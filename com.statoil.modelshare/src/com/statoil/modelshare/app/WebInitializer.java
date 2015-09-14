@@ -1,4 +1,4 @@
-package com.statoil.modelshare.spring;
+package com.statoil.modelshare.app;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
@@ -6,7 +6,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.statoil.modelshare.spring.config.DispatcherConfig;
+import com.statoil.modelshare.app.config.DispatcherConfig;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.statoil.modelshare.model/src" modelPluginID="com.statoil.modelshare.model"
+    modelName="Modelshare" editPluginClass="com.statoil.modelshare.model.provider.ModelshareEditPlugin"
+    editorPluginClass="com.statoil.modelshare.model.presentation.ModelshareEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testSuiteClass="com.statoil.modelshare.model.tests.ModelshareAllTests"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>modelshare.ecore</foreignModel>
+  <genPackages prefix="Modelshare" basePackage="com.statoil" disposableProviderFactory="true"
+      ecorePackage="modelshare.ecore#/">
+    <genClasses ecoreClass="modelshare.ecore#//User">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//SImulationModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//SImulationModel/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//SImulationModel/description"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

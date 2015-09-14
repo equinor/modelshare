@@ -1,11 +1,11 @@
-package com.statoil.modelshare.spring;
+package com.statoil.modelshare.app;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.statoil.modelshare.spring.config.DispatcherConfig;
+import com.statoil.modelshare.app.config.DispatcherConfig;
 
 
 @Configuration
