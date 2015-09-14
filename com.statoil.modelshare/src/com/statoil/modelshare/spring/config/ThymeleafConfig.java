@@ -1,4 +1,4 @@
-package no.itema.modelshare.spring.config;
+package com.statoil.modelshare.spring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

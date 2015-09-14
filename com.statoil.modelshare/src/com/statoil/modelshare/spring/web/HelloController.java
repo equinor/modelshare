@@ -1,4 +1,4 @@
-package no.itema.modelshare.spring.web;
+package com.statoil.modelshare.spring.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
