@@ -2,51 +2,28 @@
  */
 package com.statoil.modelshare.impl;
 
+import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelsharePackage;
-import com.statoil.modelshare.SImulationModel;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>SImulation Model</b></em>'.
+ * An implementation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.statoil.modelshare.impl.SImulationModelImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.SImulationModelImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class SImulationModelImpl extends MinimalEObjectImpl.Container implements SImulationModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class ModelImpl extends AssetImpl implements Model {
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -56,7 +33,6 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
-
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,7 +48,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SImulationModelImpl() {
+	protected ModelImpl() {
 		super();
 	}
 
@@ -83,28 +59,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ModelsharePackage.Literals.SIMULATION_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.SIMULATION_MODEL__NAME, oldName, name));
+		return ModelsharePackage.Literals.MODEL;
 	}
 
 	/**
@@ -125,7 +80,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 		String oldDescription = description;
 		description = newDescription;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.SIMULATION_MODEL__DESCRIPTION, oldDescription, description));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.MODEL__DESCRIPTION, oldDescription, description));
 	}
 
 	/**
@@ -136,9 +91,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ModelsharePackage.SIMULATION_MODEL__NAME:
-				return getName();
-			case ModelsharePackage.SIMULATION_MODEL__DESCRIPTION:
+			case ModelsharePackage.MODEL__DESCRIPTION:
 				return getDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -152,10 +105,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ModelsharePackage.SIMULATION_MODEL__NAME:
-				setName((String)newValue);
-				return;
-			case ModelsharePackage.SIMULATION_MODEL__DESCRIPTION:
+			case ModelsharePackage.MODEL__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
 		}
@@ -170,10 +120,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.SIMULATION_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case ModelsharePackage.SIMULATION_MODEL__DESCRIPTION:
+			case ModelsharePackage.MODEL__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
 		}
@@ -188,9 +135,7 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.SIMULATION_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case ModelsharePackage.SIMULATION_MODEL__DESCRIPTION:
+			case ModelsharePackage.MODEL__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 		}
 		return super.eIsSet(featureID);
@@ -206,12 +151,10 @@ public class SImulationModelImpl extends MinimalEObjectImpl.Container implements
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", description: ");
+		result.append(" (description: ");
 		result.append(description);
 		result.append(')');
 		return result.toString();
 	}
 
-} //SImulationModelImpl
+} //ModelImpl

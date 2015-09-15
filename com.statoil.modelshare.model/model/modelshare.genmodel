@@ -9,14 +9,34 @@
   <foreignModel>modelshare.ecore</foreignModel>
   <genPackages prefix="Modelshare" basePackage="com.statoil" disposableProviderFactory="true"
       ecorePackage="modelshare.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="modelshare.ecore#//Access">
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/View"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Read"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Write"/>
+    </genEnums>
     <genClasses ecoreClass="modelshare.ecore#//User">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
     </genClasses>
-    <genClasses ecoreClass="modelshare.ecore#//SImulationModel">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//SImulationModel/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//SImulationModel/description"/>
+    <genClasses ecoreClass="modelshare.ecore#//Model">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/description"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//Group"/>
+    <genClasses ecoreClass="modelshare.ecore#//Account">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Account/identifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Account/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Account/group"/>
+      <genOperations ecoreOperation="modelshare.ecore#//Account/getAllRoles"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//Folder">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Folder/assets"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//Asset">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Asset/folder"/>
+      <genOperations ecoreOperation="modelshare.ecore#//Asset/getAccess">
+        <genParameters ecoreParameter="modelshare.ecore#//Asset/getAccess/account"/>
+      </genOperations>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

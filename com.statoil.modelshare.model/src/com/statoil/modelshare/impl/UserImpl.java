@@ -8,9 +8,7 @@ import com.statoil.modelshare.User;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,34 +18,13 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.statoil.modelshare.impl.UserImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.UserImpl#getOrganisation <em>Organisation</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.UserImpl#getEmail <em>Email</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class UserImpl extends MinimalEObjectImpl.Container implements User {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
+public class UserImpl extends AccountImpl implements User {
 	/**
 	 * The default value of the '{@link #getOrganisation() <em>Organisation</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -112,27 +89,6 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public String getOrganisation() {
 		return organisation;
 	}
@@ -178,8 +134,6 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ModelsharePackage.USER__NAME:
-				return getName();
 			case ModelsharePackage.USER__ORGANISATION:
 				return getOrganisation();
 			case ModelsharePackage.USER__EMAIL:
@@ -196,9 +150,6 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ModelsharePackage.USER__NAME:
-				setName((String)newValue);
-				return;
 			case ModelsharePackage.USER__ORGANISATION:
 				setOrganisation((String)newValue);
 				return;
@@ -217,9 +168,6 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.USER__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case ModelsharePackage.USER__ORGANISATION:
 				setOrganisation(ORGANISATION_EDEFAULT);
 				return;
@@ -238,8 +186,6 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.USER__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ModelsharePackage.USER__ORGANISATION:
 				return ORGANISATION_EDEFAULT == null ? organisation != null : !ORGANISATION_EDEFAULT.equals(organisation);
 			case ModelsharePackage.USER__EMAIL:
@@ -258,9 +204,7 @@ public class UserImpl extends MinimalEObjectImpl.Container implements User {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", organisation: ");
+		result.append(" (organisation: ");
 		result.append(organisation);
 		result.append(", email: ");
 		result.append(email);

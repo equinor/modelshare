@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modelshare" nsURI="http://www.statoil.com/modelshare" nsPrefix="com.statoil.modelshare.model">
-  <eClassifiers xsi:type="ecore:EClass" name="User">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Account">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="organisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SImulationModel">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//Asset">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Model"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Access">
+    <eLiterals name="View" value="1"/>
+    <eLiterals name="Read" value="2"/>
+    <eLiterals name="Write" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Account"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Account" abstract="true">
+    <eOperations name="getAllRoles" upperBound="-1" eType="#//Account">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a list of all accounts that can be derived from this account. This starts with root group account, continues to the most immediate group, then finally the account itself. For example &quot;users&quot; -> &quot;superusers&quot; -> &quot;you&quot;. This means that the root group &quot;users&quot; may be overridden by the group &quot;superusers&quot; then finally the user account."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Folder" eSuperTypes="#//Asset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assets" upperBound="-1"
+        eType="#//Asset" eOpposite="#//Asset/folder"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Asset" abstract="true">
+    <eOperations name="getAccess" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EEnum">
+      <eParameters name="account" lowerBound="1" eType="#//Account"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folder" eType="#//Folder"
+        eOpposite="#//Folder/assets"/>
   </eClassifiers>
 </ecore:EPackage>
