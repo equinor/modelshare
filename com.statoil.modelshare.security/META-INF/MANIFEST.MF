@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Modelshare Security
+Bundle-SymbolicName: com.statoil.modelshare.security
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Statoil
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
