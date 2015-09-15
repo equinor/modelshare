@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<groupId>com.statoil.modelshare</groupId>
+	<artifactId>com.statoil.modelshare-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Statoil Modelshare</name>
+
+	<properties>
+		<tycho.version>0.22.0</tycho.version>
+	</properties>
+
+	<modules>
+		<module>com.statoil.modelshare</module>
+		<module>com.statoil.modelshare.model</module>
+		<module>com.statoil.modelshare.controller</module>
+		<module>com.statoil.modelshare.security</module>
+	</modules>
+
+</project>
