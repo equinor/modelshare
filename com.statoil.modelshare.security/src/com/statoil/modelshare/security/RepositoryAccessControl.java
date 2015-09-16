@@ -95,12 +95,13 @@ public class RepositoryAccessControl {
 	 * may override rights of the parent group.
 	 * <p>
 	 * If no access file exists for the path, the parent access rights will be
-	 * used.
+	 * used. If there are no rights applicable for the account, no access will
+	 * be granted.
 	 * </p>
 	 * 
 	 * @param path
 	 *            the path to the file or folder, relative to the model storage
-	 *            root
+	 *            root.
 	 * @param ident
 	 *            the user identifier
 	 * @param account
