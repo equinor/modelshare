@@ -24,10 +24,12 @@ public class RepositoryAccessTest {
 	private static Group userGroup;
 	private static Group userGroup2;
 	EnumSet<Access> access = EnumSet.noneOf(Access.class);
+	private static final Path root = Paths.get("test-resources/models/").toAbsolutePath();
+	private static RepositoryAccessControl ra;
 	
 	@BeforeClass
 	public static void setUp(){
-		RepositoryAccess.getSharedInstance("test-resources/models/");
+		ra = RepositoryAccessControl.getSharedInstance(root);
 		adminGroup = ModelshareFactory.eINSTANCE.createGroup();
 		adminGroup.setIdentifier("administrators");
 		userGroup = ModelshareFactory.eINSTANCE.createGroup();
@@ -38,29 +40,28 @@ public class RepositoryAccessTest {
 	
 	@Test
 	public void testGetModelRoot() {
-		Path path = RepositoryAccess.getModelRoot();
-		File[] listFiles = path.toFile().listFiles();
+		File[] listFiles = root.toFile().listFiles();
 		Assert.assertEquals(3, listFiles.length);
 	}
 	
 	@Test
 	public void testInternalNoAccess() throws IOException{
-		Assert.assertEquals(EnumSet.noneOf(Access.class), RepositoryAccess.getAccess(access,RepositoryAccess.getModelRoot(), "no.access"));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(access,root, "no.access"));
 	}
 	
 	@Test
 	public void testInternalReadAccess() throws IOException{
-		Assert.assertEquals(EnumSet.of(Access.READ), RepositoryAccess.getAccess(access,RepositoryAccess.getModelRoot(), "read.access"));
+		Assert.assertEquals(EnumSet.of(Access.READ), ra.getAccess(access,root, "read.access"));
 	}
 
 	@Test
 	public void testInternalViewAccess() throws IOException{
-		Assert.assertEquals(EnumSet.of(Access.VIEW), RepositoryAccess.getAccess(access,RepositoryAccess.getModelRoot(), "view.access"));
+		Assert.assertEquals(EnumSet.of(Access.VIEW), ra.getAccess(access,root, "view.access"));
 	}
 
 	@Test
 	public void testInternalWriteAccess() throws IOException{
-		Assert.assertEquals(EnumSet.of(Access.WRITE), RepositoryAccess.getAccess(access,RepositoryAccess.getModelRoot(), "write.access"));
+		Assert.assertEquals(EnumSet.of(Access.WRITE), ra.getAccess(access,root, "write.access"));
 	}
 	
 //	@Test
@@ -77,31 +78,31 @@ public class RepositoryAccessTest {
 	
 	@Test
 	public void testAdminAccess() throws IOException{
-		Assert.assertEquals(EnumSet.allOf(Access.class), RepositoryAccess.getRights(RepositoryAccess.getModelRoot(), adminGroup));
+		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(root, adminGroup));
 	}
 
 	@Test
 	public void testUserAccess() throws IOException{
-		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), RepositoryAccess.getRights(RepositoryAccess.getModelRoot(), userGroup));
+		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), ra.getRights(root, userGroup));
 	}
 
 	@Test
 	public void testSecretAccess() throws IOException{
-		Assert.assertEquals(EnumSet.noneOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret"), userGroup));
-		Assert.assertEquals(EnumSet.allOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret"), adminGroup));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getRights(Paths.get("Secret"), userGroup));
+		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(Paths.get("Secret"), adminGroup));
 	}
 
 	@Test
 	public void testInheritedSecretAccess() throws IOException{
-		Assert.assertEquals(EnumSet.noneOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret/SubSecret"), userGroup));
-		Assert.assertEquals(EnumSet.allOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret/SubSecret"), adminGroup));
-		Assert.assertEquals(EnumSet.noneOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret/SubSecret/model.stask"), userGroup));
-		Assert.assertEquals(EnumSet.allOf(Access.class), RepositoryAccess.getRights(Paths.get("Secret/SubSecret/model.stask"), adminGroup));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getRights(Paths.get("Secret/SubSecret"), userGroup));
+		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(Paths.get("Secret/SubSecret"), adminGroup));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getRights(Paths.get("Secret/SubSecret/model.stask"), userGroup));
+		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(Paths.get("Secret/SubSecret/model.stask"), adminGroup));
 	}
 
 	@Test
 	public void testSecretAccessOverride() throws IOException{
-		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), RepositoryAccess.getRights(Paths.get("Secret/SubSecret/model.stask"), userGroup2));
+		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), ra.getRights(Paths.get("Secret/SubSecret/model.stask"), userGroup2));
 	}
 
 }

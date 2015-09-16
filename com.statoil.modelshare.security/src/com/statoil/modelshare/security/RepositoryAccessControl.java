@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -16,30 +15,15 @@ import com.statoil.modelshare.Account;
  * 
  * @author Torkild U. Resheim, Itema AS
  */
-public class RepositoryAccess {
+public class RepositoryAccessControl {
 
 	/** Singleton instance */
-	private static RepositoryAccess shared;
+	private static RepositoryAccessControl shared;
 
 	protected final Path root;
 
-	public RepositoryAccess() {
-		root = Paths.get("models").toAbsolutePath();
-	}
-
-	public RepositoryAccess(String rootPath) {
-		root = Paths.get(rootPath).toAbsolutePath();
-	}
-
-	public static Path getModelRoot() {
-		return getSharedInstance().root;
-	}
-
-	public synchronized static RepositoryAccess getSharedInstance() {
-		if (shared == null) {
-			shared = new RepositoryAccess();
-		}
-		return shared;
+	public RepositoryAccessControl(Path rootPath) {
+		root = rootPath.toAbsolutePath();
 	}
 
 	/**
@@ -51,21 +35,21 @@ public class RepositoryAccess {
 	 *            the path to the model collection root
 	 * @return the shared instance
 	 */
-	public synchronized static RepositoryAccess getSharedInstance(String rootPath) {
+	public synchronized static RepositoryAccessControl getSharedInstance(Path rootPath) {
 		if (shared == null) {
-			shared = new RepositoryAccess(rootPath);
+			shared = new RepositoryAccessControl(rootPath);
 		}
 		return shared;
 	}
 
-	synchronized static EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
+	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
 		String name = null;
 		if (path.toAbsolutePath().toFile().isDirectory()) {
 			name = path.getFileName() + File.separator + ".access";
 		} else {
 			name = "." + path.getFileName().toString() + ".access";
 		}
-		Path filePath = RepositoryAccess.getModelRoot().resolve(path.getParent().resolve(name));
+		Path filePath = root.resolve(path.getParent().resolve(name));
 		File file = filePath.toFile();
 		if (!file.exists()) {
 			return access;
@@ -137,17 +121,17 @@ public class RepositoryAccess {
 	 * @return a set of access rights
 	 * @throws IOException
 	 */
-	public synchronized static EnumSet<Access> getRights(final Path path, Account account) throws IOException {
+	public synchronized EnumSet<Access> getRights(final Path path, Account account) throws IOException {
 		EnumSet<Access> access = EnumSet.noneOf(Access.class);
 		List<Account> roles = account.getAllRoles();
 		for (Account a : roles) {
-			Path root = getModelRoot();
+			Path r = root;
 			Path p = root.relativize(root.resolve(path));
 			int nameCount = p.getNameCount();
 			for (int i = 0; i <= nameCount; i++) {
-				access = getAccess(access, root, a.getIdentifier());
+				access = getAccess(access, r, a.getIdentifier());
 				if (i < nameCount) {
-					root = root.resolve(p.getName(i));
+					r = r.resolve(p.getName(i));
 				}
 			}
 		}
