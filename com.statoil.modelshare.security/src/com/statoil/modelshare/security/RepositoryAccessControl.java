@@ -17,29 +17,16 @@ import com.statoil.modelshare.Account;
  */
 public class RepositoryAccessControl {
 
-	/** Singleton instance */
-	private static RepositoryAccessControl shared;
+	protected Path rootPath;
 
-	protected final Path root;
-
-	public RepositoryAccessControl(Path rootPath) {
-		root = rootPath.toAbsolutePath();
+	@SuppressWarnings("unused")
+	private RepositoryAccessControl() {
+		// NOOP - use constructor specifying repository root instead
 	}
 
-	/**
-	 * Alternative method for creating the singleton instance where the path to
-	 * the model collection root is specified. Only the first call to this
-	 * method will set up the path.
-	 * 
-	 * @param rootPath
-	 *            the path to the model collection root
-	 * @return the shared instance
-	 */
-	public synchronized static RepositoryAccessControl getSharedInstance(Path rootPath) {
-		if (shared == null) {
-			shared = new RepositoryAccessControl(rootPath);
-		}
-		return shared;
+	public RepositoryAccessControl(Path path) {
+		// Just making sure, we must have an absolute path.
+		rootPath = path.toAbsolutePath();
 	}
 
 	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
@@ -49,7 +36,7 @@ public class RepositoryAccessControl {
 		} else {
 			name = "." + path.getFileName().toString() + ".access";
 		}
-		Path filePath = root.resolve(path.getParent().resolve(name));
+		Path filePath = rootPath.resolve(path.getParent().resolve(name));
 		File file = filePath.toFile();
 		if (!file.exists()) {
 			return access;
@@ -125,8 +112,8 @@ public class RepositoryAccessControl {
 		EnumSet<Access> access = EnumSet.noneOf(Access.class);
 		List<Account> roles = account.getAllRoles();
 		for (Account a : roles) {
-			Path r = root;
-			Path p = root.relativize(root.resolve(path));
+			Path r = rootPath;
+			Path p = rootPath.relativize(rootPath.resolve(path));
 			int nameCount = p.getNameCount();
 			for (int i = 0; i <= nameCount; i++) {
 				access = getAccess(access, r, a.getIdentifier());

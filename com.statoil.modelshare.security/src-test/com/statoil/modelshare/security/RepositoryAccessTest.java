@@ -29,7 +29,7 @@ public class RepositoryAccessTest {
 	
 	@BeforeClass
 	public static void setUp(){
-		ra = RepositoryAccessControl.getSharedInstance(root);
+		ra = new RepositoryAccessControl(root);
 		adminGroup = ModelshareFactory.eINSTANCE.createGroup();
 		adminGroup.setIdentifier("administrators");
 		userGroup = ModelshareFactory.eINSTANCE.createGroup();

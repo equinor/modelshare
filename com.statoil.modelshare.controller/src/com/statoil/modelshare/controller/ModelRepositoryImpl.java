@@ -1,9 +1,9 @@
 package com.statoil.modelshare.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumSet;
 
 import com.statoil.modelshare.Access;
@@ -19,47 +19,59 @@ import com.statoil.modelshare.security.RepositoryAccessControl;
 public class ModelRepositoryImpl implements ModelRepository {
 
 	private Folder root;
-	private File rootFolder;
+	private Path rootPath;
 	private RepositoryAccessControl ra;
 
-	public ModelRepositoryImpl() {
-		this(System.getProperty("user.home") + File.separator + "modelshare" + File.separator + "repository" + File.separator);
+	@SuppressWarnings("unused")
+	private ModelRepositoryImpl() {
+		// NOOP - use constructor specifying repository root instead
 	}
 
-	public ModelRepositoryImpl(String path) {
+	/**
+	 * Creates a new model repository. Files are retrieved and stored at the given location.
+	 *  
+	 * @param path path to the repository root.
+	 */
+	public ModelRepositoryImpl(Path path) {
+		rootPath = path.toAbsolutePath();
 		root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setName("");
-		rootFolder = new File(path).getAbsoluteFile();
-		ra = RepositoryAccessControl.getSharedInstance(Paths.get(path).toAbsolutePath());
-		System.out.println("Using root folder at " + rootFolder);
+		ra = new RepositoryAccessControl(rootPath);
+		System.out.println("Using root folder at " + rootPath);
 	}
 
-	public void fillFolderContents(Folder folder, User user) throws IOException {
-		File file = rootFolder.toPath().resolve(folder.getName()).toFile();
+	private void fillFolderContents(Folder folder, User user) throws IOException {
+		File file = rootPath.resolve(folder.getName()).toFile();
 		if (!file.exists()) {
 			return;
 		}
-		Path path = rootFolder.toPath().relativize(file.toPath());
-		// Do not handle folders where the user have no access
-		EnumSet<Access> rights = ra.getRights(path, user);			
-		if (!(rights.contains(Access.READ) 
-				|| rights.contains(Access.WRITE) 
-				|| rights.contains(Access.VIEW))) return;
 
-		
-		File[] listFiles = file.listFiles();
+		// List all files except those that are hidden
+		File[] listFiles = file.listFiles((FilenameFilter) (dir, name) -> {
+			return (!name.startsWith("."));
+		});
+
+		// Recurse into subfolders and add files
 		for (File child : listFiles) {
-			if (child.isDirectory()) {
-				Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
-				newFolder.setName(child.getName());
-				folder.getAssets().add(newFolder);
-				fillFolderContents(newFolder, user);
-			} else {
-				Model newFile = ModelshareFactory.eINSTANCE.createModel();
-				newFile.setName(child.getName());
-				folder.getAssets().add(newFile);
+			// Ignore those where the user have no access
+			if (haveAccess(user, child.toPath())) {
+				if (child.isDirectory()) {
+					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
+					newFolder.setName(child.getName());
+					folder.getAssets().add(newFolder);
+					fillFolderContents(newFolder, user);
+				} else {
+					Model newFile = ModelshareFactory.eINSTANCE.createModel();
+					newFile.setName(child.getName());
+					folder.getAssets().add(newFile);
+				}
 			}
 		}
+	}
+
+	private boolean haveAccess(User user, Path path) throws IOException {
+		EnumSet<Access> rights = ra.getRights(path, user);
+		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
 	}
 
 	public Folder getRoot(User user) {
@@ -67,8 +79,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 			try {
 				fillFolderContents(root, user);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 		return root;
