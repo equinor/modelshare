@@ -5,6 +5,7 @@ package com.statoil.modelshare.impl;
 import com.statoil.modelshare.*;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -57,9 +58,41 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ModelsharePackage.USER: return createUser();
-			case ModelsharePackage.SIMULATION_MODEL: return createSImulationModel();
+			case ModelsharePackage.MODEL: return createModel();
+			case ModelsharePackage.GROUP: return createGroup();
+			case ModelsharePackage.FOLDER: return createFolder();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case ModelsharePackage.ACCESS:
+				return createAccessFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case ModelsharePackage.ACCESS:
+				return convertAccessToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -78,9 +111,49 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SImulationModel createSImulationModel() {
-		SImulationModelImpl sImulationModel = new SImulationModelImpl();
-		return sImulationModel;
+	public Model createModel() {
+		ModelImpl model = new ModelImpl();
+		return model;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Group createGroup() {
+		GroupImpl group = new GroupImpl();
+		return group;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Folder createFolder() {
+		FolderImpl folder = new FolderImpl();
+		return folder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Access createAccessFromString(EDataType eDataType, String initialValue) {
+		Access result = Access.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertAccessToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

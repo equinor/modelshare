@@ -2,15 +2,23 @@
  */
 package com.statoil.modelshare.impl;
 
+import com.statoil.modelshare.Access;
+import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Asset;
+import com.statoil.modelshare.Folder;
+import com.statoil.modelshare.Group;
+import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
-import com.statoil.modelshare.SImulationModel;
 import com.statoil.modelshare.User;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -32,7 +40,42 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass sImulationModelEClass = null;
+	private EClass modelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass groupEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass accountEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass folderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass assetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum accessEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -109,7 +152,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Name() {
+	public EAttribute getUser_Organisation() {
 		return (EAttribute)userEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -118,7 +161,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Organisation() {
+	public EAttribute getUser_Email() {
 		return (EAttribute)userEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -127,8 +170,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Email() {
-		return (EAttribute)userEClass.getEStructuralFeatures().get(2);
+	public EClass getModel() {
+		return modelEClass;
 	}
 
 	/**
@@ -136,8 +179,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getSImulationModel() {
-		return sImulationModelEClass;
+	public EAttribute getModel_Description() {
+		return (EAttribute)modelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -145,8 +188,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSImulationModel_Name() {
-		return (EAttribute)sImulationModelEClass.getEStructuralFeatures().get(0);
+	public EClass getGroup() {
+		return groupEClass;
 	}
 
 	/**
@@ -154,8 +197,107 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSImulationModel_Description() {
-		return (EAttribute)sImulationModelEClass.getEStructuralFeatures().get(1);
+	public EClass getAccount() {
+		return accountEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAccount_Identifier() {
+		return (EAttribute)accountEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAccount_Name() {
+		return (EAttribute)accountEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAccount_Group() {
+		return (EReference)accountEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAccount__GetAllRoles() {
+		return accountEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFolder() {
+		return folderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFolder_Assets() {
+		return (EReference)folderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAsset() {
+		return assetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAsset_Name() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAsset_Folder() {
+		return (EReference)assetEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAsset__GetAccess__Account() {
+		return assetEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getAccess() {
+		return accessEEnum;
 	}
 
 	/**
@@ -187,13 +329,30 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 		// Create classes and their features
 		userEClass = createEClass(USER);
-		createEAttribute(userEClass, USER__NAME);
 		createEAttribute(userEClass, USER__ORGANISATION);
 		createEAttribute(userEClass, USER__EMAIL);
 
-		sImulationModelEClass = createEClass(SIMULATION_MODEL);
-		createEAttribute(sImulationModelEClass, SIMULATION_MODEL__NAME);
-		createEAttribute(sImulationModelEClass, SIMULATION_MODEL__DESCRIPTION);
+		modelEClass = createEClass(MODEL);
+		createEAttribute(modelEClass, MODEL__DESCRIPTION);
+
+		groupEClass = createEClass(GROUP);
+
+		accountEClass = createEClass(ACCOUNT);
+		createEAttribute(accountEClass, ACCOUNT__IDENTIFIER);
+		createEAttribute(accountEClass, ACCOUNT__NAME);
+		createEReference(accountEClass, ACCOUNT__GROUP);
+		createEOperation(accountEClass, ACCOUNT___GET_ALL_ROLES);
+
+		folderEClass = createEClass(FOLDER);
+		createEReference(folderEClass, FOLDER__ASSETS);
+
+		assetEClass = createEClass(ASSET);
+		createEAttribute(assetEClass, ASSET__NAME);
+		createEReference(assetEClass, ASSET__FOLDER);
+		createEOperation(assetEClass, ASSET___GET_ACCESS__ACCOUNT);
+
+		// Create enums
+		accessEEnum = createEEnum(ACCESS);
 	}
 
 	/**
@@ -224,19 +383,66 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		userEClass.getESuperTypes().add(this.getAccount());
+		modelEClass.getESuperTypes().add(this.getAsset());
+		groupEClass.getESuperTypes().add(this.getAccount());
+		folderEClass.getESuperTypes().add(this.getAsset());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getUser_Name(), ecorePackage.getEString(), "name", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_Email(), ecorePackage.getEString(), "email", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(sImulationModelEClass, SImulationModel.class, "SImulationModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSImulationModel_Name(), ecorePackage.getEString(), "name", null, 0, 1, SImulationModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSImulationModel_Description(), ecorePackage.getEString(), "description", null, 0, 1, SImulationModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getModel_Description(), ecorePackage.getEString(), "description", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(accountEClass, Account.class, "Account", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAccount_Identifier(), ecorePackage.getEString(), "identifier", null, 1, 1, Account.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAccount_Name(), ecorePackage.getEString(), "name", null, 1, 1, Account.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAccount_Group(), this.getGroup(), null, "group", null, 0, 1, Account.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getAccount__GetAllRoles(), this.getAccount(), "getAllRoles", 0, -1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFolder_Assets(), this.getAsset(), this.getAsset_Folder(), "assets", null, 0, -1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(assetEClass, Asset.class, "Asset", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAsset_Name(), ecorePackage.getEString(), "name", null, 1, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAsset_Folder(), this.getFolder(), this.getFolder_Assets(), "folder", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getAsset__GetAccess__Account(), ecorePackage.getEEnum(), "getAccess", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, this.getAccount(), "account", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(accessEEnum, Access.class, "Access");
+		addEEnumLiteral(accessEEnum, Access.VIEW);
+		addEEnumLiteral(accessEEnum, Access.READ);
+		addEEnumLiteral(accessEEnum, Access.WRITE);
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+		createExtendedMetaDataAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createExtendedMetaDataAnnotations() {
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
+		addAnnotation
+		  (modelEClass, 
+		   source, 
+		   new String[] {
+			 "name", "Model"
+		   });
 	}
 
 } //ModelsharePackageImpl

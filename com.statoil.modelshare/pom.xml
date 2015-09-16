@@ -1,8 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.statoil.modelshare</groupId>
-  <artifactId>spring-thymeleaf</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -83,10 +80,16 @@
       	<scope>provided</scope>
   	</dependency>
   	<dependency>
-  		<groupId>com.statoil.modelshare.model</groupId>
+  		<groupId>com.statoil.modelshare</groupId>
   		<artifactId>com.statoil.modelshare.model</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   
+  <parent>
+  	<groupId>com.statoil.modelshare</groupId>
+  	<artifactId>com.statoil.modelshare-parent</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>com.statoil.modelshare</artifactId>
 </project>

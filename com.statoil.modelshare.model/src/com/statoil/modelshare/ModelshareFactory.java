@@ -31,13 +31,31 @@ public interface ModelshareFactory extends EFactory {
 	User createUser();
 
 	/**
-	 * Returns a new object of class '<em>SImulation Model</em>'.
+	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>SImulation Model</em>'.
+	 * @return a new object of class '<em>Model</em>'.
 	 * @generated
 	 */
-	SImulationModel createSImulationModel();
+	Model createModel();
+
+	/**
+	 * Returns a new object of class '<em>Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Group</em>'.
+	 * @generated
+	 */
+	Group createGroup();
+
+	/**
+	 * Returns a new object of class '<em>Folder</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Folder</em>'.
+	 * @generated
+	 */
+	Folder createFolder();
 
 	/**
 	 * Returns the package supported by this factory.

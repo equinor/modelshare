@@ -1,1 +1,7 @@
-# This is a comment
+# Test variants of (r)ead (v)iew (w)rite
+no.access			-r -v -w
+read.access			+r -v -w
+view.access			-r +v -w
+write.access		-r -v +w
+administrators		+r +v +w
+users               +r +v -w
