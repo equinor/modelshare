@@ -11,7 +11,8 @@ public class ModelRepositoryTest {
 	
 	@Test
 	public void testGetRoot(){
-		Folder root = ModelRepository.getRoot();
+		ModelRepository repo = new ModelRepositoryImpl(null);
+		Folder root = repo.getRoot();
 		EList<Asset> eContents = root.getAssets();
 		for (Asset eObject : eContents) {
 			if (eObject instanceof Folder){
