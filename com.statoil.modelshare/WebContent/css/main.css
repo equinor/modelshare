@@ -1,11 +1,15 @@
 @CHARSET "UTF-8";
 
-body{
-	
+body {
+  padding-top: 40px;
 }
 
-.content-container {
-	background-color: Red;
+.theme-statoil > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-statoil .navbar .container {
+  width: auto;
 }
 
 .treeview-ul {

@@ -2,20 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="../fragments/header :: header">
 </head>
-<body>
+<body role="document">
 
 <div th:replace="../fragments/navbar :: navbar(home)">...</div>
 
-	<div class="container">
-		<div class="jumbotron content-container">
+	<div class="container theme-statoil" role="main">
+		<div class="page-header">
 			<h2 th:text="${title}">ModelShare</h2>
+		</div>
 			<p>Starting point for the ModelShare project</p>		
 			<span>
 				<img src="../../images/spring.png" th:attr="src=@{images/spring.png}" style="width: 100px;vertical-align: middle;"/>
 				<span style="font-size: 64px">+</span>
 				<img src="../../images/thymeleaf.png" th:attr="src=@{images/thymeleaf.png}" style="width: 100px;vertical-align: middle;"/>
 			</span>
-		</div>
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
