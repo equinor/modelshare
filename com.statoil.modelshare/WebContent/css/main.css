@@ -1,11 +1,15 @@
 @CHARSET "UTF-8";
 
-body{
-	
+body {
+  padding-top: 40px;
 }
 
-.content-container {
-	background-color: Red;
+.theme-statoil > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-statoil .navbar .container {
+  width: auto;
 }
 
 .treeview-ul {
@@ -14,4 +18,20 @@ body{
 }
 .treeview-li {
 	font-weight: bold;
+}
+
+.left-container {
+	width: 300px;
+	height: 70%;
+}
+.right-container {
+	max-width: 900px;
+	height: 70%;
+}
+.content-box {
+	background-color: #FFFFFF;
+	border: 1px solid #555555;
+    border-radius: 7px;
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
 }
