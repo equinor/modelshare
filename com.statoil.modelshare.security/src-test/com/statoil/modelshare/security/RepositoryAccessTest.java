@@ -29,7 +29,7 @@ public class RepositoryAccessTest {
 	
 	@BeforeClass
 	public static void setUp(){
-		ra = RepositoryAccessControl.getSharedInstance(root);
+		ra = new RepositoryAccessControl(root);
 		adminGroup = ModelshareFactory.eINSTANCE.createGroup();
 		adminGroup.setIdentifier("administrators");
 		userGroup = ModelshareFactory.eINSTANCE.createGroup();
@@ -63,19 +63,7 @@ public class RepositoryAccessTest {
 	public void testInternalWriteAccess() throws IOException{
 		Assert.assertEquals(EnumSet.of(Access.WRITE), ra.getAccess(access,root, "write.access"));
 	}
-	
-//	@Test
-//	public void testInternalInheritedNoAccess() throws IOException{
-//		Assert.assertEquals(EnumSet.noneOf(Access.class), AccessFileReader.getAccess(access,Paths.get("Model_A/Model_A1/Model_A1.1"), "no.access"));
-//	}
-//
-//	@Test
-//	public void testInternalInheritedAdminAccess() throws IOException{
-//		Assert.assertEquals(EnumSet.allOf(Access.class), AccessFileReader.getAccess(access,Paths.get("Model_A/Model_A1/Model_A1.1"), "administrator"));
-//	}
-	
-	//------ 
-	
+			
 	@Test
 	public void testAdminAccess() throws IOException{
 		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(root, adminGroup));
