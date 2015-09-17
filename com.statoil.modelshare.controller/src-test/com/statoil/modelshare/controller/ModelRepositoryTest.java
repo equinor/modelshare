@@ -1,7 +1,6 @@
 package com.statoil.modelshare.controller;
 
 import org.eclipse.emf.common.util.EList;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.statoil.modelshare.Asset;
@@ -12,7 +11,7 @@ import com.statoil.modelshare.User;
 
 public class ModelRepositoryTest {	
 	
-	@Ignore
+	@Test
 	public void testGetRoot(){
 		ModelRepository repo = new ModelRepositoryImpl();
 		User user = ModelshareFactory.eINSTANCE.createUser();

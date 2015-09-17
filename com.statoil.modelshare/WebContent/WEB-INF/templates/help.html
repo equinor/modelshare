@@ -6,20 +6,15 @@
 
 <div th:replace="../fragments/navbar :: navbar(help)">...</div>
 
-	<div class="container">
-		<div class="jumbotron">
+	<div class="jumbotron">
+		<div class="container">
 			<h2 th:text="${title}">Help</h2>
-			<!-- 
-			<div style="float:left"><h2 th:text="${title}">Help</h2></div>
-			<div style="float:right"><img src="../../images/Help-32.png" th:attr="src=@{images/Help-32.png}" style="width: 32px;vertical-align: bottom;"/></div>
-			 -->
-			<!--  <div style="float:left">-->
-				<h3>How to use this application</h3>
-				<p>Modelshare is an application where you can share models with others.</p>
-				<ul>
-					<li>As an owner you may upload a model and provide information on how to use this model.</li>
-					<li>As a user you may browse the models and request permission to download a model.</li>
-				</ul>
+			<h3>How to use this application</h3>
+			<p>Modelshare is an application where you can share models with others.</p>
+			<ul>
+				<li>As an owner you may upload a model and provide information on how to use this model.</li>
+				<li>As a user you may browse the models and request permission to download a model.</li>
+			</ul>
 		</div>
 	</div>
 
