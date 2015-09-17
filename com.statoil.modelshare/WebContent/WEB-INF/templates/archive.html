@@ -2,19 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="../fragments/header :: header">
 </head>
-<body>
+<body role="document">
 
 <div th:replace="../fragments/navbar :: navbar(archive)"></div>
 
-	<div class="container">
-		<div class="jumbotron">
+	<div class="container theme-statoil" role="main">
+		<div class="page-header">
 			<h2 th:text="${title}">Archive</h2>
+		</div>
 			<p>View for looping through all model files in the archive</p>		
 			<ul class="treeview-ul">
 				<li class="treeview-li" th:each="modelFile : ${modelFiles}" th:text="${modelFile.name}"></li>
 			</ul>
 			
-		</div>
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
