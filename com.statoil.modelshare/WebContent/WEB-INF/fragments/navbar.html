@@ -1,29 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<title>Navbar</title>
+	<meta charset="UTF-8"/>
+	<title>Navbar</title>
 </head>
 <body>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar(activeTab)">
+	  <!-- <img src="images/statoil-horizontal-neg.png" height="35px"/> -->
       <div class="container">
-        <div class="navbar-header">
+        <div class="navbar-header">        
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./">ModelShare</a>
+          <a class="navbar-brand" href="./">Modelshare</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li th:class="${activeTab == 'home'}? 'active' : null"><a href="./">Home</a></li>
-            <li th:class="${activeTab == 'archive'}? 'active' : null"><a href="archive?item">Model archive</a></li>
-            <li th:class="${activeTab == 'help'}? 'active' : null"><a href="help">Help</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+		<div th:if="${#httpServletRequest.remoteUser != null}">
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	            <li th:class="${activeTab == 'home'}? 'active' : null"><a href="./">Home</a></li>
+	            <li th:class="${activeTab == 'archive'}? 'active' : null"><a href="archive?item">Model archive</a></li>
+            	<li th:class="${activeTab == 'help'}? 'active' : null"><a href="help">Help</a></li>
+				<li class="dropdown pull-right">
+	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <span sec:authentication="name">user@statoil.com</span><span class="caret"></span></a>
+	                <ul class="dropdown-menu">
+	                  <li><a href="logout">Sign out</a></li>
+	                </ul>
+				</li>            
+	          </ul>
+	        </div><!--/.nav-collapse -->
+		</div>
       </div>
     </nav>
     <!-- Bootstrap core JavaScript
