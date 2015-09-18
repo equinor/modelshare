@@ -1,5 +1,7 @@
 package com.statoil.modelshare.app.web;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,7 @@ public class ArchiveController {
 	 * - Implement collapsible node tree, preferably with CSS
 	 * 
 	 */
-		public String doShow (ModelMap model, @RequestParam String item) {
+		public String doShow (ModelMap model, @RequestParam String item) throws FileNotFoundException {
 			ModelInformation modelInformation = service.getModelInformation(item);
 			model.addAttribute("modelInformation", modelInformation);
 			model.addAttribute("node", service.getMenuItems());
