@@ -9,12 +9,34 @@
 	<div class="container theme-statoil" role="main">
 		<div class="page-header">
 			<h2 th:text="${title}">Archive</h2>
-		</div>
-			<p>View for looping through all model files in the archive</p>		
-			<ul class="treeview-ul">
-				<li class="treeview-li" th:each="modelFile : ${modelFiles}" th:text="${modelFile.name}"></li>
-			</ul>
-			
+			<div class="row">
+				<div class="left-container col-sm-3">
+					<div class="content-box">
+						<div th:fragment="fragment_node" th:remove="tag">
+		            		<ul th:if="${not #lists.isEmpty(node.children)}" >
+					    		<li th:each="child : ${node.children}" th:inline="text" th:with="node = ${child}">
+							    	<a class="menu-link" th:if="${child.leaf}" th:href="@{/showModel(item=__${child.name}__)}">
+							    		[[${child.name}]]
+							    	</a>
+							    	<a class="menu-link" th:if="${!child.leaf}" th:href="@{/showModel(item)}">
+							    		[[${child.name}]]
+							    	</a>
+							      	<ul th:replace="../templates/archive::fragment_node"></ul>
+							 	</li>
+					 		</ul>
+					 	</div>
+					</div>
+				</div>
+				<div class="right-container col-sm-9">
+					<div class="text-label">Model name<p>
+						<span class="info-field" th:text="${modelInformation.name}"></span>
+					</div>
+					<div class="text-label">Description<p>
+						<span class="info-field" th:text="${modelInformation.description}"></span>
+					</div>
+				</div>
+			</div>
+		</div>			
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
