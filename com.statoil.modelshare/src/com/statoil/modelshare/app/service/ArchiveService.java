@@ -1,5 +1,7 @@
 package com.statoil.modelshare.app.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -57,13 +59,9 @@ public class ArchiveService {
 		return  Paths.get(System.getProperty("user.home"), "Documents/Models");
 	}
 
-	public ModelInformation getModelInformation(String path) {
-		/* 
-		 * TODO: Get correct model info from meta file (based on path)
-		 * Should be a ModelInformation object 
-		 */
-		
-		ModelInformation modelInfo = new ModelInformation(path, path);
+	public ModelInformation getModelInformation(String item) throws FileNotFoundException {
+		Path path = new File(item).toPath();
+		ModelInformation modelInfo = new ModelInformation(path);
 		return modelInfo;
 	}
 
