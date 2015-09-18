@@ -42,5 +42,4 @@ public class MenuItem {
 		public boolean isLeaf() {
 			return leaf;
 		}
-
 	} 
