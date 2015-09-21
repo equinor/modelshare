@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -88,6 +89,30 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return root;
 	}
 
+	@Override
+	public void createFolder(Folder parentFolder, String name) {
+		Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
+		newFolder.setName(name);
+		parentFolder.getAssets().add(newFolder);
+	}
+	
+	@Override
+	public void deleteFolder(Folder parentFolder, Folder folder) {
+		parentFolder.getAssets().remove(folder);
+	}
+	
+	@Override
+	public void uploadFile(Folder folder, File file, String owner, String organisation, String usage) {
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setOwner(owner);
+		model.setLastUpdated(new Date());
+		model.setName(file.getName());
+		model.setOrganisation(organisation);
+		model.setPath(folder.getName() + File.separator + file.getName());
+		model.setUsage(usage);
+		folder.getAssets().add(model);
+	}
+	
 	@Override
 	public List<User> getUsers() {
 		List<User> users = new ArrayList<>();
