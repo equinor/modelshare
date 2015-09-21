@@ -61,6 +61,7 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 			case ModelsharePackage.MODEL: return createModel();
 			case ModelsharePackage.GROUP: return createGroup();
 			case ModelsharePackage.FOLDER: return createFolder();
+			case ModelsharePackage.TASK_INFORMATION: return createTaskInformation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -134,6 +135,16 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	public Folder createFolder() {
 		FolderImpl folder = new FolderImpl();
 		return folder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TaskInformation createTaskInformation() {
+		TaskInformationImpl taskInformation = new TaskInformationImpl();
+		return taskInformation;
 	}
 
 	/**
