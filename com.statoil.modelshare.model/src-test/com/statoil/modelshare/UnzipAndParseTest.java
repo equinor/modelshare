@@ -19,7 +19,6 @@ public class UnzipAndParseTest {
 		String tempDir = System.getProperty("java.io.tmpdir");
 		UnzipUtility.unzip(zipFile.getAbsolutePath(), tempDir);
 		
-		assertEquals(3, UnzipUtility.getunzippedFiles().size());
 		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
 		File file1 = unzippedFiles.get(0);
 		assertEquals("Simple_Flexible_Riser.task.xmi", file1.getName());
