@@ -40,4 +40,9 @@ public class ModelRepositoryTest {
 			}			
 		}
 	}
+	
+	@Test
+	public void testCreateFolder() {
+		
+	}
 }
