@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
-import com.statoil.modelshare.User;
 
 /**
  * This type represents the model repository. It's content can be accessed by
@@ -25,14 +25,14 @@ public interface ModelRepository {
 	 *            the logged in user
 	 * @return the root folder
 	 */
-	public Folder getRoot(User user);
+	public Folder getRoot(Client user);
 
 	/**
 	 * Returns a list of all users that have access to the repository.
 	 * 
 	 * @return a list of users
 	 */
-	public List<User> getUsers();
+	public List<Client> getClients();
 
 	/**
 	 * Returns the user with the given identifier if found, otherwise
@@ -42,20 +42,20 @@ public interface ModelRepository {
 	 *            the identifier
 	 * @return the user or <code>null</code>
 	 */
-	public User getUser(String id);
+	public Client getUser(String id);
 
 	/**
 	 * Sets the password has for the specified user.
 	 * 
-	 * @param name
+	 * @param id
 	 *            user identifier
 	 * @param hash
 	 *            password hash
 	 */
-	public void setPassword(String name, String hash);
+	public void setPassword(String id, String hash);
 
 	/**
-	 * Convencience method for determining whether the user has view access to
+	 * Convenience method for determining whether the user has view access to
 	 * the given path.
 	 * 
 	 * @param user
@@ -64,7 +64,7 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasDisplayAccess(User user, Path path) throws IOException ;
+	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;
 	
 	/**
 	 * Uploads a file based on information given in the view

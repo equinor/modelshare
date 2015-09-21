@@ -11,10 +11,10 @@ import java.util.List;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.security.RepositoryAccessControl;
 
 /**
@@ -43,7 +43,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		System.out.println("Using root folder at " + rootPath);
 	}
 
-	private void fillFolderContents(Folder folder, User user) throws IOException {
+	private void fillFolderContents(Folder folder, Client user) throws IOException {
 		File file = rootPath.resolve(folder.getName()).toFile();
 		if (!file.exists()) {
 			return;
@@ -72,12 +72,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 	}
 
-	public boolean hasDisplayAccess(User user, Path path) throws IOException {
+	public boolean hasDisplayAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
 	}
 
-	public Folder getRoot(User user) {
+	public Folder getRoot(Client user) {
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setName("");
 		try {
@@ -113,12 +113,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 	
 	@Override
-	public List<User> getUsers() {
-		List<User> users = new ArrayList<>();
+	public List<Client> getClients() {
+		List<Client> users = new ArrayList<>();
 		List<Account> accounts = ra.getAccounts();
 		for (Account account : accounts) {
-			if (account instanceof User) {
-				users.add((User) account);
+			if (account instanceof Client) {
+				users.add((Client) account);
 			}
 		}
 		return users;
@@ -130,8 +130,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public User getUser(String id) {
-		for (User user : getUsers()) {
+	public Client getUser(String id) {
+		for (Client user : getClients()) {
 			if (user.getIdentifier().equals(id)) {
 				return user;
 			}
