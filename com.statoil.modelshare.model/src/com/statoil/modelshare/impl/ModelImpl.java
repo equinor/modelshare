@@ -546,16 +546,8 @@ public class ModelImpl extends AssetImpl implements Model {
 	}
 
 	private void unzipAndGetStaskInformation() {
-		UnzipUtility unzipper = new UnzipUtility();
 		String tempDir = System.getProperty("java.io.tmpdir");
-		try {
-			unzipper.unzip(path, tempDir);
-			
-			
-			
-		} catch (IOException e) {
-			System.err.println("Could not unzip stask to "+ tempDir);
-		}
+		UnzipUtility.unzip(path, tempDir);
 	}
 
 } //ModelImpl
