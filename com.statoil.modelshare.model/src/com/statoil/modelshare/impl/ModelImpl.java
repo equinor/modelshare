@@ -2,24 +2,25 @@
  */
 package com.statoil.modelshare.impl;
 
-import com.statoil.modelshare.Model;
-import com.statoil.modelshare.ModelsharePackage;
-
-import com.statoil.modelshare.TaskInformation;
-import com.statoil.modelshare.util.UnzipUtility;
-
-import java.io.IOException;
+import java.io.File;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.statoil.modelshare.Model;
+import com.statoil.modelshare.ModelsharePackage;
+import com.statoil.modelshare.TaskInformation;
+import com.statoil.modelshare.util.ParseUtility;
+import com.statoil.modelshare.util.UnzipUtility;
 
 /**
  * <!-- begin-user-doc -->
@@ -545,16 +546,18 @@ public class ModelImpl extends AssetImpl implements Model {
 		}
 	}
 
+	/**
+	 * Unzip stask and parses the xmi files for task name and description
+	 * Creates a TaskInformation object per xmi file and adds it to the model object. 
+	 */
 	private void unzipAndGetStaskInformation() {
-		UnzipUtility unzipper = new UnzipUtility();
 		String tempDir = System.getProperty("java.io.tmpdir");
-		try {
-			unzipper.unzip(path, tempDir);
-			
-			
-			
-		} catch (IOException e) {
-			System.err.println("Could not unzip stask to "+ tempDir);
+		UnzipUtility.unzip(path, tempDir);
+		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
+		for (int i = 0; i < unzippedFiles.size(); i++) {
+			File unzippedFile = unzippedFiles.get(i);
+			TaskInformation taskInfo = ParseUtility.parseXMI(unzippedFile);
+			getTaskInformation().add(taskInfo);
 		}
 	}
 

@@ -2,5 +2,6 @@
     <wb-module deploy-name="com.statoil.modelshare.model">
         <wb-resource deploy-path="/" source-path="/src"/>
         <wb-resource deploy-path="/" source-path="/src-test"/>
+        <wb-resource deploy-path="/" source-path="/test-resources"/>
     </wb-module>
 </project-modules>
