@@ -2,6 +2,9 @@ package com.statoil.modelshare.app.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,19 +21,19 @@ import com.statoil.modelshare.controller.ModelRepositoryImpl;
 
 public class ArchiveService {
 
-	public MenuItem getMenuItems() {
+	public MenuItem getMenuItems() throws UnsupportedEncodingException {
 		
 		ModelRepository repo = new ModelRepositoryImpl(getRepositoryPath());
 		Folder root = repo.getRoot(getUser());
 	
 		EList<Asset> eContents = root.getAssets();
-		MenuItem rootItem = new MenuItem("Root");
+		MenuItem rootItem = new MenuItem("Root", "");
 		rootItem.addChildren(getMenuItemsFromAssets(eContents, 0));
 
 		return rootItem;
 	}
 
-	private List<MenuItem> getMenuItemsFromAssets(EList<Asset> eContents, int num) {
+	private List<MenuItem> getMenuItemsFromAssets(EList<Asset> eContents, int num) throws UnsupportedEncodingException {
 		List<MenuItem> items = new ArrayList<MenuItem>();
 		if(eContents != null){
 			for (Asset eObject : eContents) {
@@ -42,6 +45,7 @@ public class ArchiveService {
 					}
 				}else{
 					item = createMenuItem(eObject, true);
+					
 				}
 				items.add(item);
 			}
@@ -49,8 +53,13 @@ public class ArchiveService {
 		return items;
 	}
 
-	private MenuItem createMenuItem(Asset eObject, boolean leaf) {
-		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getFolder().getName(), leaf);
+	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
+		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), getPath(eObject), leaf);
+	}
+
+	private String getPath(Asset eObject) throws UnsupportedEncodingException {
+		String path = URLEncoder.encode(getRepositoryPath().toString() + "/" + eObject.getFolder().getName()+"/"+eObject.getName(), "UTF-8");
+		return path;
 	}
 
 	private Path getRepositoryPath() {
@@ -59,7 +68,12 @@ public class ArchiveService {
 		return  Paths.get(System.getProperty("user.home"), "Documents/Models");
 	}
 
-//	public ModelInformation getModelInformation(String item) throws FileNotFoundException {
+//	public ModelInformation getModelInformation(String item) throws FileNotFoundException, UnsupportedEncodingException {
+//		if(item == null){
+//			return null;
+//		}
+//		item = URLDecoder.decode(item, "UTF-8");
+//		
 //		Path path = new File(item).toPath();
 //		ModelInformation modelInfo = new ModelInformation(path);
 //		return modelInfo;

@@ -10,3 +10,44 @@ body {
 .theme-statoil .navbar .container {
   width: auto;
 }
+
+.treeview-ul {
+	width: 200px:
+	background-color: #ACACAC;
+}
+.treeview-li {
+	font-weight: bold;
+}
+
+.left-container {
+	width: 300px;
+	height: 70%;
+}
+.right-container {
+	max-width: 700px;
+	height: 70%;
+}
+.content-box {
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+}
+
+.text-label {
+	border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+	font-weight: bold;
+	width: 450px;
+}
+.info-field {
+	width: 400px;
+	font-weight: normal;
+}
+.menu-link {
+	font-weight: bold;
+	font-size: 120%;
+}
