@@ -4,6 +4,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Account">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="organisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceChangePassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//Asset">
     <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">

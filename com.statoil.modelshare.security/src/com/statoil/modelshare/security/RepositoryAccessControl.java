@@ -3,13 +3,18 @@ package com.statoil.modelshare.security;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Group;
+import com.statoil.modelshare.ModelshareFactory;
+import com.statoil.modelshare.User;
 
 /**
  * 
@@ -17,16 +22,26 @@ import com.statoil.modelshare.Account;
  */
 public class RepositoryAccessControl {
 
-	protected Path rootPath;
+	protected Path repositoryRootPath;
+	protected Path passwordFilePath;
+	/** Current list of users */
+	private List<Account> users;
 
 	@SuppressWarnings("unused")
 	private RepositoryAccessControl() {
 		// NOOP - use constructor specifying repository root instead
 	}
 
-	public RepositoryAccessControl(Path path) {
-		// Just making sure, we must have an absolute path.
-		rootPath = path.toAbsolutePath();
+	/**
+	 * Path to the repository root.
+	 * 
+	 * @param root
+	 *            the path to the repository root
+	 */
+	public RepositoryAccessControl(Path root) {
+		// Just making sure - we must have an absolute path.
+		repositoryRootPath = root.toAbsolutePath();
+		passwordFilePath = repositoryRootPath.resolve(".passwd");
 	}
 
 	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
@@ -36,7 +51,7 @@ public class RepositoryAccessControl {
 		} else {
 			name = "." + path.getFileName().toString() + ".access";
 		}
-		Path filePath = rootPath.resolve(path.getParent().resolve(name));
+		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
 		File file = filePath.toFile();
 		if (!file.exists()) {
 			return access;
@@ -113,8 +128,8 @@ public class RepositoryAccessControl {
 		EnumSet<Access> access = EnumSet.noneOf(Access.class);
 		List<Account> roles = account.getAllRoles();
 		for (Account a : roles) {
-			Path r = rootPath;
-			Path p = rootPath.relativize(rootPath.resolve(path));
+			Path r = repositoryRootPath;
+			Path p = repositoryRootPath.relativize(repositoryRootPath.resolve(path));
 			int nameCount = p.getNameCount();
 			for (int i = 0; i <= nameCount; i++) {
 				access = getAccess(access, r, a.getIdentifier());
@@ -124,6 +139,93 @@ public class RepositoryAccessControl {
 			}
 		}
 		return access;
+	}
+
+	/**
+	 * Returns a list of users and groups that may log into the system. The list
+	 * is guaranteed to be up to date, the underlying data is re-read on every
+	 * call of this method.
+	 * 
+	 * @return a list of accounts
+	 * @throws IOException
+	 */
+	public List<Account> getAccounts() {
+		synchronized (passwordFilePath) {
+			if (users == null) {
+				users = new ArrayList<>();
+				String in = null;
+				// Add h
+				try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
+					while ((in = br.readLine()) != null) {
+						String[] split = in.split(":");
+						// "x" som password indikerer at dette er en gruppe
+						if (split[1].equals("x")) {
+							Group group = ModelshareFactory.eINSTANCE.createGroup();
+							group.setIdentifier(split[0]);
+							group.setName(split[3]);
+							users.add(group);
+						} else {
+							User user = ModelshareFactory.eINSTANCE.createUser();
+							user.setIdentifier(split[0]);
+							user.setEmail(split[0]);
+							user.setPassword(split[1]);
+							user.setName(split[3]);
+							users.add(user);
+							if (split[1].length() == 0) {
+								user.setForceChangePassword(true);
+							}
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return users;
+		}
+	}
+
+	/**
+	 * 
+	 * @param id
+	 *            the user identifier
+	 * @param hash
+	 *            the password hash
+	 */
+	public synchronized void setPassword(String id, String hash) {
+		List<Account> accounts = getAccounts();
+		for (Account account : accounts) {
+			if (account.getIdentifier().equals(id) && account instanceof User) {
+				((User) account).setPassword(hash);
+			}
+		}
+		savePasswords();
+	}
+
+	private void savePasswords() {
+		synchronized (passwordFilePath) {
+			List<Account> accounts = getAccounts();
+			try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
+				for (Account account : accounts) {
+					if (account instanceof Group) {
+						fw.write(account.getIdentifier() + ":x:");
+						fw.write(account.getGroup().getIdentifier() + ":");
+						fw.write(account.getName());
+					} else if (account instanceof User) {
+						fw.write(account.getIdentifier() + ":");
+						fw.write(((User) account).getPassword() + ":");
+						if (account.getGroup()!=null){
+							fw.write(account.getGroup().getName() + ":");
+						} else {
+							fw.write(":");
+						}
+						fw.write(account.getName());
+					}
+					fw.write(System.lineSeparator());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

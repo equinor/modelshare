@@ -178,13 +178,31 @@ public interface ModelsharePackage extends EPackage {
 	int USER__EMAIL = ACCOUNT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Password</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER__PASSWORD = ACCOUNT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Force Change Password</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER__FORCE_CHANGE_PASSWORD = ACCOUNT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>User</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 2;
+	int USER_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get All Roles</em>' operation.
@@ -604,6 +622,28 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getUser_Email();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#getPassword <em>Password</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Password</em>'.
+	 * @see com.statoil.modelshare.User#getPassword()
+	 * @see #getUser()
+	 * @generated
+	 */
+	EAttribute getUser_Password();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Force Change Password</em>'.
+	 * @see com.statoil.modelshare.User#isForceChangePassword()
+	 * @see #getUser()
+	 * @generated
+	 */
+	EAttribute getUser_ForceChangePassword();
+
+	/**
 	 * Returns the meta object for class '{@link com.statoil.modelshare.Model <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -917,6 +957,22 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER__EMAIL = eINSTANCE.getUser_Email();
+
+		/**
+		 * The meta object literal for the '<em><b>Password</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER__PASSWORD = eINSTANCE.getUser_Password();
+
+		/**
+		 * The meta object literal for the '<em><b>Force Change Password</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER__FORCE_CHANGE_PASSWORD = eINSTANCE.getUser_ForceChangePassword();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.impl.ModelImpl <em>Model</em>}' class.

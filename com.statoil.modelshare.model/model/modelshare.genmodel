@@ -17,6 +17,8 @@
     <genClasses ecoreClass="modelshare.ecore#//User">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/forceChangePassword"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>

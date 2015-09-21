@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.statoil.modelshare.Access;
+import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
@@ -54,7 +57,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		// Recurse into subfolders and add files
 		for (File child : listFiles) {
 			// Ignore those where the user have no access
-			if (haveAccess(user, child.toPath())) {
+			if (hasDisplayAccess(user, child.toPath())) {
 				if (child.isDirectory()) {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
@@ -69,7 +72,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 	}
 
-	private boolean haveAccess(User user, Path path) throws IOException {
+	public boolean hasDisplayAccess(User user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
 	}
@@ -83,6 +86,23 @@ public class ModelRepositoryImpl implements ModelRepository {
 			}
 		}
 		return root;
+	}
+
+	@Override
+	public List<User> getUsers() {
+		List<User> users = new ArrayList<>();
+		List<Account> accounts = ra.getAccounts();
+		for (Account account : accounts) {
+			if (account instanceof User){
+				users.add((User) account);
+			}
+		}
+		return users;
+	}
+
+	@Override
+	public void setPassword(String name, String hash) {
+		ra.setPassword(name,hash);
 	}
 
 }

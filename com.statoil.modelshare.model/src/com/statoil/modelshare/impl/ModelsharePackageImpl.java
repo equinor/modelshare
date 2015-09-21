@@ -178,6 +178,24 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getUser_Password() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUser_ForceChangePassword() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getModel() {
 		return modelEClass;
 	}
@@ -429,6 +447,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		userEClass = createEClass(USER);
 		createEAttribute(userEClass, USER__ORGANISATION);
 		createEAttribute(userEClass, USER__EMAIL);
+		createEAttribute(userEClass, USER__PASSWORD);
+		createEAttribute(userEClass, USER__FORCE_CHANGE_PASSWORD);
 
 		modelEClass = createEClass(MODEL);
 		createEAttribute(modelEClass, MODEL__OWNER);
@@ -501,6 +521,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUser_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_Email(), ecorePackage.getEString(), "email", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_Password(), ecorePackage.getEString(), "password", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModel_Owner(), ecorePackage.getEString(), "owner", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
