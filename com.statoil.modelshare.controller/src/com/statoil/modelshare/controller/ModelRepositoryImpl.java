@@ -44,7 +44,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	private void fillFolderContents(Folder folder, Client user) throws IOException {
-		File file = rootPath.resolve(folder.getName()).toFile();
+		File file = new File(folder.getPath());
 		if (!file.exists()) {
 			return;
 		}
@@ -61,10 +61,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 				if (child.isDirectory()) {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
-					folder.getAssets().add(newFolder);
+					newFolder.setPath(child.getAbsolutePath());
+					folder.getAssets().add(newFolder);					
 					fillFolderContents(newFolder, user);
 				} else {
 					Model newFile = ModelshareFactory.eINSTANCE.createModel();
+					newFile.setPath(child.getAbsolutePath());
 					newFile.setName(child.getName());
 					folder.getAssets().add(newFile);
 				}
@@ -79,6 +81,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	public Folder getRoot(Client user) {
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
+		root.setPath(rootPath.toString());
 		root.setName("");
 		try {
 			fillFolderContents(root, user);

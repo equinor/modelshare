@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.statoil.modelshare.Asset#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.Asset#getFolder <em>Folder</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getAsset()
@@ -76,6 +77,35 @@ public interface Asset extends EObject {
 	 * @generated
 	 */
 	void setFolder(Folder value);
+
+	/**
+	 * Returns the value of the '<em><b>Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Path</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Absolute file system path to the resource.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Path</em>' attribute.
+	 * @see #setPath(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Path()
+	 * @model
+	 * @generated
+	 */
+	String getPath();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Path</em>' attribute.
+	 * @see #getPath()
+	 * @generated
+	 */
+	void setPath(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

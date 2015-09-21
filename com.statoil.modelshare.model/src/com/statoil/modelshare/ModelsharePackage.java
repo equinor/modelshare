@@ -251,13 +251,22 @@ public interface ModelsharePackage extends EPackage {
 	int ASSET__FOLDER = 1;
 
 	/**
+	 * The feature id for the '<em><b>Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSET__PATH = 2;
+
+	/**
 	 * The number of structural features of the '<em>Asset</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSET_FEATURE_COUNT = 2;
+	int ASSET_FEATURE_COUNT = 3;
 
 	/**
 	 * The operation id for the '<em>Get Access</em>' operation.
@@ -304,6 +313,15 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int MODEL__FOLDER = ASSET__FOLDER;
+
+	/**
+	 * The feature id for the '<em><b>Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__PATH = ASSET__PATH;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' attribute.
@@ -360,22 +378,13 @@ public interface ModelsharePackage extends EPackage {
 	int MODEL__TASK_INFORMATION = ASSET_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Path</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL__PATH = ASSET_FEATURE_COUNT + 6;
-
-	/**
 	 * The feature id for the '<em><b>Usage</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL__USAGE = ASSET_FEATURE_COUNT + 7;
+	int MODEL__USAGE = ASSET_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -384,7 +393,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_FEATURE_COUNT = ASSET_FEATURE_COUNT + 8;
+	int MODEL_FEATURE_COUNT = ASSET_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Access</em>' operation.
@@ -495,6 +504,15 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int FOLDER__FOLDER = ASSET__FOLDER;
+
+	/**
+	 * The feature id for the '<em><b>Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__PATH = ASSET__PATH;
 
 	/**
 	 * The feature id for the '<em><b>Assets</b></em>' reference list.
@@ -720,17 +738,6 @@ public interface ModelsharePackage extends EPackage {
 	EReference getModel_TaskInformation();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Model#getPath <em>Path</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Path</em>'.
-	 * @see com.statoil.modelshare.Model#getPath()
-	 * @see #getModel()
-	 * @generated
-	 */
-	EAttribute getModel_Path();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Model#getUsage <em>Usage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -856,6 +863,17 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAsset_Folder();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Path</em>'.
+	 * @see com.statoil.modelshare.Asset#getPath()
+	 * @see #getAsset()
+	 * @generated
+	 */
+	EAttribute getAsset_Path();
 
 	/**
 	 * Returns the meta object for the '{@link com.statoil.modelshare.Asset#getAccess(com.statoil.modelshare.Account) <em>Get Access</em>}' operation.
@@ -1033,14 +1051,6 @@ public interface ModelsharePackage extends EPackage {
 		EReference MODEL__TASK_INFORMATION = eINSTANCE.getModel_TaskInformation();
 
 		/**
-		 * The meta object literal for the '<em><b>Path</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MODEL__PATH = eINSTANCE.getModel_Path();
-
-		/**
 		 * The meta object literal for the '<em><b>Usage</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1143,6 +1153,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ASSET__FOLDER = eINSTANCE.getAsset_Folder();
+
+		/**
+		 * The meta object literal for the '<em><b>Path</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSET__PATH = eINSTANCE.getAsset_Path();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Access</b></em>' operation.

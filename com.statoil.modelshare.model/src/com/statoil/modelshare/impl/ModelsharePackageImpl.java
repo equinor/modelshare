@@ -258,17 +258,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getModel_Path() {
-		return (EAttribute)modelEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getModel_Usage() {
-		return (EAttribute)modelEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)modelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -375,6 +366,15 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAsset_Path() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getAsset__GetAccess__Account() {
 		return assetEClass.getEOperations().get(0);
 	}
@@ -456,7 +456,6 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(modelEClass, MODEL__LAST_UPDATED);
 		createEAttribute(modelEClass, MODEL__STASK);
 		createEReference(modelEClass, MODEL__TASK_INFORMATION);
-		createEAttribute(modelEClass, MODEL__PATH);
 		createEAttribute(modelEClass, MODEL__USAGE);
 
 		groupEClass = createEClass(GROUP);
@@ -473,6 +472,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		assetEClass = createEClass(ASSET);
 		createEAttribute(assetEClass, ASSET__NAME);
 		createEReference(assetEClass, ASSET__FOLDER);
+		createEAttribute(assetEClass, ASSET__PATH);
 		createEOperation(assetEClass, ASSET___GET_ACCESS__ACCOUNT);
 
 		taskInformationEClass = createEClass(TASK_INFORMATION);
@@ -530,7 +530,6 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getModel_LastUpdated(), ecorePackage.getEDate(), "lastUpdated", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModel_Stask(), ecorePackage.getEBoolean(), "stask", "false", 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_TaskInformation(), this.getTaskInformation(), null, "taskInformation", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getModel_Path(), ecorePackage.getEString(), "path", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModel_Usage(), ecorePackage.getEString(), "usage", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -548,6 +547,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEClass(assetEClass, Asset.class, "Asset", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAsset_Name(), ecorePackage.getEString(), "name", null, 1, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAsset_Folder(), this.getFolder(), this.getFolder_Assets(), "folder", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_Path(), ecorePackage.getEString(), "path", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getAsset__GetAccess__Account(), ecorePackage.getEEnum(), "getAccess", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAccount(), "account", 1, 1, IS_UNIQUE, IS_ORDERED);
