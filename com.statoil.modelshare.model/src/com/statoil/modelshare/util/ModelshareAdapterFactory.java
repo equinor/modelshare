@@ -92,6 +92,10 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 				return createAssetAdapter();
 			}
 			@Override
+			public Adapter caseTaskInformation(TaskInformation object) {
+				return createTaskInformationAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -192,6 +196,20 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAssetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.TaskInformation <em>Task Information</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.statoil.modelshare.TaskInformation
+	 * @generated
+	 */
+	public Adapter createTaskInformationAdapter() {
 		return null;
 	}
 

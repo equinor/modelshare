@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.statoil.modelshare.app.service.ModelInformation;
 import com.statoil.modelshare.app.service.ArchiveService;
 
 @Controller
@@ -23,8 +22,8 @@ public class ArchiveController {
 	 * 
 	 */
 		public String doShow (ModelMap model, @RequestParam String item) throws FileNotFoundException {
-			ModelInformation modelInformation = service.getModelInformation(item);
-			model.addAttribute("modelInformation", modelInformation);
+//			ModelInformation modelInformation = service.getModelInformation(item);
+//			model.addAttribute("modelInformation", modelInformation);
 			model.addAttribute("node", service.getMenuItems());
 		return "archive";
 	}

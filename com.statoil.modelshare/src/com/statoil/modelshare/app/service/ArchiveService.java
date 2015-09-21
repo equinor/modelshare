@@ -59,11 +59,11 @@ public class ArchiveService {
 		return  Paths.get(System.getProperty("user.home"), "Documents/Models");
 	}
 
-	public ModelInformation getModelInformation(String item) throws FileNotFoundException {
-		Path path = new File(item).toPath();
-		ModelInformation modelInfo = new ModelInformation(path);
-		return modelInfo;
-	}
+//	public ModelInformation getModelInformation(String item) throws FileNotFoundException {
+//		Path path = new File(item).toPath();
+//		ModelInformation modelInfo = new ModelInformation(path);
+//		return modelInfo;
+//	}
 
 	private User getUser() {
 		// TODO: Get correct user info from login

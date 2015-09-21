@@ -58,6 +58,15 @@ public interface ModelshareFactory extends EFactory {
 	Folder createFolder();
 
 	/**
+	 * Returns a new object of class '<em>Task Information</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Task Information</em>'.
+	 * @generated
+	 */
+	TaskInformation createTaskInformation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
