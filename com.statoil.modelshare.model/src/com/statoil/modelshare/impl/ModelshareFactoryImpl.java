@@ -57,7 +57,7 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ModelsharePackage.USER: return createUser();
+			case ModelsharePackage.CLIENT: return createClient();
 			case ModelsharePackage.MODEL: return createModel();
 			case ModelsharePackage.GROUP: return createGroup();
 			case ModelsharePackage.FOLDER: return createFolder();
@@ -102,9 +102,9 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public User createUser() {
-		UserImpl user = new UserImpl();
-		return user;
+	public Client createClient() {
+		ClientImpl client = new ClientImpl();
+		return client;
 	}
 
 	/**

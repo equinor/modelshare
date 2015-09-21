@@ -14,11 +14,11 @@
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Read"/>
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Write"/>
     </genEnums>
-    <genClasses ecoreClass="modelshare.ecore#//User">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/password"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/forceChangePassword"/>
+    <genClasses ecoreClass="modelshare.ecore#//Client">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/organisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/forceChangePassword"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>

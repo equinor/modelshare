@@ -8,7 +8,7 @@ public class UserTest {
 
 	@Test
 	public void testUser() {
-		User per = ModelshareFactory.eINSTANCE.createUser();
+		Client per = ModelshareFactory.eINSTANCE.createClient();
 		assertNotNull(per);
 	}
 }

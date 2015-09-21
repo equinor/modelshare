@@ -5,14 +5,13 @@ package com.statoil.modelshare.impl;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Asset;
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
 import com.statoil.modelshare.TaskInformation;
-import com.statoil.modelshare.User;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -34,7 +33,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass userEClass = null;
+	private EClass clientEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -151,8 +150,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getUser() {
-		return userEClass;
+	public EClass getClient() {
+		return clientEClass;
 	}
 
 	/**
@@ -160,8 +159,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Organisation() {
-		return (EAttribute)userEClass.getEStructuralFeatures().get(0);
+	public EAttribute getClient_Organisation() {
+		return (EAttribute)clientEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -169,8 +168,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Email() {
-		return (EAttribute)userEClass.getEStructuralFeatures().get(1);
+	public EAttribute getClient_Email() {
+		return (EAttribute)clientEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -178,8 +177,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_Password() {
-		return (EAttribute)userEClass.getEStructuralFeatures().get(2);
+	public EAttribute getClient_Password() {
+		return (EAttribute)clientEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -187,8 +186,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUser_ForceChangePassword() {
-		return (EAttribute)userEClass.getEStructuralFeatures().get(3);
+	public EAttribute getClient_ForceChangePassword() {
+		return (EAttribute)clientEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -444,11 +443,11 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		isCreated = true;
 
 		// Create classes and their features
-		userEClass = createEClass(USER);
-		createEAttribute(userEClass, USER__ORGANISATION);
-		createEAttribute(userEClass, USER__EMAIL);
-		createEAttribute(userEClass, USER__PASSWORD);
-		createEAttribute(userEClass, USER__FORCE_CHANGE_PASSWORD);
+		clientEClass = createEClass(CLIENT);
+		createEAttribute(clientEClass, CLIENT__ORGANISATION);
+		createEAttribute(clientEClass, CLIENT__EMAIL);
+		createEAttribute(clientEClass, CLIENT__PASSWORD);
+		createEAttribute(clientEClass, CLIENT__FORCE_CHANGE_PASSWORD);
 
 		modelEClass = createEClass(MODEL);
 		createEAttribute(modelEClass, MODEL__OWNER);
@@ -512,17 +511,17 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		userEClass.getESuperTypes().add(this.getAccount());
+		clientEClass.getESuperTypes().add(this.getAccount());
 		modelEClass.getESuperTypes().add(this.getAsset());
 		groupEClass.getESuperTypes().add(this.getAccount());
 		folderEClass.getESuperTypes().add(this.getAsset());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getUser_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUser_Email(), ecorePackage.getEString(), "email", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUser_Password(), ecorePackage.getEString(), "password", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUser_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(clientEClass, Client.class, "Client", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getClient_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getClient_Email(), ecorePackage.getEString(), "email", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getClient_Password(), ecorePackage.getEString(), "password", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getClient_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModel_Owner(), ecorePackage.getEString(), "owner", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

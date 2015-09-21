@@ -22,13 +22,13 @@ public interface ModelshareFactory extends EFactory {
 	ModelshareFactory eINSTANCE = com.statoil.modelshare.impl.ModelshareFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>User</em>'.
+	 * Returns a new object of class '<em>Client</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>User</em>'.
+	 * @return a new object of class '<em>Client</em>'.
 	 * @generated
 	 */
-	User createUser();
+	Client createClient();
 
 	/**
 	 * Returns a new object of class '<em>Model</em>'.

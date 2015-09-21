@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modelshare" nsURI="http://www.statoil.com/modelshare" nsPrefix="com.statoil.modelshare.model">
-  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Account">
+  <eClassifiers xsi:type="ecore:EClass" name="Client" eSuperTypes="#//Account">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="organisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -123,14 +123,14 @@ public interface ModelsharePackage extends EPackage {
 	int ACCOUNT_OPERATION_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.statoil.modelshare.impl.UserImpl <em>User</em>}' class.
+	 * The meta object id for the '{@link com.statoil.modelshare.impl.ClientImpl <em>Client</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.statoil.modelshare.impl.UserImpl
-	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getUser()
+	 * @see com.statoil.modelshare.impl.ClientImpl
+	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getClient()
 	 * @generated
 	 */
-	int USER = 0;
+	int CLIENT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Identifier</b></em>' attribute.
@@ -139,7 +139,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__IDENTIFIER = ACCOUNT__IDENTIFIER;
+	int CLIENT__IDENTIFIER = ACCOUNT__IDENTIFIER;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -148,7 +148,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__NAME = ACCOUNT__NAME;
+	int CLIENT__NAME = ACCOUNT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Group</b></em>' reference.
@@ -157,7 +157,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__GROUP = ACCOUNT__GROUP;
+	int CLIENT__GROUP = ACCOUNT__GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Organisation</b></em>' attribute.
@@ -166,7 +166,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__ORGANISATION = ACCOUNT_FEATURE_COUNT + 0;
+	int CLIENT__ORGANISATION = ACCOUNT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Email</b></em>' attribute.
@@ -175,7 +175,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__EMAIL = ACCOUNT_FEATURE_COUNT + 1;
+	int CLIENT__EMAIL = ACCOUNT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Password</b></em>' attribute.
@@ -184,7 +184,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__PASSWORD = ACCOUNT_FEATURE_COUNT + 2;
+	int CLIENT__PASSWORD = ACCOUNT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Force Change Password</b></em>' attribute.
@@ -193,16 +193,16 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER__FORCE_CHANGE_PASSWORD = ACCOUNT_FEATURE_COUNT + 3;
+	int CLIENT__FORCE_CHANGE_PASSWORD = ACCOUNT_FEATURE_COUNT + 3;
 
 	/**
-	 * The number of structural features of the '<em>User</em>' class.
+	 * The number of structural features of the '<em>Client</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 4;
+	int CLIENT_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get All Roles</em>' operation.
@@ -211,16 +211,16 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER___GET_ALL_ROLES = ACCOUNT___GET_ALL_ROLES;
+	int CLIENT___GET_ALL_ROLES = ACCOUNT___GET_ALL_ROLES;
 
 	/**
-	 * The number of operations of the '<em>User</em>' class.
+	 * The number of operations of the '<em>Client</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_OPERATION_COUNT = ACCOUNT_OPERATION_COUNT + 0;
+	int CLIENT_OPERATION_COUNT = ACCOUNT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.statoil.modelshare.impl.AssetImpl <em>Asset</em>}' class.
@@ -590,58 +590,58 @@ public interface ModelsharePackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link com.statoil.modelshare.User <em>User</em>}'.
+	 * Returns the meta object for class '{@link com.statoil.modelshare.Client <em>Client</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>User</em>'.
-	 * @see com.statoil.modelshare.User
+	 * @return the meta object for class '<em>Client</em>'.
+	 * @see com.statoil.modelshare.Client
 	 * @generated
 	 */
-	EClass getUser();
+	EClass getClient();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#getOrganisation <em>Organisation</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Client#getOrganisation <em>Organisation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Organisation</em>'.
-	 * @see com.statoil.modelshare.User#getOrganisation()
-	 * @see #getUser()
+	 * @see com.statoil.modelshare.Client#getOrganisation()
+	 * @see #getClient()
 	 * @generated
 	 */
-	EAttribute getUser_Organisation();
+	EAttribute getClient_Organisation();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#getEmail <em>Email</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Client#getEmail <em>Email</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Email</em>'.
-	 * @see com.statoil.modelshare.User#getEmail()
-	 * @see #getUser()
+	 * @see com.statoil.modelshare.Client#getEmail()
+	 * @see #getClient()
 	 * @generated
 	 */
-	EAttribute getUser_Email();
+	EAttribute getClient_Email();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#getPassword <em>Password</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Client#getPassword <em>Password</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Password</em>'.
-	 * @see com.statoil.modelshare.User#getPassword()
-	 * @see #getUser()
+	 * @see com.statoil.modelshare.Client#getPassword()
+	 * @see #getClient()
 	 * @generated
 	 */
-	EAttribute getUser_Password();
+	EAttribute getClient_Password();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Client#isForceChangePassword <em>Force Change Password</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Force Change Password</em>'.
-	 * @see com.statoil.modelshare.User#isForceChangePassword()
-	 * @see #getUser()
+	 * @see com.statoil.modelshare.Client#isForceChangePassword()
+	 * @see #getClient()
 	 * @generated
 	 */
-	EAttribute getUser_ForceChangePassword();
+	EAttribute getClient_ForceChangePassword();
 
 	/**
 	 * Returns the meta object for class '{@link com.statoil.modelshare.Model <em>Model</em>}'.
@@ -933,14 +933,14 @@ public interface ModelsharePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.statoil.modelshare.impl.UserImpl <em>User</em>}' class.
+		 * The meta object literal for the '{@link com.statoil.modelshare.impl.ClientImpl <em>Client</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.statoil.modelshare.impl.UserImpl
-		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getUser()
+		 * @see com.statoil.modelshare.impl.ClientImpl
+		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getClient()
 		 * @generated
 		 */
-		EClass USER = eINSTANCE.getUser();
+		EClass CLIENT = eINSTANCE.getClient();
 
 		/**
 		 * The meta object literal for the '<em><b>Organisation</b></em>' attribute feature.
@@ -948,7 +948,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER__ORGANISATION = eINSTANCE.getUser_Organisation();
+		EAttribute CLIENT__ORGANISATION = eINSTANCE.getClient_Organisation();
 
 		/**
 		 * The meta object literal for the '<em><b>Email</b></em>' attribute feature.
@@ -956,7 +956,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER__EMAIL = eINSTANCE.getUser_Email();
+		EAttribute CLIENT__EMAIL = eINSTANCE.getClient_Email();
 
 		/**
 		 * The meta object literal for the '<em><b>Password</b></em>' attribute feature.
@@ -964,7 +964,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER__PASSWORD = eINSTANCE.getUser_Password();
+		EAttribute CLIENT__PASSWORD = eINSTANCE.getClient_Password();
 
 		/**
 		 * The meta object literal for the '<em><b>Force Change Password</b></em>' attribute feature.
@@ -972,7 +972,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute USER__FORCE_CHANGE_PASSWORD = eINSTANCE.getUser_ForceChangePassword();
+		EAttribute CLIENT__FORCE_CHANGE_PASSWORD = eINSTANCE.getClient_ForceChangePassword();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.impl.ModelImpl <em>Model</em>}' class.

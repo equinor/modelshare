@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.ModelshareFactory;
-import com.statoil.modelshare.User;
 
 /**
  * 
@@ -176,7 +176,7 @@ public class RepositoryAccessControl {
 						group.setName(split[3]);
 						accounts.add(group);
 					} else {
-						User user = ModelshareFactory.eINSTANCE.createUser();
+						Client user = ModelshareFactory.eINSTANCE.createClient();
 						user.setIdentifier(split[0]);
 						user.setEmail(split[0]);
 						user.setPassword(split[1]);
@@ -207,8 +207,8 @@ public class RepositoryAccessControl {
 		synchronized (passwordFilePath) {
 			List<Account> accounts = getAccounts();
 			for (Account account : accounts) {
-				if (account.getIdentifier().equals(id) && account instanceof User) {
-					((User) account).setPassword(hash);
+				if (account.getIdentifier().equals(id) && account instanceof Client) {
+					((Client) account).setPassword(hash);
 				}
 			}
 			try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
@@ -216,16 +216,16 @@ public class RepositoryAccessControl {
 					if (account instanceof Group) {
 						fw.write(account.getIdentifier() + ":x:");
 						if (account.getGroup() != null) {
-							fw.write(account.getGroup().getName() + ":");
+							fw.write(account.getGroup().getIdentifier() + ":");
 						} else {
 							fw.write(":");
 						}
 						fw.write(account.getName());
-					} else if (account instanceof User) {
+					} else if (account instanceof Client) {
 						fw.write(account.getIdentifier() + ":");
-						fw.write(((User) account).getPassword() + ":");
+						fw.write(((Client) account).getPassword() + ":");
 						if (account.getGroup() != null) {
-							fw.write(account.getGroup().getName() + ":");
+							fw.write(account.getGroup().getIdentifier() + ":");
 						} else {
 							fw.write(":");
 						}

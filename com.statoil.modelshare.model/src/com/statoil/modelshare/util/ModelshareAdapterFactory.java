@@ -68,8 +68,8 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 	protected ModelshareSwitch<Adapter> modelSwitch =
 		new ModelshareSwitch<Adapter>() {
 			@Override
-			public Adapter caseUser(User object) {
-				return createUserAdapter();
+			public Adapter caseClient(Client object) {
+				return createClientAdapter();
 			}
 			@Override
 			public Adapter caseModel(Model object) {
@@ -116,16 +116,16 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.User <em>User</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.Client <em>Client</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.statoil.modelshare.User
+	 * @see com.statoil.modelshare.Client
 	 * @generated
 	 */
-	public Adapter createUserAdapter() {
+	public Adapter createClientAdapter() {
 		return null;
 	}
 
