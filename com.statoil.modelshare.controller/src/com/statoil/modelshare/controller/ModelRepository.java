@@ -28,11 +28,21 @@ public interface ModelRepository {
 	public Folder getRoot(User user);
 
 	/**
-	 * Returns a list of users that have access to the repository.
+	 * Returns a list of all users that have access to the repository.
 	 * 
 	 * @return a list of users
 	 */
 	public List<User> getUsers();
+
+	/**
+	 * Returns the user with the given identifier if found, otherwise
+	 * <code>null</code> is returned.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @return the user or <code>null</code>
+	 */
+	public User getUser(String id);
 
 	/**
 	 * Sets the password has for the specified user.
@@ -45,10 +55,13 @@ public interface ModelRepository {
 	public void setPassword(String name, String hash);
 
 	/**
-	 * Returns <code>true</code> if the user has view access to the given path.
+	 * Convencience method for determining whether the user has view access to
+	 * the given path.
 	 * 
-	 * @param user the user to test for
-	 * @param path the path to the resource
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
 	 * @return
 	 */
 	public boolean hasDisplayAccess(User user, Path path) throws IOException ;

@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.web;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,13 +26,13 @@ public class ArchiveController {
 	 * - Handle exceptions
 	 * 
 	 */
-		public String doShow (ModelMap model, @RequestParam String item) throws FileNotFoundException, UnsupportedEncodingException {
+		public String doShow (ModelMap model, @RequestParam(value = "item", required = false) String item, Principal principal) throws FileNotFoundException, UnsupportedEncodingException {
 			Model currentModel = service.getModelFromAssets(item);
 			if(currentModel!=null){
 				model.addAttribute("currentModel", currentModel);
 			}
 			model.addAttribute("title", "Model archive");
-			MenuItem menuItem = service.getMenuItemsFromAssets();
+			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", menuItem);
 		return "archive";
 	}

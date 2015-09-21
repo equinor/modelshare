@@ -5,11 +5,8 @@ import java.security.Principal;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,7 +23,7 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 public class PasswdController {
 
-	private ModelRepository repo;
+	private ModelRepository repository;
 
 	@RequestMapping(value = "/passwd", method = RequestMethod.POST)
 	public String changePassword(ModelMap model, @RequestParam(value = "old-password", required = true) String password,
@@ -41,15 +38,15 @@ public class PasswdController {
 
 		// We're using the repository configuration to get a handle on the user
 		// database
-		if (repo == null) {
+		if (repository == null) {
 			ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
-			repo = ctx.getBean(ModelRepository.class);
+			repository = ctx.getBean(ModelRepository.class);
 			((ConfigurableApplicationContext) ctx).close();
 		}
 		
 		// Change the password
 		String name = principal.getName();
-		repo.setPassword(name, newHashedPassword);
+		repository.setPassword(name, newHashedPassword);
 		// Reset securitycontext and force user to log in again
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
         auth.setAuthenticated(false);
