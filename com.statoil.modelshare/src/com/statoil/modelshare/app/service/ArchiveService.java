@@ -1,5 +1,7 @@
 package com.statoil.modelshare.app.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -39,6 +41,7 @@ public class ArchiveService {
 					}
 				}else{
 					item = createMenuItem(eObject, true);
+					
 				}
 				items.add(item);
 			}
