@@ -27,12 +27,12 @@
 					 	</div>
 					</div>
 				</div>
-				<div class="right-container col-sm-9" th:if="${modelInformation}">
-					<div class="text-label">Model name<p>
-						<span class="info-field" th:text="${modelInformation.name}"></span>
+				<div class="right-container col-sm-9" th:if="${currentModel}">
+					<div class="text-label">Model owner<p/>
+						<span class="info-field" th:text="${currentModel.owner}"></span>
 					</div>
-					<div class="text-label">Description<p/>
-						<span class="info-field" th:text="${modelInformation.description}"></span>
+					<div class="text-label">Organisation<p/>
+						<span class="info-field" th:text="${currentModel.organisation}"></span>
 					</div>
 				</div>
 			</div>

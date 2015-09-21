@@ -3,6 +3,8 @@ package com.statoil.modelshare.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.statoil.modelshare.Model;
+
 public class MenuItem {
 	    private String name;
 	    private ArrayList<MenuItem> children;
@@ -42,4 +44,5 @@ public class MenuItem {
 		public boolean isLeaf() {
 			return leaf;
 		}
+
 	} 

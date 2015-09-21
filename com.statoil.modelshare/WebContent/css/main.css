@@ -24,7 +24,7 @@ body {
 	height: 70%;
 }
 .right-container {
-	max-width: 700px;
+	max-width: 600px;
 	height: 70%;
 }
 .content-box {
@@ -44,7 +44,7 @@ body {
 	width: 450px;
 }
 .info-field {
-	width: 400px;
+	width: 550px;
 	font-weight: normal;
 }
 .menu-link {

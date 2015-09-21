@@ -1,7 +1,5 @@
 package com.statoil.modelshare.app.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -9,27 +7,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.emf.common.util.EList;
 
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
+import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.controller.ModelRepository;
 import com.statoil.modelshare.controller.ModelRepositoryImpl;
 
 public class ArchiveService {
-
-	public MenuItem getMenuItems() throws UnsupportedEncodingException {
-		
-		ModelRepository repo = new ModelRepositoryImpl(getRepositoryPath());
-		Folder root = repo.getRoot(getUser());
 	
-		EList<Asset> eContents = root.getAssets();
+	public MenuItem getMenuItemsFromAssets() throws UnsupportedEncodingException {
+		
+		EList<Asset> eContents = getAssets();
 		MenuItem rootItem = new MenuItem("Root", "");
 		rootItem.addChildren(getMenuItemsFromAssets(eContents, 0));
-
 		return rootItem;
 	}
 
@@ -45,12 +39,36 @@ public class ArchiveService {
 					}
 				}else{
 					item = createMenuItem(eObject, true);
-					
 				}
 				items.add(item);
 			}
 		}
 		return items;
+	}
+	public Model getModelFromAssets(String path) throws UnsupportedEncodingException {
+		EList<Asset> eContents = getAssets();
+		return getModelFromAssets(eContents, URLDecoder.decode(path, "UTF-8"));
+	}
+	
+	private Model getModelFromAssets(EList<Asset> eContents, String path) throws UnsupportedEncodingException {
+		
+		Model model = null;
+		if(eContents != null){
+			for (Asset eObject : eContents) {
+				if (eObject instanceof Folder){
+					if(model == null){
+						model = getModelFromAssets(((Folder) eObject).getAssets(), path);
+					}
+				}else{
+					String objectPath = eObject.getFolder().getName()+"/"+eObject.getName();
+					if(path.equals(objectPath)){
+						model = (Model) eObject;
+						break;
+					}
+				}
+			}
+		}
+		return model;
 	}
 
 	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
@@ -58,27 +76,23 @@ public class ArchiveService {
 	}
 
 	private String getPath(Asset eObject) throws UnsupportedEncodingException {
-		String path = URLEncoder.encode(getRepositoryPath().toString() + "/" + eObject.getFolder().getName()+"/"+eObject.getName(), "UTF-8");
+		String path = URLEncoder.encode(eObject.getFolder().getName()+"/"+eObject.getName(), "UTF-8");
 		return path;
 	}
 
 	private Path getRepositoryPath() {
 		// TODO: Get correct repository path
-		
+
 		return  Paths.get(System.getProperty("user.home"), "Documents/Models");
 	}
 
-//	public ModelInformation getModelInformation(String item) throws FileNotFoundException, UnsupportedEncodingException {
-//		if(item == null){
-//			return null;
-//		}
-//		item = URLDecoder.decode(item, "UTF-8");
-//		
-//		Path path = new File(item).toPath();
-//		ModelInformation modelInfo = new ModelInformation(path);
-//		return modelInfo;
-//	}
-
+	private EList<Asset> getAssets() {
+		ModelRepository repo = new ModelRepositoryImpl(getRepositoryPath());
+		Folder root = repo.getRoot(getUser());
+		EList<Asset> eContents = root.getAssets();
+		return eContents;
+	}
+	
 	private User getUser() {
 		// TODO: Get correct user info from login
 
