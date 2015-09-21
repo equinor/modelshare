@@ -15,7 +15,7 @@
 						<div th:fragment="fragment_node" th:remove="tag">
 		            		<ul th:if="${not #lists.isEmpty(node.children)}" >
 					    		<li th:each="child : ${node.children}" th:inline="text" th:with="node = ${child}">
-							    	<a class="menu-link" th:if="${child.leaf}" th:href="@{/showModel(item=__${child.name}__)}">
+										<a class="menu-link" th:if="${child.leaf}" th:href="@{/showModel(item=${child.path})}">
 							    		[[${child.name}]]
 							    	</a>
 							    	<a class="menu-link" th:if="${!child.leaf}" th:href="@{/showModel(item)}">
@@ -27,12 +27,12 @@
 					 	</div>
 					</div>
 				</div>
-				<div class="right-container col-sm-9">
-					<div class="text-label">Model name<p/>
-						<span class="info-field" th:text="${modelInformation.name}"></span>
+				<div class="right-container col-sm-9" th:if="${currentModel}">
+					<div class="text-label">Model owner<p/>
+						<span class="info-field" th:text="${currentModel.owner}"></span>
 					</div>
-					<div class="text-label">Description<p/>
-						<span class="info-field" th:text="${modelInformation.description}"></span>
+					<div class="text-label">Organisation<p/>
+						<span class="info-field" th:text="${currentModel.organisation}"></span>
 					</div>
 				</div>
 			</div>

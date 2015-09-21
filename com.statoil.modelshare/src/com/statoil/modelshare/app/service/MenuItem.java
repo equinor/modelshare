@@ -3,6 +3,8 @@ package com.statoil.modelshare.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.statoil.modelshare.Model;
+
 public class MenuItem {
 	    private String name;
 	    private ArrayList<MenuItem> children;
@@ -16,10 +18,10 @@ public class MenuItem {
 	        this.leaf = leaf;
 	    }
 	    
-	    public MenuItem(String name) {
+	    public MenuItem(String name, String path) {
 	        this.name = name;
 	        this.children = new ArrayList<MenuItem>();
-	        this.path = null;
+	        this.path = path;
 	        this.leaf = false;
 		}
 
@@ -42,4 +44,5 @@ public class MenuItem {
 		public boolean isLeaf() {
 			return leaf;
 		}
+
 	} 
