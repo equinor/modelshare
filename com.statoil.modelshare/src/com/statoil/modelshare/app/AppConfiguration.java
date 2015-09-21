@@ -1,5 +1,7 @@
 package com.statoil.modelshare.app;
 
+import java.util.logging.Logger;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,7 +17,7 @@ import com.statoil.modelshare.app.config.RootConfig;
 @ComponentScan(basePackages = "com.statoil.modelshare")
 @Import({ WebInitializer.class, RootConfig.class })
 public class AppConfiguration extends WebMvcConfigurerAdapter{
-
+	
 	@Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/signin").setViewName("signin");

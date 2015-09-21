@@ -13,6 +13,8 @@ package com.statoil.modelshare;
  * <ul>
  *   <li>{@link com.statoil.modelshare.User#getOrganisation <em>Organisation</em>}</li>
  *   <li>{@link com.statoil.modelshare.User#getEmail <em>Email</em>}</li>
+ *   <li>{@link com.statoil.modelshare.User#getPassword <em>Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getUser()
@@ -71,5 +73,57 @@ public interface User extends Account {
 	 * @generated
 	 */
 	void setEmail(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Password</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Password</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Password</em>' attribute.
+	 * @see #setPassword(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getUser_Password()
+	 * @model
+	 * @generated
+	 */
+	String getPassword();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.User#getPassword <em>Password</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Password</em>' attribute.
+	 * @see #getPassword()
+	 * @generated
+	 */
+	void setPassword(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Force Change Password</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Force Change Password</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Force Change Password</em>' attribute.
+	 * @see #setForceChangePassword(boolean)
+	 * @see com.statoil.modelshare.ModelsharePackage#getUser_ForceChangePassword()
+	 * @model
+	 * @generated
+	 */
+	boolean isForceChangePassword();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Force Change Password</em>' attribute.
+	 * @see #isForceChangePassword()
+	 * @generated
+	 */
+	void setForceChangePassword(boolean value);
 
 } // User

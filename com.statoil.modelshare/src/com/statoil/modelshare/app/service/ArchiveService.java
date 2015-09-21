@@ -10,12 +10,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.User;
+import com.statoil.modelshare.app.config.RepositoryConfig;
 import com.statoil.modelshare.controller.ModelRepository;
 import com.statoil.modelshare.controller.ModelRepositoryImpl;
 
@@ -23,7 +27,11 @@ public class ArchiveService {
 	
 	public MenuItem getMenuItemsFromAssets() throws UnsupportedEncodingException {
 		
-		EList<Asset> eContents = getAssets();
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
+		ModelRepository repo = ctx.getBean(ModelRepository.class);
+		((ConfigurableApplicationContext)ctx).close();		
+		Folder root = repo.getRoot(getUser());
+		EList<Asset> eContents = root.getAssets();
 		MenuItem rootItem = new MenuItem("Root", "");
 		rootItem.addChildren(getMenuItemsFromAssets(eContents, 0));
 		return rootItem;
