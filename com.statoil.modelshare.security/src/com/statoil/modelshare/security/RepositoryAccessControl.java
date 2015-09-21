@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -24,8 +25,8 @@ public class RepositoryAccessControl {
 
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
-	/** Current list of users */
-	private List<Account> users;
+	
+	static Logger log = Logger.getLogger(RepositoryAccessControl.class.getName());
 
 	@SuppressWarnings("unused")
 	private RepositoryAccessControl() {
@@ -138,7 +139,18 @@ public class RepositoryAccessControl {
 				}
 			}
 		}
+		log.info("Tested rights for "+account+" at "+path+" ("+access+")");
 		return access;
+	}
+	
+	private Group getGroup(List<Account> accounts, String name){
+		for (Account account : accounts) {
+			if (account.getIdentifier().equals(name) && account instanceof Group){
+				return (Group)account;
+			}
+		}
+		log.severe("Group \""+name+"\" not found.");
+		return null;
 	}
 
 	/**
@@ -150,38 +162,38 @@ public class RepositoryAccessControl {
 	 * @throws IOException
 	 */
 	public List<Account> getAccounts() {
+		List<Account> accounts = new ArrayList<>();
 		synchronized (passwordFilePath) {
-			if (users == null) {
-				users = new ArrayList<>();
-				String in = null;
-				// Add h
-				try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
-					while ((in = br.readLine()) != null) {
-						String[] split = in.split(":");
-						// "x" som password indikerer at dette er en gruppe
-						if (split[1].equals("x")) {
-							Group group = ModelshareFactory.eINSTANCE.createGroup();
-							group.setIdentifier(split[0]);
-							group.setName(split[3]);
-							users.add(group);
-						} else {
-							User user = ModelshareFactory.eINSTANCE.createUser();
-							user.setIdentifier(split[0]);
-							user.setEmail(split[0]);
-							user.setPassword(split[1]);
-							user.setName(split[3]);
-							users.add(user);
-							if (split[1].length() == 0) {
-								user.setForceChangePassword(true);
-							}
+			String in = null;
+			try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
+				while ((in = br.readLine()) != null) {
+					String[] split = in.split(":");
+					// "x" as password indicates that this is a group
+					if (split[1].equals("x")) {
+						Group group = ModelshareFactory.eINSTANCE.createGroup();
+						group.setIdentifier(split[0]);
+						group.setGroup(getGroup(accounts, split[2]));
+						group.setName(split[3]);
+						accounts.add(group);
+					} else {
+						User user = ModelshareFactory.eINSTANCE.createUser();
+						user.setIdentifier(split[0]);
+						user.setEmail(split[0]);
+						user.setPassword(split[1]);
+						user.setGroup(getGroup(accounts, split[2]));
+						user.setName(split[3]);
+						accounts.add(user);
+						if (split[1].length() == 0) {
+							user.setForceChangePassword(true);
 						}
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			return users;
 		}
+		log.info("Reading .passwd "+accounts.size()+" users found");
+		return accounts;
 	}
 
 	/**
@@ -192,28 +204,27 @@ public class RepositoryAccessControl {
 	 *            the password hash
 	 */
 	public synchronized void setPassword(String id, String hash) {
-		List<Account> accounts = getAccounts();
-		for (Account account : accounts) {
-			if (account.getIdentifier().equals(id) && account instanceof User) {
-				((User) account).setPassword(hash);
-			}
-		}
-		savePasswords();
-	}
-
-	private void savePasswords() {
 		synchronized (passwordFilePath) {
 			List<Account> accounts = getAccounts();
+			for (Account account : accounts) {
+				if (account.getIdentifier().equals(id) && account instanceof User) {
+					((User) account).setPassword(hash);
+				}
+			}
 			try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
 				for (Account account : accounts) {
 					if (account instanceof Group) {
 						fw.write(account.getIdentifier() + ":x:");
-						fw.write(account.getGroup().getIdentifier() + ":");
+						if (account.getGroup() != null) {
+							fw.write(account.getGroup().getName() + ":");
+						} else {
+							fw.write(":");
+						}
 						fw.write(account.getName());
 					} else if (account instanceof User) {
 						fw.write(account.getIdentifier() + ":");
 						fw.write(((User) account).getPassword() + ":");
-						if (account.getGroup()!=null){
+						if (account.getGroup() != null) {
 							fw.write(account.getGroup().getName() + ":");
 						} else {
 							fw.write(":");
@@ -227,5 +238,4 @@ public class RepositoryAccessControl {
 			}
 		}
 	}
-
 }

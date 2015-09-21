@@ -306,18 +306,7 @@ public class UserImpl extends AccountImpl implements User {
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (organisation: ");
-		result.append(organisation);
-		result.append(", email: ");
-		result.append(email);
-		result.append(", password: ");
-		result.append(password);
-		result.append(", forceChangePassword: ");
-		result.append(forceChangePassword);
-		result.append(')');
-		return result.toString();
+		return getIdentifier();
 	}
 
 } //UserImpl

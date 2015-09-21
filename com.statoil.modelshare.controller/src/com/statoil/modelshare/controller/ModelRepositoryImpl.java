@@ -22,7 +22,6 @@ import com.statoil.modelshare.security.RepositoryAccessControl;
  */
 public class ModelRepositoryImpl implements ModelRepository {
 
-	private Folder root;
 	private Path rootPath;
 	private RepositoryAccessControl ra;
 
@@ -32,14 +31,14 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	/**
-	 * Creates a new model repository. Files are retrieved and stored at the given location.
-	 *  
-	 * @param path path to the repository root.
+	 * Creates a new model repository. Files are retrieved and stored at the
+	 * given location.
+	 * 
+	 * @param path
+	 *            path to the repository root.
 	 */
 	public ModelRepositoryImpl(Path path) {
 		rootPath = path.toAbsolutePath();
-		root = ModelshareFactory.eINSTANCE.createFolder();
-		root.setName("");
 		ra = new RepositoryAccessControl(rootPath);
 		System.out.println("Using root folder at " + rootPath);
 	}
@@ -79,12 +78,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	public Folder getRoot(User user) {
-		if (root.getAssets().isEmpty()) {
-			try {
-				fillFolderContents(root, user);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+		Folder root = ModelshareFactory.eINSTANCE.createFolder();
+		root.setName("");
+		try {
+			fillFolderContents(root, user);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		return root;
 	}
@@ -118,7 +117,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		List<User> users = new ArrayList<>();
 		List<Account> accounts = ra.getAccounts();
 		for (Account account : accounts) {
-			if (account instanceof User){
+			if (account instanceof User) {
 				users.add((User) account);
 			}
 		}
@@ -127,7 +126,17 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	@Override
 	public void setPassword(String name, String hash) {
-		ra.setPassword(name,hash);
+		ra.setPassword(name, hash);
+	}
+
+	@Override
+	public User getUser(String id) {
+		for (User user : getUsers()) {
+			if (user.getIdentifier().equals(id)) {
+				return user;
+			}
+		}
+		return null;
 	}
 
 }
