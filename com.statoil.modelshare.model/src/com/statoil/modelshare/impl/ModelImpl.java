@@ -36,7 +36,6 @@ import com.statoil.modelshare.util.UnzipUtility;
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getLastUpdated <em>Last Updated</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#isStask <em>Stask</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getTaskInformation <em>Task Information</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getPath <em>Path</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getUsage <em>Usage</em>}</li>
  * </ul>
  *
@@ -142,24 +141,6 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * @ordered
 	 */
 	protected EList<TaskInformation> taskInformation;
-	/**
-	 * The default value of the '{@link #getPath() <em>Path</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPath()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PATH_EDEFAULT = null;
-	/**
-	 * The cached value of the '{@link #getPath() <em>Path</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPath()
-	 * @generated
-	 * @ordered
-	 */
-	protected String path = PATH_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getUsage() <em>Usage</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -317,34 +298,13 @@ public class ModelImpl extends AssetImpl implements Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public void setPath(String newPath) {
-		setPathGen(newPath);
+		super.setPath(newPath);
 		setModelType();
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPathGen(String newPath) {
-		String oldPath = path;
-		path = newPath;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.MODEL__PATH, oldPath, path));
-	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -400,8 +360,6 @@ public class ModelImpl extends AssetImpl implements Model {
 				return isStask();
 			case ModelsharePackage.MODEL__TASK_INFORMATION:
 				return getTaskInformation();
-			case ModelsharePackage.MODEL__PATH:
-				return getPath();
 			case ModelsharePackage.MODEL__USAGE:
 				return getUsage();
 		}
@@ -436,9 +394,6 @@ public class ModelImpl extends AssetImpl implements Model {
 				getTaskInformation().clear();
 				getTaskInformation().addAll((Collection<? extends TaskInformation>)newValue);
 				return;
-			case ModelsharePackage.MODEL__PATH:
-				setPath((String)newValue);
-				return;
 			case ModelsharePackage.MODEL__USAGE:
 				setUsage((String)newValue);
 				return;
@@ -472,9 +427,6 @@ public class ModelImpl extends AssetImpl implements Model {
 			case ModelsharePackage.MODEL__TASK_INFORMATION:
 				getTaskInformation().clear();
 				return;
-			case ModelsharePackage.MODEL__PATH:
-				setPath(PATH_EDEFAULT);
-				return;
 			case ModelsharePackage.MODEL__USAGE:
 				setUsage(USAGE_EDEFAULT);
 				return;
@@ -502,8 +454,6 @@ public class ModelImpl extends AssetImpl implements Model {
 				return stask != STASK_EDEFAULT;
 			case ModelsharePackage.MODEL__TASK_INFORMATION:
 				return taskInformation != null && !taskInformation.isEmpty();
-			case ModelsharePackage.MODEL__PATH:
-				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
 			case ModelsharePackage.MODEL__USAGE:
 				return USAGE_EDEFAULT == null ? usage != null : !USAGE_EDEFAULT.equals(usage);
 		}
@@ -530,8 +480,6 @@ public class ModelImpl extends AssetImpl implements Model {
 		result.append(lastUpdated);
 		result.append(", stask: ");
 		result.append(stask);
-		result.append(", path: ");
-		result.append(path);
 		result.append(", usage: ");
 		result.append(usage);
 		result.append(')');

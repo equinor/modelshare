@@ -302,23 +302,12 @@ public class ClientImpl extends AccountImpl implements Client {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (organisation: ");
-		result.append(organisation);
-		result.append(", email: ");
-		result.append(email);
-		result.append(", password: ");
-		result.append(password);
-		result.append(", forceChangePassword: ");
-		result.append(forceChangePassword);
-		result.append(')');
-		return result.toString();
+		return getIdentifier();
 	}
 
 } //ClientImpl
