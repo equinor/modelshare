@@ -16,10 +16,10 @@ public class MenuItem {
 	        this.leaf = leaf;
 	    }
 	    
-	    public MenuItem(String name) {
+	    public MenuItem(String name, String path) {
 	        this.name = name;
 	        this.children = new ArrayList<MenuItem>();
-	        this.path = null;
+	        this.path = path;
 	        this.leaf = false;
 		}
 
