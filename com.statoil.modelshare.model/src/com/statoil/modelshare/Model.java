@@ -20,7 +20,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.statoil.modelshare.Model#getLastUpdated <em>Last Updated</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#isStask <em>Stask</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#getTaskInformation <em>Task Information</em>}</li>
- *   <li>{@link com.statoil.modelshare.Model#getPath <em>Path</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#getUsage <em>Usage</em>}</li>
  * </ul>
  *
@@ -176,32 +175,6 @@ public interface Model extends Asset {
 	 * @generated
 	 */
 	EList<TaskInformation> getTaskInformation();
-
-	/**
-	 * Returns the value of the '<em><b>Path</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Path</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Path</em>' attribute.
-	 * @see #setPath(String)
-	 * @see com.statoil.modelshare.ModelsharePackage#getModel_Path()
-	 * @model
-	 * @generated
-	 */
-	String getPath();
-
-	/**
-	 * Sets the value of the '{@link com.statoil.modelshare.Model#getPath <em>Path</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Path</em>' attribute.
-	 * @see #getPath()
-	 * @generated
-	 */
-	void setPath(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Usage</b></em>' attribute.

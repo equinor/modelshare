@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getFolder <em>Folder</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getPath <em>Path</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,6 +65,25 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected Folder folder;
+
+	/**
+	 * The default value of the '{@link #getPath() <em>Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPath()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PATH_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getPath() <em>Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPath()
+	 * @generated
+	 * @ordered
+	 */
+	protected String path = PATH_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,6 +190,27 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPath(String newPath) {
+		String oldPath = path;
+		path = newPath;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PATH, oldPath, path));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAccess(Account account) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -219,6 +260,8 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 			case ModelsharePackage.ASSET__FOLDER:
 				if (resolve) return getFolder();
 				return basicGetFolder();
+			case ModelsharePackage.ASSET__PATH:
+				return getPath();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -236,6 +279,9 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return;
 			case ModelsharePackage.ASSET__FOLDER:
 				setFolder((Folder)newValue);
+				return;
+			case ModelsharePackage.ASSET__PATH:
+				setPath((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -255,6 +301,9 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 			case ModelsharePackage.ASSET__FOLDER:
 				setFolder((Folder)null);
 				return;
+			case ModelsharePackage.ASSET__PATH:
+				setPath(PATH_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -271,6 +320,8 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ModelsharePackage.ASSET__FOLDER:
 				return folder != null;
+			case ModelsharePackage.ASSET__PATH:
+				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -301,6 +352,8 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", path: ");
+		result.append(path);
 		result.append(')');
 		return result.toString();
 	}

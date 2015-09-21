@@ -11,10 +11,10 @@ import java.util.List;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.security.RepositoryAccessControl;
 
 /**
@@ -22,7 +22,6 @@ import com.statoil.modelshare.security.RepositoryAccessControl;
  */
 public class ModelRepositoryImpl implements ModelRepository {
 
-	private Folder root;
 	private Path rootPath;
 	private RepositoryAccessControl ra;
 
@@ -32,20 +31,20 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	/**
-	 * Creates a new model repository. Files are retrieved and stored at the given location.
-	 *  
-	 * @param path path to the repository root.
+	 * Creates a new model repository. Files are retrieved and stored at the
+	 * given location.
+	 * 
+	 * @param path
+	 *            path to the repository root.
 	 */
 	public ModelRepositoryImpl(Path path) {
 		rootPath = path.toAbsolutePath();
-		root = ModelshareFactory.eINSTANCE.createFolder();
-		root.setName("");
 		ra = new RepositoryAccessControl(rootPath);
 		System.out.println("Using root folder at " + rootPath);
 	}
 
-	private void fillFolderContents(Folder folder, User user) throws IOException {
-		File file = rootPath.resolve(folder.getName()).toFile();
+	private void fillFolderContents(Folder folder, Client user) throws IOException {
+		File file = new File(folder.getPath());
 		if (!file.exists()) {
 			return;
 		}
@@ -62,10 +61,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 				if (child.isDirectory()) {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
-					folder.getAssets().add(newFolder);
+					newFolder.setPath(child.getAbsolutePath());
+					folder.getAssets().add(newFolder);					
 					fillFolderContents(newFolder, user);
 				} else {
 					Model newFile = ModelshareFactory.eINSTANCE.createModel();
+					newFile.setPath(child.getAbsolutePath());
 					newFile.setName(child.getName());
 					folder.getAssets().add(newFile);
 				}
@@ -73,18 +74,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 	}
 
-	public boolean hasDisplayAccess(User user, Path path) throws IOException {
+	public boolean hasDisplayAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
 	}
 
-	public Folder getRoot(User user) {
-		if (root.getAssets().isEmpty()) {
-			try {
-				fillFolderContents(root, user);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+	public Folder getRoot(Client user) {
+		Folder root = ModelshareFactory.eINSTANCE.createFolder();
+		root.setPath(rootPath.toString());
+		root.setName("");
+		try {
+			fillFolderContents(root, user);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		return root;
 	}
@@ -114,12 +116,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 	
 	@Override
-	public List<User> getUsers() {
-		List<User> users = new ArrayList<>();
+	public List<Client> getClients() {
+		List<Client> users = new ArrayList<>();
 		List<Account> accounts = ra.getAccounts();
 		for (Account account : accounts) {
-			if (account instanceof User){
-				users.add((User) account);
+			if (account instanceof Client) {
+				users.add((Client) account);
 			}
 		}
 		return users;
@@ -127,7 +129,17 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	@Override
 	public void setPassword(String name, String hash) {
-		ra.setPassword(name,hash);
+		ra.setPassword(name, hash);
+	}
+
+	@Override
+	public Client getUser(String id) {
+		for (Client user : getClients()) {
+			if (user.getIdentifier().equals(id)) {
+				return user;
+			}
+		}
+		return null;
 	}
 
 }

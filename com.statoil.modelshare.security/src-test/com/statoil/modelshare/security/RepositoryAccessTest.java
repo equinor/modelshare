@@ -73,6 +73,10 @@ public class RepositoryAccessTest {
 	public void testUserAccess() throws IOException{
 		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), ra.getRights(root, userGroup));
 	}
+	@Test
+	public void testInheritedAccess() throws IOException{
+		Assert.assertEquals(EnumSet.allOf(Access.class), ra.getRights(Paths.get("Model_A/Model_A1/Model_A1.1"), adminGroup));
+	}
 
 	@Test
 	public void testSecretAccess() throws IOException{

@@ -14,11 +14,11 @@
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Read"/>
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Write"/>
     </genEnums>
-    <genClasses ecoreClass="modelshare.ecore#//User">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/password"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/forceChangePassword"/>
+    <genClasses ecoreClass="modelshare.ecore#//Client">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/organisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/forceChangePassword"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>
@@ -27,7 +27,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/lastUpdated"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/stask"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Model/taskInformation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/path"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/usage"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Group"/>
@@ -43,6 +42,7 @@
     <genClasses ecoreClass="modelshare.ecore#//Asset">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Asset/folder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/path"/>
       <genOperations ecoreOperation="modelshare.ecore#//Asset/getAccess">
         <genParameters ecoreParameter="modelshare.ecore#//Asset/getAccess/account"/>
       </genOperations>

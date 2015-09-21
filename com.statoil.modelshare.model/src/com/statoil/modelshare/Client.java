@@ -2,26 +2,27 @@
  */
 package com.statoil.modelshare;
 
+
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>User</b></em>'.
+ * A representation of the model object '<em><b>Client</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.statoil.modelshare.User#getOrganisation <em>Organisation</em>}</li>
- *   <li>{@link com.statoil.modelshare.User#getEmail <em>Email</em>}</li>
- *   <li>{@link com.statoil.modelshare.User#getPassword <em>Password</em>}</li>
- *   <li>{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Client#getOrganisation <em>Organisation</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Client#getEmail <em>Email</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Client#getPassword <em>Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Client#isForceChangePassword <em>Force Change Password</em>}</li>
  * </ul>
  *
- * @see com.statoil.modelshare.ModelsharePackage#getUser()
+ * @see com.statoil.modelshare.ModelsharePackage#getClient()
  * @model
  * @generated
  */
-public interface User extends Account {
+public interface Client extends Account {
 	/**
 	 * Returns the value of the '<em><b>Organisation</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -32,14 +33,14 @@ public interface User extends Account {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Organisation</em>' attribute.
 	 * @see #setOrganisation(String)
-	 * @see com.statoil.modelshare.ModelsharePackage#getUser_Organisation()
+	 * @see com.statoil.modelshare.ModelsharePackage#getClient_Organisation()
 	 * @model
 	 * @generated
 	 */
 	String getOrganisation();
 
 	/**
-	 * Sets the value of the '{@link com.statoil.modelshare.User#getOrganisation <em>Organisation</em>}' attribute.
+	 * Sets the value of the '{@link com.statoil.modelshare.Client#getOrganisation <em>Organisation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Organisation</em>' attribute.
@@ -58,14 +59,14 @@ public interface User extends Account {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Email</em>' attribute.
 	 * @see #setEmail(String)
-	 * @see com.statoil.modelshare.ModelsharePackage#getUser_Email()
+	 * @see com.statoil.modelshare.ModelsharePackage#getClient_Email()
 	 * @model
 	 * @generated
 	 */
 	String getEmail();
 
 	/**
-	 * Sets the value of the '{@link com.statoil.modelshare.User#getEmail <em>Email</em>}' attribute.
+	 * Sets the value of the '{@link com.statoil.modelshare.Client#getEmail <em>Email</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Email</em>' attribute.
@@ -84,14 +85,14 @@ public interface User extends Account {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Password</em>' attribute.
 	 * @see #setPassword(String)
-	 * @see com.statoil.modelshare.ModelsharePackage#getUser_Password()
+	 * @see com.statoil.modelshare.ModelsharePackage#getClient_Password()
 	 * @model
 	 * @generated
 	 */
 	String getPassword();
 
 	/**
-	 * Sets the value of the '{@link com.statoil.modelshare.User#getPassword <em>Password</em>}' attribute.
+	 * Sets the value of the '{@link com.statoil.modelshare.Client#getPassword <em>Password</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Password</em>' attribute.
@@ -110,14 +111,14 @@ public interface User extends Account {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Force Change Password</em>' attribute.
 	 * @see #setForceChangePassword(boolean)
-	 * @see com.statoil.modelshare.ModelsharePackage#getUser_ForceChangePassword()
+	 * @see com.statoil.modelshare.ModelsharePackage#getClient_ForceChangePassword()
 	 * @model
 	 * @generated
 	 */
 	boolean isForceChangePassword();
 
 	/**
-	 * Sets the value of the '{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}' attribute.
+	 * Sets the value of the '{@link com.statoil.modelshare.Client#isForceChangePassword <em>Force Change Password</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Force Change Password</em>' attribute.
@@ -126,4 +127,4 @@ public interface User extends Account {
 	 */
 	void setForceChangePassword(boolean value);
 
-} // User
+} // Client

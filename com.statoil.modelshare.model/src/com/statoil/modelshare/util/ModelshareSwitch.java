@@ -66,10 +66,10 @@ public class ModelshareSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ModelsharePackage.USER: {
-				User user = (User)theEObject;
-				T result = caseUser(user);
-				if (result == null) result = caseAccount(user);
+			case ModelsharePackage.CLIENT: {
+				Client client = (Client)theEObject;
+				T result = caseClient(client);
+				if (result == null) result = caseAccount(client);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -117,17 +117,17 @@ public class ModelshareSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>User</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Client</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>User</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Client</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseUser(User object) {
+	public T caseClient(Client object) {
 		return null;
 	}
 
