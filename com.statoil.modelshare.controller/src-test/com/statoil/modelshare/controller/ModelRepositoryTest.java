@@ -1,5 +1,9 @@
 package com.statoil.modelshare.controller;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,7 +46,33 @@ public class ModelRepositoryTest {
 	}
 	
 	@Test
-	public void testCreateFolder() {
+	public void testUploadingFile() {
+		String home = System.getProperty("user.home");
 		
+		assertNotNull(home);
+		File homeDir = new File(home);
+		assertTrue(homeDir.exists());
+		String root = homeDir + File.separator + "modelshare" + File.separator + "repository";
+		File rootFile = new File(root);
+		Path rootPath = rootFile.toPath();
+		
+		ModelRepository repo = new ModelRepositoryImpl(rootPath);
+		
+		Client client = repo.getUser("test");
+		
+		repo.createFolder(repo.getRoot(client), "TestUpload");
+		
+		String owner = "lars";
+		String org = "Statoil";
+		String usage = "Bla bla bla...";
+		
+		File file = Paths.get("test-resources/itema.stask").toAbsolutePath().toFile();
+		
+		String testUpload = rootPath + File.separator + "TestUpload";
+		File testDir = new File(testUpload);
+		repo.uploadFile(testDir.toPath(), file, owner, org, usage);
+		
+		File staskFile = new File(testDir, "itema.stask");
+		assertNotNull(staskFile);
 	}
 }

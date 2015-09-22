@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
+import com.statoil.modelshare.Model;
 
 /**
  * This type represents the model repository. It's content can be accessed by
@@ -69,7 +70,7 @@ public interface ModelRepository {
 	/**
 	 * Uploads a file based on information given in the view
 	 */
-	public void uploadFile(Folder folder, File file, String owner, String organisation, String usage);
+	public void uploadFile(Path path, File file, String owner, String organisation, String usage);
 	
 	/**
 	 * Creates a folder on the given parent folder and the name of the new folder
@@ -80,4 +81,13 @@ public interface ModelRepository {
 	 * Delete a folder given the parent folder
 	 */
 	public void deleteFolder(Folder parentFolder, Folder folder);
+	
+	/**
+	 * Gets properties from the meta file and creates a model object to be returned
+	 * 
+	 * @param path
+	 * @param fileName
+	 * @return model object
+	 */
+	public Model getMetaInformation(Path path, String fileName);
 }

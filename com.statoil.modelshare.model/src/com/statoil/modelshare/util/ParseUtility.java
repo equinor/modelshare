@@ -1,6 +1,8 @@
 package com.statoil.modelshare.util;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +19,7 @@ public class ParseUtility {
 	
 	private static TaskInformation taskInfo;
 
-	public static TaskInformation parseXMI(File input) {
+	public static TaskInformation parseStaskXMI(File input) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

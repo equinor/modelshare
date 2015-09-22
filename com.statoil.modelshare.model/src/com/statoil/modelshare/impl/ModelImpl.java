@@ -504,7 +504,7 @@ public class ModelImpl extends AssetImpl implements Model {
 		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
 		for (int i = 0; i < unzippedFiles.size(); i++) {
 			File unzippedFile = unzippedFiles.get(i);
-			TaskInformation taskInfo = ParseUtility.parseXMI(unzippedFile);
+			TaskInformation taskInfo = ParseUtility.parseStaskXMI(unzippedFile);
 			getTaskInformation().add(taskInfo);
 		}
 	}

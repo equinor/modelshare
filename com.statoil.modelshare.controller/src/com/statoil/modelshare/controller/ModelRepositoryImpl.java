@@ -1,13 +1,19 @@
 package com.statoil.modelshare.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Properties;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -15,7 +21,10 @@ import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
+import com.statoil.modelshare.TaskInformation;
 import com.statoil.modelshare.security.RepositoryAccessControl;
+import com.statoil.modelshare.util.ParseUtility;
+import com.statoil.modelshare.util.UnzipUtility;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -93,28 +102,141 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	@Override
 	public void createFolder(Folder parentFolder, String name) {
-		Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
-		newFolder.setName(name);
-		parentFolder.getAssets().add(newFolder);
+		File parentDir = new File(parentFolder.getPath());
+		File childDir = new File(parentDir + File.separator + name);
+		childDir.mkdir();
 	}
-	
+
 	@Override
 	public void deleteFolder(Folder parentFolder, Folder folder) {
-		parentFolder.getAssets().remove(folder);
+		File parentDir = new File(parentFolder.getPath());
+		File childDir = new File(parentDir + File.separator + folder.getName());
+		childDir.delete();
 	}
-	
+
 	@Override
-	public void uploadFile(Folder folder, File file, String owner, String organisation, String usage) {
-		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setOwner(owner);
-		model.setLastUpdated(new Date());
-		model.setName(file.getName());
-		model.setOrganisation(organisation);
-		model.setPath(folder.getName() + File.separator + file.getName());
-		model.setUsage(usage);
-		folder.getAssets().add(model);
+	public void uploadFile(Path path, File file, String owner, String organisation, String usage) {
+		File dir = path.toFile();
+		File sourceFile = new File(file.getAbsolutePath());
+		if (!sourceFile.exists()) {
+			System.err.println("File not found " + file.getAbsolutePath());
+		}
+		File destFile = new File(dir.getAbsolutePath(), file.getName());
+		if (!destFile.exists()) {
+			try {
+				destFile.createNewFile();
+				System.out.println("Destination file doesn't exist. Creating one!");
+			} catch (IOException e) {
+				System.err.println("Error creating new file in Modelshare respositury " + destFile.getName());
+			}
+		}
+		
+		FileChannel source = null;
+		FileChannel destination = null;
+		
+		try {
+			source = new FileInputStream(sourceFile).getChannel();
+			destination = new FileOutputStream(destFile).getChannel();
+
+			if (destination != null && source != null) {
+				destination.transferFrom(source, 0, source.size());
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		finally {
+			if (source != null) {
+				try {
+					source.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (destination != null) {
+				try {
+					destination.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		// Create .meta file on this path
+		Properties p = new Properties();
+		p.setProperty("owner", owner);
+		p.setProperty("organisation", organisation);
+		p.setProperty("name", file.getName());
+		p.setProperty("usage", usage);
+		p.setProperty("lastUpdated", LocalDateTime.now().toString());
+
+		String metaPath = path + File.separator + "." + file.getName() + ".meta";
+		writeMetaFile(metaPath, p);
 	}
 	
+	private void writeMetaFile(String metaPath, Properties properties) {
+		try {
+			File metaFile = new File(metaPath);
+			metaFile.createNewFile();
+			FileOutputStream fos = new FileOutputStream(metaFile);
+			properties.storeToXML(fos, "Statoil model meta properties file", "UTF-8");
+			fos.close();
+		} catch (FileNotFoundException fe) {
+			System.err.println("Error writing to " + metaPath);
+		} catch (IOException ioe) {
+			System.err.println("Error trying to write XML properties to " + metaPath);
+		}
+	}
+
+	@Override
+	public Model getMetaInformation(Path path, String fileName) {
+		Properties resultProps = new Properties();
+		String metaFileName = path + File.pathSeparator + "." + fileName + ".meta";
+		try {
+			final FileInputStream in = new FileInputStream(metaFileName);
+			resultProps.loadFromXML(in);
+			in.close();
+		} catch (IOException ioe) {
+			System.err.println("Error reading meta information from "+ metaFileName);
+		}
+		
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setOwner(resultProps.getProperty("owner"));
+		model.setLastUpdated(new Date(resultProps.getProperty("lastUpdated")));
+		model.setName(resultProps.getProperty("name"));
+		model.setOrganisation(resultProps.getProperty("organisation"));
+		model.setPath(path.toString());
+		model.setUsage(resultProps.getProperty("usage"));
+		
+		// TODO: Move this to creation of meta file. Change meta file format to general XML format.
+		if (fileName.endsWith(".stask")) {
+			unzipAndGetStaskInformation(path, model);
+		}
+
+		return model;
+	}
+	
+	/**
+	 * Unzip stask and parses the xmi files for task name and description
+	 * Creates a TaskInformation object per xmi file and adds it to the model object. 
+	 * @param path 
+	 * @param model 
+	 * @param p 
+	 */
+	private void unzipAndGetStaskInformation(Path path, Model model) {
+		String tempDir = System.getProperty("java.io.tmpdir");
+		UnzipUtility.unzip(path.toString(), tempDir);
+		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
+		for (int i = 0; i < unzippedFiles.size(); i++) {
+			File unzippedFile = unzippedFiles.get(i);
+			TaskInformation taskInfo = ParseUtility.parseStaskXMI(unzippedFile);
+			model.getTaskInformation().add(taskInfo);
+		}
+	}
+
 	@Override
 	public List<Client> getClients() {
 		List<Client> users = new ArrayList<>();
