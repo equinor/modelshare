@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
 					newFolder.setPath(child.getAbsolutePath());
-					folder.getAssets().add(newFolder);					
+					folder.getAssets().add(newFolder);
 					fillFolderContents(newFolder, user);
 				} else {
 					Model newFile = ModelshareFactory.eINSTANCE.createModel();
@@ -264,6 +266,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public InputStream getFileStream(Client user, Path path) throws IOException {
+		File file = rootPath.resolve(path).toFile();
+		EnumSet<Access> rights = ra.getRights(path, user);
+		if (rights.contains(Access.READ))
+			return new FileInputStream(file);
+		else
+			throw new AccessDeniedException(path.toString());
 	}
 
 }
