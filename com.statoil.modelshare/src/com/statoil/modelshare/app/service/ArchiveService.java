@@ -1,7 +1,11 @@
 package com.statoil.modelshare.app.service;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
@@ -32,7 +37,6 @@ public class ArchiveService {
 		EList<Asset> eContents = root.getAssets();
 		MenuItem rootItem = new MenuItem("Root", "");
 		rootItem.addChildren(getMenuItemsFromAssets(eContents, 0));
-		
 		return rootItem;
 	}
 
@@ -48,26 +52,47 @@ public class ArchiveService {
 					}
 				}else{
 					item = createMenuItem(eObject, true);
-					
 				}
 				items.add(item);
 			}
 		}
 		return items;
 	}
-	public Model getModelFromAssets(String path) throws UnsupportedEncodingException {
+	
+	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
+		/*
+		 * TODO: Get model from path:
+		 * Path path = Paths.get(URLDecoder.decode(encodedPath, "UTF-8"));
+		 * return repository.getModel(path);
+		 */
 		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setPath(path);
+		model.setPath(URLDecoder.decode(encodedPath, "UTF-8"));
 		return model;
 	}	
-
+	
 	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
-		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), getPath(eObject), leaf);
+		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), leaf);
 	}
 
-	private String getPath(Asset eObject) throws UnsupportedEncodingException {
-		String path = URLEncoder.encode(eObject.getFolder().getName()+"/"+eObject.getName(), "UTF-8");
-		return path;
+	public void saveFile(MultipartFile myFile, Model model) throws UnsupportedEncodingException {
+		/*
+		 * TODO: Upload file:
+		 * return repository.uploadFile(myFile, model);
+		 */
+		System.out.println("Saving file: " + myFile.getOriginalFilename() + " to path: " + model.getPath());
+		System.out.println(model.getOwner());
+		System.out.println(model.getMail());
+		System.out.println(model.getOrganisation());
+		System.out.println(model.getUsage());
 	}
-		
+	
+	public void createFolder(String path, String name) {
+		Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
+		parentFolder.setPath(path);
+		repository.createFolder(parentFolder, name);
+	}
 }
+
+/* The end
+ */
+

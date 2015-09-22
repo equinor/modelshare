@@ -34,7 +34,6 @@ body {
     margin: 5px 5px 5px 5px;
     padding: 5px 5px 5px 5px;
 }
-
 .text-label {
 	border: 1px solid #CCCCCC;
     border-radius: 4px;
@@ -49,5 +48,29 @@ body {
 }
 .menu-link {
 	font-weight: bold;
-	font-size: 120%;
+	font-size: 100%;
 }
+.menu-item {
+	padding-left: 20px;
+	background-color: #FFFFFF;
+	color: #449944;
+	width: 100%;
+}
+
+.active-menu-item {
+	background-color: #777777;
+}
+.active-menu-item a:link, .active-menu-item a:visited {
+	color: #FFFFFF;
+}
+
+.save-button {
+	width: 170px;
+}
+.form-label {
+	width: 150px;
+}
+.form-input {
+	width: 250px;	
+}
+	
