@@ -68,9 +68,9 @@ public interface ModelRepository {
 	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;	
 	
 	/**
-	 * Uploads a file based on information given in the view - represented by the model object
+	 * Uploads a file to Modelshare based on information given in the view - represented by the model object
 	 */
-	public void uploadFile(File file, Model model);
+	public void uploadFile(File sourceFile, Model model);
 	
 	/**
 	 * Creates a folder on the given parent folder and the name of the new folder
