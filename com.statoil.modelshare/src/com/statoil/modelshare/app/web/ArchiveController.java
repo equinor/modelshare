@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
