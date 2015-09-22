@@ -11,15 +11,14 @@
 
 	<!-- Navigation bar -->	
 	<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
-	<br/><br/><br/>
 	
 	<!-- Sign-in form -->
-	<div class="container">
+	<div class="container theme-statoil" role="main">
 		<div class="content-container">
 		<form class="form-signin" th:action="@{/passwd}" method="post">
 			<fieldset>
-                <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 		       	<h2 class="form-signin-heading">Change password</h2>
+                <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 		        <label for="old-password" class="sr-only">Old password</label>
 		        <input type="password" name="old-password" id="old-password" class="form-control" placeholder="Old password" required="required" autofocus="autofocus"/>
 
