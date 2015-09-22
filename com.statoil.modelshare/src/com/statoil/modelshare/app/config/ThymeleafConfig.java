@@ -14,6 +14,10 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
+/**
+ * @author Torkild U. Resheim, Itema AS
+ * @author Robert Heggdal, Itema AS
+ */
 @Configuration
 @PropertySource("classpath:thymeleaf.properties")
 public class ThymeleafConfig {

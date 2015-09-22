@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.statoil.modelshare.app.service.FilebasedAuthenticationProvider;
 
+/**
+ * @author Torkild U. Resheim, Itema AS
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
