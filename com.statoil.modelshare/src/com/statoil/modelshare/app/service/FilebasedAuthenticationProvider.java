@@ -3,9 +3,7 @@ package com.statoil.modelshare.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -18,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.statoil.modelshare.Client;
-import com.statoil.modelshare.app.config.RepositoryConfig;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -28,6 +25,7 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Service
 public class FilebasedAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
+	@Autowired
 	private ModelRepository repository;
 
 	@Override
@@ -40,11 +38,7 @@ public class FilebasedAuthenticationProvider extends AbstractUserDetailsAuthenti
 	@Override
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
-		if (repository == null) {
-			ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
-			repository = ctx.getBean(ModelRepository.class);
-			((ConfigurableApplicationContext) ctx).close();
-		}
+
 		Client client = repository.getUser(username);
 		if (client==null){
 			throw new BadCredentialsException("Bad credentials");
