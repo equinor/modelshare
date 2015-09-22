@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -25,8 +30,9 @@ public class RepositoryAccessControl {
 
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
-	
+
 	static Logger log = Logger.getLogger(RepositoryAccessControl.class.getName());
+	private List<Account> accounts;
 
 	@SuppressWarnings("unused")
 	private RepositoryAccessControl() {
@@ -43,6 +49,52 @@ public class RepositoryAccessControl {
 		// Just making sure - we must have an absolute path.
 		repositoryRootPath = root.toAbsolutePath();
 		passwordFilePath = repositoryRootPath.resolve(".passwd");
+		log.info("Creating new repository access control");
+		watch();
+	}
+
+	/**
+	 * Registeres for changes on the .passwd-file and reloads user data if the
+	 * file has changed.
+	 */
+	private void watch() {
+		Runnable run = () -> {
+			try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
+				passwordFilePath.getParent().register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
+				log.info("Setting up watch service on " + passwordFilePath);
+				while (true) {
+					// wait for key to be signaled
+					WatchKey key;
+					try {
+						key = watcher.take();
+					} catch (InterruptedException x) {
+						return;
+					}
+					for (WatchEvent<?> event : key.pollEvents()) {
+						WatchEvent.Kind<?> kind = event.kind();
+						if (kind == StandardWatchEventKinds.OVERFLOW) {
+							continue;
+						}
+						@SuppressWarnings("unchecked")
+						WatchEvent<Path> ev = (WatchEvent<Path>) event;
+						Path changed = ev.context();
+						if (changed.equals(repositoryRootPath.relativize(passwordFilePath))) {
+							log.info("Password file has changed, reloading");
+							readAccounts();
+						}
+					}
+					boolean valid = key.reset();
+					if (!valid) {
+						break;
+					}
+				}
+			} catch (IOException e) {
+				log.severe(e.getMessage());
+			}
+		};
+		Thread thread = new Thread(run);
+		thread.setDaemon(true);
+		thread.start();
 	}
 
 	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
@@ -139,17 +191,17 @@ public class RepositoryAccessControl {
 				}
 			}
 		}
-		log.info("Tested rights for "+account+" at "+path+" ("+access+")");
+		log.info("Tested rights for " + account + " at " + path + " (" + access + ")");
 		return access;
 	}
-	
-	private Group getGroup(List<Account> accounts, String name){
+
+	private Group getGroup(List<Account> accounts, String name) {
 		for (Account account : accounts) {
-			if (account.getIdentifier().equals(name) && account instanceof Group){
-				return (Group)account;
+			if (account.getIdentifier().equals(name) && account instanceof Group) {
+				return (Group) account;
 			}
 		}
-		log.severe("Group \""+name+"\" not found.");
+		log.severe("Group \"" + name + "\" not found.");
 		return null;
 	}
 
@@ -162,12 +214,25 @@ public class RepositoryAccessControl {
 	 * @throws IOException
 	 */
 	public List<Account> getAccounts() {
-		List<Account> accounts = new ArrayList<>();
+		if (accounts == null) {
+			readAccounts();
+		}
+		return accounts;
+	}
+
+	/**
+	 * Reads all the user accounts and updates the shared list.
+	 */
+	private void readAccounts() {
 		synchronized (passwordFilePath) {
+			accounts = new ArrayList<>();
 			String in = null;
 			try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
+					if (split.length != 4) {
+						continue;
+					}
 					// "x" as password indicates that this is a group
 					if (split[1].equals("x")) {
 						Group group = ModelshareFactory.eINSTANCE.createGroup();
@@ -192,8 +257,7 @@ public class RepositoryAccessControl {
 				e.printStackTrace();
 			}
 		}
-		log.info("Reading .passwd "+accounts.size()+" users found");
-		return accounts;
+		log.info("Done reading .passwd " + accounts.size() + " accounts found");
 	}
 
 	/**
