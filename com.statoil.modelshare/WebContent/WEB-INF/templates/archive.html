@@ -11,31 +11,28 @@
 			<h2 th:text="${title}">Archive</h2>
 			<div class="row">
 				<div class="left-container col-sm-3">
-					<div class="content-box">
-						<div th:fragment="fragment_node" th:remove="tag">
-		            		<ul th:if="${not #lists.isEmpty(node.children)}" >
-					    		<li th:each="child : ${node.children}" th:inline="text" th:with="node = ${child}">
-										<a class="menu-link" th:if="${child.leaf}" th:href="@{/showModel(item=${child.path})}">
-							    		[[${child.name}]]
-							    	</a>
-							    	<a class="menu-link" th:if="${!child.leaf}" th:href="@{/showModel(item)}">
-							    		[[${child.name}]]
-							    	</a>
-							      	<ul th:replace="../templates/archive::fragment_node"></ul>
-							 	</li>
-					 		</ul>
-					 	</div>
-					</div>
+
+					<!-- Showing file menu -->
+					<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">Model details</div>
+
 				</div>
-				<div class="right-container col-sm-9" th:if="${currentModel}">
-					<div class="text-label">Model owner<p/>
-						<span class="info-field" th:text="${currentModel.owner}"></span>
+				<div class="right-container col-sm-9">
+					
+					<!-- Showing model details -->
+					<div th:if="${currentModel}">
+						<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
 					</div>
-					<div class="text-label">Organisation<p/>
-						<span class="info-field" th:text="${currentModel.organisation}"></span>
+					<!-- Showing file upload screen -->
+					<div th:if="${showUploadFile}">
+						<div th:replace="../fragments/upload :: upload(${currentFolder})">Upload file</div>
 					</div>
+
+					<!-- Showing create folder screen -->
+					<div th:if="${showNewFolder}">
+						<div th:replace="../fragments/folder :: folder(${currentFolder})">Create folder</div>
+					</div>
+					
 				</div>
-				-->
 			</div>
 		</div>			
 	</div>
