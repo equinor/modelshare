@@ -6,8 +6,7 @@
 </head>
 <body>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar(activeTab)">
-	  <!-- <img src="images/statoil-horizontal-neg.png" height="35px"/> -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar(activeTab)">	  
       <div class="container">
         <div class="navbar-header">        
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -19,9 +18,9 @@
           </button>
           <a class="navbar-brand" href="./">Modelshare</a>
         </div>
-		<div th:if="${#httpServletRequest.remoteUser != null}">
+		<div>
 	        <div id="navbar" class="navbar-collapse collapse">
-	          <ul class="nav navbar-nav">
+	          <ul class="nav navbar-nav" th:if="${#httpServletRequest.remoteUser != null}">
 	            <li th:class="${activeTab == 'home'}? 'active' : null"><a href="./">Home</a></li>
 	            <li th:class="${activeTab == 'archive'}? 'active' : null"><a href="archive?item">Model archive</a></li>
             	<li th:class="${activeTab == 'help'}? 'active' : null"><a href="help">Help</a></li>
@@ -33,6 +32,7 @@
 	                </ul>
 				</li>            
 	          </ul>
+	          <a class="navbar-brand logo" href="./"><img src="images/statoil-horizontal-neg.png" height="35px"/></a>
 	        </div><!--/.nav-collapse -->
 		</div>
       </div>

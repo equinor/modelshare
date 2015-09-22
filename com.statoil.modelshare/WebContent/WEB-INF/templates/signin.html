@@ -23,16 +23,20 @@
                 <div th:if="${param.logout}" class="alert alert-success" role="alert">
                     You have been signed out.
                 </div>
+                <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
+                
 		       	<h2 class="form-signin-heading">Please sign in</h2>
 				<label for="username" class="sr-only">Email address</label>
 		        <input type="email" name="username" id="username" class="form-control" placeholder="User name" autofocus="autofocus" required="required"/>
 		        <label for="password" class="sr-only">Password</label>
 		        <input type="password" name="password" id="password" class="form-control" placeholder="Password" required="required"/>
+		        <!-- 
 		        <div class="checkbox">
 		          <label>
 		            <input type="checkbox" value="remember-me"/> Remember me
 		          </label>
 		        </div>
+		        -->
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 			</fieldset>
 		</form>
