@@ -10,13 +10,13 @@
 
 	<!-- Navigation bar -->	
 	<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
-	<br/><br/><br/>
 	
 	<!-- Sign-in form -->
-	<div class="container">
+	<div class="container theme-statoil" role="main">
 		<div class="content-container">
 		<form class="form-signin" th:action="@{/signin}" method="post">
-			<fieldset>
+			<fieldset>                
+		       	<h2 class="form-signin-heading">Please sign in</h2>
                 <div th:if="${param.error}" class="alert alert-danger" role="alert">
                     Invalid user name or password.
                 </div>
@@ -24,8 +24,6 @@
                     You have been signed out.
                 </div>
                 <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
-                
-		       	<h2 class="form-signin-heading">Please sign in</h2>
 				<label for="username" class="sr-only">Email address</label>
 		        <input type="email" name="username" id="username" class="form-control" placeholder="User name" autofocus="autofocus" required="required"/>
 		        <label for="password" class="sr-only">Password</label>

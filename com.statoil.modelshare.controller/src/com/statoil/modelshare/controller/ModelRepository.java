@@ -2,6 +2,8 @@ package com.statoil.modelshare.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -66,6 +68,21 @@ public interface ModelRepository {
 	 * @return
 	 */
 	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;	
+	
+	/**
+	 * Returns the {@link InputStream} for the path if the client has access to
+	 * the asset.
+	 * 
+	 * @param user
+	 *            the user that requests the asset
+	 * @param path
+	 *            the root relative path to the asset
+	 * @throws IOException
+	 *             if the file could not be read
+	 * @throws AccessDeniedException
+	 *             if the user does not have read access
+	 */
+	public InputStream getFileStream(Client user, Path path) throws AccessDeniedException, IOException;
 	
 	/**
 	 * Uploads a file to Modelshare based on information given in the view - represented by the model object
