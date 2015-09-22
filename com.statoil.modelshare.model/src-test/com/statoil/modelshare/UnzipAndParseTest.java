@@ -23,7 +23,7 @@ public class UnzipAndParseTest {
 		File file1 = unzippedFiles.get(0);
 		assertEquals("Simple_Flexible_Riser.task.xmi", file1.getName());
 		
-		TaskInformation taskInfo = ParseUtility.parseXMI(file1);
+		TaskInformation taskInfo = ParseUtility.parseStaskXMI(file1);
 		assertNotNull(taskInfo);
 		assertEquals("Simple_Flexible_Riser", taskInfo.getName()); 
 		assertFalse(taskInfo.getDescription().isEmpty());

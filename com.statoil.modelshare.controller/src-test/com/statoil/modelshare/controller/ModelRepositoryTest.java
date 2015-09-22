@@ -1,5 +1,9 @@
 package com.statoil.modelshare.controller;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,7 +46,37 @@ public class ModelRepositoryTest {
 	}
 	
 	@Test
-	public void testCreateFolder() {
+	public void testUploadingFile() {
+		// Set up a model repository
+		String home = System.getProperty("user.home");
+		assertNotNull(home);
+		File homeDir = new File(home);
+		assertTrue(homeDir.exists());
+		String root = homeDir + File.separator + "modelshare" + File.separator + "repository";
+		Path rootPath = new File(root).toPath();
+		ModelRepository repo = new ModelRepositoryImpl(rootPath);
 		
+		// Create a folder as user "test" 
+		Client client = repo.getUser("test");
+		repo.createFolder(repo.getRoot(client), "TestUpload");
+		
+		String testUpload = rootPath + File.separator + "TestUpload";
+		File testDir = new File(testUpload);
+		
+		// Create a model representation of the file
+		File file = Paths.get("test-resources/itema.stask").toAbsolutePath().toFile();
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setOwner("lars");
+		model.setOrganisation("Statoil");
+		model.setUsage("Bla bla bla...");
+		model.setName(file.getName());
+		model.setPath(testDir.getAbsolutePath() + File.separator + "itema.stask");
+		
+		// Upload the file
+		repo.uploadFile(file, model);
+		
+		// Make sure it actually exists
+		File staskFile = new File(testDir, "itema.stask");
+		assertNotNull(staskFile);
 	}
 }

@@ -1,6 +1,7 @@
 package com.statoil.modelshare.app.service;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ArchiveService {
 	}
 	public Model getModelFromAssets(String path) throws UnsupportedEncodingException {
 		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setPath(path);
+		model.setPath(URLDecoder.decode(path, "UTF-8"));
 		return model;
 	}	
 
