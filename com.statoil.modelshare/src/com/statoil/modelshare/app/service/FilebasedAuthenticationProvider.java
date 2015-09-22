@@ -32,8 +32,9 @@ public class FilebasedAuthenticationProvider extends AbstractUserDetailsAuthenti
 
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
-			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-		// TODO Auto-generated method stub
+			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {		
+//		if (userDetails.getPassword().isEmpty()) throw new CredentialsExpiredException("Password must be changed");		
+//		if (!userDetails.getPassword().equals(authentication.getCredentials())) throw new BadCredentialsException("Bad credentials");
 	}
 
 	@Override
@@ -45,6 +46,9 @@ public class FilebasedAuthenticationProvider extends AbstractUserDetailsAuthenti
 			((ConfigurableApplicationContext) ctx).close();
 		}
 		Client client = repository.getUser(username);
+		if (client==null){
+			throw new BadCredentialsException("Bad credentials");
+		}
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String credentials = (String)authentication.getCredentials();

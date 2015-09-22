@@ -29,21 +29,27 @@ public class PasswdController {
 	public String changePassword(ModelMap model, @RequestParam(value = "old-password", required = true) String password,
 			@RequestParam(value = "new-password", required = true) String newPassword,
 			@RequestParam(value = "confirm-password", required = true) String confirmPassword, Principal principal) {
+		
+		if (repository == null) {
+			ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
+			repository = ctx.getBean(ModelRepository.class);
+			((ConfigurableApplicationContext) ctx).close();
+		}
+
+		// Make sure password are the same
 		if (!newPassword.equals(confirmPassword)) {
 			model.addAttribute("error", "'New password' and 'Confirm password' must match.");
 			return "passwd";
 		}
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String newHashedPassword = passwordEncoder.encode(newPassword);
-
-		// We're using the repository configuration to get a handle on the user
-		// database
-		if (repository == null) {
-			ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
-			repository = ctx.getBean(ModelRepository.class);
-			((ConfigurableApplicationContext) ctx).close();
-		}
 		
+		String userPassword = repository.getUser(principal.getName()).getPassword();
+		if (!userPassword.isEmpty() && !passwordEncoder.matches(password, userPassword)){
+			model.addAttribute("error", "'Old password' is not correct.");
+			return "passwd";			
+		}
+
 		// Change the password
 		String name = principal.getName();
 		repository.setPassword(name, newHashedPassword);
@@ -51,7 +57,7 @@ public class PasswdController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
         auth.setAuthenticated(false);
 		SecurityContextHolder.clearContext();
-		model.addAttribute("info", "Your password has been changed, please log in using the new credentials.");
+		model.addAttribute("message", "Your password has been changed, please sign in using the new credentials.");
 		return "signin";
 	}
 	
