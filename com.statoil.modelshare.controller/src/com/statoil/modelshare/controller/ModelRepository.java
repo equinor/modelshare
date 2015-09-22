@@ -68,9 +68,9 @@ public interface ModelRepository {
 	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;	
 	
 	/**
-	 * Uploads a file based on information given in the view
+	 * Uploads a file based on information given in the view - represented by the model object
 	 */
-	public void uploadFile(Path path, File file, String owner, String organisation, String usage);
+	public void uploadFile(File file, Model model);
 	
 	/**
 	 * Creates a folder on the given parent folder and the name of the new folder
@@ -80,14 +80,13 @@ public interface ModelRepository {
 	/**
 	 * Delete a folder given the parent folder
 	 */
-	public void deleteFolder(Folder parentFolder, Folder folder);
+	public void deleteFolder(Folder folder);
 	
 	/**
 	 * Gets properties from the meta file and creates a model object to be returned
 	 * 
 	 * @param path
-	 * @param fileName
 	 * @return model object
 	 */
-	public Model getMetaInformation(Path path, String fileName);
+	public Model getMetaInformation(Path path);
 }

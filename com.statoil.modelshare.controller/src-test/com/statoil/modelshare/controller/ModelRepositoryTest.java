@@ -47,31 +47,35 @@ public class ModelRepositoryTest {
 	
 	@Test
 	public void testUploadingFile() {
+		// Set up a model repository
 		String home = System.getProperty("user.home");
-		
 		assertNotNull(home);
 		File homeDir = new File(home);
 		assertTrue(homeDir.exists());
 		String root = homeDir + File.separator + "modelshare" + File.separator + "repository";
-		File rootFile = new File(root);
-		Path rootPath = rootFile.toPath();
-		
+		Path rootPath = new File(root).toPath();
 		ModelRepository repo = new ModelRepositoryImpl(rootPath);
 		
+		// Create a folder as user "test" 
 		Client client = repo.getUser("test");
-		
 		repo.createFolder(repo.getRoot(client), "TestUpload");
-		
-		String owner = "lars";
-		String org = "Statoil";
-		String usage = "Bla bla bla...";
-		
-		File file = Paths.get("test-resources/itema.stask").toAbsolutePath().toFile();
 		
 		String testUpload = rootPath + File.separator + "TestUpload";
 		File testDir = new File(testUpload);
-		repo.uploadFile(testDir.toPath(), file, owner, org, usage);
 		
+		// Create a model representation of the file
+		File file = Paths.get("test-resources/itema.stask").toAbsolutePath().toFile();
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setOwner("lars");
+		model.setOrganisation("Statoil");
+		model.setUsage("Bla bla bla...");
+		model.setName(file.getName());
+		model.setPath(testDir.getAbsolutePath() + File.separator + "itema.stask");
+		
+		// Upload the file
+		repo.uploadFile(file, model);
+		
+		// Make sure it actually exists
 		File staskFile = new File(testDir, "itema.stask");
 		assertNotNull(staskFile);
 	}

@@ -108,20 +108,21 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void deleteFolder(Folder parentFolder, Folder folder) {
-		File parentDir = new File(parentFolder.getPath());
-		File childDir = new File(parentDir + File.separator + folder.getName());
-		childDir.delete();
+	public void deleteFolder(Folder folder) {
+		File f = new File(folder.getPath());
+		f.delete();
 	}
 
 	@Override
-	public void uploadFile(Path path, File file, String owner, String organisation, String usage) {
-		File dir = path.toFile();
-		File sourceFile = new File(file.getAbsolutePath());
+	public void uploadFile(File sourceFile, Model model) {
 		if (!sourceFile.exists()) {
-			System.err.println("File not found " + file.getAbsolutePath());
+			System.err.println("File not found " + sourceFile.getAbsolutePath());
 		}
-		File destFile = new File(dir.getAbsolutePath(), file.getName());
+		File destDir = new File(model.getPath());
+		if (!destDir.isDirectory()) {
+			destDir = destDir.getParentFile();
+		}
+		File destFile = new File(destDir, sourceFile.getName());
 		if (!destFile.exists()) {
 			try {
 				destFile.createNewFile();
@@ -167,13 +168,13 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 		// Create .meta file on this path
 		Properties p = new Properties();
-		p.setProperty("owner", owner);
-		p.setProperty("organisation", organisation);
-		p.setProperty("name", file.getName());
-		p.setProperty("usage", usage);
+		p.setProperty("owner", model.getOwner());
+		p.setProperty("organisation", model.getOrganisation());
+		p.setProperty("name", model.getName());
+		p.setProperty("usage", model.getUsage());
 		p.setProperty("lastUpdated", LocalDateTime.now().toString());
 
-		String metaPath = path + File.separator + "." + file.getName() + ".meta";
+		String metaPath = destDir + File.separator + "." + destFile.getName() + ".meta";
 		writeMetaFile(metaPath, p);
 	}
 	
@@ -192,8 +193,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public Model getMetaInformation(Path path, String fileName) {
+	public Model getMetaInformation(Path path) {
 		Properties resultProps = new Properties();
+		String fileName = path.getFileName().toString();
 		String metaFileName = path + File.pathSeparator + "." + fileName + ".meta";
 		try {
 			final FileInputStream in = new FileInputStream(metaFileName);
