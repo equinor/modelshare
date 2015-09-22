@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.web;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.net.URLDecoder;
@@ -52,15 +53,16 @@ public class ArchiveController {
     		@RequestParam("owner") String owner,
     		@RequestParam("email") String email,
     		@RequestParam("organisation") String organisation,
-    		@RequestParam("usage") String usage) throws UnsupportedEncodingException {
+    		@RequestParam("usage") String usage) throws IllegalStateException, IOException {
 			Model model = ModelshareFactory.eINSTANCE.createModel();
 			model.setPath(URLDecoder.decode(path, "UTF-8"));
+			model.setName(file.getOriginalFilename());
 			model.setOwner(owner);
 			model.setMail(email);
 			model.setOrganisation(organisation);
 			model.setUsage(usage);
 		service.saveFile(file, model);
-        return "redirect:archive.html?item=" + URLEncoder.encode(path, "UTF-8") + File.separator + file.getOriginalFilename(); 
+		return "redirect:showModel?item=" + path + File.separator + file.getOriginalFilename() + "&leaf=true";
     }
 
 	@RequestMapping(value = "/createFolder", method = RequestMethod.POST) 
