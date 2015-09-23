@@ -65,7 +65,8 @@ public class ArchiveService {
 	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
 		checkRepository();
 		if(encodedPath!=null){
-			return repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
+			Model metaInformation = repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
+			return metaInformation;
 		}
 		return null;
 	}	
@@ -75,6 +76,9 @@ public class ArchiveService {
 	}
 
 	public void saveFile(MultipartFile myFile, Model model) throws IllegalStateException, IOException {
+		if(myFile.getOriginalFilename().indexOf(".") == 0){
+			throw new RuntimeException("This is not a valid file name.");
+		}
 		checkRepository();
 		File sourceFile = new File(myFile.getOriginalFilename());
 		myFile.transferTo(sourceFile);

@@ -208,7 +208,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public Model getMetaInformation(Path path) {
 		Properties resultProps = new Properties();
 		String fileName = path.getFileName().toString();
-		String metaFileName = path + File.pathSeparator + "." + fileName + ".meta";
+		String metaFileName = path.toFile().getParent() + File.separator + "." + fileName + ".meta";
 		try {
 			final FileInputStream in = new FileInputStream(metaFileName);
 			resultProps.loadFromXML(in);
