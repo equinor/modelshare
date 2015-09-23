@@ -8,7 +8,7 @@
 	<div th:fragment="filemenu(node)">
 		<div class="content-box">
 			<div th:fragment="fragment_node" th:remove="tag">
-		         		<div th:if="${not #lists.isEmpty(node.children)}" >
+		         <div th:if="${not #lists.isEmpty(node.children)}" >
 		    		<div th:each="child : ${node.children}" th:inline="text" th:with="node = ${child}">
 				    	<div class="menu-item" >
 				    		<div th:class="${activeMenuItem == child.path}? 'active-menu-item menu-item' : 'menu-item'" >
@@ -16,15 +16,11 @@
 			    					<tr>
 			    						<td>
 				    						<a th:href="@{/showModel(item=${child.path},leaf=${child.leaf})}">
-									    		[[${child.name}]]
+									    		<span th:if="${child.leaf == false}" class="glyphicon glyphicon-folder-open"></span>
+									    		<span th:if="${child.leaf == true}" class="glyphicon glyphicon-file"></span>
+									    		&nbsp;&nbsp;[[${child.name}]]
 									    	</a>
 									    </td>
-									    <td style="width: 10px; align: right;">
-									    	&nbsp;<a th:if="${!child.leaf}" th:href="@{/showModel(item=${child.path},leaf=${child.leaf},showNewFolder=true)}">X</a>&nbsp;
-									    </td>
-									    <td style="width: 10px; align: right;">
-									    	&nbsp;<a th:if="${!child.leaf}" th:href="@{/showModel(item=${child.path},leaf=${child.leaf},showUploadFile=true)}">Y</a>&nbsp;
-										</td>
 									</tr>
 								</table>
 					    	</div>

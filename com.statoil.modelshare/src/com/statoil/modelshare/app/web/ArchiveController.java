@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.net.URLDecoder;
 
+import org.eclipse.emf.common.util.EList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Client;
+import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.app.service.ArchiveService;
@@ -33,6 +36,7 @@ public class ArchiveController {
 	@RequestMapping(value={"/archive", "/showModel"}, method = RequestMethod.GET)
 		public String doShow (ModelMap model, @RequestParam(value = "item", required = false) String item, 
 				@RequestParam(required = false) boolean leaf,
+				@RequestParam(required = false) boolean showFiles,
 				@RequestParam(required = false) boolean showNewFolder,
 				@RequestParam(required = false) boolean showUploadFile,
 				Principal principal) 
@@ -45,6 +49,9 @@ public class ArchiveController {
 				model.addAttribute("currentFolder", item);
 				model.addAttribute("showNewFolder", showNewFolder);
 				model.addAttribute("showUploadFile", showUploadFile);
+				
+				Folder models = currentModel.getFolder();
+				model.addAttribute("models", models);
 			}
 			model.addAttribute("attributes", currentModel.getTaskInformation());
 			model.addAttribute("client", client);
