@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,14 +63,11 @@ public class ArchiveService {
 	}
 	
 	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
-		/*
-		 * TODO: Get model from path:
-		 * Path path = Paths.get(URLDecoder.decode(encodedPath, "UTF-8"));
-		 * return repository.getModel(path);
-		 */
-		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setPath(URLDecoder.decode(encodedPath, "UTF-8"));
-		return model;
+		checkRepository();
+		if(encodedPath!=null){
+			return repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
+		}
+		return null;
 	}	
 	
 	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
@@ -89,6 +87,7 @@ public class ArchiveService {
 		parentFolder.setPath(path);
 		repository.createFolder(parentFolder, name);
 	}
+
 }
 
 /* The end

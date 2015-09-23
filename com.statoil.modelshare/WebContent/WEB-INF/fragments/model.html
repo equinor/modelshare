@@ -19,6 +19,9 @@
 			<div class="text-label">last updated<p/>
 				<span class="info-field" th:text="${currentModel.lastUpdated}"></span>
 			</div>
+			<a th:href="@{/download(asset=${currentModel.path})}">
+				<span class="btn btn-default save-button">Download model file</span>
+			</a>
 		</div>
 	</div>
 </body>

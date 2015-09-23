@@ -24,7 +24,7 @@
 					</div>
 					<!-- Showing file upload screen -->
 					<div th:if="${showUploadFile}">
-						<div th:replace="../fragments/upload :: upload(${currentFolder})">Upload file</div>
+						<div th:replace="../fragments/upload :: upload(${currentFolder}, ${client})">Upload file</div>
 					</div>
 
 					<!-- Showing create folder screen -->
