@@ -179,6 +179,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 			usage = model.getUsage();
 		}
 		p.setProperty("usage", usage);
+		
+		String email = "Unknown";
+		if (model.getMail() != null) {
+			email = model.getMail();
+		}
+		p.setProperty("mail", email);
 		p.setProperty("lastUpdated", LocalDateTime.now().toString());
 		
 		addTaskInformation(sourceFile, p);
@@ -228,6 +234,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		model.setOrganisation(resultProps.getProperty("organisation"));
 		model.setPath(path.toString());
 		model.setUsage(resultProps.getProperty("usage"));
+		model.setMail(resultProps.getProperty("mail"));
 
 		for (Enumeration<?> e = resultProps.propertyNames(); e.hasMoreElements();) {
 			String element = (String) e.nextElement();
@@ -235,7 +242,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 				TaskInformation taskInfo = ModelshareFactory.eINSTANCE.createTaskInformation();
 				int start = element.indexOf(".");
 				int end = element.lastIndexOf(".");
-				String taskName = element.substring(start, end-1);
+				String taskName = element.substring(start + 1, end);
 				taskInfo.setName(taskName);
 				taskInfo.setDescription(resultProps.getProperty(element));
 				model.getTaskInformation().add(taskInfo);
