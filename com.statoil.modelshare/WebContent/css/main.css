@@ -51,6 +51,11 @@ body {
 	width: 550px;
 	font-weight: normal;
 }
+.info-field-bold {
+	width: 550px;
+	font-weight: bold;
+}
+
 .menu-link {
 	font-weight: bold;
 	font-size: 100%;

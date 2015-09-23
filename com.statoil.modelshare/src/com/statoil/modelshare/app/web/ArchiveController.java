@@ -46,6 +46,7 @@ public class ArchiveController {
 				model.addAttribute("showNewFolder", showNewFolder);
 				model.addAttribute("showUploadFile", showUploadFile);
 			}
+			model.addAttribute("attributes", currentModel.getTaskInformation());
 			model.addAttribute("client", client);
 			model.addAttribute("activeMenuItem", item);
 			model.addAttribute("title", "Model archive");
