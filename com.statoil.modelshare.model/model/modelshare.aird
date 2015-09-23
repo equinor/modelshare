@@ -373,7 +373,7 @@
           </ownedStyle>
           <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
         </ownedElements>
-        <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_Jx2KUF37EeWRu_Fft3maaw" name="lastUpdated : EDate" tooltipText="">
+        <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_Jx2KUF37EeWRu_Fft3maaw" name="lastUpdated : EString" tooltipText="">
           <target xmi:type="ecore:EAttribute" href="modelshare.ecore#//Model/lastUpdated"/>
           <semanticElements xmi:type="ecore:EAttribute" href="modelshare.ecore#//Model/lastUpdated"/>
           <ownedStyle xmi:type="diagram:BundledImage" xmi:id="_LWE9MF37EeWRu_Fft3maaw" labelAlignment="LEFT">

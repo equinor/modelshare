@@ -4,7 +4,6 @@ package com.statoil.modelshare.impl;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -104,7 +103,7 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date LAST_UPDATED_EDEFAULT = null;
+	protected static final String LAST_UPDATED_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getLastUpdated() <em>Last Updated</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -113,7 +112,7 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date lastUpdated = LAST_UPDATED_EDEFAULT;
+	protected String lastUpdated = LAST_UPDATED_EDEFAULT;
 	/**
 	 * The default value of the '{@link #isStask() <em>Stask</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -246,7 +245,7 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getLastUpdated() {
+	public String getLastUpdated() {
 		return lastUpdated;
 	}
 
@@ -255,8 +254,8 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLastUpdated(Date newLastUpdated) {
-		Date oldLastUpdated = lastUpdated;
+	public void setLastUpdated(String newLastUpdated) {
+		String oldLastUpdated = lastUpdated;
 		lastUpdated = newLastUpdated;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.MODEL__LAST_UPDATED, oldLastUpdated, lastUpdated));
@@ -385,7 +384,7 @@ public class ModelImpl extends AssetImpl implements Model {
 				setMail((String)newValue);
 				return;
 			case ModelsharePackage.MODEL__LAST_UPDATED:
-				setLastUpdated((Date)newValue);
+				setLastUpdated((String)newValue);
 				return;
 			case ModelsharePackage.MODEL__STASK:
 				setStask((Boolean)newValue);
