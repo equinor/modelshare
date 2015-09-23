@@ -99,6 +99,6 @@ public class ModelRepositoryTest {
 		LocalDateTime ldt = LocalDateTime.parse(lastUpdated);
 		
 		assertEquals(now, ldt);
-		
 	}
+	
 }
