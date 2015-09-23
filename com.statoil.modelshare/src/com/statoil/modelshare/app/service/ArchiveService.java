@@ -87,13 +87,6 @@ public class ArchiveService {
 		parentFolder.setPath(path);
 		repository.createFolder(parentFolder, name);
 	}
-	
-	public void downloadFile(String path, String name) {
-		checkRepository();
-		Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
-		parentFolder.setPath(path);
-		repository.createFolder(parentFolder, name);
-	}
 
 }
 

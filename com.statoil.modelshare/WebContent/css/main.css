@@ -78,4 +78,9 @@ body {
 .form-input {
 	width: 250px;	
 }
+.usage-input {
+	width: 425px;
+	height: 220px;
+	font-weight: normal;
+}
 	
