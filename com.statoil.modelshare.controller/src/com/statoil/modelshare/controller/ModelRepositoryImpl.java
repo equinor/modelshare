@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -143,16 +144,50 @@ public class ModelRepositoryImpl implements ModelRepository {
 			}
 		}
 		
-		// Create .meta file on this path
-		Properties p = new Properties();
-		p.setProperty("owner", model.getOwner());
-		p.setProperty("organisation", model.getOrganisation());
-		p.setProperty("name", model.getName());
-		p.setProperty("usage", model.getUsage());
-		p.setProperty("lastUpdated", LocalDateTime.now().toString());
+		Properties p = setupMetaFileProperties(sourceFile, model);
 
 		String metaPath = destDir + File.separator + "." + destFile.getName() + ".meta";
 		writeMetaFile(metaPath, p);
+	}
+
+	private Properties setupMetaFileProperties(File sourceFile, Model model) {
+		Properties p = new Properties();
+		String owner = "unknown";
+		if (model.getOwner() != null) {
+			owner = model.getOwner();
+		}
+		p.setProperty("owner", owner);
+		
+		String org = "unknown";
+		if (model.getOrganisation() != null) {
+			org = model.getOrganisation();
+		}
+		p.setProperty("organisation", org);
+		
+		String name = "unknown";
+		if (model.getName() != null) {
+			name = model.getName();
+		}
+		p.setProperty("name", name);
+		
+		String usage = "unknown";
+		if (model.getUsage() != null) {
+			usage = model.getUsage();
+		}
+		p.setProperty("usage", usage);
+		p.setProperty("lastUpdated", LocalDateTime.now().toString());
+		
+		addTaskInformation(sourceFile, p);
+		return p;
+	}
+
+	private void addTaskInformation(File sourceFile, Properties p) {
+		if (sourceFile.getName().endsWith(".stask")) {
+			List<TaskInformation> tasks = unzipAndGetStaskInformation(sourceFile.toPath());
+			for (TaskInformation taskInfo : tasks) {
+				p.setProperty("task."+taskInfo.getName()+".description", taskInfo.getDescription());
+			}
+		}
 	}
 	
 	private void writeMetaFile(String metaPath, Properties properties) {
@@ -189,31 +224,36 @@ public class ModelRepositoryImpl implements ModelRepository {
 		model.setOrganisation(resultProps.getProperty("organisation"));
 		model.setPath(path.toString());
 		model.setUsage(resultProps.getProperty("usage"));
-		
-		// TODO: Move this to creation of meta file. Change meta file format to general XML format.
-		if (fileName.endsWith(".stask")) {
-			unzipAndGetStaskInformation(path, model);
-		}
 
+		for (Enumeration<?> e = resultProps.propertyNames(); e.hasMoreElements();) {
+			String element = (String) e.nextElement();
+			if (element.startsWith("task")) {
+				TaskInformation taskInfo = ModelshareFactory.eINSTANCE.createTaskInformation();
+				int start = element.indexOf(".");
+				int end = element.lastIndexOf(".");
+				String taskName = element.substring(start, end-1);
+				taskInfo.setName(taskName);
+				taskInfo.setDescription(resultProps.getProperty(element));
+				model.getTaskInformation().add(taskInfo);
+			}
+		}
 		return model;
 	}
 	
 	/**
-	 * Unzip stask and parses the xmi files for task name and description
-	 * Creates a TaskInformation object per xmi file and adds it to the model object. 
-	 * @param path 
-	 * @param model 
-	 * @param p 
+	 * Unzip stask and parses the xmi files for task names and descriptions
 	 */
-	private void unzipAndGetStaskInformation(Path path, Model model) {
+	private List<TaskInformation> unzipAndGetStaskInformation(Path path) {
+		List<TaskInformation> tasks = new ArrayList<>();
 		String tempDir = System.getProperty("java.io.tmpdir");
 		UnzipUtility.unzip(path.toString(), tempDir);
 		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
 		for (int i = 0; i < unzippedFiles.size(); i++) {
 			File unzippedFile = unzippedFiles.get(i);
 			TaskInformation taskInfo = ParseUtility.parseStaskXMI(unzippedFile);
-			model.getTaskInformation().add(taskInfo);
+			tasks.add(taskInfo);
 		}
+		return tasks;
 	}
 
 	@Override

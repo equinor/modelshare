@@ -1,8 +1,6 @@
 package com.statoil.modelshare.util;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
