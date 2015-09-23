@@ -1,35 +1,30 @@
 @CHARSET "UTF-8";
 body {
   padding-top: 40px;
+  width: 100%;
 }
 
 .logo {
 	padding:10px;
 	float: right;
 }
+.container {
+	width: 100%;
+}
 .theme-statoil > p > .btn {
   margin: 5px 0;
+  width: 100%;
 }
 
 .theme-statoil .navbar .container {
   width: auto;
 }
 
-.treeview-ul {
-	width: 200px:
-	background-color: #ACACAC;
-}
-.treeview-li {
-	font-weight: bold;
-}
-
 .left-container {
-	width: 300px;
-	height: 70%;
+	width: 400px;
 }
 .right-container {
-	max-width: 600px;
-	height: 70%;
+	max-width: 70%;
 }
 .content-box {
 	background-color: #FFFFFF;
@@ -44,14 +39,15 @@ body {
     margin: 5px 5px 5px 5px;
     padding: 5px 5px 5px 5px;
 	font-weight: bold;
-	width: 450px;
+	min-width: 100px;
+	max-width: 100%;
 }
 .info-field {
-	width: 550px;
+	width: 650px;
 	font-weight: normal;
 }
 .info-field-bold {
-	width: 550px;
+	width: 560px;
 	font-weight: bold;
 }
 
@@ -92,4 +88,3 @@ body {
 	height: 220px;
 	font-weight: normal;
 }
-	

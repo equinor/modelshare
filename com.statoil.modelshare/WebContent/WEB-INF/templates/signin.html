@@ -8,11 +8,12 @@
 
 <body role="document">
 
-	<!-- Navigation bar -->	
-	<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
-	
 	<!-- Sign-in form -->
 	<div class="container theme-statoil" role="main">
+
+		<!-- Navigation bar -->	
+		<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
+
 		<div class="content-container">
 		<form class="form-signin" th:action="@{/signin}" method="post">
 			<fieldset>                

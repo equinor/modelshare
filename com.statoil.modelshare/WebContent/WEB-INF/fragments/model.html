@@ -5,7 +5,7 @@
 	<title>Model</title>
 </head>
 <body>
-	<div  th:fragment="model(currentModel)">
+	<div th:fragment="model(currentModel)">
 		<div th:if="${currentModel}" class="text-label">
 			<label class="form-label" for="owner">Owner</label><span class="info-field" id="owner" th:text="${currentModel.owner}" ></span><p />
 			<label class="form-label" for="organisation">Owner organisation</label><span class="info-field" id="organisation" th:text="${currentModel.organisation}" ></span><p />
