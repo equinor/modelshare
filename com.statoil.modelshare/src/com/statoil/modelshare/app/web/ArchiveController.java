@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import java.net.URLDecoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Model;
@@ -59,7 +63,7 @@ public class ArchiveController {
     public String importParse(@RequestParam("uploadFile") MultipartFile file, 
     		@RequestParam("path") String path,
     		@RequestParam("usage") String usage, 
-    		Principal principal) throws IllegalStateException, IOException {
+    		Principal principal) throws IllegalStateException, IOException, ParserConfigurationException, SAXException {
 			Client user = modelrepository.getUser(principal.getName());
 			Model model = ModelshareFactory.eINSTANCE.createModel();
 			model.setPath(URLDecoder.decode(path, "UTF-8"));

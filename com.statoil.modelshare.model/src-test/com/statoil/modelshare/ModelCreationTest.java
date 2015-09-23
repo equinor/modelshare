@@ -41,8 +41,5 @@ public class ModelCreationTest {
 		assertEquals(2, folder.getAssets().size());
 		assertTrue(model1.isStask());
 		assertFalse(model2.isStask());
-		assertEquals(3, model1.getTaskInformation().size());
-		TaskInformation taskInformation1 = model1.getTaskInformation().get(0);
-		assertEquals("Simple_Flexible_Riser", taskInformation1.getName());
 	}
 }

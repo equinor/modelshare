@@ -8,6 +8,10 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
@@ -88,7 +92,7 @@ public interface ModelRepository {
 	/**
 	 * Uploads a file to Modelshare based on information given in the view - represented by the model object
 	 */
-	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException;
+	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException;
 	
 	/**
 	 * Creates a folder on the given parent folder and the name of the new folder

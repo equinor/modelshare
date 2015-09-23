@@ -1,14 +1,17 @@
 package com.statoil.modelshare.util;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.TaskInformation;
@@ -17,8 +20,7 @@ public class ParseUtility {
 	
 	private static TaskInformation taskInfo;
 
-	public static TaskInformation parseStaskXMI(File input) {
-		try {
+	public static TaskInformation parseStaskXMI(File input) throws ParserConfigurationException, SAXException, IOException {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(input);
@@ -39,11 +41,6 @@ public class ParseUtility {
 				taskInfo.setName(taskName);
 			}
 
-		} catch (Exception ex) {
-
-			ex.printStackTrace();
-
-		}
 		return taskInfo;
 	}
 	
