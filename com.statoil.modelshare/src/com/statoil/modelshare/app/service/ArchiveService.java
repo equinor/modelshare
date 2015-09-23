@@ -8,11 +8,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.emf.common.util.EList;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
@@ -22,7 +25,7 @@ import com.statoil.modelshare.app.config.RepositoryConfig;
 import com.statoil.modelshare.controller.ModelRepository;
 
 public class ArchiveService {
-	
+
 	private ModelRepository repository;
 
 	public MenuItem getMenuItemsFromAssets(String userId) throws UnsupportedEncodingException {
@@ -36,24 +39,24 @@ public class ArchiveService {
 	}
 
 	private void checkRepository() {
-		if (repository==null) {
+		if (repository == null) {
 			ApplicationContext ctx = new AnnotationConfigApplicationContext(RepositoryConfig.class);
 			repository = ctx.getBean(ModelRepository.class);
-			((ConfigurableApplicationContext)ctx).close();
+			((ConfigurableApplicationContext) ctx).close();
 		}
 	}
 
 	private List<MenuItem> getMenuItemsFromAssets(EList<Asset> eContents, int num) throws UnsupportedEncodingException {
 		List<MenuItem> items = new ArrayList<MenuItem>();
-		if(eContents != null){
+		if (eContents != null) {
 			for (Asset eObject : eContents) {
 				MenuItem item = null;
-				if (eObject instanceof Folder){
+				if (eObject instanceof Folder) {
 					item = createMenuItem(eObject, false);
-					if(((Folder) eObject).getAssets() != null){
+					if (((Folder) eObject).getAssets() != null) {
 						item.addChildren(getMenuItemsFromAssets(((Folder) eObject).getAssets(), num));
 					}
-				}else{
+				} else {
 					item = createMenuItem(eObject, true);
 				}
 				items.add(item);
@@ -61,22 +64,23 @@ public class ArchiveService {
 		}
 		return items;
 	}
-	
+
 	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
 		checkRepository();
-		if(encodedPath!=null){
+		if (encodedPath != null) {
 			Model metaInformation = repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
 			return metaInformation;
 		}
 		return null;
-	}	
-	
+	}
+
 	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
 		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), leaf);
 	}
 
-	public void saveFile(MultipartFile myFile, Model model) throws IllegalStateException, IOException {
-		if(myFile.getOriginalFilename().indexOf(".") == 0){
+	public void saveFile(MultipartFile myFile, Model model)
+			throws IllegalStateException, IOException, ParserConfigurationException, SAXException {
+		if (myFile.getOriginalFilename().indexOf(".") == 0) {
 			throw new RuntimeException("This is not a valid file name.");
 		}
 		checkRepository();
@@ -84,7 +88,7 @@ public class ArchiveService {
 		myFile.transferTo(sourceFile);
 		repository.uploadFile(sourceFile, model);
 	}
-	
+
 	public void createFolder(String path, String name) {
 		checkRepository();
 		Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
@@ -94,6 +98,6 @@ public class ArchiveService {
 
 }
 
-/* The end
+/*
+ * The end
  */
-

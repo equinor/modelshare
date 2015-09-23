@@ -17,6 +17,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Client;
@@ -116,7 +120,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException {
+	public void uploadFile(File sourceFile, Model model) throws IOException, ParserConfigurationException, SAXException {
 		if (!sourceFile.exists()) {
 			System.err.println("File not found " + sourceFile.getAbsolutePath());
 		}
@@ -150,7 +154,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		writeMetaFile(metaPath, p);
 	}
 
-	private Properties setupMetaFileProperties(File sourceFile, Model model) {
+	private Properties setupMetaFileProperties(File sourceFile, Model model) throws ParserConfigurationException, SAXException, IOException {
 		Properties p = new Properties();
 		String owner = "unknown";
 		if (model.getOwner() != null) {
@@ -181,7 +185,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return p;
 	}
 
-	private void addTaskInformation(File sourceFile, Properties p) {
+	private void addTaskInformation(File sourceFile, Properties p) throws ParserConfigurationException, SAXException, IOException {
 		if (sourceFile.getName().endsWith(".stask")) {
 			List<TaskInformation> tasks = unzipAndGetStaskInformation(sourceFile.toPath());
 			for (TaskInformation taskInfo : tasks) {
@@ -242,8 +246,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 	
 	/**
 	 * Unzip stask and parses the xmi files for task names and descriptions
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	private List<TaskInformation> unzipAndGetStaskInformation(Path path) {
+	private List<TaskInformation> unzipAndGetStaskInformation(Path path) throws ParserConfigurationException, SAXException, IOException {
 		List<TaskInformation> tasks = new ArrayList<>();
 		String tempDir = System.getProperty("java.io.tmpdir");
 		UnzipUtility.unzip(path.toString(), tempDir);

@@ -1,11 +1,14 @@
 package com.statoil.modelshare.app.web;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 import java.net.URLDecoder;
+import java.security.Principal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Model;
@@ -25,7 +29,9 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 @RequestMapping("/")
 public class ArchiveController {
+	
 	private ArchiveService service = new ArchiveService();
+	static Logger log = Logger.getLogger(ArchiveController.class.getName());
 
 	@Autowired
 	private ModelRepository modelrepository;
@@ -35,8 +41,8 @@ public class ArchiveController {
 				@RequestParam(required = false) boolean leaf,
 				@RequestParam(required = false) boolean showNewFolder,
 				@RequestParam(required = false) boolean showUploadFile,
-				Principal principal) 
-				throws FileNotFoundException, UnsupportedEncodingException {
+				Principal principal) {
+		try {
 			Model currentModel = service.getModelFromAssets(item);
 			Client client = modelrepository.getUser(principal.getName());
 			if(leaf){
@@ -52,14 +58,21 @@ public class ArchiveController {
 			model.addAttribute("title", "Model archive");
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", menuItem);
+		} catch (UnsupportedEncodingException ue) {
+			String msg = "Error found when encoding file URL";
+			log.log(Level.SEVERE, msg, ue);
+			model.addAttribute("error", msg);
+			return "errorpage";
+		}
 		return "archive";
 	}
 	
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST) 
-    public String importParse(@RequestParam("uploadFile") MultipartFile file, 
+    public String importParse(ModelMap modelMap, @RequestParam("uploadFile") MultipartFile file, 
     		@RequestParam("path") String path,
     		@RequestParam("usage") String usage, 
-    		Principal principal) throws IllegalStateException, IOException {
+    		Principal principal) {
+		try {
 			Client user = modelrepository.getUser(principal.getName());
 			Model model = ModelshareFactory.eINSTANCE.createModel();
 			model.setPath(URLDecoder.decode(path, "UTF-8"));
@@ -69,6 +82,22 @@ public class ArchiveController {
 			model.setOrganisation(user.getOrganisation());
 			model.setUsage(usage);
 		service.saveFile(file, model);
+		} catch (SAXException se) {
+			String msg = "Parsing of the content of the file " + file.getName() + " failed";
+			log.log(Level.SEVERE, msg, se);
+			modelMap.addAttribute("error", msg);
+			return "errorpage";
+		} catch (ParserConfigurationException pe) {
+			String msg = "Errors found in file " + file.getName() + " when parsing content";
+			log.log(Level.SEVERE, msg, pe);
+			modelMap.addAttribute("error", msg);
+			return "errorpage";
+		} catch (IOException ioe) {
+			String msg = "Errors saving file " + file.getName();
+			log.log(Level.SEVERE, msg, ioe);
+			modelMap.addAttribute("error", msg);
+			return "errorpage";
+		}
 		return "redirect:showModel?item=" + path + File.separator + file.getOriginalFilename() + "&leaf=true";
     }
 

@@ -11,9 +11,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.emf.common.util.EList;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Client;
@@ -50,7 +53,7 @@ public class ModelRepositoryTest {
 	}
 	
 	@Test
-	public void testUploadingFile() throws FileNotFoundException, IOException {
+	public void testUploadingFile() throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
 		// Set up a model repository
 		String home = System.getProperty("user.home");
 		assertNotNull(home);

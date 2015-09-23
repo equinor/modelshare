@@ -51,7 +51,7 @@ public class DownloadController {
 		} catch (IOException ex) {
 			log.log(Level.SEVERE,
 					MessageFormat.format("Error writing file to output stream. Filename was '{0}'", asset), ex);
-			throw new RuntimeException("IOError writing file to output stream");
+			return "errorpage";
 		}
 		return "download";
 	}
