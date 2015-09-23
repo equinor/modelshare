@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Upload</title>
+</head>
+<body>
+	<div th:fragment="upload(currentFolder)">
+		<div th:if="${currentFolder}" class="details">
+			<div class="text-label">Upload new model file<p/>
+					<form action="archive.html" th:action="@{/fileUpload}" method="post" enctype="multipart/form-data"><p />
+						
+						<label class="form-label" for="owner">Owner</label><input class="form-input" type="text" id="owner" name="owner" placeholder="The owner's name" /><p />
+						<label class="form-label" for="email">Email</label><input class="form-input" type="text" id="email" name="email" placeholder="The owner's email" /><p />
+						<label class="form-label" for="organisation">Organisation</label><input class="form-input" type="text" id="organisation" name="organisation" placeholder="The owner's organisation" /><p />
+						<label class="form-label" for="usage">Usage description</label><textarea class="form-input" id="usage" name="usage" placeholder="Description of use"></textarea><p />
+						<input type="hidden" name="path" th:value="${currentFolder}" />
+				       	<input class="btn btn-default" type="file" name="uploadFile" /><p/><p/>
+				       	<input class="btn btn-default save-button" type="submit" value="Save file" />
+			    </form>
+		    </div>
+		</div>
+	</div>
+</body>
+</html>

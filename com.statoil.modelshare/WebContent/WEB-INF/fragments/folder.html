@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Upload</title>
+</head>
+<body>
+	<div th:fragment="folder(currentFolder)">
+		<div th:if="${currentFolder}" class="details">
+			<div class="text-label" th:inline="text">Create new subfolder in [[${currentFolder}]]<p/>
+				<form action="archive.html" th:action="@{/createFolder}" method="post" enctype="multipart/form-data"><p />
+					<input type="hidden" name="path" th:value="${currentFolder}" />
+					<label class="form-label" for="name">Folder</label><input class="form-input" type="text" id="name" name="name" placeholder="The folder name" /><p />
+			       	<input class="btn btn-default save-button" type="submit" value="Create folder" />
+			    </form>
+		    </div>
+		</div>
+	</div>
+</body>
+</html>
