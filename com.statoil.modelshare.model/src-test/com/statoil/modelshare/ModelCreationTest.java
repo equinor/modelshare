@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class ModelCreationTest {
 		Path staskPath = Paths.get("test-resources/itema.stask").toAbsolutePath();
 		model1.setPath(staskPath.toString());
 		model1.setUsage("Dette er en stask som skal brukes med møye..");
-		model1.setLastUpdated(new Date());
+		model1.setLastUpdated(LocalDateTime.now().toString());
 		folder.getAssets().add(model1);
 		
 		Model model2 = ModelshareFactory.eINSTANCE.createModel();
@@ -35,7 +35,7 @@ public class ModelCreationTest {
 		model2.setMail("tor.larsen@statoil.com");
 		model2.setPath("A1/koko.geo");
 		model1.setUsage("Dette er en geometrimodell som skal brukes med tøy og bøy..");
-		model2.setLastUpdated(new Date());
+		model2.setLastUpdated(LocalDateTime.now().toString());
 		folder.getAssets().add(model2);
 		
 		assertEquals(2, folder.getAssets().size());

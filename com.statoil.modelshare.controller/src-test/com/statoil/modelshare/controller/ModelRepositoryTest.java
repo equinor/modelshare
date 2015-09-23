@@ -1,11 +1,15 @@
 package com.statoil.modelshare.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.BeforeClass;
@@ -46,7 +50,7 @@ public class ModelRepositoryTest {
 	}
 	
 	@Test
-	public void testUploadingFile() {
+	public void testUploadingFile() throws FileNotFoundException, IOException {
 		// Set up a model repository
 		String home = System.getProperty("user.home");
 		assertNotNull(home);
@@ -78,5 +82,23 @@ public class ModelRepositoryTest {
 		// Make sure it actually exists
 		File staskFile = new File(testDir, "itema.stask");
 		assertNotNull(staskFile);
+	}
+	
+	@Test
+	public void testLastUpdatedFeature() {
+		// Representing date in .meta file
+		LocalDateTime now = LocalDateTime.now();
+		String storedDate = now.toString();
+		
+		// Setting date string in model to be delivered to the view
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setLastUpdated(storedDate);
+
+		// Converting to date
+		String lastUpdated = model.getLastUpdated();
+		LocalDateTime ldt = LocalDateTime.parse(lastUpdated);
+		
+		assertEquals(now, ldt);
+		
 	}
 }

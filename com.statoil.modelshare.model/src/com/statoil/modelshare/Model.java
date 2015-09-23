@@ -2,7 +2,6 @@
  */
 package com.statoil.modelshare;
 
-import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -116,12 +115,12 @@ public interface Model extends Asset {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Last Updated</em>' attribute.
-	 * @see #setLastUpdated(Date)
+	 * @see #setLastUpdated(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getModel_LastUpdated()
 	 * @model
 	 * @generated
 	 */
-	Date getLastUpdated();
+	String getLastUpdated();
 
 	/**
 	 * Sets the value of the '{@link com.statoil.modelshare.Model#getLastUpdated <em>Last Updated</em>}' attribute.
@@ -131,7 +130,7 @@ public interface Model extends Asset {
 	 * @see #getLastUpdated()
 	 * @generated
 	 */
-	void setLastUpdated(Date value);
+	void setLastUpdated(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Stask</b></em>' attribute.

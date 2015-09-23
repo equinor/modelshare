@@ -1,6 +1,7 @@
 package com.statoil.modelshare.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
@@ -87,7 +88,7 @@ public interface ModelRepository {
 	/**
 	 * Uploads a file to Modelshare based on information given in the view - represented by the model object
 	 */
-	public void uploadFile(File sourceFile, Model model);
+	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException;
 	
 	/**
 	 * Creates a folder on the given parent folder and the name of the new folder

@@ -12,7 +12,6 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Properties;
@@ -116,7 +115,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadFile(File sourceFile, Model model) {
+	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException {
 		if (!sourceFile.exists()) {
 			System.err.println("File not found " + sourceFile.getAbsolutePath());
 		}
@@ -134,40 +133,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 			}
 		}
 		
-		FileChannel source = null;
-		FileChannel destination = null;
-		
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-
+		try (FileInputStream sourceStream = new FileInputStream(sourceFile);
+			FileOutputStream destStream = new FileOutputStream(destFile)	
+		) {
+			FileChannel source = sourceStream.getChannel();
+			FileChannel destination = destStream.getChannel();
 			if (destination != null && source != null) {
 				destination.transferFrom(source, 0, source.size());
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-
-		finally {
-			if (source != null) {
-				try {
-					source.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (destination != null) {
-				try {
-					destination.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
+		
 		// Create .meta file on this path
 		Properties p = new Properties();
 		p.setProperty("owner", model.getOwner());
@@ -209,7 +184,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		
 		Model model = ModelshareFactory.eINSTANCE.createModel();
 		model.setOwner(resultProps.getProperty("owner"));
-		model.setLastUpdated(new Date(resultProps.getProperty("lastUpdated")));
+		model.setLastUpdated(resultProps.getProperty("lastUpdated"));
 		model.setName(resultProps.getProperty("name"));
 		model.setOrganisation(resultProps.getProperty("organisation"));
 		model.setPath(path.toString());
