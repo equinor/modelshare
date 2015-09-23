@@ -120,7 +120,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
+	public void uploadFile(File sourceFile, Model model) throws IOException, ParserConfigurationException, SAXException {
 		if (!sourceFile.exists()) {
 			System.err.println("File not found " + sourceFile.getAbsolutePath());
 		}
