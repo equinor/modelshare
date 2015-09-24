@@ -3,36 +3,29 @@
 <head th:replace="../fragments/header :: header">
 </head>
 <body role="document">
-
-<div th:replace="../fragments/navbar :: navbar(archive)"></div>
-
 	<div class="container theme-statoil" role="main">
+		<div th:replace="../fragments/navbar :: navbar(archive)"></div>
 		<div class="page-header">
-			<h2 th:text="${title}">Archive</h2>
-			<div class="row">
-				<div class="left-container col-sm-3">
+		</div>
+		<div class="row content-row">
+			<div class="left-container col-xs-5">
 
-					<!-- Showing file menu -->
-					<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">Model details</div>
+				<!-- Showing model menu -->
+				<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">Model menu</div>
 
+			</div>
+			<div class="right-container col-xs-7">
+				
+				<!-- Showing model detail view -->
+				<div th:if="${currentModel}">
+					<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
 				</div>
-				<div class="right-container col-sm-9">
-					
-					<!-- Showing model details -->
-					<div th:if="${currentModel}">
-						<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
-					</div>
-					<!-- Showing file upload screen -->
-					<div th:if="${showUploadFile}">
-						<div th:replace="../fragments/upload :: upload(${currentFolder}, ${client})">Upload file</div>
-					</div>
 
-					<!-- Showing create folder screen -->
-					<div th:if="${showNewFolder}">
-						<div th:replace="../fragments/folder :: folder(${currentFolder})">Create folder</div>
-					</div>
-					
+				<!-- Showing folder view -->
+				<div th:if="${currentFolder}">
+					<div th:replace="../fragments/folder :: folder(${currentFolder}, ${models}, ${client})">Folder</div>
 				</div>
+				
 			</div>
 		</div>			
 	</div>

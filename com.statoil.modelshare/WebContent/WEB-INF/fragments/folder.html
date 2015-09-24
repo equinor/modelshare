@@ -5,15 +5,54 @@
 	<title>Upload</title>
 </head>
 <body>
-	<div th:fragment="folder(currentFolder)">
-		<div th:if="${currentFolder}" class="details">
-			<div class="text-label" th:inline="text">Create new subfolder in [[${currentFolder}]]<p/>
-				<form action="archive.html" th:action="@{/createFolder}" method="post" enctype="multipart/form-data"><p />
-					<input type="hidden" name="path" th:value="${currentFolder}" />
-					<label class="form-label" for="name">Folder</label><input class="form-input" type="text" id="name" name="name" placeholder="The folder name" /><p />
-			       	<input class="btn btn-default save-button" type="submit" value="Create folder" />
-			    </form>
-		    </div>
+	<div th:fragment="folder(currentFolder, models, client)">
+		<div th:if="${currentFolder}" class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Folder information</h3>
+			</div>
+			<div class="panel-body">
+		
+				<a th:href="@{/showModel(item=${currentFolder},leaf=${false},showNewFolder=true)}">
+					<button class="btn btn-primary btn-sm">New subfolder</button>
+				</a>
+				<a th:href="@{/showModel(item=${currentFolder},leaf=${false},showUploadFile=true)}">
+					<button class="btn btn-primary btn-sm">New model</button>
+				</a><p />
+	
+	<!--  If new folder -->			
+				<div th:if="${showNewFolder}" th:inline="text" class="">
+					<b>Create new subfolder</b><p/>
+					<form action="archive.html" th:action="@{/createFolder}" method="post" enctype="multipart/form-data"><p />
+						<input type="hidden" name="path" th:value="${currentFolder}" />
+						<label class="form-label" for="name">Folder</label><input class="form-input" type="text" id="name" name="name" placeholder="Fill in folder name" />
+				       	<input class="btn btn-primary btn-sm" type="submit" value="Save folder" />
+				    </form>
+			    </div>
+	
+	<!--  If upload model -->		    
+				<div th:if="${showUploadFile}">
+					<b>Upload new model</b><p/>
+					<form action="archive.html" th:action="@{/fileUpload}" method="post" enctype="multipart/form-data"><p />
+						<label class="form-label" for="owner">Owner</label><input class="form-input" type="text" id="owner" name="owner" th:value="${client.name}" readonly="readonly" /><p />
+						<label class="form-label" for="email">Email</label><input class="form-input" type="text" id="email" name="email" th:value="${client.email}" readonly="readonly" /><p />
+						<label class="form-label" for="organisation">Organisation</label><input class="form-input" type="text" id="organisation" name="organisation" readonly="readonly" th:value="${client.organisation}" /><p />
+						<label class="form-label" for="usage"></label><textarea class="form-input usage-input" id="usage" name="usage" placeholder="Describe how to use the model"></textarea><p />
+						<input type="hidden" name="path" th:value="${currentFolder}" />
+						<div class="input-group">
+							<div class="input-group-btn">
+			                    <div class="btn btn-primary btn-file btn-sm">
+			                        Browse <input type="file" name="uploadFile" />
+			                        
+			                    </div>
+			                </div>
+			                <input type="text" class="form-control" readonly="true" />
+				       	</div>
+				       	<p/><p/>
+				       	<input class="btn btn-primary btn-sm" type="submit" value="Save model" disabled="true" />
+				    </form>
+			    </div>
+			    
+			</div>
 		</div>
 	</div>
 </body>
