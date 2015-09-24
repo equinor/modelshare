@@ -14,6 +14,26 @@
 	<link rel="stylesheet" type="text/css" media="all" href="../../css/signin.css" th:href="@{/css/signin.css}" />
 	<link rel="stylesheet" type="text/css" media="all" href="../../css/request.css" th:href="@{/css/request.css}" />
 	<title th:text="${title}"></title>
+	
+	<script src="http://code.jquery.com/jquery-1.10.2.js">
+	</script>
+	<script>
+		$(document).on('change', '.btn-file :file', function() {
+		    var input = $(this),
+		        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+		        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		    input.trigger('fileselect', [label]);
+		});
+		
+		$(document).ready( function() {
+		    $('.btn-file :file').on('fileselect', function(event, label) {
+		        console.log("Something has happened: " + label);
+		        $('.input-group .form-control').val(label);
+		        $('.save').removeAttr('disabled');
+		    });
+		});
+	</script>
+	
 </head>
 <body>
 </body>

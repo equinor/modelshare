@@ -6,16 +6,15 @@
 	<div class="container theme-statoil" role="main">
 		<div th:replace="../fragments/navbar :: navbar(archive)"></div>
 		<div class="page-header">
-			<h2 th:text="${title}">Archive</h2>
 		</div>
-		<div class="row">
-			<div class="left-container col-sm-3">
+		<div class="row content-row">
+			<div class="left-container col-xs-5">
 
-				<!-- Showing file menu -->
-				<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">File menu</div>
+				<!-- Showing model menu -->
+				<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">Model menu</div>
 
 			</div>
-			<div class="right-container col-sm-9">
+			<div class="right-container col-xs-7">
 				
 				<!-- Showing model detail view -->
 				<div th:if="${currentModel}">

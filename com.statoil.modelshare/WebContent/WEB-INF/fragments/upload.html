@@ -7,7 +7,7 @@
 <body>
 	<div th:fragment="upload(currentFolder, client)">
 		<div th:if="${currentFolder}" class="details">
-			<div class="text-label">Upload new model file<p/>
+			<div>Upload new model file<p/>
 					<form action="archive.html" th:action="@{/fileUpload}" method="post" enctype="multipart/form-data"><p />
 						
 						<label class="form-label" for="owner">Owner</label><input class="form-input" type="text" id="owner" name="owner" th:value="${client.name}" readonly="readonly" /><p />
