@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+
+<!-- Header -->
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+
+	<!-- Navigation bar -->	
+	<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
+	
+	<!-- Sign-in form -->
+	<div class="container theme-statoil" role="main">
+		<div class="content-container">
+		<form class="form-request" th:action="@{/request}" method="post">
+			<fieldset>
+		       	<h2 class="form-request-heading">Request access</h2>
+		        
+		        <label for="from">From:</label>
+		        <input type="text" name="from-email" id="from" class="form-control" placeholder="From" th:value="${from}" readonly="readonly"/>
+		        
+		        <label for="to">To:</label>
+		        <input type="text" name="to" id="to" class="form-control" placeholder="To" th:value="${from}" readonly="readonly"/>
+		        
+		        <label for="message">Message:</label>
+		        <textarea rows="10" maxlength="1024" name="message" id="message" class="form-control" placeholder="Message" required="required" autofocus="autofocus"></textarea>
+				
+		        <label for="asset">Requested model:</label>
+		        <input type="text" name="asset" id="asset" class="form-control" placeholder="Asset" th:value="${asset}" readonly="readonly"/>
+
+				<br/>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+			</fieldset>
+		</form>
+	</div>
+    </div>
+    <!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+
+</body>
+</html>
