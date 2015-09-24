@@ -4,22 +4,13 @@
 </head>
 <body role="document">
 
-<div th:replace="../fragments/navbar :: navbar(home)">...</div>
+	<div th:replace="../fragments/navbar :: navbar(home)">...</div>
 
 	<div class="container theme-statoil" role="main">
 		<div class="page-header">
-			<h2 th:text="${title}">ModelShare</h2>
+			<h2 th:text="${title}">Modelshare</h2>
 		</div>
-			<p>Starting point for the ModelShare project</p>		
-			<span>
-				<img src="../../images/spring.png" th:attr="src=@{images/spring.png}" style="width: 100px;vertical-align: middle;"/>
-				<span style="font-size: 64px">+</span>
-				<img src="../../images/thymeleaf.png" th:attr="src=@{images/thymeleaf.png}" style="width: 100px;vertical-align: middle;"/>
-			</span>
-			<p>
-				<a href="download?asset=Secret/Subsecret/itema.stask">Download secret file</a><br/>
-				<a href="download?asset=Model_A/itema.stask">Download other file</a>
-			</p>
+		<p>Sharing and securing models</p>
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
