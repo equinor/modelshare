@@ -76,6 +76,11 @@ body {
 .save-button {
 	width: 170px;
 }
+
+.back-button {
+	width: 70px;
+}
+
 .form-label {
 	width: 150px;
 }
