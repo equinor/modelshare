@@ -38,7 +38,6 @@ public class RepositoryConfig {
 	 */
 	@Bean
 	public ModelRepository getModelRepository() {
-		System.out.println("RepositoryConfig.getModelRepository()");
 		return new ModelRepositoryImpl(Paths.get(repositoryRoot));
 	}
 
