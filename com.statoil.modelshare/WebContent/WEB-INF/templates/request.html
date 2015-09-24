@@ -27,6 +27,9 @@
 				
 		        <label for="asset">Requested model:</label>
 		        <input type="text" name="asset" id="asset" class="form-control" placeholder="Asset" th:value="${asset}" readonly="readonly"/>
+		        
+		        <input type="hidden" name="mailfrom" id="mailfrom" class="form-control" placeholder="Mailfrom" th:value="${mailfrom}" readonly="readonly"/>
+		        
 
 				<br/>
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
