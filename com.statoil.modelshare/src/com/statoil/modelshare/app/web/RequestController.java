@@ -51,8 +51,11 @@ public class RequestController {
 			model.put("mailfrom", user.getEmail());
 			model.put("to", downloadModel.getMail());
 			model.put("asset", asset);
-		} catch (Exception e) {
-			return "error";
+		} catch (UnsupportedEncodingException e) {
+			String msg = "Error getting model from repository";
+			log.log(Level.SEVERE, msg, e);
+			model.addAttribute("error", msg);
+			return "errorpage";
 		}
 		return "request";
 	}
