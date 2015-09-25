@@ -73,6 +73,18 @@ public interface ModelRepository {
 	 * @return
 	 */
 	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;	
+
+	/**
+	 * Convenience method for determining whether the user has read access to
+	 * the given path.
+	 * 
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
+	 * @return
+	 */
+	public boolean hasReadAccess(Client user, Path path) throws IOException ;	
 	
 	/**
 	 * Returns the {@link InputStream} for the path if the client has access to

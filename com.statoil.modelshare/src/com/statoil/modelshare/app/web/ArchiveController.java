@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.emf.common.util.EList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
-import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
@@ -51,6 +50,7 @@ public class ArchiveController {
 			Client client = modelrepository.getUser(principal.getName());
 			if(leaf){
 				model.addAttribute("currentModel", currentModel);
+				model.addAttribute("viewOnly", hasViewOnlyAccess(item, client));
 			}else{
 				model.addAttribute("currentFolder", item);
 				model.addAttribute("showNewFolder", showNewFolder);
@@ -70,10 +70,15 @@ public class ArchiveController {
 			log.log(Level.SEVERE, msg, ue);
 			model.addAttribute("error", msg);
 			return "errorpage";
+		} catch (IOException e) {
+			String msg = "Error found when checking access rights";
+			log.log(Level.SEVERE, msg, e);
+			model.addAttribute("error", msg);
+			return "errorpage";
 		}
 		return "archive";
 	}
-	
+
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST) 
     public String importParse(ModelMap modelMap, @RequestParam("uploadFile") MultipartFile file, 
     		@RequestParam("path") String path,
@@ -114,5 +119,13 @@ public class ArchiveController {
 		service.createFolder(URLDecoder.decode(path, "UTF-8"), name);
         return "redirect:archive.html?item=" + path + File.separator + name; 
     }
+	
+	private boolean hasViewOnlyAccess(String item, Client client) throws IOException {
+		boolean hasReadAccess = modelrepository.hasReadAccess(client, Paths.get(item));
+		boolean hasDisplayAccess = modelrepository.hasDisplayAccess(client, Paths.get(item));
+		boolean viewOnly = (!hasReadAccess) && (hasDisplayAccess);
+		return viewOnly;
+	}
+
 
 }
