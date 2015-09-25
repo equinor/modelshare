@@ -97,7 +97,3 @@ public class ArchiveService {
 	}
 
 }
-
-/*
- * The end
- */

@@ -94,6 +94,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
 	}
 
+	public boolean hasReadAccess(Client user, Path path) throws IOException {
+		EnumSet<Access> rights = ra.getRights(path, user);
+		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE)));
+	}
+	
 	public Folder getRoot(Client user) {
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setPath(rootPath.toString());

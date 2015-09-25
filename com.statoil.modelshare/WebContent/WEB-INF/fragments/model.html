@@ -16,10 +16,10 @@
 				<label class="form-label" for="mail">Owner email</label><span class="form-field" id="mail" th:text="${currentModel.mail}" ></span><p />
 				<label class="form-label" for="lastUpdated">Last updated</label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><p />
 
-				<a th:href="@{/download(asset=${currentModel.path})}">
+				<a th:if="${viewOnly}" th:href="@{/request(asset=${currentModel.path})}">
 					<button class="btn btn-primary btn-sm">Request access</button>
 				</a>
-				<a th:href="@{/download(asset=${currentModel.path})}">
+				<a th:if="${!viewOnly}" th:href="@{/download(asset=${currentModel.path})}">
 					<button class="btn btn-primary btn-sm">Download this model</button>
 				</a>
 				<br /><br />
