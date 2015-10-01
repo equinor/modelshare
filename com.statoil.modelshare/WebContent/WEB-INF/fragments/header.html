@@ -28,7 +28,7 @@
 		$(document).ready( function() {
 		    $('.btn-file :file').on('fileselect', function(event, label) {
 		        console.log("Something has happened: " + label);
-		        $('.input-group .form-control').val(label);
+		        $('.input-group').val(label);
 		        $('.save').removeAttr('disabled');
 		    });
 		});
