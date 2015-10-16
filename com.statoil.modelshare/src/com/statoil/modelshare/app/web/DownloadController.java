@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,20 +40,23 @@ public class DownloadController {
 			Client user = modelrepository.getUser(principal.getName());
 			String name = asset.substring(asset.lastIndexOf('/')+1);
 			Path path = Paths.get(asset);
-			try {
-				InputStream is = modelrepository.getFileStream(user, path);
+			try (ServletOutputStream outputStream = response.getOutputStream();
+				InputStream is = modelrepository.getFileStream(user, path)) 
+			{
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
-				org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+				org.apache.commons.io.IOUtils.copy(is, outputStream);
 				response.flushBuffer();
 			}catch (AccessDeniedException e){
-				return "download";
+				log.log(Level.SEVERE,
+						MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset), e);
+				return "errorpage";
 			}
 		} catch (IOException ex) {
 			log.log(Level.SEVERE,
 					MessageFormat.format("Error writing file to output stream. Filename was '{0}'", asset), ex);
 			return "errorpage";
 		}
-		return "download";
+		return null;
 	}
 }

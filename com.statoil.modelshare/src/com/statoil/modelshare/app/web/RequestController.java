@@ -4,16 +4,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,15 +80,21 @@ public class RequestController {
 			@RequestParam(value = "message", required = true) String message, 
 			Principal principal,
 			@RequestParam(value = "to", required = true) String mailTo, 
-			@RequestParam(value = "mailfrom", required = true) String mailFrom) {
+			@RequestParam(value = "mailfrom", required = true) String mailFrom, HttpServletRequest request) {
 
 		if (isEmailWellformed(mailTo)) {
 			try {
 				Client user = modelrepository.getUser(principal.getName());
-				sendEmail(message, mailTo, user, asset);
+				String url = makeUrl(request, asset, user);
+				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {
 				String msg = "Error sending mail. Contact system responsible.";
 				log.log(Level.SEVERE, msg, e);
+				modelMap.addAttribute("error", msg);
+				return "errorpage";
+			} catch (UnsupportedEncodingException ue) {
+				String msg = "Error creating new URL when sending mail. Contact system responsible.";
+				log.log(Level.SEVERE, msg, ue);
 				modelMap.addAttribute("error", msg);
 				return "errorpage";
 			}
@@ -105,8 +116,14 @@ public class RequestController {
 		}
 		return "redirect:showModel?item=" + model.getPath() + "&leaf=true";
 	}
+	
+	private String makeUrl(HttpServletRequest request, String asset, Client user) {
+	    String url = request.getRequestURL().toString();
+	    url = url.substring(0, url.lastIndexOf("/")) + "/grantaccess";
+		return url + "?asset=" + asset + "&user=" + user.getEmail() + "&grant=true";
+	}
 
-	private void sendEmail(String message, String mailTo, Client user, String asset) throws MessagingException {
+	private void sendEmail(String message, String mailTo, Client user, String asset, String url) throws MessagingException, UnsupportedEncodingException {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
 		properties.setProperty("mail.smtp.port", String.valueOf(smtpConfig.getPort()));
@@ -116,7 +133,18 @@ public class RequestController {
 		mimeMessage.setFrom(new InternetAddress(user.getEmail()));
 		mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
 		mimeMessage.setSubject("Modelshare: Request for download of model "+ asset);
-		mimeMessage.setText(message);
+		mimeMessage.setSentDate(new Date());
+		
+		Multipart multipart = new MimeMultipart();
+		
+		MimeBodyPart htmlPart = new MimeBodyPart();
+		String htmlContent = "<html><body><h3>"+message+"</h3><br/><br/>";
+		htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
+		multipart.addBodyPart(htmlPart);
+		
+		mimeMessage.setContent(multipart);
+		
 		Transport.send(mimeMessage);
 	}
 

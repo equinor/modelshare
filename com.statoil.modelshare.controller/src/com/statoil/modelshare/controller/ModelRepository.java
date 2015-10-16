@@ -87,6 +87,15 @@ public interface ModelRepository {
 	public boolean hasReadAccess(Client user, Path path) throws IOException ;	
 	
 	/**
+	 * Convenience method to set download rights on a file / folder for a user
+	 * 
+	 * @param user			the user to set access for 
+	 * @param path			the folder / file to set access on
+	 * @throws IOException
+	 */
+	public void setDownloadRights(Client user, Path path) throws IOException;
+	
+	/**
 	 * Returns the {@link InputStream} for the path if the client has access to
 	 * the asset.
 	 * 

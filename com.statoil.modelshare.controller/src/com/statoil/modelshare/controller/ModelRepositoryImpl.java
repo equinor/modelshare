@@ -306,10 +306,18 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public InputStream getFileStream(Client user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
 		EnumSet<Access> rights = ra.getRights(path, user);
+		
+		// TODO: Log Date, time, user and path + rights
+		
 		if (rights.contains(Access.READ))
 			return new FileInputStream(file);
 		else
 			throw new AccessDeniedException(path.toString());
+	}
+
+	@Override
+	public void setDownloadRights(Client user, Path path) throws IOException {
+		ra.setDownloadRights(path, user);
 	}
 
 }
