@@ -10,7 +10,8 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @PropertySources( value = { 
 		@PropertySource (value = "classpath:modelshare.properties"),
-		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true)
+		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true),
+		@PropertySource (value = "file:///D:/modelshare/modelshare.properties", ignoreResourceNotFound=true)
 		})
 public class MailConfig {
 
