@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 @Configuration
-@PropertySource("classpath:repository.properties")
+@PropertySources( value = { 
+		@PropertySource (value = "classpath:modelshare.properties"),
+		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true)
+		})
 public class MailConfig {
 
 	@Autowired
