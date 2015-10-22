@@ -18,7 +18,8 @@ import com.statoil.modelshare.controller.ModelRepositoryImpl;
 @Configuration
 @PropertySources( value = { 
 		@PropertySource (value = "classpath:modelshare.properties"),
-		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true)
+		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true),
+		@PropertySource (value = "file:///D:/modelshare/modelshare.properties", ignoreResourceNotFound=true)
 		})
 public class RepositoryConfig {
 
