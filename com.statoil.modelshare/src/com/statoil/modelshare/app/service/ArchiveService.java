@@ -27,13 +27,14 @@ import com.statoil.modelshare.controller.ModelRepository;
 public class ArchiveService {
 
 	private ModelRepository repository;
+	private Folder root;
 
 	public MenuItem getMenuItemsFromAssets(String userId) throws UnsupportedEncodingException {
 		checkRepository();
 
-		Folder root = repository.getRoot(repository.getUser(userId));
+		root = repository.getRoot(repository.getUser(userId));
 		EList<Asset> eContents = root.getAssets();
-		MenuItem rootItem = new MenuItem("Root", "");
+		MenuItem rootItem = new MenuItem("Root", "", "");
 		rootItem.addChildren(getMenuItemsFromAssets(eContents, 0));
 		return rootItem;
 	}
@@ -75,7 +76,10 @@ public class ArchiveService {
 	}
 
 	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
-		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), leaf);
+		String path = eObject.getPath();
+		String relativePath = path.replace(root.getPath(), "");
+		relativePath = relativePath.substring(1);
+		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), relativePath, leaf);
 	}
 
 	public void saveFile(MultipartFile myFile, Model model)

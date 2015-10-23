@@ -224,8 +224,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 	@Override
 	public Model getMetaInformation(Path path) {
 		Properties resultProps = new Properties();
-		String fileName = path.getFileName().toString();
-		String metaFileName = path.toFile().getParent() + File.separator + "." + fileName + ".meta";
+		Path resolvedPath = rootPath.resolve(path);
+		String fileName = resolvedPath.getFileName().toString();
+		String metaFileName = resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta";
+		
 		try {
 			final FileInputStream in = new FileInputStream(metaFileName);
 			resultProps.loadFromXML(in);

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Client;
+import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -39,9 +40,11 @@ public class DownloadController {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 			String name = asset.substring(asset.lastIndexOf('/')+1);
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path path = Paths.get(asset);
+			Path resolvedPath = rootPath.resolve(path);
 			try (ServletOutputStream outputStream = response.getOutputStream();
-				InputStream is = modelrepository.getFileStream(user, path)) 
+				InputStream is = modelrepository.getFileStream(user, resolvedPath)) 
 			{
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");

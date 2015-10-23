@@ -7,19 +7,22 @@ public class MenuItem {
 	    private String name;
 	    private ArrayList<MenuItem> children;
 	    private String path;
+	    private String relativePath;
 	    private boolean leaf;
 
-	    public MenuItem(String name, ArrayList<MenuItem> children, String path, boolean leaf) {
+	    public MenuItem(String name, ArrayList<MenuItem> children, String path, String relativePath, boolean leaf) {
 	        this.name = name;
 	        this.children = children;
 	        this.path = path;
+			this.relativePath = relativePath;
 	        this.leaf = leaf;
 	    }
 	    
-	    public MenuItem(String name, String path) {
+	    public MenuItem(String name, String path, String relativePath) {
 	        this.name = name;
 	        this.children = new ArrayList<MenuItem>();
 	        this.path = path;
+	        this.relativePath = relativePath;
 	        this.leaf = false;
 		}
 
@@ -41,6 +44,10 @@ public class MenuItem {
 
 		public boolean isLeaf() {
 			return leaf;
+		}
+
+		public String getRelativePath() {
+			return relativePath;
 		}
 
 	} 
