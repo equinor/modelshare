@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -82,7 +83,7 @@ public class RequestController {
 			@RequestParam(value = "to", required = true) String mailTo, 
 			@RequestParam(value = "mailfrom", required = true) String mailFrom, HttpServletRequest request) {
 
-		if (isEmailWellformed(mailTo)) {
+		if (modelrepository.isValidEmailAddress(mailTo)) {
 			try {
 				Client user = modelrepository.getUser(principal.getName());
 				String url = makeUrl(request, asset, user);
@@ -132,13 +133,13 @@ public class RequestController {
 		MimeMessage mimeMessage = new MimeMessage(session);
 		mimeMessage.setFrom(new InternetAddress(user.getEmail()));
 		mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
-		mimeMessage.setSubject("Modelshare: Request for download of model "+ asset);
+		mimeMessage.setSubject("Modelshare: Request for download of model");
 		mimeMessage.setSentDate(new Date());
 		
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = "<html><body><h3>"+message+"</h3><br/><br/>";
+		String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
 		htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
@@ -148,10 +149,4 @@ public class RequestController {
 		Transport.send(mimeMessage);
 	}
 
-	private boolean isEmailWellformed(String mailTo) {
-		if (mailTo.isEmpty() || !mailTo.contains("@")) {
-			return false;
-		}
-		return true;
-	}
 }

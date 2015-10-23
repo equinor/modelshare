@@ -22,6 +22,10 @@
                 <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 		      	<input type="hidden" name="querystring" id="querystring" class="form-control" th:value="${querystring}" />
 		      	<input type="hidden" name="filename" id="filename" class="form-control" th:value="${filename}" />
+		      	<label for="filenametext">Model: </label>
+		      	<div class="form-group" id="filenametext" th:text="${filename}"></div>
+		      	<label for="usernametext">To user: </label>
+		      	<div class="form-group" id="usernametext" th:text="${user}"></div>
 		      	<input type="hidden" name="user" id="user" class="form-control" th:value="${user}" />
 				<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 			</fieldset>

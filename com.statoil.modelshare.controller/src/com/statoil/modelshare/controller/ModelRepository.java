@@ -132,4 +132,13 @@ public interface ModelRepository {
 	 * @return model object
 	 */
 	public Model getMetaInformation(Path path);
+	
+	/**
+	 * Checks an email address for validity
+	 * 
+	 * @param email
+	 * @return false if the email address does not meet the RFC822 standard
+	 */
+	public boolean isValidEmailAddress(String email);
+	
 }
