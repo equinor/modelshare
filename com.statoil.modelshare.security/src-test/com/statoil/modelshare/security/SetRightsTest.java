@@ -44,7 +44,8 @@ public class SetRightsTest {
 		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(access,testFile.toPath(), ident));
 
 		Client user = ModelshareFactory.eINSTANCE.createClient();
-		user.setName(ident);
+		user.setName("Test Banan");
+		user.setIdentifier(ident);
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		

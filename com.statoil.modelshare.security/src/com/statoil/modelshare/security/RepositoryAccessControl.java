@@ -261,7 +261,7 @@ public class RepositoryAccessControl {
 		} else {
 			File newAccessFile = Files.createFile(filePath).toFile();
 			BufferedWriter writer = Files.newBufferedWriter(newAccessFile.toPath());
-			writer.write(client.getEmail() + " " + "+v +r -w");
+			writer.write(client.getIdentifier() + " " + "+v +r -w");
 			writer.flush();
 			writer.close();
 		}
