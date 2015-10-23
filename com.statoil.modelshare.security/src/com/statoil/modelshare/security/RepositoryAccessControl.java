@@ -218,7 +218,7 @@ public class RepositoryAccessControl {
 				while (iterator.hasNext()) {
 					String line = iterator.next();
 					StringTokenizer tokenizer = new StringTokenizer(line);
-					String email = "";
+					String ident = "";
 					String view = "";
 					String read = "";
 					String write = "";
@@ -231,20 +231,20 @@ public class RepositoryAccessControl {
 						} else if (token.contains("-w") || token.contains("+w")) {
 							write = token;
 						} else {
-							email = token;
+							ident = token;
 						}
 					}
-					if (email.contentEquals(client.getEmail())) {
+					if (ident.contentEquals(client.getIdentifier())) {
 						foundClient = true;
 						read = "+r";
 					}
-					AccessRight aRight = new AccessRight(email, view, read, write);
+					AccessRight aRight = new AccessRight(ident, view, read, write);
 					accessRights.add(aRight);
 				}
 			}
 
 			if (!foundClient) {
-				AccessRight newAccessRight = new AccessRight(client.getEmail(), "+v", "+r", "-w");
+				AccessRight newAccessRight = new AccessRight(client.getIdentifier(), "+v", "+r", "-w");
 				accessRights.add(newAccessRight);
 			}
 

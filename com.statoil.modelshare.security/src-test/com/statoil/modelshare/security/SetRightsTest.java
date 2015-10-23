@@ -69,7 +69,8 @@ public class SetRightsTest {
 		Assert.assertEquals(EnumSet.of(Access.VIEW), rights);
 		
 		Client user = ModelshareFactory.eINSTANCE.createClient();
-		user.setName(ident);
+		user.setName("Test Testesen");
+		user.setIdentifier(ident);
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		
