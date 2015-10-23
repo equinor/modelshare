@@ -17,6 +17,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -222,8 +224,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 	@Override
 	public Model getMetaInformation(Path path) {
 		Properties resultProps = new Properties();
-		String fileName = path.getFileName().toString();
-		String metaFileName = path.toFile().getParent() + File.separator + "." + fileName + ".meta";
+		Path resolvedPath = rootPath.resolve(path);
+		String fileName = resolvedPath.getFileName().toString();
+		String metaFileName = resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta";
+		
 		try {
 			final FileInputStream in = new FileInputStream(metaFileName);
 			resultProps.loadFromXML(in);
@@ -306,10 +310,30 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public InputStream getFileStream(Client user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
 		EnumSet<Access> rights = ra.getRights(path, user);
+		
+		// TODO: Log Date, time, user and path + rights
+		
 		if (rights.contains(Access.READ))
 			return new FileInputStream(file);
 		else
 			throw new AccessDeniedException(path.toString());
+	}
+
+	@Override
+	public void setDownloadRights(Client user, Path path) throws IOException {
+		ra.setDownloadRights(path, user);
+	}
+
+	@Override
+	public boolean isValidEmailAddress(String email) {
+		boolean result = true;
+		try {
+			InternetAddress emailAddr = new InternetAddress(email);
+			emailAddr.validate();
+		} catch (AddressException ex) {
+			result = false;
+		}
+		return result;
 	}
 
 }

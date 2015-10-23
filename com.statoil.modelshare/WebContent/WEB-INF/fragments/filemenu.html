@@ -11,8 +11,8 @@
 				<div class="no-margin" th:fragment="fragment_node" th:remove="tag">
 			         <div class="recursive" th:if="${not #lists.isEmpty(node.children)}">
 			    		<div th:if="${not #lists.isEmpty(node.children)}" th:each="child : ${node.children}" th:inline="text" th:with="node = ${child}">
-				    		<div th:class="${activeMenuItem == child.path}? 'active-menu-item menu-item padding' : 'menu-item padding'" >
-	    						<a th:href="@{/showModel(item=${child.path},leaf=${child.leaf})}">
+				    		<div th:class="${activeMenuItem == child.relativePath}? 'active-menu-item menu-item padding' : 'menu-item padding'" >
+	    						<a th:href="@{/showModel(item=${child.relativePath},leaf=${child.leaf})}">
 						    		<span th:if="${child.leaf == false}" class="glyphicon glyphicon-folder-open"></span>
 						    		<span th:if="${child.leaf == true}" class="glyphicon glyphicon-file"></span>
 						    		&nbsp;&nbsp;[[${child.name}]]

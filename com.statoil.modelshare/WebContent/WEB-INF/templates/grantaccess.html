@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+
+<!-- Header -->
+<head th:replace="../fragments/header :: header">
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/signin.css" th:href="@{/css/signin.css}" />
+</head>
+
+<body role="document">
+
+	<!-- Sign-in form -->
+	<div class="container theme-statoil" role="main">
+
+		<!-- Navigation bar -->	
+		<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
+
+		<div class="content-container">
+		<form class="form-signin" th:action="@{/grantaccess}" method="post">
+			<fieldset>
+		       	<h2 class="form-signin-heading">Give Access</h2>
+                <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+		      	<input type="hidden" name="querystring" id="querystring" class="form-control" th:value="${querystring}" />
+		      	<input type="hidden" name="filename" id="filename" class="form-control" th:value="${filename}" />
+		      	<label for="filenametext">Model: </label>
+		      	<div class="form-group" id="filenametext" th:text="${filename}"></div>
+		      	<label for="usernametext">To user: </label>
+		      	<div class="form-group" id="usernametext" th:text="${user}"></div>
+		      	<input type="hidden" name="user" id="user" class="form-control" th:value="${user}" />
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+			</fieldset>
+		</form>
+		</div>
+    </div>
+    <!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+
+</body>
+</html>

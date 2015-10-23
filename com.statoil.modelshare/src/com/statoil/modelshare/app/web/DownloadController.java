@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Client;
+import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -38,21 +40,26 @@ public class DownloadController {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 			String name = asset.substring(asset.lastIndexOf('/')+1);
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path path = Paths.get(asset);
-			try {
-				InputStream is = modelrepository.getFileStream(user, path);
+			Path resolvedPath = rootPath.resolve(path);
+			try (ServletOutputStream outputStream = response.getOutputStream();
+				InputStream is = modelrepository.getFileStream(user, resolvedPath)) 
+			{
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
-				org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+				org.apache.commons.io.IOUtils.copy(is, outputStream);
 				response.flushBuffer();
 			}catch (AccessDeniedException e){
-				return "download";
+				log.log(Level.SEVERE,
+						MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset), e);
+				return "errorpage";
 			}
 		} catch (IOException ex) {
 			log.log(Level.SEVERE,
 					MessageFormat.format("Error writing file to output stream. Filename was '{0}'", asset), ex);
 			return "errorpage";
 		}
-		return "download";
+		return null;
 	}
 }

@@ -1,11 +1,13 @@
 package com.statoil.modelshare.security;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
@@ -13,8 +15,11 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -195,6 +200,87 @@ public class RepositoryAccessControl {
 		return access;
 	}
 
+	public void setDownloadRights(Path path, Client client) throws IOException {
+		String name = null;
+		if (path.toAbsolutePath().toFile().isDirectory()) {
+			name = path.getFileName() + File.separator + ".access";
+		} else {
+			name = "." + path.getFileName().toString() + ".access";
+		}
+		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
+		File accessFile = filePath.toFile();
+		if (accessFile.exists()) {
+			List<AccessRight> accessRights = new ArrayList<>();
+			boolean foundClient = false;
+			try (BufferedReader reader = Files.newBufferedReader(filePath)) {
+				Stream<String> lines = reader.lines();
+				Iterator<String> iterator = lines.iterator();
+				while (iterator.hasNext()) {
+					String line = iterator.next();
+					StringTokenizer tokenizer = new StringTokenizer(line);
+					String ident = "";
+					String view = "";
+					String read = "";
+					String write = "";
+					while (tokenizer.hasMoreTokens()) {
+						String token = tokenizer.nextToken();
+						if (token.contains("-r") || token.contains("+r")) {
+							read = token;
+						} else if (token.contains("-v") || token.contains("+v")) {
+							view = token;
+						} else if (token.contains("-w") || token.contains("+w")) {
+							write = token;
+						} else {
+							ident = token;
+						}
+					}
+					if (ident.contentEquals(client.getIdentifier())) {
+						foundClient = true;
+						read = "+r";
+					}
+					AccessRight aRight = new AccessRight(ident, view, read, write);
+					accessRights.add(aRight);
+				}
+			}
+
+			if (!foundClient) {
+				AccessRight newAccessRight = new AccessRight(client.getIdentifier(), "+v", "+r", "-w");
+				accessRights.add(newAccessRight);
+			}
+
+			try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+				for (AccessRight accessRight : accessRights) {
+					writer.write(accessRight.name + " " + accessRight.view + " " + accessRight.read + " "
+							+ accessRight.write);
+					writer.newLine();
+				}
+				writer.flush();
+				writer.close();
+			}
+			
+		} else {
+			File newAccessFile = Files.createFile(filePath).toFile();
+			BufferedWriter writer = Files.newBufferedWriter(newAccessFile.toPath());
+			writer.write(client.getIdentifier() + " " + "+v +r -w");
+			writer.flush();
+			writer.close();
+		}
+	}
+
+	private class AccessRight {
+		private String name;
+		private String view;
+		private String read;
+		private String write;
+
+		public AccessRight(String name, String view, String read, String write) {
+			this.name = name;
+			this.view = view;
+			this.read = read;
+			this.write = write;
+		}
+	}
+
 	private Group getGroup(List<Account> accounts, String name) {
 		for (Account account : accounts) {
 			if (account.getIdentifier().equals(name) && account instanceof Group) {
@@ -302,4 +388,5 @@ public class RepositoryAccessControl {
 			}
 		}
 	}
+
 }

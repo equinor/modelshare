@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.logging.Level;
@@ -86,8 +87,11 @@ public class ArchiveController {
     		Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
+			Path uploadPath = Paths.get(path);
+			Path resolvedPath = rootPath.resolve(uploadPath);
 			Model model = ModelshareFactory.eINSTANCE.createModel();
-			model.setPath(URLDecoder.decode(path, "UTF-8"));
+			model.setPath(URLDecoder.decode(resolvedPath.toString(), "UTF-8"));
 			model.setName(file.getOriginalFilename());
 			model.setOwner(user.getName());
 			model.setMail(user.getEmail());
@@ -115,8 +119,14 @@ public class ArchiveController {
 
 	@RequestMapping(value = "/createFolder", method = RequestMethod.POST) 
     public String importParse(@RequestParam("path") String path, 
-    		@RequestParam("name") String name) throws UnsupportedEncodingException {
-		service.createFolder(URLDecoder.decode(path, "UTF-8"), name);
+    		@RequestParam("name") String name,
+    		Principal principal) throws UnsupportedEncodingException {
+		
+		Client user = modelrepository.getUser(principal.getName());
+		Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
+		Path resolvedPath = rootPath.resolve(path);
+		service.createFolder(URLDecoder.decode(resolvedPath.toString(), "UTF-8"), name);
+		
         return "redirect:archive.html?item=" + path + File.separator + name; 
     }
 	
