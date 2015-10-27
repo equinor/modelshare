@@ -21,3 +21,21 @@ If the user password field is empty, the user may log in without specifying a pa
 	user::users:User
 
 The default location of the file is at `${user.home}/modelshare/repository/`.
+
+Modelshare is installed on the following server: 84.16.202.251
+The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. 
+To log in to the server via remote desktop use the following:
+user: itema
+password: 1tema1sKing
+
+Tomcat 8 is installed as web-container.
+To administrate Tomcat go to the following site: 84.16.202.251/manager
+Clik the Manage button and log in using the follwing:
+user: admin
+password: Kokke Limonke 123
+
+
+The following document was agreed upon as the first delivery:
+https://docs.google.com/document/d/1Q-6XYVCCoVEz7N6S7dGUnP9NCEu3OxQoUsgpqvg4yVY/edit#heading=h.s1zs8p6fault
+
+Bengt has sent a document to Statoil where we have proposed further work.
