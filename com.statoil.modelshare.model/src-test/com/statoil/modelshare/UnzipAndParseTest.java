@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -20,10 +22,11 @@ public class UnzipAndParseTest {
 	@Test
 	public void testUnzipAndParse() throws ParserConfigurationException, SAXException, IOException {
 		File zipFile = Paths.get("test-resources/itema.stask").toAbsolutePath().toFile();
-		String tempDir = System.getProperty("java.io.tmpdir");
-		UnzipUtility.unzip(zipFile.getAbsolutePath(), tempDir);
+		Path tempPath = Files.createTempDirectory("modelshare");
+		UnzipUtility unzipper = new UnzipUtility();
+		unzipper.unzip(zipFile.toPath(), tempPath);
 		
-		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
+		List<File> unzippedFiles = unzipper.getunzippedFiles();
 		File file1 = unzippedFiles.get(0);
 		assertEquals("Simple_Flexible_Riser.task.xmi", file1.getName());
 		
