@@ -34,6 +34,12 @@ Clik the Manage button and log in using the follwing:
 user: admin
 password: Kokke Limonke 123
 
+If you need to test the mail functionality you can do the following:
+Install Docker (or Kitematic if you are on mac).
+Download Mailhog/Mailhog from docker hub.
+Start Mailhog and check the ports assigned to the SMTP server and the web interface to read the mails you send.
+If necessary - change the modelshare.properties file on your local machine (/modelshare/modelshare.repository) to reflect the ports mailhog uses.
+
 
 The following document was agreed upon as the first delivery:
 https://docs.google.com/document/d/1Q-6XYVCCoVEz7N6S7dGUnP9NCEu3OxQoUsgpqvg4yVY/edit#heading=h.s1zs8p6fault
