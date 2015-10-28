@@ -1,0 +1,2 @@
+admins	+r +v +w
+users	+r +v -w
