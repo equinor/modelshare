@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Client;
-import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**

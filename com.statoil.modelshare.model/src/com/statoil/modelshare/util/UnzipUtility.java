@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -17,11 +18,12 @@ import java.util.zip.ZipInputStream;
  *
  */
 public class UnzipUtility {
-	
-	private static List<File> unzippedFiles = new ArrayList<>();
 
-	public static void unzip(String zipFilePath, String destDir) {
-		File dir = new File(destDir);
+	private List<File> unzippedFiles;
+
+	public void unzip(Path zipFilePath, Path destDir) {
+		List<File> files = new ArrayList<>();
+		File dir = destDir.toFile();
 		// create output directory if it doesn't exist
 		if (!dir.exists())
 			dir.mkdirs();
@@ -29,37 +31,40 @@ public class UnzipUtility {
 		// buffer for read and write data to file
 		byte[] buffer = new byte[1024];
 		try {
-			fis = new FileInputStream(zipFilePath);
+			fis = new FileInputStream(zipFilePath.toFile());
 			ZipInputStream zis = new ZipInputStream(fis);
 			ZipEntry ze = zis.getNextEntry();
-				while (ze != null) {
-					String fileName = ze.getName();
-					if (ze.getName().endsWith(".xmi")) {
-						File newFile = new File(destDir + File.separator + fileName);
-						// create directories for sub directories in zip
-						new File(newFile.getParent()).mkdirs();
-						FileOutputStream fos = new FileOutputStream(newFile);
-						int len;
-						while ((len = zis.read(buffer)) > 0) {
-							fos.write(buffer, 0, len);
-						}
-						fos.close();
-						// close this ZipEntry
-						unzippedFiles.add(newFile);
+			while (ze != null) {
+				String fileName = ze.getName();
+				if (ze.getName().endsWith(".xmi")) {
+					File newFile = new File(destDir + File.separator + fileName);
+					// create directories for sub directories in zip
+					new File(newFile.getParent()).mkdirs();
+					FileOutputStream fos = new FileOutputStream(newFile);
+					int len;
+					while ((len = zis.read(buffer)) > 0) {
+						fos.write(buffer, 0, len);
 					}
-					zis.closeEntry();
-					ze = zis.getNextEntry();
+					fos.close();
+					// close this ZipEntry
+					files.add(newFile);
 				}
-				// close last ZipEntry
 				zis.closeEntry();
-				zis.close();
-				fis.close();
+				ze = zis.getNextEntry();
+			}
+			// close last ZipEntry
+			zis.closeEntry();
+			zis.close();
+			fis.close();
+			
+			unzippedFiles = files;
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static List<File> getunzippedFiles() {
+
+	public List<File> getunzippedFiles() {
 		return unzippedFiles;
 	}
 

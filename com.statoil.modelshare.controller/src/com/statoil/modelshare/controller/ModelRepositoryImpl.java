@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -268,9 +269,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 	 */
 	private List<TaskInformation> unzipAndGetStaskInformation(Path path) throws ParserConfigurationException, SAXException, IOException {
 		List<TaskInformation> tasks = new ArrayList<>();
-		String tempDir = System.getProperty("java.io.tmpdir");
-		UnzipUtility.unzip(path.toString(), tempDir);
-		List<File> unzippedFiles = UnzipUtility.getunzippedFiles();
+		Path tempPath = Files.createTempDirectory("modelshare");
+		UnzipUtility unzipper = new UnzipUtility();
+		unzipper.unzip(path, tempPath);
+		List<File> unzippedFiles = unzipper.getunzippedFiles();
 		for (int i = 0; i < unzippedFiles.size(); i++) {
 			File unzippedFile = unzippedFiles.get(i);
 			TaskInformation taskInfo = ParseUtility.parseStaskXMI(unzippedFile);
