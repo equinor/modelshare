@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Statoil model meta properties file</comment>
+<entry key="owner">Torkild U. Resheim</entry>
+<entry key="mail">tur@itema.no</entry>
+<entry key="name">itema.stask</entry>
+<entry key="lastUpdated">2015-10-29T14:09:07.258</entry>
+<entry key="usage">Do not use this model. It's an example</entry>
+<entry key="organisation">Itema AS</entry>
+</properties>

@@ -21,6 +21,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Access;
@@ -40,7 +42,10 @@ import com.statoil.modelshare.util.UnzipUtility;
 public class ModelRepositoryImpl implements ModelRepository {
 
 	private Path rootPath;
+	
 	private RepositoryAccessControl ra;
+	
+	static Log log = LogFactory.getLog(ModelRepository.class.getName());
 
 	@SuppressWarnings("unused")
 	private ModelRepositoryImpl() {
@@ -233,7 +238,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 			resultProps.loadFromXML(in);
 			in.close();
 		} catch (IOException ioe) {
-			System.err.println("Error reading meta information from "+ metaFileName);
+			log.error("Error reading meta information from "+ metaFileName);
 		}
 		
 		Model model = ModelshareFactory.eINSTANCE.createModel();
