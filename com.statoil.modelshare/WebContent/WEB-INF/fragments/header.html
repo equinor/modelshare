@@ -31,7 +31,17 @@
 		        $('.input-group #fileName').val(label);
 		        $('.save').removeAttr('disabled');
 		    });
+		    
+		    //terms dialog fragment
+		    $('#terms-dialog').on('show.bs.modal', function(e) {
+			    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+			    $(this).find('.btn-ok .btn').on('click', function(e){
+			    	//Rethink this strategy
+			    });
+			});
 		});
+		
+		
 	</script>
 	
 </head>
