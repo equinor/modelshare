@@ -1,7 +1,7 @@
 package com.statoil.modelshare.app.config;
 
-import java.util.logging.Logger;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ import com.statoil.modelshare.app.service.FilebasedAuthenticationProvider;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	static Logger log = Logger.getLogger(SecurityConfig.class.getName());
+	static Log log = LogFactory.getLog(SecurityConfig.class.getName());
 	
 	@Override
     public void configure(WebSecurity web) throws Exception {

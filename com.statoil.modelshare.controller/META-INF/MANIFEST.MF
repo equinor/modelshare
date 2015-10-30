@@ -5,4 +5,5 @@ Bundle-SymbolicName: com.statoil.modelshare.controller
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: STATOIL
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.junit
+Import-Package: org.apache.commons.logging;version="1.0.4",
+ org.junit
