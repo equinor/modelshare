@@ -24,6 +24,10 @@ public class MailConfig {
 	private final String smtpPort = null;
 	
 	@Autowired
+	@Value("${access.request.mail.template}")
+	private final String accessRequestMailTemplate = null;
+	
+	@Autowired
 	private SMTPConfiguration smtpConfiguration = new SMTPConfiguration();
 
 	
@@ -31,12 +35,14 @@ public class MailConfig {
 	public SMTPConfiguration getSMTPConfiguration() {
 		smtpConfiguration.setHost(smtpHost);
 		smtpConfiguration.setPort(smtpPort);
+		smtpConfiguration.setAccessRequestMailTemplate(accessRequestMailTemplate);
 		return smtpConfiguration;
 	}
 	
 	public class SMTPConfiguration {
 		private String host;
 		private String port;
+		private String accessRequestMailTemplate;
 		
 		public String getHost() {
 			return host;
@@ -50,6 +56,12 @@ public class MailConfig {
 		private void setPort(final String port) {
 			this.port = port;
 		}
+		public String getAccessRequestMailTemplate() {
+			return accessRequestMailTemplate;
+		}
+		private void setAccessRequestMailTemplate(final String template) {
+			this.accessRequestMailTemplate = template;
+		}
+
 	}
-	
 }

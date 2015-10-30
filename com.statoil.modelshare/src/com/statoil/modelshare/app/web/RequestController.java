@@ -20,6 +20,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,7 +40,7 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 public class RequestController {
 
-	static Logger log = Logger.getLogger(RequestController.class.getName());
+	static Log log = LogFactory.getLog(RequestController.class);
 
 	@Autowired
 	private ModelRepository modelrepository;
@@ -58,7 +60,7 @@ public class RequestController {
 			model.put("asset", asset);
 		} catch (UnsupportedEncodingException e) {
 			String msg = "Error getting model from repository";
-			log.log(Level.SEVERE, msg, e);
+			log.fatal(msg, e);
 			model.addAttribute("error", msg);
 			return "errorpage";
 		}
@@ -89,19 +91,19 @@ public class RequestController {
 				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {
 				String msg = "Error sending mail. Contact system responsible.";
-				log.log(Level.SEVERE, msg, e);
+				log.fatal(msg, e);
 				modelMap.addAttribute("error", msg);
 				return "errorpage";
 			} catch (UnsupportedEncodingException ue) {
 				String msg = "Error creating new URL when sending mail. Contact system responsible.";
-				log.log(Level.SEVERE, msg, ue);
+				log.fatal(msg, ue);
 				modelMap.addAttribute("error", msg);
 				return "errorpage";
 			}
 			
 		} else {
 			String msg = "Missing well formed e-mail address";
-			log.log(Level.SEVERE, msg);
+			log.fatal(msg);
 			modelMap.addAttribute("error", msg);
 			return "errorpage";
 		}
@@ -110,7 +112,7 @@ public class RequestController {
 			model = getModelFromAssets(asset);
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
-			log.log(Level.SEVERE, msg, e);
+			log.fatal(msg, e);
 			modelMap.addAttribute("error", msg);
 			return "errorpage";
 		}
@@ -127,6 +129,7 @@ public class RequestController {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
 		properties.setProperty("mail.smtp.port", String.valueOf(smtpConfig.getPort()));
+		log.info("Sending e-mail using server at "+smtpConfig.getHost()+":"+smtpConfig.getPort());
 		Session session = Session.getDefaultInstance(properties);
 
 		MimeMessage mimeMessage = new MimeMessage(session);
@@ -138,8 +141,11 @@ public class RequestController {
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
-		htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		String htmlContent = String.format(smtpConfig.getAccessRequestMailTemplate(), user.getEmail(), asset, message, url);
+		
+		//String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
+		//htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
 		
