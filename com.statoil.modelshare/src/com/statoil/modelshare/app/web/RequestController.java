@@ -138,8 +138,11 @@ public class RequestController {
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
-		htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		String htmlContent = String.format(smtpConfig.getAccessRequestMailTemplate(), user.getEmail(), asset, message, url);
+		
+		//String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
+		//htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
 		
