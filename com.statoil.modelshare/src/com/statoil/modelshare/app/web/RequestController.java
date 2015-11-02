@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -141,8 +142,8 @@ public class RequestController {
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = "<html><body><h3>"+message+"</h3><br/><h3>Model: "+asset+"</h3><br/>";
-		htmlContent += "<a href="+url + ">" + url +"</a></body></html>";
+		String htmlContent = MessageFormat.format(smtpConfig.getAccessRequestMailTemplate(), user.getName(), asset, message, url);
+		
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
 		
