@@ -142,11 +142,7 @@ public class RequestController {
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-<<<<<<< HEAD
 		String htmlContent = MessageFormat.format(smtpConfig.getAccessRequestMailTemplate(), user.getName(), asset, message, url);
-=======
-		String htmlContent = String.format(smtpConfig.getAccessRequestMailTemplate(), user.getEmail(), asset, message, url);
->>>>>>> origin/Issue94
 		
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
