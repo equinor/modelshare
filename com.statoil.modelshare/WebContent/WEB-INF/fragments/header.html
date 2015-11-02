@@ -32,12 +32,21 @@
 		        $('.save').removeAttr('disabled');
 		    });
 		    
-		    //terms dialog fragment
-		    $('#terms-dialog').on('show.bs.modal', function(e) {
-			    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-			    $(this).find('.btn-ok .btn').on('click', function(e){
-			    	//Rethink this strategy
+		    //confirm download dialog fragment
+		    $('#confirm-dialog').on('show.bs.modal', function(e) {
+		    	var modal = this;
+		    	var confirmBtn = $(this).find('#confirm-ok .btn');
+		    	
+		    	$(this).find('#confirm-check').on('change', function(e){
+		    		confirmBtn.prop('disabled', !e.currentTarget.checked);
+		    	});
+		    	
+			    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
+			    confirmBtn.on('click', function(e){
+			     	$(modal).modal('hide');
 			    });
+			    
+			    //ToDo. remove these on close
 			});
 		});
 		

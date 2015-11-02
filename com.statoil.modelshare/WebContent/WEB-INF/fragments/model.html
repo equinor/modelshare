@@ -19,7 +19,7 @@
 				<a th:if="${viewOnly}" th:href="@{/request(asset=${currentModel.path})}">
 					<button class="btn btn-primary btn-sm">Request access</button>
 				</a>
-				<a th:if="${!viewOnly}" th:attr="data-href=@{/download(asset=${currentModel.path})}" data-toggle="modal" data-target="#terms-dialog">
+				<a th:if="${!viewOnly}" th:attr="data-href=@{/download(asset=${currentModel.path})}" data-toggle="modal" data-target="#confirm-dialog">
 					<button class="btn btn-primary btn-sm">Download this model</button>
 				</a>
 				<br /><br />
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 		</div>
-		<div th:replace="../fragments/terms :: terms">...</div>
+		<div th:replace="../fragments/confirm :: confirm('Disclaimer header', 'Disclaimer body')">...</div>
 	</div>
 </body>
 </html>

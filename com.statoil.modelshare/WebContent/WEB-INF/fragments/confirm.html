@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Terms</title>
+</head>
+<body>
+	<div th:fragment="confirm(header, body)">
+		<div class="modal fade" id="confirm-dialog" tabindex="-1" role="dialog">
+  			<div class="modal-dialog modal-default">
+    			<div class="modal-content">
+	    			<div class="modal-header">
+	                	<span th:text="${header}"></span>
+	            	</div>
+		            <div class="modal-body">
+		              <p th:text="${body}"></p> 
+		            	
+		            </div>    		
+	    			<div class="modal-footer">
+	                	<div class="checkbox pull-left">
+  							<label><input type="checkbox" value="1" id="confirm-check"></input>Accept terms</label>
+						</div>
+	                	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+	                	<a id="confirm-ok">
+	                		<button class="btn btn-sm btn-primary" disabled="disabled">Download</button>
+	                	</a>
+	            	</div>
+            	</div>
+  			</div> 			 
+		</div>
+    </div>
+</body>
+</html>

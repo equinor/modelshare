@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
 import com.statoil.modelshare.controller.ModelRepositoryImpl;
 /**
@@ -26,7 +27,11 @@ public class RepositoryConfig {
 	@Autowired
 	@Value("${repository.root}")
 	private final String repositoryRoot = null;
-
+	
+	@Autowired
+	@Value("${repository.root}")
+	private final String repositoryTerms = null;
+	
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
 		return new PropertySourcesPlaceholderConfigurer();
@@ -45,5 +50,10 @@ public class RepositoryConfig {
 	public ModelRepository getModelRepository() {
 		return new ModelRepositoryImpl(Paths.get(repositoryRoot));
 	}
-
+	
+	@Bean
+	public String getDownloadTerms() {
+		return repositoryTerms;
+	}
+	
 }
