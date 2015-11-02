@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -141,7 +142,7 @@ public class RequestController {
 		Multipart multipart = new MimeMultipart();
 		
 		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = String.format(smtpConfig.getAccessRequestMailTemplate(), user.getEmail(), asset, message, url);
+		String htmlContent = MessageFormat.format(smtpConfig.getAccessRequestMailTemplate(), user.getName(), asset, message, url);
 		
 		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
 		multipart.addBodyPart(htmlPart);
