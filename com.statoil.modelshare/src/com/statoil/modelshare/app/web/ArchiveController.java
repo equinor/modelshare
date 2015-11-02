@@ -28,6 +28,7 @@ import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.app.service.ArchiveService;
 import com.statoil.modelshare.app.service.MenuItem;
 import com.statoil.modelshare.controller.ModelRepository;
+import com.statoil.modelshare.app.config.RepositoryConfig;
 
 @Controller
 @RequestMapping("/")
@@ -38,6 +39,9 @@ public class ArchiveController {
 
 	@Autowired
 	private ModelRepository modelrepository;
+	
+	@Autowired
+	private RepositoryConfig repositoryConfig;
 	
 	@RequestMapping(value={"/archive", "/showModel"}, method = RequestMethod.GET)
 		public String doShow (ModelMap model, @RequestParam(value = "item", required = false) String item, 
@@ -52,6 +56,7 @@ public class ArchiveController {
 			if(leaf){
 				model.addAttribute("currentModel", currentModel);
 				model.addAttribute("viewOnly", hasViewOnlyAccess(item, client));
+				model.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 			}else{
 				model.addAttribute("currentFolder", item);
 				model.addAttribute("showNewFolder", showNewFolder);

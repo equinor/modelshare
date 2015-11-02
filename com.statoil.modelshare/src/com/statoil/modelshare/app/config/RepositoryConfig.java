@@ -29,7 +29,7 @@ public class RepositoryConfig {
 	private final String repositoryRoot = null;
 	
 	@Autowired
-	@Value("${repository.root}")
+	@Value("${repository.terms}")
 	private final String repositoryTerms = null;
 	
 	@Bean

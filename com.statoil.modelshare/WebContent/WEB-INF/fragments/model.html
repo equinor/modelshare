@@ -34,7 +34,7 @@
 				</div>
 			</div>
 		</div>
-		<div th:replace="../fragments/confirm :: confirm('Disclaimer header', 'Disclaimer body')">...</div>
+		<div th:if="${!viewOnly}" th:replace="../fragments/confirm :: confirm('Disclaimer header', ${downloadTerms})">...</div>
 	</div>
 </body>
 </html>
