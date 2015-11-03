@@ -7,9 +7,9 @@
 <body>
 	<div th:fragment="confirm(header, body)">
 		<div class="modal fade" id="confirm-dialog" tabindex="-1" role="dialog">
-  			<div class="modal-dialog modal-default">
+  			<div class="modal-dialog">
     			<div class="modal-content">
-	    			<div class="modal-header">
+	    			<div class="modal-header modal-header-primary">
 	                	<span th:text="${header}"></span>
 	            	</div>
 		            <div class="modal-body">
