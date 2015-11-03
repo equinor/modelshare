@@ -18,8 +18,10 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -36,7 +38,7 @@ public class RepositoryAccessControl {
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
 
-	static Logger log = Logger.getLogger(RepositoryAccessControl.class.getName());
+	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
 	private List<Account> accounts;
 
 	@SuppressWarnings("unused")
@@ -54,7 +56,7 @@ public class RepositoryAccessControl {
 		// Just making sure - we must have an absolute path.
 		repositoryRootPath = root.toAbsolutePath();
 		passwordFilePath = repositoryRootPath.resolve(".passwd");
-		log.info("Creating new repository access control");
+		log.debug("Creating new repository access control");
 		watch();
 	}
 
@@ -66,7 +68,7 @@ public class RepositoryAccessControl {
 		Runnable run = () -> {
 			try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
 				passwordFilePath.getParent().register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
-				log.info("Setting up watch service on " + passwordFilePath);
+				log.debug("Setting up watch service on " + passwordFilePath);
 				while (true) {
 					// wait for key to be signaled
 					WatchKey key;
@@ -94,7 +96,7 @@ public class RepositoryAccessControl {
 					}
 				}
 			} catch (IOException e) {
-				log.severe(e.getMessage());
+				log.fatal(e.getMessage());
 			}
 		};
 		Thread thread = new Thread(run);
@@ -196,7 +198,7 @@ public class RepositoryAccessControl {
 				}
 			}
 		}
-		log.info("Tested rights for " + account + " at " + path + " (" + access + ")");
+		log.debug("Tested rights for " + account + " at " + path + " (" + access + ")");
 		return access;
 	}
 
@@ -287,7 +289,7 @@ public class RepositoryAccessControl {
 				return (Group) account;
 			}
 		}
-		log.severe("Group \"" + name + "\" not found.");
+		log.fatal("Group \"" + name + "\" not found.");
 		return null;
 	}
 
