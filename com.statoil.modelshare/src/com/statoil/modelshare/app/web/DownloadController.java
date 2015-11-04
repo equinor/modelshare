@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.controller.ModelRepository;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -29,7 +31,9 @@ import com.statoil.modelshare.controller.ModelRepository;
 public class DownloadController {
 
 	static Logger log = Logger.getLogger(DownloadController.class.getName());
-
+	
+	static Log downloadLog = LogFactory.getLog("downloadLogger");
+	
 	@Autowired
 	private ModelRepository modelrepository;
 
@@ -49,6 +53,9 @@ public class DownloadController {
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
 				org.apache.commons.io.IOUtils.copy(is, outputStream);
 				response.flushBuffer();
+				Object[] messageArgs = {asset, principal.getName()};
+				downloadLog.info( 
+						MessageFormat.format("Model {0} was downloaded by {1}", messageArgs));
 			}catch (AccessDeniedException e){
 				log.log(Level.SEVERE,
 						MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset), e);
