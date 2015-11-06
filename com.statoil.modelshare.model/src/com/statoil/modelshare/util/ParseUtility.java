@@ -31,7 +31,7 @@ public class ParseUtility {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				NamedNodeMap attributes = node.getAttributes();
 				Node descrNode = attributes.getNamedItem("description");
-				String description = descrNode.getNodeValue();
+				String description = (descrNode!=null) ? descrNode.getNodeValue() : "";
 
 				Node task = attributes.getNamedItem("name");
 				String taskName = task.getNodeValue();
