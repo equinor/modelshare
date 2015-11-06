@@ -18,7 +18,7 @@ public class HelpController {
 	@RequestMapping(value = "/help", method = RequestMethod.GET)
 	public String printHelp(ModelMap model, Principal principal) {
 		model.addAttribute("title", "Help");
-		model.addAttribute("locations", service.getLocations(principal));
+		model.addAttribute("topLevel", service.getTopLevel(principal));
 		return "help";
 	}
 	

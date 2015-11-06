@@ -17,7 +17,7 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String printWelcome(ModelMap model, Principal principal) {
 		model.addAttribute("title", "Modelshare");
-		model.addAttribute("locations", service.getLocations(principal));
+		model.addAttribute("topLevel", service.getTopLevel(principal));
 		return "index";
 	}
 }

@@ -30,18 +30,18 @@ public class ArchiveService {
 	private ModelRepository repository;
 	private Folder root;
 	
-	//ToDo: Lift this method out of service after refactoring.
-	public List<MenuItem> getLocations(Principal principal){
-		List<MenuItem> locations = null;
+	//ToDo: Refactor out of service after
+	public List<MenuItem> getTopLevel(Principal principal){
+		List<MenuItem> topLevel = null;
 		try {
 			MenuItem menuItem = getMenuItemsFromAssets(principal.getName());
 			if(menuItem != null) 
-				locations = menuItem.getChildren();
+				topLevel = menuItem.getChildren();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return locations;
+		return topLevel;
 	}
 	public MenuItem getMenuItemsFromAssets(String userId) throws UnsupportedEncodingException {
 		checkRepository();

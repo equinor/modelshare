@@ -6,7 +6,7 @@
 </head>
 <body>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar(activeTab, locations)">	  
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar(activeTab, topLevel)">	  
       <div class="container">
 	    <a class="navbar-brand logo" href="./"><img src="images/statoil-horizontal-neg.png" height="35px"/></a>
         <div class="navbar-header">        
@@ -25,9 +25,9 @@
 	            <li th:class="${activeTab == 'home'}? 'active' : null"><a href="./">Home</a></li>
 	            <li class="dropdown">
 	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Model archive <span class="caret"></span></a>
-	                <ul class="dropdown-menu" th:if="${not #lists.isEmpty(locations)}">
-                 		<li th:each="location : ${locations}">
-	                  		<a th:text="${location.name}" th:href="@{/archive(item=${location.relativePath},leaf=false)}">...</a>
+	                <ul class="dropdown-menu" th:if="${not #lists.isEmpty(topLevel)}">
+                 		<li th:each="node : ${topLevel}">
+	                  		<a th:text="${node.name}" th:href="@{/archive(item=${node.relativePath},leaf=false)}">...</a>
                   		</li>      
 	                </ul>
 				</li>      
