@@ -5,7 +5,7 @@
 <body role="document">
 
 	<div class="container theme-statoil" role="main">
-		<div th:replace="../fragments/navbar :: navbar(home)">...</div>
+		<div th:replace="../fragments/navbar :: navbar(home, ${topLevel})">...</div>
 		<div class="page-header">
 			<h2 th:text="${title}">Modelshare</h2>
 		</div>

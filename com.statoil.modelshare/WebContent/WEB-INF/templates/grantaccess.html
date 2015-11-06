@@ -13,7 +13,7 @@
 	<div class="container theme-statoil" role="main">
 
 		<!-- Navigation bar -->	
-		<div th:replace="../fragments/navbar :: navbar(signin)">...</div>
+		<div th:replace="../fragments/navbar :: navbar(signin, ${topLevel})">...</div>
 
 		<div class="content-container">
 		<form class="form-signin" th:action="@{/grantaccess}" method="post">

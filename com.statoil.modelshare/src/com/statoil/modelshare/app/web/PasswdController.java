@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.statoil.modelshare.app.service.ArchiveService;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -19,7 +20,9 @@ import com.statoil.modelshare.controller.ModelRepository;
  */
 @Controller
 public class PasswdController {
-
+	
+	private ArchiveService service = new ArchiveService();
+	
     @Autowired
     private ModelRepository repository;
 
@@ -28,7 +31,8 @@ public class PasswdController {
 			@RequestParam(value = "new-password", required = true) String newPassword,
 			@RequestParam(value = "confirm-password", required = true) String confirmPassword, Principal principal) {
 		
-
+		
+		
 		// Make sure password are the same
 		if (!newPassword.equals(confirmPassword)) {
 			model.addAttribute("error", "'New password' and 'Confirm password' must match.");
@@ -56,7 +60,8 @@ public class PasswdController {
 	
 
 	@RequestMapping(value = "/passwd", method = RequestMethod.GET)
-	public String showPasswordView(ModelMap model) {
+	public String showPasswordView(ModelMap model, Principal principal) {
+		model.addAttribute("topLevel", service.getTopLevel(principal));
 		return "passwd";
 	}
 }

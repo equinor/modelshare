@@ -71,6 +71,7 @@ public class ArchiveController {
 			model.addAttribute("title", "Model archive");
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", menuItem);
+			model.addAttribute("topLevel", service.getTopLevel(principal));
 		} catch (UnsupportedEncodingException ue) {
 			String msg = "Error found when encoding file URL";
 			log.log(Level.SEVERE, msg, ue);
