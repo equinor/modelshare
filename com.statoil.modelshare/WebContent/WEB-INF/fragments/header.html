@@ -31,6 +31,40 @@
 		        $('.input-group #fileName').val(label);
 		        $('.save').removeAttr('disabled');
 		    });
+		    
+		    //confirm download dialog fragment
+		    function activateConfirmBtn(e){
+		    	$('#confirm-dialog #confirm-ok .btn').prop('disabled', !e.currentTarget.checked);
+		    	if(e.currentTarget.checked)
+		    		$('#confirm-dialog #confirm-ok').unbind('click', disableDownloadLink);
+		    	else
+		    		$('#confirm-dialog #confirm-ok').bind('click', disableDownloadLink);
+		    }
+		    function hideDialog(e){
+		    	$('#confirm-dialog').modal('hide');
+		    }
+		    function disableDownloadLink(e){
+		    	//ie fix
+		    	e.preventDefault();
+		    }
+		  	//on show - bind event handlers
+		    $('#confirm-dialog').bind('show.bs.modal', function(e) {	    	
+		    	$(this).find('#confirm-check').bind('change', activateConfirmBtn);
+			    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
+			    $(this).find('#confirm-ok').bind('click', disableDownloadLink);
+			    $(this).find('#confirm-ok .btn').bind('click', hideDialog);
+			});
+		    
+		    //on hide - unbind event handlers - reset checkbox and button state.
+ 		    $('#confirm-dialog').bind('hide.bs.modal', function(e) {
+ 		    	var confirmCheck = $(this).find('#confirm-check');
+ 		    	confirmCheck.prop('checked', false);
+ 		    	confirmCheck.unbind('change', activateConfirmBtn);
+ 		    	
+ 		    	var confirmBtn = $(this).find('#confirm-ok .btn'); 		    	
+ 		    	confirmBtn.prop('disabled', true);
+		    	confirmBtn.unbind('click', hideDialog);		    	
+			});
 		});
 	</script>
 	
