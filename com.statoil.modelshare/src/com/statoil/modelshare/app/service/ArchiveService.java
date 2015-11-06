@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,20 @@ public class ArchiveService {
 
 	private ModelRepository repository;
 	private Folder root;
-
+	
+	//ToDo: Lift this method out of service after refactoring.
+	public List<MenuItem> getLocations(Principal principal){
+		List<MenuItem> locations = null;
+		try {
+			MenuItem menuItem = getMenuItemsFromAssets(principal.getName());
+			if(menuItem != null) 
+				locations = menuItem.getChildren();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return locations;
+	}
 	public MenuItem getMenuItemsFromAssets(String userId) throws UnsupportedEncodingException {
 		checkRepository();
 
