@@ -99,12 +99,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	public boolean hasDisplayAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
-		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE) || rights.contains(Access.VIEW)));
+		return rights.contains(Access.VIEW);
 	}
 
 	public boolean hasReadAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
-		return ((rights.contains(Access.READ) || rights.contains(Access.WRITE)));
+		return rights.contains(Access.READ);
 	}
 	
 	public Folder getRoot(Client user) {
@@ -316,10 +316,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	@Override
 	public InputStream getFileStream(Client user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
-		EnumSet<Access> rights = ra.getRights(path, user);
-		
-		// TODO: Log Date, time, user and path + rights
-		
+		EnumSet<Access> rights = ra.getRights(path, user);		
 		if (rights.contains(Access.READ))
 			return new FileInputStream(file);
 		else
