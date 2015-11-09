@@ -37,8 +37,10 @@ public class RepositoryAccessControl {
 
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
+	protected long passwordFileModified;
 
 	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
+	
 	private List<Account> accounts;
 
 	@SuppressWarnings("unused")
@@ -302,7 +304,8 @@ public class RepositoryAccessControl {
 	 * @throws IOException
 	 */
 	public List<Account> getAccounts() {
-		if (accounts == null) {
+		long changed = passwordFilePath.toFile().lastModified();
+		if (accounts == null || changed !=  passwordFileModified) {
 			readAccounts();
 		}
 		return accounts;
@@ -315,6 +318,7 @@ public class RepositoryAccessControl {
 		synchronized (passwordFilePath) {
 			accounts = new ArrayList<>();
 			String in = null;
+			passwordFileModified = passwordFilePath.toFile().lastModified();
 			try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
@@ -389,6 +393,15 @@ public class RepositoryAccessControl {
 							fw.write(":");
 						}
 						fw.write(account.getName());
+						fw.write(":");
+						if (((Client) account).getOrganisation() != null) {
+							fw.write(((Client) account).getOrganisation() + ":");
+						} else {
+							fw.write(":");
+						}
+						if (((Client) account).getLocalUser() != null) {
+							fw.write(((Client) account).getLocalUser());
+						}
 					}
 					fw.write(System.lineSeparator());
 				}

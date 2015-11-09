@@ -1,23 +1,38 @@
 package com.statoil.modelshare.security;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Group;
 
 public class PasswordFileTest {
-	private static final Path root = Paths.get("test-resources/").toAbsolutePath();
+	private static final Path root = Paths.get("test-resources/users").toAbsolutePath();
+	
+	@ClassRule
+	public static TemporaryFolder folder= new TemporaryFolder();
+
 	private static RepositoryAccessControl ra;
+	private static RepositoryAccessControl ra2;
 	
 	@BeforeClass
-	public static void setUp(){
+	public static void setUp() throws IOException{
+		File tempFolder = folder.newFolder().getParentFile();
+		Files.copy(root.resolve(".passwd"), tempFolder.toPath().resolve(".passwd"), StandardCopyOption.REPLACE_EXISTING);
 		ra = new RepositoryAccessControl(root);
+		ra2 = new RepositoryAccessControl(tempFolder.toPath());
 	}
 
 	@Test
@@ -89,5 +104,15 @@ public class PasswordFileTest {
 		Assert.assertEquals("d@company-d", ((Client)account).getEmail());
 		Assert.assertEquals("Company D", ((Client)account).getOrganisation());
 		Assert.assertEquals("LocalUserD", ((Client)account).getLocalUser());
+	}
+	
+	@Test
+	public final void testOverwritePasswordFile() throws IOException{
+		// add an account by modifying the file directly
+		Files.write(ra2.passwordFilePath, "e@company-e::users:User E:Company E:LocalUserE".getBytes(), StandardOpenOption.APPEND);
+		Account account = ra2.getAccounts().get(5);
+		ra2.setPassword(account.getIdentifier(), "xxxxx");
+		// the manually added account should not have disappeared
+		Assert.assertEquals(7, ra2.getAccounts().size());
 	}
 }
