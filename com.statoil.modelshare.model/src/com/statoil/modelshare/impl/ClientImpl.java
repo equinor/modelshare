@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getEmail <em>Email</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getPassword <em>Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ClientImpl#isForceChangePassword <em>Force Change Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getLocalUser <em>Local User</em>}</li>
  * </ul>
  *
  * @generated
@@ -107,6 +108,26 @@ public class ClientImpl extends AccountImpl implements Client {
 	 * @ordered
 	 */
 	protected boolean forceChangePassword = FORCE_CHANGE_PASSWORD_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLocalUser() <em>Local User</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocalUser()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String LOCAL_USER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLocalUser() <em>Local User</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocalUser()
+	 * @generated
+	 * @ordered
+	 */
+	protected String localUser = LOCAL_USER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -216,6 +237,27 @@ public class ClientImpl extends AccountImpl implements Client {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getLocalUser() {
+		return localUser;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLocalUser(String newLocalUser) {
+		String oldLocalUser = localUser;
+		localUser = newLocalUser;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__LOCAL_USER, oldLocalUser, localUser));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -227,6 +269,8 @@ public class ClientImpl extends AccountImpl implements Client {
 				return getPassword();
 			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
 				return isForceChangePassword();
+			case ModelsharePackage.CLIENT__LOCAL_USER:
+				return getLocalUser();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -250,6 +294,9 @@ public class ClientImpl extends AccountImpl implements Client {
 				return;
 			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
 				setForceChangePassword((Boolean)newValue);
+				return;
+			case ModelsharePackage.CLIENT__LOCAL_USER:
+				setLocalUser((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -275,6 +322,9 @@ public class ClientImpl extends AccountImpl implements Client {
 			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
 				setForceChangePassword(FORCE_CHANGE_PASSWORD_EDEFAULT);
 				return;
+			case ModelsharePackage.CLIENT__LOCAL_USER:
+				setLocalUser(LOCAL_USER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -295,6 +345,8 @@ public class ClientImpl extends AccountImpl implements Client {
 				return PASSWORD_EDEFAULT == null ? password != null : !PASSWORD_EDEFAULT.equals(password);
 			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
 				return forceChangePassword != FORCE_CHANGE_PASSWORD_EDEFAULT;
+			case ModelsharePackage.CLIENT__LOCAL_USER:
+				return LOCAL_USER_EDEFAULT == null ? localUser != null : !LOCAL_USER_EDEFAULT.equals(localUser);
 		}
 		return super.eIsSet(featureID);
 	}

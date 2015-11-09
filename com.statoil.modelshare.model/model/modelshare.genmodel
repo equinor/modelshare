@@ -19,6 +19,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/email"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/password"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/forceChangePassword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/localUser"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>
