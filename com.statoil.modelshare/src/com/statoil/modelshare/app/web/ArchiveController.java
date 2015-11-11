@@ -7,6 +7,9 @@ import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +46,7 @@ public class ArchiveController {
 	@Autowired
 	private RepositoryConfig repositoryConfig;
 	
-	@RequestMapping(value={"/archive", "/showModel"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/showModel"}, method = RequestMethod.GET)
 		public String doShow (ModelMap model, @RequestParam(value = "item", required = false) String item, 
 				@RequestParam(required = false) boolean leaf,
 				@RequestParam(required = false) boolean showFiles,
@@ -72,6 +75,7 @@ public class ArchiveController {
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", menuItem);
 			model.addAttribute("topLevel", service.getTopLevel(principal));
+			model.addAttribute("crumbs", getBreadCrumb(item, leaf));
 		} catch (UnsupportedEncodingException ue) {
 			String msg = "Error found when encoding file URL";
 			log.log(Level.SEVERE, msg, ue);
@@ -83,9 +87,35 @@ public class ArchiveController {
 			model.addAttribute("error", msg);
 			return "errorpage";
 		}
-		return "archive";
+		return "content";
 	}
 
+	@RequestMapping(value={"/archive"}, method = RequestMethod.GET)
+	public String viewArchive (ModelMap model, @RequestParam(value = "item", required = false) String item, 
+			Principal principal) {
+	try {
+		Client client = modelrepository.getUser(principal.getName());
+		model.addAttribute("client", client);
+		model.addAttribute("activeMenuItem", item);
+		model.addAttribute("title", "Model archive");
+		MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
+		model.addAttribute("node", findActiveNode(item, menuItem));
+		model.addAttribute("topLevel", service.getTopLevel(principal));
+		model.addAttribute("crumbs", getBreadCrumb(item, false));
+	} catch (UnsupportedEncodingException ue) {
+		String msg = "Error found when encoding file URL";
+		log.log(Level.SEVERE, msg, ue);
+		model.addAttribute("error", msg);
+		return "errorpage";
+	} catch (IOException e) {
+		String msg = "Error found when checking access rights";
+		log.log(Level.SEVERE, msg, e);
+		model.addAttribute("error", msg);
+		return "errorpage";
+	}
+	return "archive";
+}
+	
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST) 
     public String importParse(ModelMap modelMap, @RequestParam("uploadFile") MultipartFile file, 
     		@RequestParam("path") String path,
@@ -142,6 +172,30 @@ public class ArchiveController {
 		boolean viewOnly = (!hasReadAccess) && (hasDisplayAccess);
 		return viewOnly;
 	}
-
-
+		
+	private List<MenuItem> getBreadCrumb(String item, boolean leaf){
+		ArrayList<MenuItem> crumbs = new ArrayList<MenuItem>();
+		String[] parts = item.split("\\\\");
+		String relativePath = "";
+		
+		for(int i = 0; i < parts.length; i++) {
+			relativePath += (relativePath=="") ? parts[i] : "\\" + parts[i];
+			Boolean leafNode = (parts.length==i+1) ? leaf : false;
+			crumbs.add(new MenuItem(parts[i], null, "", relativePath, leafNode));
+		}
+		return crumbs;		
+	}
+	
+	private MenuItem findActiveNode(String activeMenuItem, MenuItem menuItem){
+		MenuItem node = null;
+		for(MenuItem mItem : menuItem.getChildren()){
+			if(Objects.equals(mItem.getRelativePath(), activeMenuItem)){
+				node =  mItem;
+				break;
+			}
+				
+		}
+		return node;
+	}
+	
 }

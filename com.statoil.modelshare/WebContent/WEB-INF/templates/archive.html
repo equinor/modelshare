@@ -5,31 +5,45 @@
 <body role="document">
 	<div class="container theme-statoil" role="main">
 		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
-		<div class="page-header">
+		
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})">BreadCrumb</div>
+		
+		<div th:fragment="modelList(modelNode)" th:remove="tag"> 
+			<div th:if="${modelNode}" th:remove="tag">
+				<b>
+					<a th:href="@{/showModel(item=${modelNode.relativePath},leaf=false)}" th:text="${modelNode.name}">..</a>
+				</b>
+				<ul th:if="${not #lists.isEmpty(modelNode.children)}">
+					<li th:each="child: ${modelNode.children}">
+		  				<a th:href="@{/showModel(item=${child.relativePath},leaf=${child.leaf})}" th:text="${child.name}">..</a>
+		 			</li>
+				</ul>
+				<br/>
+		 	</div>
 		</div>
-		<div class="row content-row">
-			<div class="left-container col-xs-5">
-
-				<!-- Showing model menu -->
-				<div th:if="${node}" th:replace="../fragments/filemenu :: filemenu(${node})">Model menu</div>
-
-			</div>
-			<div class="right-container col-xs-7">
-				
-				<!-- Showing model detail view -->
-				<div th:if="${currentModel}">
-					<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
+		
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				<div class="content" 
+					th:if="${not #lists.isEmpty(node.children)}" 
+					th:with="maxIndex=${#lists.size(node.children)-1}" >
+					<div th:each="index: ${#numbers.sequence(0, maxIndex, 3)}">
+						<div class="row">
+							<div class="col-md-4">
+								<div th:replace=":: modelList(${node.children.get(index)})">...</div>
+							</div> 
+							<div class="col-md-4" th:if="${index+1 le maxIndex}">
+								<div th:replace=":: modelList(${node.children.get(index + 1)})">...</div>
+							</div>
+							<div class="col-md-4" th:if="${index+2 le maxIndex}">
+								<div th:replace=":: modelList(${node.children.get(index + 2)})">...</div>
+							</div>
+						</div>
+					</div>
 				</div>
-
-				<!-- Showing folder view -->
-				<div th:if="${currentFolder}">
-					<div th:replace="../fragments/folder :: folder(${currentFolder}, ${models}, ${client})">Folder</div>
-				</div>
-				
-			</div>
-		</div>			
-	</div>
-	
+			</div>	
+		</div>					
+	</div>	
 	<div th:replace="../fragments/footer :: footer">...</div>
 
 </body>
