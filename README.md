@@ -22,7 +22,7 @@ If the user password field is empty, the user may log in without specifying a pa
 
 The default location of the file is at `${user.home}/modelshare/repository/`.
 
-Modelshare is installed on http://84.16.202.251:8080/com.statoil.modelshare-0.0.1-SNAPSHOT/. The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. To log in to the server via remote desktop use the following:
+Modelshare is installed on http://84.16.202.251:8080/modelshare/. The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. To log in to the server via remote desktop use the following:
 
 * user: itema
 * password: 1tema1sKing
