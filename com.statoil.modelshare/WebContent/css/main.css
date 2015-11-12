@@ -100,3 +100,8 @@ body {
 	border-top-left-radius: inherit; 
     border-top-right-radius: inherit;
 }
+.breadcrumb{
+	margin-top:20px;
+	margin-bottom:10px;
+}
+

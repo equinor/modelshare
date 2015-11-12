@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<title>BreadCrumb</title>
+</head>
+<body>
+	<div th:fragment="breadcrumb(crumbs)">
+		<ul class="breadcrumb" >
+  			<li th:each="crumb: ${crumbs}">
+  				<a th:href="@{/showModel(item=${crumb.relativePath},leaf=${crumb.leaf})}" th:text="${crumb.name}">..</a>
+ 			</li>
+ 			
+		</ul>
+    </div> 
+</body>
+</html>

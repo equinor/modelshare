@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header">
+</head>
+<body role="document">
+	<div class="container theme-statoil" role="main">
+		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+		
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})">BreadCrumb</div>
+		
+		<!-- Showing model detail view -->
+		<div th:if="${currentModel}">
+			<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
+		</div>
+		<!-- Showing folder view -->
+		<div th:if="${currentFolder}">
+			<div th:replace="../fragments/folder :: folder(${currentFolder}, ${models}, ${client})">Folder</div>
+		</div>			
+	</div>
+	<div th:replace="../fragments/footer :: footer">...</div>
+</body>
+</html>
