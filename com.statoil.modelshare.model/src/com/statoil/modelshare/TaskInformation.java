@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.statoil.modelshare.TaskInformation#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.TaskInformation#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.statoil.modelshare.TaskInformation#getFormattedName <em>Formatted Name</em>}</li>
+ *   <li>{@link com.statoil.modelshare.TaskInformation#getFormattedDescription <em>Formatted Description</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getTaskInformation()
@@ -73,5 +75,35 @@ public interface TaskInformation extends EObject {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Formatted Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Formatted Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Formatted Name</em>' attribute.
+	 * @see com.statoil.modelshare.ModelsharePackage#getTaskInformation_FormattedName()
+	 * @model transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	String getFormattedName();
+
+	/**
+	 * Returns the value of the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Formatted Description</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Formatted Description</em>' attribute.
+	 * @see com.statoil.modelshare.ModelsharePackage#getTaskInformation_FormattedDescription()
+	 * @model transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	String getFormattedDescription();
 
 } // TaskInformation

@@ -588,13 +588,31 @@ public interface ModelsharePackage extends EPackage {
 	int TASK_INFORMATION__DESCRIPTION = 1;
 
 	/**
+	 * The feature id for the '<em><b>Formatted Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_INFORMATION__FORMATTED_NAME = 2;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_INFORMATION__FORMATTED_DESCRIPTION = 3;
+
+	/**
 	 * The number of structural features of the '<em>Task Information</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION_FEATURE_COUNT = 2;
+	int TASK_INFORMATION_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Task Information</em>' class.
@@ -938,6 +956,28 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getTaskInformation_Description();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getFormattedName <em>Formatted Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Formatted Name</em>'.
+	 * @see com.statoil.modelshare.TaskInformation#getFormattedName()
+	 * @see #getTaskInformation()
+	 * @generated
+	 */
+	EAttribute getTaskInformation_FormattedName();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getFormattedDescription <em>Formatted Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Formatted Description</em>'.
+	 * @see com.statoil.modelshare.TaskInformation#getFormattedDescription()
+	 * @see #getTaskInformation()
+	 * @generated
+	 */
+	EAttribute getTaskInformation_FormattedDescription();
+
+	/**
 	 * Returns the meta object for enum '{@link com.statoil.modelshare.Access <em>Access</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1223,6 +1263,22 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TASK_INFORMATION__DESCRIPTION = eINSTANCE.getTaskInformation_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Formatted Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TASK_INFORMATION__FORMATTED_NAME = eINSTANCE.getTaskInformation_FormattedName();
+
+		/**
+		 * The meta object literal for the '<em><b>Formatted Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TASK_INFORMATION__FORMATTED_DESCRIPTION = eINSTANCE.getTaskInformation_FormattedDescription();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.Access <em>Access</em>}' enum.

@@ -17,19 +17,27 @@
 				<label class="form-label" for="lastUpdated">Last updated</label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><p />
 
 				<a th:if="${viewOnly}" th:href="@{/request(asset=${currentModel.path})}">
-					<button class="btn btn-primary btn-sm">Request access</button>
+					<button class="btn btn-info">Request access</button>
 				</a>
 				<a th:if="${!viewOnly}" th:attr="data-href=@{/download(asset=${currentModel.path})}" data-toggle="modal" data-target="#confirm-dialog">
-					<button class="btn btn-primary btn-sm">Download this model</button>
+					<button class="btn btn-success"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>&nbsp;Download this model</button>
 				</a>
 				<br /><br />
 				<label class="form-label" for="usage">Usage</label><span class="form-field" id="usage" th:text="${currentModel.usage}" ></span><p />
 				
-				<b th:if="${attributes.size()>0}">Content description</b><p />
-				<div th:each="child : ${attributes}" class="details">
-					<div class="">
-						<span class="form-field-bold" th:text="${child.name}"></span><br />
-						<span class="form-field" th:text="${child.description}"></span><p />
+				<!-- Model "task" descriptions -->
+				<div th:each="task : ${tasks}" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default"> 
+						<div class="panel-heading" role="tab" th:id="'h_'+${task.name}"> 
+							<h4 class="panel-title"> 
+								<a role="button" data-toggle="collapse" data-parent="#accordion" th:href="'#c_'+${task.name}" aria-expanded="true" th:aria-controls="'c_'+${task.name}"> 
+					          		<span th:text="${task.formattedName}"></span> 
+					        	</a> 
+							</h4> 
+						</div>
+						<div th:id="'c_'+${task.name}" class="panel-collapse collapse in" role="tabpanel" th:aria-labelledby="'h_'+${task.name}">
+							<div class="panel-body" th:utext="${task.formattedDescription}"></div>							
+						</div>
 					</div>
 				</div>
 			</div>

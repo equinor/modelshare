@@ -420,6 +420,24 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getTaskInformation_FormattedName() {
+		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTaskInformation_FormattedDescription() {
+		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAccess() {
 		return accessEEnum;
 	}
@@ -488,6 +506,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		taskInformationEClass = createEClass(TASK_INFORMATION);
 		createEAttribute(taskInformationEClass, TASK_INFORMATION__NAME);
 		createEAttribute(taskInformationEClass, TASK_INFORMATION__DESCRIPTION);
+		createEAttribute(taskInformationEClass, TASK_INFORMATION__FORMATTED_NAME);
+		createEAttribute(taskInformationEClass, TASK_INFORMATION__FORMATTED_DESCRIPTION);
 
 		// Create enums
 		accessEEnum = createEEnum(ACCESS);
@@ -566,6 +586,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEClass(taskInformationEClass, TaskInformation.class, "TaskInformation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTaskInformation_Name(), ecorePackage.getEString(), "name", null, 0, 1, TaskInformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTaskInformation_Description(), ecorePackage.getEString(), "description", null, 0, 1, TaskInformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTaskInformation_FormattedName(), ecorePackage.getEString(), "formattedName", null, 0, 1, TaskInformation.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTaskInformation_FormattedDescription(), ecorePackage.getEString(), "formattedDescription", null, 0, 1, TaskInformation.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessEEnum, Access.class, "Access");
