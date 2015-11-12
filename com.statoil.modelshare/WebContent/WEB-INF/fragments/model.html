@@ -25,7 +25,7 @@
 				<br /><br />
 				<label class="form-label" for="usage">Usage</label><span class="form-field" id="usage" th:text="${currentModel.usage}" ></span><p />
 				
-				<b th:if="${attributes.size()>0}">Task information</b><p />
+				<b th:if="${attributes.size()>0}">Content description</b><p />
 				<div th:each="child : ${attributes}" class="details">
 					<div class="">
 						<span class="form-field-bold" th:text="${child.name}"></span><br />
