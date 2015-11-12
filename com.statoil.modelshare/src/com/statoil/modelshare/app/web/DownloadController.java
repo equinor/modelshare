@@ -1,5 +1,6 @@
 package com.statoil.modelshare.app.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
@@ -42,7 +43,7 @@ public class DownloadController {
 			Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			String name = asset.substring(asset.lastIndexOf('/')+1);
+			String name = asset.substring(asset.lastIndexOf(File.separator)+1);
 			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path path = Paths.get(asset);
 			Path resolvedPath = rootPath.resolve(path);
