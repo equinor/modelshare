@@ -43,9 +43,9 @@ public class DownloadController {
 			Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			String name = asset.substring(asset.lastIndexOf(File.separator)+1);
-			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path path = Paths.get(asset);
+			String name = path.getFileName().toString();
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path resolvedPath = rootPath.resolve(path);
 			try (ServletOutputStream outputStream = response.getOutputStream();
 				InputStream is = modelrepository.getFileStream(user, resolvedPath)) 
