@@ -16,6 +16,7 @@ package com.statoil.modelshare;
  *   <li>{@link com.statoil.modelshare.Client#getEmail <em>Email</em>}</li>
  *   <li>{@link com.statoil.modelshare.Client#getPassword <em>Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.Client#isForceChangePassword <em>Force Change Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Client#getLocalUser <em>Local User</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getClient()
@@ -126,5 +127,31 @@ public interface Client extends Account {
 	 * @generated
 	 */
 	void setForceChangePassword(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Local User</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Local User</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Local User</em>' attribute.
+	 * @see #setLocalUser(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getClient_LocalUser()
+	 * @model
+	 * @generated
+	 */
+	String getLocalUser();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Client#getLocalUser <em>Local User</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Local User</em>' attribute.
+	 * @see #getLocalUser()
+	 * @generated
+	 */
+	void setLocalUser(String value);
 
 } // Client

@@ -196,13 +196,22 @@ public interface ModelsharePackage extends EPackage {
 	int CLIENT__FORCE_CHANGE_PASSWORD = ACCOUNT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Local User</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLIENT__LOCAL_USER = ACCOUNT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Client</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CLIENT_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 4;
+	int CLIENT_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get All Roles</em>' operation.
@@ -662,6 +671,17 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getClient_ForceChangePassword();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Client#getLocalUser <em>Local User</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Local User</em>'.
+	 * @see com.statoil.modelshare.Client#getLocalUser()
+	 * @see #getClient()
+	 * @generated
+	 */
+	EAttribute getClient_LocalUser();
+
+	/**
 	 * Returns the meta object for class '{@link com.statoil.modelshare.Model <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +1011,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CLIENT__FORCE_CHANGE_PASSWORD = eINSTANCE.getClient_ForceChangePassword();
+
+		/**
+		 * The meta object literal for the '<em><b>Local User</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CLIENT__LOCAL_USER = eINSTANCE.getClient_LocalUser();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.impl.ModelImpl <em>Model</em>}' class.

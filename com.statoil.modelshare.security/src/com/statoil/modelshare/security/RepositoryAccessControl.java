@@ -37,8 +37,10 @@ public class RepositoryAccessControl {
 
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
+	protected long passwordFileModified;
 
 	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
+	
 	private List<Account> accounts;
 
 	@SuppressWarnings("unused")
@@ -259,7 +261,7 @@ public class RepositoryAccessControl {
 				writer.flush();
 				writer.close();
 			}
-			
+
 		} else {
 			File newAccessFile = Files.createFile(filePath).toFile();
 			BufferedWriter writer = Files.newBufferedWriter(newAccessFile.toPath());
@@ -302,7 +304,8 @@ public class RepositoryAccessControl {
 	 * @throws IOException
 	 */
 	public List<Account> getAccounts() {
-		if (accounts == null) {
+		long changed = passwordFilePath.toFile().lastModified();
+		if (accounts == null || changed !=  passwordFileModified) {
 			readAccounts();
 		}
 		return accounts;
@@ -315,10 +318,11 @@ public class RepositoryAccessControl {
 		synchronized (passwordFilePath) {
 			accounts = new ArrayList<>();
 			String in = null;
+			passwordFileModified = passwordFilePath.toFile().lastModified();
 			try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
-					if (split.length != 4) {
+					if (split.length < 4) {
 						continue;
 					}
 					// "x" as password indicates that this is a group
@@ -335,6 +339,13 @@ public class RepositoryAccessControl {
 						user.setPassword(split[1]);
 						user.setGroup(getGroup(accounts, split[2]));
 						user.setName(split[3]);
+						if (split.length > 4) {
+							String value = split[4];
+							user.setOrganisation(value.equals("") ? null : value);
+						}
+						if (split.length > 5) {
+							user.setLocalUser(split[5]);
+						}
 						accounts.add(user);
 						if (split[1].length() == 0) {
 							user.setForceChangePassword(true);
@@ -382,6 +393,15 @@ public class RepositoryAccessControl {
 							fw.write(":");
 						}
 						fw.write(account.getName());
+						fw.write(":");
+						if (((Client) account).getOrganisation() != null) {
+							fw.write(((Client) account).getOrganisation() + ":");
+						} else {
+							fw.write(":");
+						}
+						if (((Client) account).getLocalUser() != null) {
+							fw.write(((Client) account).getLocalUser());
+						}
 					}
 					fw.write(System.lineSeparator());
 				}
