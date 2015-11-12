@@ -51,6 +51,8 @@
     <genClasses ecoreClass="modelshare.ecore#//TaskInformation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/formattedName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/formattedDescription"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

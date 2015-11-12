@@ -7,8 +7,6 @@ import java.security.Principal;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
