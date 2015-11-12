@@ -22,23 +22,17 @@ If the user password field is empty, the user may log in without specifying a pa
 
 The default location of the file is at `${user.home}/modelshare/repository/`.
 
-Modelshare is installed on the following server: 84.16.202.251
-The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. 
-To log in to the server via remote desktop use the following:
-user: itema
-password: 1tema1sKing
+Modelshare is installed on http://84.16.202.251:8080/com.statoil.modelshare-0.0.1-SNAPSHOT/. The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. To log in to the server via remote desktop use the following:
 
-Tomcat 8 is installed as web-container.
-To administrate Tomcat go to the following site: 84.16.202.251/manager
-Clik the Manage button and log in using the follwing:
-user: admin
-password: Kokke Limonke 123
+* user: itema
+* password: 1tema1sKing
 
-If you need to test the mail functionality you can do the following:
-Install Docker (or Kitematic if you are on mac).
-Download Mailhog/Mailhog from docker hub.
-Start Mailhog and check the ports assigned to the SMTP server and the web interface to read the mails you send.
-If necessary - change the modelshare.properties file on your local machine (/modelshare/modelshare.repository) to reflect the ports mailhog uses.
+Tomcat 8 is installed as servlet-container. To administrate Tomcat go to the following site: http://84.16.202.251:8080/manager/. Click the Manage button and log in using the following:
+
+* user: admin
+* password: Kokke Limonke 123
+
+If you need to test the mail functionality you can do the following: Install Docker (or Kitematic if you are on mac). Download Mailhog/Mailhog from docker hub. Start Mailhog and check the ports assigned to the SMTP server and the web interface to read the mails you send. If necessary - change the modelshare.properties file on your local machine (/modelshare/modelshare.repository) to reflect the ports mailhog uses.
 
 
 The following document was agreed upon as the first delivery:
