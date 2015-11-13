@@ -58,15 +58,11 @@ public class GrantAccessController {
 			@RequestParam("user") String user,
 			@RequestParam("querystring") String query,
 			Principal principal) {
-		System.out.println("POST query = " + query);
-		System.out.println("POST model file name = " + filename);
-		System.out.println("POST model user = " + user);
 		
 		Client client = modelrepository.getUser(user);
 		String item = query.substring(query.indexOf("repository/") + 11, query.indexOf("&"));
-		System.out.println("Item path = " + item);
 		try {
-			if (!modelrepository.hasReadAccess(client, Paths.get(item))) {
+			if (!modelrepository.hasDownloadAccess(client, Paths.get(item))) {
 				modelrepository.setDownloadRights(client, Paths.get(item));
 				
 			} else {

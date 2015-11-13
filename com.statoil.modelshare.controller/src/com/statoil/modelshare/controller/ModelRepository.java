@@ -72,10 +72,10 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasDisplayAccess(Client user, Path path) throws IOException ;	
+	public boolean hasViewAccess(Client user, Path path) throws IOException ;	
 
 	/**
-	 * Convenience method for determining whether the user has read access to
+	 * Convenience method for determining whether the user has download access to
 	 * the given path.
 	 * 
 	 * @param user
@@ -84,7 +84,7 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasReadAccess(Client user, Path path) throws IOException ;	
+	public boolean hasDownloadAccess(Client user, Path path) throws IOException ;	
 	
 	/**
 	 * Convenience method to set download rights on a file / folder for a user
@@ -109,6 +109,20 @@ public interface ModelRepository {
 	 *             if the user does not have read access
 	 */
 	public InputStream getFileStream(Client user, Path path) throws AccessDeniedException, IOException;
+	
+	/**
+	 * Copies the asset to the local user directory if possible
+	 * 
+	 * @param user
+	 *            the user that requests the asset
+	 * @param path
+	 *            the root relative path to the asset
+	 * @throws IOException
+	 *             if the file could not be read
+	 * @throws AccessDeniedException
+	 *             if the user does not have read access
+	 */
+	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException;
 	
 	/**
 	 * Uploads a file to Modelshare based on information given in the view - represented by the model object

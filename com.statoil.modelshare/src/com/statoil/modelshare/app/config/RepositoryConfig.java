@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.config;
 
 import java.nio.file.Paths;
 
+import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +48,15 @@ public class RepositoryConfig {
 	 */
 	@Bean
 	public ModelRepository getModelRepository() {
-		return new ModelRepositoryImpl(Paths.get(repositoryRoot));
+		String path = null;
+		if (SystemUtils.IS_OS_WINDOWS){
+			path = "C:/Users/";
+		} else if (SystemUtils.IS_OS_MAC){
+			path = "/Users/";
+		} else if (SystemUtils.IS_OS_LINUX){
+			path = "/home/";
+		}
+		return new ModelRepositoryImpl(Paths.get(repositoryRoot), Paths.get(path));
 	}
 	
 	@Bean

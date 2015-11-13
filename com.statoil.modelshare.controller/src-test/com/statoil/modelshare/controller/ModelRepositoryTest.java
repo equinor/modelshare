@@ -26,7 +26,7 @@ public class ModelRepositoryTest {
 	
 	@BeforeClass
 	public static void setUp(){
-		repo = new ModelRepositoryImpl(rootPath);		
+		repo = new ModelRepositoryImpl(rootPath, null);		
 	}
 	
 	@Test

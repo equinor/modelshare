@@ -2,7 +2,6 @@ package com.statoil.modelshare.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -11,6 +10,9 @@ import java.nio.channels.FileChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -44,9 +46,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	private Path rootPath;
 	
+	private Path userRoot;
+
 	private RepositoryAccessControl ra;
-	
+
 	static Log log = LogFactory.getLog(ModelRepository.class.getName());
+	static Log downloadLog = LogFactory.getLog("downloadLogger");
 
 	@SuppressWarnings("unused")
 	private ModelRepositoryImpl() {
@@ -60,10 +65,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 	 * @param path
 	 *            path to the repository root.
 	 */
-	public ModelRepositoryImpl(Path path) {
+	public ModelRepositoryImpl(Path path, Path userRoot) {
 		rootPath = path.toAbsolutePath();
 		ra = new RepositoryAccessControl(rootPath);
-		System.out.println("Using root folder at " + rootPath);
+		this.userRoot = userRoot;
 	}
 
 	private void fillFolderContents(Folder folder, Client user) throws IOException {
@@ -80,7 +85,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		// Recurse into subfolders and add files
 		for (File child : listFiles) {
 			// Ignore those where the user have no access
-			if (hasDisplayAccess(user, child.toPath())) {
+			if (hasViewAccess(user, child.toPath())) {
 				if (child.isDirectory()) {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
@@ -97,16 +102,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 	}
 
-	public boolean hasDisplayAccess(Client user, Path path) throws IOException {
+	public boolean hasViewAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return rights.contains(Access.VIEW);
 	}
 
-	public boolean hasReadAccess(Client user, Path path) throws IOException {
+	public boolean hasDownloadAccess(Client user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return rights.contains(Access.READ);
 	}
-	
+
 	public Folder getRoot(Client user) {
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setPath(rootPath.toString());
@@ -133,7 +138,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadFile(File sourceFile, Model model) throws IOException, ParserConfigurationException, SAXException {
+	public void uploadFile(File sourceFile, Model model)
+			throws IOException, ParserConfigurationException, SAXException {
 		if (!sourceFile.exists()) {
 			System.err.println("File not found " + sourceFile.getAbsolutePath());
 		}
@@ -150,80 +156,76 @@ public class ModelRepositoryImpl implements ModelRepository {
 				System.err.println("Error creating new file in Modelshare respositury " + destFile.getName());
 			}
 		}
-		
+
 		try (FileInputStream sourceStream = new FileInputStream(sourceFile);
-			FileOutputStream destStream = new FileOutputStream(destFile)	
-		) {
+				FileOutputStream destStream = new FileOutputStream(destFile)) {
 			FileChannel source = sourceStream.getChannel();
 			FileChannel destination = destStream.getChannel();
 			if (destination != null && source != null) {
 				destination.transferFrom(source, 0, source.size());
 			}
 		}
-		
+
 		Properties p = setupMetaFileProperties(sourceFile, model);
 
 		String metaPath = destDir + File.separator + "." + destFile.getName() + ".meta";
 		writeMetaFile(metaPath, p);
 	}
 
-	private Properties setupMetaFileProperties(File sourceFile, Model model) throws ParserConfigurationException, SAXException, IOException {
+	private Properties setupMetaFileProperties(File sourceFile, Model model)
+			throws ParserConfigurationException, SAXException, IOException {
 		Properties p = new Properties();
 		String owner = "unknown";
 		if (model.getOwner() != null) {
 			owner = model.getOwner();
 		}
 		p.setProperty("owner", owner);
-		
+
 		String org = "unknown";
 		if (model.getOrganisation() != null) {
 			org = model.getOrganisation();
 		}
 		p.setProperty("organisation", org);
-		
+
 		String name = "unknown";
 		if (model.getName() != null) {
 			name = model.getName();
 		}
 		p.setProperty("name", name);
-		
+
 		String usage = "unknown";
 		if (model.getUsage() != null) {
 			usage = model.getUsage();
 		}
 		p.setProperty("usage", usage);
-		
+
 		String email = "Unknown";
 		if (model.getMail() != null) {
 			email = model.getMail();
 		}
 		p.setProperty("mail", email);
 		p.setProperty("lastUpdated", LocalDateTime.now().toString());
-		
+
 		addTaskInformation(sourceFile, p);
 		return p;
 	}
 
-	private void addTaskInformation(File sourceFile, Properties p) throws ParserConfigurationException, SAXException, IOException {
+	private void addTaskInformation(File sourceFile, Properties p)
+			throws ParserConfigurationException, SAXException, IOException {
 		if (sourceFile.getName().endsWith(".stask")) {
 			List<TaskInformation> tasks = unzipAndGetStaskInformation(sourceFile.toPath());
 			for (TaskInformation taskInfo : tasks) {
-				p.setProperty("task."+taskInfo.getName()+".description", taskInfo.getDescription());
+				p.setProperty("task." + taskInfo.getName() + ".description", taskInfo.getDescription());
 			}
 		}
 	}
-	
+
 	private void writeMetaFile(String metaPath, Properties properties) {
-		try {
-			File metaFile = new File(metaPath);
-			metaFile.createNewFile();
-			FileOutputStream fos = new FileOutputStream(metaFile);
+		try (FileOutputStream fos = new FileOutputStream(new File(metaPath))) {
 			properties.storeToXML(fos, "Statoil model meta properties file", "UTF-8");
 			fos.close();
-		} catch (FileNotFoundException fe) {
-			System.err.println("Error writing to " + metaPath);
-		} catch (IOException ioe) {
-			System.err.println("Error trying to write XML properties to " + metaPath);
+		} catch (Exception e) {
+			log.error("Could not write metadata file", e);
 		}
 	}
 
@@ -233,15 +235,15 @@ public class ModelRepositoryImpl implements ModelRepository {
 		Path resolvedPath = rootPath.resolve(path);
 		String fileName = resolvedPath.getFileName().toString();
 		String metaFileName = resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta";
-		
+
 		try {
 			final FileInputStream in = new FileInputStream(metaFileName);
 			resultProps.loadFromXML(in);
 			in.close();
 		} catch (IOException ioe) {
-			log.error("Error reading meta information from "+ metaFileName);
+			log.error("Error reading meta information from " + metaFileName);
 		}
-		
+
 		Model model = ModelshareFactory.eINSTANCE.createModel();
 		model.setOwner(resultProps.getProperty("owner"));
 		model.setLastUpdated(resultProps.getProperty("lastUpdated"));
@@ -265,14 +267,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 		return model;
 	}
-	
+
 	/**
 	 * Unzip stask and parses the xmi files for task names and descriptions
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
+	 * 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
 	 */
-	private List<TaskInformation> unzipAndGetStaskInformation(Path path) throws ParserConfigurationException, SAXException, IOException {
+	private List<TaskInformation> unzipAndGetStaskInformation(Path path)
+			throws ParserConfigurationException, SAXException, IOException {
 		List<TaskInformation> tasks = new ArrayList<>();
 		Path tempPath = Files.createTempDirectory("modelshare");
 		UnzipUtility unzipper = new UnzipUtility();
@@ -316,7 +320,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	@Override
 	public InputStream getFileStream(Client user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
-		EnumSet<Access> rights = ra.getRights(path, user);		
+		EnumSet<Access> rights = ra.getRights(path, user);
 		if (rights.contains(Access.READ))
 			return new FileInputStream(file);
 		else
@@ -338,6 +342,25 @@ public class ModelRepositoryImpl implements ModelRepository {
 			result = false;
 		}
 		return result;
+	}
+
+	@Override
+	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException {
+		String localUser = user.getLocalUser();
+		if (localUser == null || localUser.isEmpty()) {
+			throw new AccessDeniedException(null, null, "Cannot copy file. User does not have a local account");
+		}
+		EnumSet<Access> rights = ra.getRights(path, user);
+		if (rights.contains(Access.READ)) {
+			Path target = userRoot.resolve(Paths.get(localUser, "Documents", "Model-export",path.getFileName().toString()));
+			target.toFile().mkdirs();
+			Files.copy(rootPath.resolve(path), target, StandardCopyOption.REPLACE_EXISTING);
+			Object[] messageArgs = { path, user.getIdentifier() };
+			downloadLog.info(MessageFormat.format("Model \"{0}\" was downloaded by {1}", messageArgs));
+			return "Model copied to "+target.toString();
+		} else {
+			throw new AccessDeniedException(path.toString());
+		}
 	}
 
 }

@@ -24,7 +24,7 @@ public class UploadFileTest {
 	
 	@Test
 	public void testUploadingFile() throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
-		ModelRepository repo = new ModelRepositoryImpl(folder.getRoot().toPath());
+		ModelRepository repo = new ModelRepositoryImpl(folder.getRoot().toPath(), null);
 		File testDir = new File(folder.getRoot().toString(), "TestUpload");
 		
 		// Create a model representation of the file

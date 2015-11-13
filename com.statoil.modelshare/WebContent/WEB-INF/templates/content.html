@@ -8,6 +8,8 @@
 		
 		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})">BreadCrumb</div>
 		
+		<div th:replace="../fragments/alert :: alert(${error},${info})">BreadCrumb</div>
+
 		<!-- Showing model detail view -->
 		<div th:if="${currentModel}">
 			<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
