@@ -1,23 +1,70 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="../fragments/header :: header">
-</head>
+<head th:replace="../fragments/header :: header"></head>
+
 <body role="document">
 	<div class="container" role="main">
+	
 		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
 		
-		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})"></div>
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs},${currentFolder})">BreadCrumb</div>
 		
 		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
 
-		<!-- Showing model detail view -->
-		<div th:if="${currentModel}">
-			<div th:replace="../fragments/model :: model(${currentModel})">Model details</div>
+		<div th:if="${currentModel}" class="panel panel-primary">
+			<div class="panel-body">
+			
+				<div class="media">
+				  	<div class="media-body">
+						<h2 class="media-heading" th:text="${currentModel.name}"></h2>
+						<label class="form-label" for="owner">Owned by:</label>
+						<a th:href="'mailto:'+${currentModel.mail}"><span class="form-field" id="owner" th:text="${currentModel.owner}"></span><span class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span></a><br/>
+						<label class="form-label" for="lastUpdated">Last updated: </label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><br/>
+						<label class="form-label" for="owner">Model type: </label>
+					</div>
+			  		<div class="media-right media-top">
+			    		<a href="#">
+			      			<img class="media-object" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzE5IiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMxOSAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTUwZmQ5OGEwMjIgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxNnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTBmZDk4YTAyMiI+PHJlY3Qgd2lkdGg9IjMxOSIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMTcuNjQ4NDM3NSIgeT0iMTA3LjIwOTM3NSI+MzE5eDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" alt="..."></img>
+			    		</a>
+			  		</div>
+				</div>
+				
+				<h3>Description</h3>
+				<p th:text="${currentModel.usage}"></p>
+
+				<p>
+					<a role="button" th:if="${viewOnly}" th:href="@{/request(asset=${currentModel.path})}">
+						<button class="btn btn-info">Request access</button>
+					</a>
+					<a role="button" th:if="${!viewOnly}" th:attr="data-href=@{/download(asset=${currentModel.path})}" data-toggle="modal" data-target="#confirm-dialog">
+						<button class="btn btn-success"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>&nbsp;Download this model</button>
+					</a>
+					<a role="button" th:if="${client.localUser}" th:attr="data-href=@{/copy(asset=${currentModel.path})}" data-toggle="modal" data-target="#confirm-dialog">
+						<button class="btn btn-primary"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Copy to work area</button>
+					</a>
+				</p>
+							
+				<h3>Contents</h3>
+
+				<!-- Model "task" descriptions -->
+				<div th:each="task : ${tasks}" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default"> 
+						<div class="panel-heading" role="tab" th:id="'h_'+${task.name}"> 
+							<h4 class="panel-title"> 
+								<a role="button" data-toggle="collapse" data-parent="#accordion" th:href="'#c_'+${task.name}" aria-expanded="true" th:aria-controls="'c_'+${task.name}"> 
+					          		<span th:text="${task.formattedName}"></span> 
+					        	</a> 
+							</h4> 
+						</div>
+						<div th:id="'c_'+${task.name}" class="panel-collapse collapse in" role="tabpanel" th:aria-labelledby="'h_'+${task.name}">
+							<div class="panel-body" th:utext="${task.formattedDescription}"></div>							
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<!-- Showing folder view -->
-		<div th:if="${currentFolder}">
-			<div th:replace="../fragments/folder :: folder(${currentFolder}, ${models}, ${client})">Folder</div>
-		</div>			
+		<div th:if="${!viewOnly}" th:replace="../fragments/confirm :: confirm('Terms of use', ${downloadTerms})">...</div>
 	</div>
 	<div th:replace="../fragments/footer :: footer">...</div>
 </body>

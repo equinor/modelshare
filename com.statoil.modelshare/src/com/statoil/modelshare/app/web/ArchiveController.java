@@ -99,8 +99,8 @@ public class ArchiveController {
 				model.addAttribute("tasks", currentModel.getTaskInformation());
 			} else {
 				model.addAttribute("currentFolder", asset);
-				model.addAttribute("showNewFolder", showNewFolder);
-				model.addAttribute("showUploadFile", showUploadFile);
+				model.addAttribute("showNewFolder", showNewFolder); //XXX: Remove
+				model.addAttribute("showUploadFile", showUploadFile); //XXX: Remove
 
 				Folder models = currentModel.getFolder();
 				model.addAttribute("models", models);
@@ -129,7 +129,8 @@ public class ArchiveController {
 		try {
 			Client client = modelrepository.getUser(principal.getName());
 			model.addAttribute("client", client);
-			model.addAttribute("activeMenuItem", item);
+			model.addAttribute("activeMenuItem", item); //XXX: Remove
+			model.addAttribute("currentFolder", item);
 			model.addAttribute("title", "Model archive");
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", getMenuItem(item, menuItem));
@@ -144,8 +145,48 @@ public class ArchiveController {
 		return "archive";
 	}
 
-	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-	public String importParse(ModelMap modelMap, @RequestParam("uploadFile") MultipartFile file,
+	/**
+	 * Shows the "upload" form.
+	 * 
+	 * @param modelMap
+	 *            attributes for the page
+	 * @param asset
+	 *            the current folder
+	 * @param principal
+	 *            the logged in user
+	 * @return the template to render
+	 */
+	@RequestMapping(value = "/upload", method = RequestMethod.GET)
+	public String upload(ModelMap modelMap, @RequestParam(value = "item", required = false) String asset, Principal principal) {		
+		Client user = modelrepository.getUser(principal.getName());
+		modelMap.addAttribute("owner", user);
+		modelMap.addAttribute("crumbs", getBreadCrumb(asset, false));
+		modelMap.addAttribute("currentFolder", asset);
+		return "upload";
+	}
+	
+	/**
+	 * Shows the "create folder" form.
+	 * 
+	 * @param modelMap
+	 *            attributes for the page
+	 * @param asset
+	 *            the current folder
+	 * @param principal
+	 *            the logged in user
+	 * @return the template to render
+	 */
+	@RequestMapping(value = "/folder", method = RequestMethod.GET)
+	public String folder(ModelMap modelMap, @RequestParam(value = "item", required = false) String asset, Principal principal) {		
+		Client user = modelrepository.getUser(principal.getName());
+		modelMap.addAttribute("owner", user);
+		modelMap.addAttribute("crumbs", getBreadCrumb(asset, false));
+		modelMap.addAttribute("currentFolder", asset);
+		return "folder";
+	}
+
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public String importParse(ModelMap modelMap, @RequestParam("model") MultipartFile file,
 			@RequestParam("path") String path, @RequestParam("usage") String usage, Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());

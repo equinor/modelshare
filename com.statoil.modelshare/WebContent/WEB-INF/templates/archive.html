@@ -4,9 +4,7 @@
 </head>
 <body>
 
-	<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
-
-
+	<!-- shows a node with children -->
 	<div th:fragment="modelList(modelNode)" th:remove="tag">
 		<div th:if="${modelNode}" th:remove="tag">
 			<b> <a
@@ -24,7 +22,13 @@
 
 	<!-- Flat view of folders -->
 	<div class="container" role="main">
-		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})">BreadCrumb</div>
+	
+		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs},${currentFolder})">BreadCrumb</div>
+
+		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
+		
 		<div class="panel panel-primary">
 			<div class="panel-body" th:if="${not #lists.isEmpty(node.children)}"
 				th:with="maxIndex=${#lists.size(node.children)-1}">
