@@ -53,9 +53,8 @@ public class DownloadController {
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
 				org.apache.commons.io.IOUtils.copy(is, outputStream);
 				response.flushBuffer();
-				Object[] messageArgs = {asset, principal.getName()};
-				downloadLog.info( 
-						MessageFormat.format("Model {0} was downloaded by {1}", messageArgs));
+				Object[] messageArgs = { asset, principal.getName() };
+				downloadLog.info(MessageFormat.format("Model {0} was downloaded by {1}", messageArgs));
 			}catch (AccessDeniedException e){
 				log.log(Level.SEVERE,
 						MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset), e);

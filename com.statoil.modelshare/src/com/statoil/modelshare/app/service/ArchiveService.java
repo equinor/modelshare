@@ -29,23 +29,19 @@ public class ArchiveService {
 
 	private ModelRepository repository;
 	private Folder root;
-	
-	//ToDo: Refactor out of service after
-	public List<MenuItem> getTopLevel(Principal principal){
+
+	// ToDo: Refactor out of service after
+	public List<MenuItem> getTopLevel(Principal principal) {
 		List<MenuItem> topLevel = null;
-		try {
-			MenuItem menuItem = getMenuItemsFromAssets(principal.getName());
-			if(menuItem != null) 
-				topLevel = menuItem.getChildren();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		MenuItem menuItem = getMenuItemsFromAssets(principal.getName());
+		if (menuItem != null) {
+			topLevel = menuItem.getChildren();
 		}
 		return topLevel;
 	}
-	public MenuItem getMenuItemsFromAssets(String userId) throws UnsupportedEncodingException {
-		checkRepository();
 
+	public MenuItem getMenuItemsFromAssets(String userId) {
+		checkRepository();
 		root = repository.getRoot(repository.getUser(userId));
 		EList<Asset> eContents = root.getAssets();
 		MenuItem rootItem = new MenuItem("Root", "", "");
@@ -61,7 +57,7 @@ public class ArchiveService {
 		}
 	}
 
-	private List<MenuItem> getMenuItemsFromAssets(EList<Asset> eContents, int num) throws UnsupportedEncodingException {
+	private List<MenuItem> getMenuItemsFromAssets(EList<Asset> eContents, int num) {
 		List<MenuItem> items = new ArrayList<MenuItem>();
 		if (eContents != null) {
 			for (Asset eObject : eContents) {
@@ -80,16 +76,19 @@ public class ArchiveService {
 		return items;
 	}
 
-	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
+	public Model getModelFromAssets(String encodedPath) {
 		checkRepository();
 		if (encodedPath != null) {
-			Model metaInformation = repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
-			return metaInformation;
+			try {
+				return repository.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 
-	private MenuItem createMenuItem(Asset eObject, boolean leaf) throws UnsupportedEncodingException {
+	private MenuItem createMenuItem(Asset eObject, boolean leaf) {
 		String path = eObject.getPath();
 		String relativePath = path.replace(root.getPath(), "");
 		relativePath = relativePath.substring(1);
