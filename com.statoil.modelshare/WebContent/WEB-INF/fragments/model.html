@@ -14,8 +14,8 @@
 						<h2 class="media-heading" th:text="${currentModel.name}"></h2>
 						<label class="form-label" for="owner">Owned by:</label>
 						<a th:href="'mailto:'+${currentModel.mail}"><span class="form-field" id="owner" th:text="${currentModel.owner}"></span><span class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span></a><br/>
-						<label class="form-label" for="lastUpdated">Last updated:</label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><br/>
-						<label class="form-label" for="owner">Model type:</label>
+						<label class="form-label" for="lastUpdated">Last updated: </label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><br/>
+						<label class="form-label" for="owner">Model type: </label>
 					</div>
 			  		<div class="media-right media-top">
 			    		<a href="#">

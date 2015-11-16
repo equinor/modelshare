@@ -8,7 +8,7 @@
 	<div th:fragment="breadcrumb(crumbs)">
 		<ul class="breadcrumb" >
   			<li th:each="crumb: ${crumbs}">
-  				<a th:href="@{/showModel(item=${crumb.relativePath},leaf=${crumb.leaf})}" th:text="${crumb.name}">..</a>
+  				<a th:href="@{/archive(item=${crumb.relativePath},leaf=${crumb.leaf})}" th:text="${crumb.name}">..</a>
  			</li>
  			
 		</ul>

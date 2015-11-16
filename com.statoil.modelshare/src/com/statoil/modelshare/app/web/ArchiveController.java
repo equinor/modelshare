@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
@@ -132,7 +132,7 @@ public class ArchiveController {
 			model.addAttribute("activeMenuItem", item);
 			model.addAttribute("title", "Model archive");
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
-			model.addAttribute("node", findActiveNode(item, menuItem));
+			model.addAttribute("node", getMenuItem(item, menuItem));
 			model.addAttribute("topLevel", service.getTopLevel(principal));
 			model.addAttribute("crumbs", getBreadCrumb(item, false));
 		} catch (Exception e) {
@@ -213,21 +213,21 @@ public class ArchiveController {
 		for (int i = 0; i < parts.length; i++) {
 			relativePath += (relativePath == "") ? parts[i] : "/" + parts[i];
 			Boolean leafNode = (parts.length == i + 1) ? leaf : false;
-			crumbs.add(new MenuItem(parts[i], null, "", relativePath, leafNode));
+			crumbs.add(new MenuItem(parts[i], null, null, relativePath, leafNode));
 		}
 		return crumbs;
 	}
 
-	private MenuItem findActiveNode(String activeMenuItem, MenuItem menuItem) {
-		MenuItem node = null;
-		for (MenuItem mItem : menuItem.getChildren()) {
-			if (Objects.equals(mItem.getRelativePath(), activeMenuItem)) {
-				node = mItem;
-				break;
-			}
-
-		}
-		return node;
+	private MenuItem getMenuItem(String path, MenuItem root) {
+		 List<MenuItem> list = root
+				 .stream()
+				 .filter(m -> m.getRelativePath().equals(path))
+				 .collect(Collectors.toList());
+		 if (list.isEmpty()){
+			 return null;
+		 } else {
+			 return list.get(0);
+		 }
 	}
 
 }
