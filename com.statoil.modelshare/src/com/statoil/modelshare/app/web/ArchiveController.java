@@ -207,11 +207,11 @@ public class ArchiveController {
 
 	private List<MenuItem> getBreadCrumb(String item, boolean leaf) {
 		ArrayList<MenuItem> crumbs = new ArrayList<MenuItem>();
-		String[] parts = item.split("\\\\");
+		String[] parts = item.split("/");
 		String relativePath = "";
 
 		for (int i = 0; i < parts.length; i++) {
-			relativePath += (relativePath == "") ? parts[i] : "\\" + parts[i];
+			relativePath += (relativePath == "") ? parts[i] : "/" + parts[i];
 			Boolean leafNode = (parts.length == i + 1) ? leaf : false;
 			crumbs.add(new MenuItem(parts[i], null, "", relativePath, leafNode));
 		}
