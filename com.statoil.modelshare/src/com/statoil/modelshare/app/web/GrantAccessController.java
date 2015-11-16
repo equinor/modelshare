@@ -1,6 +1,8 @@
 package com.statoil.modelshare.app.web;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Date;
@@ -17,7 +19,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,63 +43,64 @@ public class GrantAccessController {
 	private SMTPConfiguration smtpConfig;
 	
 	@RequestMapping(value = "/grantaccess", method = RequestMethod.GET)
-	public String prepareAccesPage(ModelMap model, HttpServletRequest request) {
-		String queryString = request.getQueryString();
-		String filename = queryString.substring(queryString.lastIndexOf("/")+1, queryString.indexOf("&"));
-		String user = queryString.substring(queryString.indexOf("user=")+5, queryString.lastIndexOf("&"));
-		model.addAttribute("querystring", queryString);
-		model.addAttribute("filename", filename);
-		model.addAttribute("user", user);
+	public String prepareAccesPage(ModelMap model,
+			@RequestParam("asset") String asset,
+			@RequestParam("user") String userId) {
+		model.addAttribute("asset", asset);
+		model.addAttribute("user", userId);
 		return "grantaccess";
 	}
 	
 	@RequestMapping(value = "/grantaccess", method = RequestMethod.POST)
 	public String setAccess(ModelMap model,
-			@RequestParam("filename") String filename,
-			@RequestParam("user") String user,
-			@RequestParam("querystring") String query,
+			@RequestParam("asset") String asset,
+			@RequestParam("user") String userId,
 			Principal principal) {
 		
-		Client client = modelrepository.getUser(user);
-		String item = query.substring(query.indexOf("repository/") + 11, query.indexOf("&"));
+		model.addAttribute("asset", asset);
+		model.addAttribute("user", userId);
+
+		Client owner = modelrepository.getUser(principal.getName());
+		Client user = modelrepository.getUser(userId);
 		try {
-			if (!modelrepository.hasDownloadAccess(client, Paths.get(item))) {
-				modelrepository.setDownloadRights(client, Paths.get(item));
+			Path path = Paths.get(URLDecoder.decode(asset, "UTF-8"));
+			if (!modelrepository.hasDownloadAccess(user, path)) {
+				modelrepository.setDownloadRights(owner, user, path);
 				
 			} else {
-				String msg = "User "+ user + " already has access to download model named " + filename;
+				String msg = "User "+ userId + " already has access to download model named " + asset;
 				log.log(Level.INFO, msg);
-				model.addAttribute("error", msg);
-				return "errorpage";
+				model.addAttribute("error", user.getName()+" already has download access to the model");
+				return "grantaccess";
 			}
 			
 			// Send mail to requesting user that download now can be done
 			Client requestUser = modelrepository.getUser(principal.getName());
 			if (modelrepository.isValidEmailAddress(requestUser.getEmail())) {
 				try {
-					sendEmail("You are now granted access to download model " + filename, requestUser.getEmail(), requestUser);
+					sendEmail("You are now granted access to download model " + asset, requestUser.getEmail(), requestUser);
 				} catch (MessagingException e) {
 					String msg = "Error sending mail. Contact system responsible.";
 					log.log(Level.SEVERE, msg, e);
 					model.addAttribute("error", msg);
-					return "errorpage";
+					return "grantaccess";
 				}
 				
 			} else {
 				String msg = "Missing well formed e-mail address";
 				log.log(Level.SEVERE, msg);
 				model.addAttribute("error", msg);
-				return "errorpage";
+				return "grantaccess";
 			}
 			
 		} catch (IOException e) {
 			String msg = "Error found when checking or setting access rights";
 			log.log(Level.SEVERE, msg, e);
 			model.addAttribute("error", msg);
-			return "errorpage";
+			return "grantaccess";
 		}
-		
-		return "redirect:archive?item";
+		model.addAttribute("success", user.getName()+ " now has access to download the model.");		
+		return "grantaccess";
 	}
 	
 	private void sendEmail(String message, String mailTo, Client user) throws MessagingException {

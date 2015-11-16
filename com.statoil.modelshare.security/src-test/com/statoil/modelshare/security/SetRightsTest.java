@@ -19,7 +19,7 @@ import com.statoil.modelshare.ModelshareFactory;
 public class SetRightsTest {
 
 	@ClassRule
-	public static TemporaryFolder folder = new TemporaryFolder();
+	public static TemporaryFolder tempFolder = new TemporaryFolder();
 	
 	private static Group adminGroup;
 	private static Group userGroup;
@@ -28,7 +28,7 @@ public class SetRightsTest {
 	
 	@BeforeClass
 	public static void setUp(){
-		ra = new RepositoryAccessControl(folder.getRoot().toPath());
+		ra = new RepositoryAccessControl(tempFolder.getRoot().toPath());
 		adminGroup = ModelshareFactory.eINSTANCE.createGroup();
 		adminGroup.setIdentifier("administrators");
 		userGroup = ModelshareFactory.eINSTANCE.createGroup();
@@ -37,11 +37,11 @@ public class SetRightsTest {
 	
 	@Test
 	public void testSetDownloadRights_ByCreatingAccessFile() throws IOException {
-		File modelBFolder = folder.newFolder("Model_B");
-		File testFile = new File(modelBFolder, "testmodel.obj");
+		File modelFolder = tempFolder.newFolder("Model_B");
+		File model = new File(modelFolder, "testmodel.obj");
 		String ident = "read.access";
 		
-		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(access,testFile.toPath(), ident));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(access,model.toPath(), ident));
 
 		Client user = ModelshareFactory.eINSTANCE.createClient();
 		user.setName("Test Banan");
@@ -49,16 +49,16 @@ public class SetRightsTest {
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		
-		ra.setDownloadRights(testFile.toPath(), user);
-		EnumSet<Access> newRights = ra.getAccess(access,testFile.toPath(), ident);
+		ra.setDownloadRights(model.toPath(), user);
+		EnumSet<Access> newRights = ra.getAccess(access,model.toPath(), ident);
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights);
 	}
 	
 	@Test
 	public void testSetDownloadRightsByChangingExistingAccessFile() throws IOException {
-		File modelBFolder = folder.newFolder("Model_C");
-		File testFile = new File(modelBFolder, "testmodel.obj");
-		File accessFile = new File(modelBFolder, ".testmodel.obj.access");
+		File modelFolder = tempFolder.newFolder("Model_C");
+		File model = new File(modelFolder, "testmodel.obj");
+		File accessFile = new File(modelFolder, ".testmodel.obj.access");
 		String ident = "read.access";
 		
 		FileWriter writer = new FileWriter(accessFile);
@@ -66,7 +66,7 @@ public class SetRightsTest {
 		writer.flush();
 		writer.close();
 		
-		EnumSet<Access> rights = ra.getAccess(access,testFile.toPath(), ident);
+		EnumSet<Access> rights = ra.getAccess(access,model.toPath(), ident);
 		Assert.assertEquals(EnumSet.of(Access.VIEW), rights);
 		
 		Client user = ModelshareFactory.eINSTANCE.createClient();
@@ -75,8 +75,8 @@ public class SetRightsTest {
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		
-		ra.setDownloadRights(testFile.toPath(), user);
-		EnumSet<Access> newRights = ra.getAccess(access,testFile.toPath(), ident);
+		ra.setDownloadRights(model.toPath(), user);
+		EnumSet<Access> newRights = ra.getAccess(access,model.toPath(), ident);
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights);
 	}
 	

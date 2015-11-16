@@ -3,12 +3,12 @@
 <head th:replace="../fragments/header :: header">
 </head>
 <body role="document">
-	<div class="container theme-statoil" role="main">
+	<div class="container" role="main">
 		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
 		
-		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})">BreadCrumb</div>
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs})"></div>
 		
-		<div th:replace="../fragments/alert :: alert(${error},${info})">BreadCrumb</div>
+		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
 
 		<!-- Showing model detail view -->
 		<div th:if="${currentModel}">
