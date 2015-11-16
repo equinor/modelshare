@@ -3,9 +3,10 @@ package com.statoil.modelshare.security;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,7 +43,7 @@ public class RepositoryAccessControl {
 
 	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
 	
-	private List<Account> accounts;
+	private List<Account> accounts = new ArrayList<>();
 
 	@SuppressWarnings("unused")
 	private RepositoryAccessControl() {
@@ -63,7 +65,7 @@ public class RepositoryAccessControl {
 	}
 
 	/**
-	 * Registeres for changes on the .passwd-file and reloads user data if the
+	 * Registers for changes on the .passwd-file and reloads user data if the
 	 * file has changed.
 	 */
 	private void watch() {
@@ -118,13 +120,14 @@ public class RepositoryAccessControl {
 		if (!file.exists()) {
 			return access;
 		}
-		FileReader fr = new FileReader(file);
-		BufferedReader bfr = new BufferedReader(fr);
-		try {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(
+						new BOMInputStream(
+								new FileInputStream(file))))) {
 			String in = null;
-			while ((in = bfr.readLine()) != null) {
+			while ((in = br.readLine()) != null) {
 				if (!in.startsWith("#") && in.length() > 0) {
-					String[] split = in.split("\\s+");
+					String[] split = in.trim().split("\\s+");
 					if (split.length != 4)
 						throw new IOException("Invalid file format " + filePath);
 					if (ident.equals(split[0])) {
@@ -159,8 +162,6 @@ public class RepositoryAccessControl {
 					}
 				}
 			}
-		} finally {
-			bfr.close();
 		}
 		return access;
 	}
@@ -191,7 +192,7 @@ public class RepositoryAccessControl {
 		List<Account> roles = account.getAllRoles();
 		for (Account a : roles) {
 			Path r = repositoryRootPath;
-			Path p = repositoryRootPath.relativize(repositoryRootPath.resolve(path));
+			Path p = repositoryRootPath.relativize(r.resolve(path));
 			int nameCount = p.getNameCount();
 			for (int i = 0; i <= nameCount; i++) {
 				access = getAccess(access, r, a.getIdentifier());
@@ -315,29 +316,39 @@ public class RepositoryAccessControl {
 	 * Reads all the user accounts and updates the shared list.
 	 */
 	private void readAccounts() {
+		
+		List<Account> newAccounts = new ArrayList<>();
+
 		synchronized (passwordFilePath) {
-			accounts = new ArrayList<>();
 			String in = null;
-			passwordFileModified = passwordFilePath.toFile().lastModified();
-			try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath.toFile()))) {
+			passwordFileModified = passwordFilePath.toFile().lastModified();			
+			try (BufferedReader br = new BufferedReader(
+					new InputStreamReader(
+							new BOMInputStream(
+									new FileInputStream(passwordFilePath.toFile()))))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
 					if (split.length < 4) {
 						continue;
 					}
+					String groupName = split[2];
 					// "x" as password indicates that this is a group
 					if (split[1].equals("x")) {
 						Group group = ModelshareFactory.eINSTANCE.createGroup();
 						group.setIdentifier(split[0]);
-						group.setGroup(getGroup(accounts, split[2]));
+						if (!groupName.isEmpty()){
+							group.setGroup(getGroup(newAccounts, groupName));
+						}
 						group.setName(split[3]);
-						accounts.add(group);
+						newAccounts.add(group);
 					} else {
 						Client user = ModelshareFactory.eINSTANCE.createClient();
 						user.setIdentifier(split[0]);
 						user.setEmail(split[0]);
 						user.setPassword(split[1]);
-						user.setGroup(getGroup(accounts, split[2]));
+						if (!groupName.isEmpty()){
+							user.setGroup(getGroup(newAccounts, groupName));
+						}
 						user.setName(split[3]);
 						if (split.length > 4) {
 							String value = split[4];
@@ -346,7 +357,7 @@ public class RepositoryAccessControl {
 						if (split.length > 5) {
 							user.setLocalUser(split[5]);
 						}
-						accounts.add(user);
+						newAccounts.add(user);
 						if (split[1].length() == 0) {
 							user.setForceChangePassword(true);
 						}
@@ -355,11 +366,13 @@ public class RepositoryAccessControl {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			accounts = newAccounts;
 		}
 		log.info("Done reading .passwd " + accounts.size() + " accounts found");
 	}
 
 	/**
+	 * Sets the password of the user with the specified identifier.
 	 * 
 	 * @param id
 	 *            the user identifier

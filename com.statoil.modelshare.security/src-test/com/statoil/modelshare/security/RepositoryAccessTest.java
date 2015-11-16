@@ -98,5 +98,23 @@ public class RepositoryAccessTest {
 		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW), ra.getRights(Paths.get("Secret/SubSecret/model.stask"), userGroup2));
 	}
 	
+	@Test
+	public void testBug_132() throws IOException {
+		Path root = Paths.get("test-resources/bug_132/").toAbsolutePath();
+		RepositoryAccessControl rac = new RepositoryAccessControl(root);
+
+		// a@user
+		Account user = rac.getAccounts().get(6);
+		Assert.assertEquals("ghe@itema.no", user.getIdentifier());
+		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW, Access.WRITE),
+				rac.getRights(Paths.get("SIMA Models"), user));
+
+//		// a@user
+//		Account group = rac.getAccounts().get(1);
+//		Assert.assertEquals("admins", group.getIdentifier());
+//		Assert.assertEquals(EnumSet.of(Access.READ, Access.VIEW, Access.WRITE),
+//				rac.getRights(Paths.get("Models"), group));
+	}
+	
 	
 }
