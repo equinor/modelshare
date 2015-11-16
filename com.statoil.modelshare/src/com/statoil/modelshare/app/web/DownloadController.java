@@ -46,8 +46,7 @@ public class DownloadController {
 			String name = path.getFileName().toString();
 
 			try (ServletOutputStream outputStream = response.getOutputStream();
-				InputStream is = modelrepository.getFileStream(user, path)) 
-			{
+				InputStream is = modelrepository.getFileStream(user, path)) {
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
 				org.apache.commons.io.IOUtils.copy(is, outputStream);
