@@ -4,12 +4,15 @@
 </head>
 <body role="document">
 
+	<div th:replace="../fragments/navbar :: navbar(home, ${topLevel})">...</div>
+
 	<div class="container" role="main">
-		<div th:replace="../fragments/navbar :: navbar(home, ${topLevel})">...</div>
-		<div class="page-header">
-			<h2 th:text="${title}">Modelshare</h2>
+		<div class="row row-offcanvas row-offcanvas-right">
+			<div class="page-header">
+				<h2 th:text="${title}">Modelshare</h2>
+			</div>
+			<p>Sharing and securing models</p>
 		</div>
-		<p>Sharing and securing models</p>
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
