@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.controller.ModelRepository;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -42,12 +42,11 @@ public class DownloadController {
 			Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			String name = asset.substring(asset.lastIndexOf('/')+1);
-			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path path = Paths.get(asset);
-			Path resolvedPath = rootPath.resolve(path);
+			String name = path.getFileName().toString();
+
 			try (ServletOutputStream outputStream = response.getOutputStream();
-				InputStream is = modelrepository.getFileStream(user, resolvedPath)) 
+				InputStream is = modelrepository.getFileStream(user, path)) 
 			{
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
