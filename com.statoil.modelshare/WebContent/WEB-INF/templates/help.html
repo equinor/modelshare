@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="../fragments/header :: header">
-</head>
+<head th:replace="../fragments/header :: header"></head>
 <body role="document">
 
-	<div class="container" role="main">
+	<div class="container-fluid" role="main">
+
 		<div th:replace="../fragments/navbar :: navbar(help, ${topLevel})">...</div>
-		<div class="page-header">
-			<h2>Help <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="align:right"></span> </h2>
+
+		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
+
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				<h3>User guide</h3>
+				<div th:utext="${helpText}"></div>
+			</div>
 		</div>
-		<h3>How to use this application</h3>
-		<p>Modelshare is an application where you can share models with others.</p>
-		<ul>
-			<li>As an owner you may upload a model and provide information on how to use this model.</li>
-			<li>As a user you may browse the models and request permission to download a model.</li>
-		</ul>
 	</div>
 	<div th:replace="../fragments/footer :: footer">...</div>
 
