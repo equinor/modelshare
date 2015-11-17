@@ -46,7 +46,7 @@ public class DownloadController {
 			String name = path.getFileName().toString();
 
 			try (ServletOutputStream outputStream = response.getOutputStream();
-				InputStream is = modelrepository.getFileStream(user, path)) {
+				InputStream is = modelrepository.downloadModel(user, path)) {
 				response.setContentType("application/octet-stream");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+name+"\"");
 				org.apache.commons.io.IOUtils.copy(is, outputStream);
@@ -56,12 +56,12 @@ public class DownloadController {
 			}catch (AccessDeniedException e){
 				log.log(Level.SEVERE,
 						MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset), e);
-				return "errorpage";
+				return "download";
 			}
 		} catch (IOException ex) {
 			log.log(Level.SEVERE,
 					MessageFormat.format("Error writing file to output stream. Filename was '{0}'", asset), ex);
-			return "errorpage";
+			return "download";
 		}
 		return null;
 	}

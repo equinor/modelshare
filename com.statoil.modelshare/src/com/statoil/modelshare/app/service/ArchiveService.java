@@ -1,24 +1,21 @@
 package com.statoil.modelshare.app.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.EList;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Asset;
+import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
@@ -30,8 +27,10 @@ public class ArchiveService {
 	private ModelRepository repository;
 	private Folder root;
 
-	// ToDo: Refactor out of service after
 	public List<MenuItem> getTopLevel(Principal principal) {
+		if (principal==null) {
+			return Collections.emptyList();
+		}
 		List<MenuItem> topLevel = null;
 		MenuItem menuItem = getMenuItemsFromAssets(principal.getName());
 		if (menuItem != null) {
@@ -95,22 +94,11 @@ public class ArchiveService {
 		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), relativePath, leaf);
 	}
 
-	public void saveFile(MultipartFile myFile, Model model)
-			throws IllegalStateException, IOException, ParserConfigurationException, SAXException {
-		if (myFile.getOriginalFilename().indexOf(".") == 0) {
-			throw new RuntimeException("This is not a valid file name.");
-		}
-		checkRepository();
-		File sourceFile = new File(myFile.getOriginalFilename());
-		myFile.transferTo(sourceFile);
-		repository.uploadFile(sourceFile, model);
-	}
-
-	public void createFolder(String path, String name) {
+	public void createFolder(Client user, String path, String name) throws IOException {
 		checkRepository();
 		Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
 		parentFolder.setPath(path);
-		repository.createFolder(parentFolder, name);
+		repository.createFolder(user, parentFolder, name); // XXX: Ensure correct location
 	}
 
 }

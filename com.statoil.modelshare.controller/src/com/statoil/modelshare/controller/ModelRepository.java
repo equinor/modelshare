@@ -1,16 +1,10 @@
 package com.statoil.modelshare.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
@@ -25,9 +19,11 @@ import com.statoil.modelshare.Model;
  * @author Torkild U. Resheim, Itema AS
  */
 public interface ModelRepository {
+	
 	/**
 	 * Returns the root folder with all it's subfolders and contents filtered
-	 * for the particular user.
+	 * for the particular user. If the user don't have view access to an item,
+	 * it will not be part of the collection.
 	 * 
 	 * @param user
 	 *            the logged in user
@@ -72,11 +68,11 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasViewAccess(Client user, Path path) throws IOException ;	
+	public boolean hasViewAccess(Client user, Path path) throws IOException;
 
 	/**
-	 * Convenience method for determining whether the user has download access to
-	 * the given path.
+	 * Convenience method for determining whether the user has download access
+	 * to the given path.
 	 * 
 	 * @param user
 	 *            the user to test for
@@ -84,8 +80,8 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasDownloadAccess(Client user, Path path) throws IOException ;	
-	
+	public boolean hasDownloadAccess(Client user, Path path) throws IOException;
+
 	/**
 	 * Convenience method to set download rights on a file / folder for a user
 	 * 
@@ -96,9 +92,11 @@ public interface ModelRepository {
 	 * @param path
 	 *            the folder / file to set access on
 	 * @throws IOException
+	 * @throws AccessDeniedException
+	 *             if the owner does not have write access
 	 */
-	public void setDownloadRights(Client owner, Client user, Path path) throws IOException;
-	
+	public void setDownloadRights(Client owner, Client user, Path path) throws AccessDeniedException, IOException;
+
 	/**
 	 * Returns the {@link InputStream} for the path if the client has access to
 	 * the asset.
@@ -112,8 +110,8 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have read access
 	 */
-	public InputStream getFileStream(Client user, Path path) throws AccessDeniedException, IOException;
-	
+	public InputStream downloadModel(Client user, Path path) throws AccessDeniedException, IOException;
+
 	/**
 	 * Copies the asset to the local user directory if possible
 	 * 
@@ -127,30 +125,40 @@ public interface ModelRepository {
 	 *             if the user does not have read access
 	 */
 	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException;
-	
+
 	/**
-	 * Uploads a file to Modelshare based on information given in the view - represented by the model object
+	 * Uploads a new model to the repository.
+	 * 
+	 * @param user
+	 *            the user performing the upload
+	 * @param is
+	 *            the source stream for the model
+	 * @param model
+	 *            model description
+	 * @throws AccessDeniedException
+	 *             if the user does not have write access
 	 */
-	public void uploadFile(File sourceFile, Model model) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException;
-	
+	public void uploadModel(Client user, InputStream is, Model model) throws IOException, AccessDeniedException;
+
 	/**
-	 * Creates a folder on the given parent folder and the name of the new folder
+	 * Creates a folder on the given parent folder.
+	 * 
+	 * @throws IOException
+	 *             if the folder could not be created
+	 * @throws AccessDeniedException
+	 *             if the user does not have write access
 	 */
-	public void createFolder(Folder parentFolder, String name);
-	
+	public void createFolder(Client user, Folder parentFolder, String name) throws IOException;
+
 	/**
-	 * Delete a folder given the parent folder
-	 */
-	public void deleteFolder(Folder folder);
-	
-	/**
-	 * Gets properties from the meta file and creates a model object to be returned
+	 * Gets properties from the meta file and creates a model object to be
+	 * returned
 	 * 
 	 * @param path
 	 * @return model object
 	 */
 	public Model getMetaInformation(Path path);
-	
+
 	/**
 	 * Checks an email address for validity
 	 * 
@@ -158,5 +166,5 @@ public interface ModelRepository {
 	 * @return false if the email address does not meet the RFC822 standard
 	 */
 	public boolean isValidEmailAddress(String email);
-	
+
 }

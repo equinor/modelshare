@@ -33,7 +33,7 @@ public class PasswdController {
 		
 		
 		
-		// Make sure password are the same
+		// make sure password are the same
 		if (!newPassword.equals(confirmPassword)) {
 			model.addAttribute("error", "'New password' and 'Confirm password' must match.");
 			return "passwd";
@@ -47,10 +47,10 @@ public class PasswdController {
 			return "passwd";			
 		}
 
-		// Change the password
+		// change the password
 		String name = principal.getName();
-		repository.setPassword(name, newHashedPassword);
-		// Reset securitycontext and force user to log in again
+		repository.setPassword(name, newHashedPassword); // XXX: Check for correct user
+		// reset security context and force user to log in again
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
         auth.setAuthenticated(false);
 		SecurityContextHolder.clearContext();
