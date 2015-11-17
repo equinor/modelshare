@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.web;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -52,13 +53,12 @@ public class GrantAccessController {
 	}
 	
 	@RequestMapping(value = "/grantaccess", method = RequestMethod.POST)
-	public String setAccess(ModelMap model,
+	public String setAccess(ModelMap map,	Principal principal,
 			@RequestParam("asset") String asset,
-			@RequestParam("user") String userId,
-			Principal principal) {
+			@RequestParam("user") String userId) {
 		
-		model.addAttribute("asset", asset);
-		model.addAttribute("user", userId);
+		map.addAttribute("asset", asset);
+		map.addAttribute("user", userId);
 
 		Client owner = modelrepository.getUser(principal.getName());
 		Client user = modelrepository.getUser(userId);
@@ -70,7 +70,7 @@ public class GrantAccessController {
 			} else {
 				String msg = "User "+ userId + " already has access to download model named " + asset;
 				log.log(Level.INFO, msg);
-				model.addAttribute("error", user.getName()+" already has download access to the model");
+				map.addAttribute("error", user.getName()+" already has download access to the model");
 				return "grantaccess";
 			}
 			
@@ -82,24 +82,29 @@ public class GrantAccessController {
 				} catch (MessagingException e) {
 					String msg = "Error sending mail. Contact system responsible.";
 					log.log(Level.SEVERE, msg, e);
-					model.addAttribute("error", msg);
+					map.addAttribute("error", msg);
 					return "grantaccess";
 				}
 				
 			} else {
 				String msg = "Missing well formed e-mail address";
 				log.log(Level.SEVERE, msg);
-				model.addAttribute("error", msg);
+				map.addAttribute("error", msg);
 				return "grantaccess";
 			}
 			
-		} catch (IOException e) {
-			String msg = "Error found when checking or setting access rights";
-			log.log(Level.SEVERE, msg, e);
-			model.addAttribute("error", msg);
+		} catch (AccessDeniedException ioe) {
+			String msg = "You don't have access to this model!";
+			log.log(Level.SEVERE, msg, ioe);
+			map.addAttribute("error", msg);
+			return "grantaccess";		
+		} catch (IOException ioe) {
+			String msg = "File system error!";
+			log.log(Level.SEVERE, msg, ioe);
+			map.addAttribute("error", msg);
 			return "grantaccess";
-		}
-		model.addAttribute("success", user.getName()+ " now has access to download the model.");		
+		}		
+		map.addAttribute("success", user.getName()+ " now has access to download the model.");		
 		return "grantaccess";
 	}
 	

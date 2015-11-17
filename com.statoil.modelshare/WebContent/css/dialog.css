@@ -15,15 +15,30 @@ form {
 	font-size: 16px;
 }
 
-/* upload model: name */
-form #name {
+/* 
+	upload model: name
+	request access: from 
+*/
+form #name, form #from {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 }
 
-/* upload model: description */
-form #usage {
+form #name, form #from {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+form #to {
+	margin-bottom: -1px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+form #usage, form #message {
 	margin-bottom: -1px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
@@ -32,8 +47,10 @@ form #usage {
 	min-height: 180px;
 }
 
-/* upload model: file */
-form #model {
+/* 
+	upload model: file 
+*/
+form #model, form #asset {
 	margin-bottom: 10px;
 	border-top-right-radius: 0;
 	border-top-left-radius: 0;
