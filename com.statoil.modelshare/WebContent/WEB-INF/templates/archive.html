@@ -13,18 +13,15 @@
 			<!-- model -->
 			<div th:if="${modelNode.leaf == true}">
 				<a th:href="@{/showModel(item=${modelNode.relativePath},leaf=true)}" th:text="${modelNode.name}"></a>
-			</div>
-			
-			<div th:if="${not #lists.isEmpty(modelNode.children)}">
-				<div th:each="child: ${modelNode.children}">
-					<!-- folder -->
-					<div th:if="${child.leaf == false}">
-						<b><a th:href="@{/archive(item=${child.relativePath},leaf=false)}" th:text="${child.name}"></a></b>
-					</div>
-					<!-- model -->
-					<div th:if="${child.leaf == true}">
-						<a th:href="@{/showModel(item=${child.relativePath},leaf=true)}" th:text="${child.name}"></a>
-					</div>
+			</div>			
+			<div th:each="child: ${modelNode.children}">
+				<!-- folder -->
+				<div th:if="${child.leaf == false}">
+					<b><a th:href="@{/archive(item=${child.relativePath},leaf=false)}" th:text="${child.name}"></a></b>
+				</div>
+				<!-- model -->
+				<div th:if="${child.leaf == true}">
+					<a th:href="@{/showModel(item=${child.relativePath},leaf=true)}" th:text="${child.name}"></a>
 				</div>
 			</div>
 		</div>

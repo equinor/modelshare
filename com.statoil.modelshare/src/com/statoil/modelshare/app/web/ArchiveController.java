@@ -98,15 +98,9 @@ public class ArchiveController {
 			Model currentModel = service.getModelFromAssets(asset);
 			Client user = modelrepository.getUser(principal.getName());
 
-			if (leaf) {
-				model.addAttribute("currentModel", currentModel);
-				model.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
-				model.addAttribute("tasks", currentModel.getTaskInformation());
-			} else {
-				model.addAttribute("currentFolder", asset);
-				Folder models = currentModel.getFolder();
-				model.addAttribute("models", models);
-			}
+			model.addAttribute("currentModel", currentModel);
+			model.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
+			model.addAttribute("tasks", currentModel.getTaskInformation());
 
 			model.addAttribute("client", user);
 			model.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
@@ -115,7 +109,7 @@ public class ArchiveController {
 			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
 			model.addAttribute("node", menuItem);
 			model.addAttribute("topLevel", service.getTopLevel(principal));
-			model.addAttribute("crumbs", getBreadCrumb(asset, leaf));
+			model.addAttribute("crumbs", getBreadCrumb(asset, true));
 		} catch (Exception e) {
 			String msg = "Error found when checking access rights";
 			log.log(Level.SEVERE, msg, e);
@@ -146,26 +140,6 @@ public class ArchiveController {
 		}
 		return "archive";
 	}
-
-	/**
-	 * Shows the "upload" form.
-	 * 
-	 * @param modelMap
-	 *            attributes for the page
-	 * @param asset
-	 *            the current folder
-	 * @param principal
-	 *            the logged in user
-	 * @return the template to render
-	 */
-	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	public String upload(ModelMap modelMap, @RequestParam(value = "item", required = false) String asset, Principal principal) {		
-		Client user = modelrepository.getUser(principal.getName());
-		modelMap.addAttribute("owner", user);
-		modelMap.addAttribute("crumbs", getBreadCrumb(asset, false));
-		modelMap.addAttribute("currentFolder", asset);
-		return "upload";
-	}
 	
 	/**
 	 * Shows the "create folder" form.
@@ -187,9 +161,33 @@ public class ArchiveController {
 		return "folder";
 	}
 
+	/**
+	 * Shows the "upload" form.
+	 * 
+	 * @param modelMap
+	 *            attributes for the page
+	 * @param asset
+	 *            the current folder
+	 * @param principal
+	 *            the logged in user
+	 * @return the template to render
+	 */
+	@RequestMapping(value = "/upload", method = RequestMethod.GET)
+	public String upload(ModelMap modelMap,Principal principal,
+			@RequestParam(value = "item", required = false) String asset) {		
+		Client user = modelrepository.getUser(principal.getName());
+		modelMap.addAttribute("owner", user);
+		modelMap.addAttribute("crumbs", getBreadCrumb(asset, false));
+		modelMap.addAttribute("currentFolder", asset);
+		return "upload";
+	}
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String upload(ModelMap map, @RequestParam("model") MultipartFile file,
-			@RequestParam("path") String path, @RequestParam("usage") String usage, Principal principal) {
+	public String upload(ModelMap map, Principal principal,
+			@RequestParam("model") MultipartFile file,
+			@RequestParam("path") String path, 
+			@RequestParam("usage") String usage,
+			@RequestParam("name") String name) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
@@ -200,8 +198,8 @@ public class ArchiveController {
 			
 			Model model = ModelshareFactory.eINSTANCE.createModel();
 			// note that the path _must_ be complete
-			model.setPath(Paths.get(URLDecoder.decode(resolvedPath.toString(), "UTF-8"),file.getOriginalFilename()).toString());
-			model.setName(file.getOriginalFilename());
+			model.setPath(Paths.get(URLDecoder.decode(resolvedPath.toString(), "UTF-8"), file.getOriginalFilename()).toString());
+			model.setName(name);
 			model.setOwner(user.getName());
 			model.setMail(user.getEmail());
 			model.setOrganisation(user.getOrganisation());
@@ -269,9 +267,12 @@ public class ArchiveController {
 		String[] parts = item.split("/");
 		String relativePath = "";
 
-		for (int i = 0; i < parts.length; i++) {
+		int length = parts.length ;
+		if (leaf) length--;
+		
+		for (int i = 0; i < length; i++) {
 			relativePath += (relativePath == "") ? parts[i] : "/" + parts[i];
-			Boolean leafNode = (parts.length == i + 1) ? leaf : false;
+			Boolean leafNode = (length == i + 1) ? leaf : false;
 			crumbs.add(new MenuItem(parts[i], null, null, relativePath, leafNode));
 		}
 		

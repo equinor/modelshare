@@ -101,9 +101,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 					folder.getAssets().add(newFolder);
 					fillFolderContents(newFolder, user);
 				} else {
-					Model newFile = ModelshareFactory.eINSTANCE.createModel();
-					newFile.setPath(child.getAbsolutePath());
-					newFile.setName(child.getName());
+					Model newFile = getMetaInformation(child.toPath());
 					folder.getAssets().add(newFile);
 				}
 			}
