@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:tiles="http://www.thymeleaf.org">
-
-<!-- Header -->
-<head >
-	<object th:include="../fragments/header :: header"></object>
-	<link rel="stylesheet" type="text/css" media="all" href="../../css/dialog.css" th:href="@{/css/dialog.css}" />
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
 
 <body role="document">
 

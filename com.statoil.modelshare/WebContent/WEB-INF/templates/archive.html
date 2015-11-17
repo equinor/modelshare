@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="../fragments/header :: header">
-</head>
+<head th:replace="../fragments/header :: header"></head>
 <body>
 
 	<!-- shows a node with children -->
 	<div th:fragment="modelList(modelNode)" th:remove="tag">
 		<div th:if="${modelNode}" th:remove="tag">
-			<b> <a
-				th:href="@{/archive(item=${modelNode.relativePath},leaf=false)}"
-				th:text="${modelNode.name}">..</a>
-			</b>
-			<ul th:if="${not #lists.isEmpty(modelNode.children)}">
-				<li th:each="child: ${modelNode.children}"><a
-					th:href="@{/showModel(item=${child.relativePath},leaf=${child.leaf})}"
-					th:text="${child.name}">..</a></li>
-			</ul>
-			<br />
+			<!-- folder -->
+			<div th:if="${modelNode.leaf == false}">
+				<b><a th:href="@{/archive(item=${modelNode.relativePath},leaf=false)}" th:text="${modelNode.name}"></a></b>
+			</div>
+			<!-- model -->
+			<div th:if="${modelNode.leaf == true}">
+				<a th:href="@{/showModel(item=${modelNode.relativePath},leaf=true)}" th:text="${modelNode.name}"></a>
+			</div>
+			
+			<div th:if="${not #lists.isEmpty(modelNode.children)}">
+				<div th:each="child: ${modelNode.children}">
+					<!-- folder -->
+					<div th:if="${child.leaf == false}">
+						<b><a th:href="@{/archive(item=${child.relativePath},leaf=false)}" th:text="${child.name}"></a></b>
+					</div>
+					<!-- model -->
+					<div th:if="${child.leaf == true}">
+						<a th:href="@{/showModel(item=${child.relativePath},leaf=true)}" th:text="${child.name}"></a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
