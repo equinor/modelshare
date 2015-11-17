@@ -13,7 +13,7 @@
 					<div class="card wizard-card ct-wizard-orange" id="wizard">
 						<div class="wizard-header">
 							<h3>
-								<b>Create</b> new folder <br />
+								Create new <b>folder</b> <br />
 								<small>Please fill in details for creating a new folder
 									in "<span th:text="${currentFolder}"></span>".
 								</small>
@@ -23,7 +23,7 @@
 						<form action="archive.html" th:action="@{/createFolder}"
 							method="post" enctype="multipart/form-data">
 							<input type="hidden" name="path" th:value="${currentFolder}" />
-							<input class="form-control" type="text" id="folder-name" name="name" placeholder="Folder name" />
+							<input class="form-control" type="text" id="folder-name" name="name" placeholder="Folder name" autofocus="autofocus"/>
 							<input class="btn btn-primary btn-block" type="submit" value="Create folder" />
 						</form>
 						<div class="wizard-footer">

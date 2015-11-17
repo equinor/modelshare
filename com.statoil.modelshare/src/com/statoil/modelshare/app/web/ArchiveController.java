@@ -158,13 +158,14 @@ public class ArchiveController {
 		map.addAttribute("owner", user);
 		map.addAttribute("crumbs", getBreadCrumb(asset, false));
 		map.addAttribute("currentFolder", asset);
+		map.addAttribute("topLevel", service.getTopLevel(principal));
 		return "folder";
 	}
 
 	/**
 	 * Shows the "upload" form.
 	 * 
-	 * @param modelMap
+	 * @param map
 	 *            attributes for the page
 	 * @param asset
 	 *            the current folder
@@ -173,12 +174,13 @@ public class ArchiveController {
 	 * @return the template to render
 	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	public String upload(ModelMap modelMap,Principal principal,
+	public String upload(ModelMap map,Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
 		Client user = modelrepository.getUser(principal.getName());
-		modelMap.addAttribute("owner", user);
-		modelMap.addAttribute("crumbs", getBreadCrumb(asset, false));
-		modelMap.addAttribute("currentFolder", asset);
+		map.addAttribute("owner", user);
+		map.addAttribute("crumbs", getBreadCrumb(asset, false));
+		map.addAttribute("currentFolder", asset);
+		map.addAttribute("topLevel", service.getTopLevel(principal));
 		return "upload";
 	}
 
@@ -192,6 +194,7 @@ public class ArchiveController {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
 			map.addAttribute("currentFolder", path);
+			map.addAttribute("topLevel", service.getTopLevel(principal));
 
 			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path resolvedPath = rootPath.resolve(path);
