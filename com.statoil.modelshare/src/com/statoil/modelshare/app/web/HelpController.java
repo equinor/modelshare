@@ -29,7 +29,7 @@ public class HelpController {
 		if (null == text){
 			text = "Help text have not been specified. Please set the <b>help.text</b> property in the service configuration.";
 		}
-		map.addAttribute("helpText", text);
+		map.addAttribute("text", text);
 		return "help";
 	}
 	

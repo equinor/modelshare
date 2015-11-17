@@ -36,6 +36,10 @@ public class RepositoryConfig {
 	@Value("${help.text}")
 	private final String helpText = null;
 
+	@Autowired
+	@Value("${welcome.text}")
+	private final String welcomeText = null;
+
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
 		return new PropertySourcesPlaceholderConfigurer();
@@ -71,5 +75,10 @@ public class RepositoryConfig {
 	@Bean
 	public String getHelpText() {
 		return helpText;
+	}
+
+	@Bean
+	public String getWelcomeText() {
+		return welcomeText;
 	}
 }
