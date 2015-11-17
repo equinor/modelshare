@@ -10,15 +10,14 @@
   			<div class="modal-dialog">
     			<div class="modal-content">
 	    			<div class="modal-header modal-header-primary">
-	                	<span th:text="${header}"></span>
+	                	<h3 th:text="${header}"></h3>
 	            	</div>
 		            <div class="modal-body">
-		              <p th:text="${body}"></p> 
-		            	
+		              <p th:utext="${body}"></p> 		            	
 		            </div>    		
 	    			<div class="modal-footer">
 	                	<div class="checkbox pull-left">
-  							<label><input type="checkbox" value="1" id="confirm-check"></input>Accept terms</label>
+  							<label><input type="checkbox" value="1" id="confirm-check"></input>I agree</label>
 						</div>
 	                	<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
 	                	<a id="confirm-ok">

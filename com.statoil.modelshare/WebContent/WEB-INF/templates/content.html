@@ -64,7 +64,7 @@
 				</div>
 			</div>
 		</div>
-		<div th:if="${!viewOnly}" th:replace="../fragments/confirm :: confirm('Terms of use', ${downloadTerms})">...</div>
+		<div th:if="${!viewOnly}" th:replace="../fragments/confirm :: confirm('Terms of use &amp; Disclaimer', ${downloadTerms})">...</div>
 	</div>
 	<div th:replace="../fragments/footer :: footer">...</div>
 </body>
