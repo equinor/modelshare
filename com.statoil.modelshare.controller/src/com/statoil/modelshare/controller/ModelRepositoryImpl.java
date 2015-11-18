@@ -74,9 +74,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(parentFolder.toString());
 		}
-		File parentDir = new File(parentFolder.getPath());
-		File childDir = new File(parentDir + File.separator + name);
-		childDir.mkdir();
+		File dir = new File(parentFolder.getPath(), name);
+		dir.mkdir();
 	}
 
 	private void fillFolderContents(Folder folder, Client user) throws IOException {

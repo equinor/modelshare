@@ -87,11 +87,13 @@ public class ArchiveService {
 		return null;
 	}
 
-	private MenuItem createMenuItem(Asset eObject, boolean leaf) {
-		String path = eObject.getPath();
-		String relativePath = path.replace(root.getPath(), "");
+	private MenuItem createMenuItem(Asset asset, boolean leaf) {
+		// this is bad and ugly code for fixing this application running on Windows.
+		String path = asset.getPath().replace('\\', '/');
+		String rootPath = root.getPath().replace('\\', '/');
+		String relativePath = path.replace(rootPath, "");
 		relativePath = relativePath.substring(1);
-		return new MenuItem(eObject.getName(), new ArrayList<MenuItem>(), eObject.getPath(), relativePath, leaf);
+		return new MenuItem(asset.getName(), new ArrayList<MenuItem>(), path, relativePath, leaf);
 	}
 
 	public void createFolder(Client user, String path, String name) throws IOException {
