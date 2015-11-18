@@ -136,36 +136,44 @@ public class ModelRepositoryImpl implements ModelRepository {
 		Properties resultProps = new Properties();
 		Path resolvedPath = rootPath.resolve(path);
 		String fileName = resolvedPath.getFileName().toString();
-		String metaFileName = resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta";
-
-		try {
-			final FileInputStream in = new FileInputStream(metaFileName);
-			resultProps.loadFromXML(in);
-			in.close();
-		} catch (IOException ioe) {
-			log.error("Error reading meta information from " + metaFileName);
+		File file = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
+		// the file may not exist due to parsing errors when uploading the file
+		if (file.exists()){
+			try {
+				final FileInputStream in = new FileInputStream(file);
+				resultProps.loadFromXML(in);
+				in.close();
+			} catch (IOException ioe) {
+				log.error("Error reading meta information from " + file.getAbsolutePath());
+			}
 		}
 
 		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setOwner(resultProps.getProperty("owner"));
-		model.setLastUpdated(resultProps.getProperty("lastUpdated"));
-		model.setName(resultProps.getProperty("name"));
-		model.setOrganisation(resultProps.getProperty("organisation"));
-		model.setPath(path.toString());
-		model.setUsage(resultProps.getProperty("usage"));
-		model.setMail(resultProps.getProperty("mail"));
-
-		for (Enumeration<?> e = resultProps.propertyNames(); e.hasMoreElements();) {
-			String element = (String) e.nextElement();
-			if (element.startsWith("task")) {
-				TaskInformation taskInfo = ModelshareFactory.eINSTANCE.createTaskInformation();
-				int start = element.indexOf(".");
-				int end = element.lastIndexOf(".");
-				String taskName = element.substring(start + 1, end);
-				taskInfo.setName(taskName);
-				taskInfo.setDescription(resultProps.getProperty(element));
-				model.getTaskInformation().add(taskInfo);
+		if (file.exists()) {
+			model.setOwner(resultProps.getProperty("owner"));
+			model.setLastUpdated(resultProps.getProperty("lastUpdated"));
+			model.setName(resultProps.getProperty("name"));
+			model.setOrganisation(resultProps.getProperty("organisation"));
+			model.setPath(path.toString());
+			model.setUsage(resultProps.getProperty("usage"));
+			model.setMail(resultProps.getProperty("mail"));
+	
+			for (Enumeration<?> e = resultProps.propertyNames(); e.hasMoreElements();) {
+				String element = (String) e.nextElement();
+				if (element.startsWith("task")) {
+					TaskInformation taskInfo = ModelshareFactory.eINSTANCE.createTaskInformation();
+					int start = element.indexOf(".");
+					int end = element.lastIndexOf(".");
+					String taskName = element.substring(start + 1, end);
+					taskInfo.setName(taskName);
+					taskInfo.setDescription(resultProps.getProperty(element));
+					model.getTaskInformation().add(taskInfo);
+				}
 			}
+		} else {
+			model.setName(path.getFileName().toString());
+			model.setPath(path.toString());
+			model.setUsage("Metadata is not on record for this model. Try re-uploading it in case the SIMA model is now supported.");			
 		}
 		return model;
 	}
