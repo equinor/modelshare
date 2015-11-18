@@ -16,8 +16,7 @@ body {
 	margin-right: 0px;
 	margin-top: 0px;
 	overflow-x: hidden;
-  	background-image: url("../images/Wea00816.jpg");
-  	background-attachment: fixed;
+	background: #004080;
 }
 
 hr {
