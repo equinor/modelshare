@@ -5,7 +5,7 @@
 	<title>BreadCrumb</title>
 </head>
 <body>
-	<div th:fragment="breadcrumb(crumbs,currentFolder)">
+	<div th:fragment="breadcrumb(crumbs,currentFolder)" th:remove="tag">
 		<ul class="breadcrumb" >
   			<li th:each="crumb: ${crumbs}">
   				<a th:href="@{/archive(item=${crumb.relativePath})}" th:text="${crumb.name}">..</a>
