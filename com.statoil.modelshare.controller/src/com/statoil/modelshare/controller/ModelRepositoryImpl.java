@@ -262,9 +262,15 @@ public class ModelRepositoryImpl implements ModelRepository {
 			unzipper.unzip(path, tempPath);
 			List<File> unzippedFiles = unzipper.getunzippedFiles();
 			for (int i = 0; i < unzippedFiles.size(); i++) {
-				File unzippedFile = unzippedFiles.get(i);
-				TaskInformation taskInfo = ParseUtility.parseStaskXMI(unzippedFile);
-				tasks.add(taskInfo);
+				File f = unzippedFiles.get(i);
+				if (!f.getName().equals("folders.xmi")){
+					try {
+						TaskInformation taskInfo = ParseUtility.parseStaskXMI(f);
+						tasks.add(taskInfo);
+					} catch (Exception e) {
+						log.fatal("Could not parse SIMA task information in file \""+f.getName()+"\"", e);
+					}
+				}
 			}
 			return tasks;
 		} catch (Exception e) {
