@@ -28,7 +28,7 @@
 					<!-- model -->
 					<div th:if="${modelNode.leaf == true}" class="asset">
 						<a class="asset" th:href="@{/showModel(item=${modelNode.relativePath},leaf=true)}" th:text="${modelNode.name}"></a>
-					</div>			
+					</div>
 				</div>							
 			</div>
 		</div>
@@ -45,17 +45,32 @@
 		
 		<div class="panel panel-primary">
 			<div class="panel-body" th:if="${not #lists.isEmpty(node.children)}"
-				th:with="maxIndex=${#lists.size(node.children)-1}">
-				<div th:each="index: ${#numbers.sequence(0, maxIndex, 3)}">
-					<div class="row">
-						<div class="col-md-4">
-							<div th:replace=":: modelList(${node.children.get(index)})">...</div>
-						</div>
-						<div class="col-md-4" th:if="${index+1 le maxIndex}">
-							<div th:replace=":: modelList(${node.children.get(index + 1)})">...</div>
-						</div>
-						<div class="col-md-4" th:if="${index+2 le maxIndex}">
-							<div th:replace=":: modelList(${node.children.get(index + 2)})">...</div>
+				th:with="maxIndex=${#lists.size(node.children.?[leaf==false])-1}">
+				<!-- show child folders of the current folder -->
+				<div class="row" th:each="index: ${#numbers.sequence(0, maxIndex, 3)}" th:if="${not #lists.isEmpty(node.children.?[leaf==false])}">
+					<div class="col-md-4">
+						<div th:replace=":: modelList(${node.children.?[leaf==false].get(index)})">...</div>
+					</div>
+					<div class="col-md-4" th:if="${index+1 le maxIndex}">
+						<div th:replace=":: modelList(${node.children.?[leaf==false].get(index + 1)})">...</div>
+					</div>
+					<div class="col-md-4" th:if="${index+2 le maxIndex}">
+						<div th:replace=":: modelList(${node.children.?[leaf==false].get(index + 2)})">...</div>
+					</div>
+				</div>					
+				<!-- show models in the current folder -->
+				<div class="row" th:if="${not #lists.isEmpty(node.children.?[leaf==true])}">				
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<!-- folder header-->			
+							<div class="panel-heading" role="tab">
+								<h4 class="panel-title"><span th:text="${node.name}"></span> models</h4>
+							</div>
+							<div class="panel-body">
+								<div th:each="model: ${node.children.?[leaf==true]}">
+									<a class="asset" th:href="@{/showModel(item=${model.relativePath},leaf=true)}" th:text="${model.name}"></a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
