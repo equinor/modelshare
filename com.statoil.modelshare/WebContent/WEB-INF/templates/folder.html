@@ -24,6 +24,7 @@
 							method="post" enctype="multipart/form-data">
 							<input type="hidden" name="path" th:value="${currentFolder}" />
 							<input class="form-control" type="text" id="folder-name" name="name" placeholder="Folder name" autofocus="autofocus"/>
+							<input class="form-control" type="file" id="picture" name="picture" placeholder="Folder picture" accept="image/*"/>
 							<input class="btn btn-primary btn-block" type="submit" value="Create folder" />
 						</form>
 						<div class="wizard-footer">
