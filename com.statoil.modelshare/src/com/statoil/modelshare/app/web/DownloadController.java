@@ -28,7 +28,7 @@ import com.statoil.modelshare.controller.ModelRepository;
  * @author Torkild U. Resheim, Itema AS
  */
 @Controller
-public class DownloadController {
+public class DownloadController extends AbstractController {
 
 	static Logger log = Logger.getLogger(DownloadController.class.getName());
 	

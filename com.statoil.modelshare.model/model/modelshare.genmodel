@@ -44,6 +44,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Asset/folder"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/picturePath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/relativePath"/>
       <genOperations ecoreOperation="modelshare.ecore#//Asset/getAccess">
         <genParameters ecoreParameter="modelshare.ecore#//Asset/getAccess/account"/>
       </genOperations>

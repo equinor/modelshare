@@ -32,6 +32,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getFolder <em>Folder</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getPath <em>Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getPicturePath <em>Picture Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getRelativePath <em>Relative Path</em>}</li>
  * </ul>
  *
  * @generated
@@ -84,6 +87,62 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected String path = PATH_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPicturePath() <em>Picture Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPicturePath()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PICTURE_PATH_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getPicturePath() <em>Picture Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPicturePath()
+	 * @generated
+	 * @ordered
+	 */
+	protected String picturePath = PICTURE_PATH_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getRelativePath() <em>Relative Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRelativePath()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String RELATIVE_PATH_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getRelativePath() <em>Relative Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRelativePath()
+	 * @generated
+	 * @ordered
+	 */
+	protected String relativePath = RELATIVE_PATH_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -211,6 +270,69 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getPicturePath() {
+		return picturePath;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPicturePath(String newPicturePath) {
+		String oldPicturePath = picturePath;
+		picturePath = newPicturePath;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PICTURE_PATH, oldPicturePath, picturePath));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__DESCRIPTION, oldDescription, description));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getRelativePath() {
+		return relativePath;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRelativePath(String newRelativePath) {
+		String oldRelativePath = relativePath;
+		relativePath = newRelativePath;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__RELATIVE_PATH, oldRelativePath, relativePath));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAccess(Account account) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -262,6 +384,12 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return basicGetFolder();
 			case ModelsharePackage.ASSET__PATH:
 				return getPath();
+			case ModelsharePackage.ASSET__PICTURE_PATH:
+				return getPicturePath();
+			case ModelsharePackage.ASSET__DESCRIPTION:
+				return getDescription();
+			case ModelsharePackage.ASSET__RELATIVE_PATH:
+				return getRelativePath();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -282,6 +410,15 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return;
 			case ModelsharePackage.ASSET__PATH:
 				setPath((String)newValue);
+				return;
+			case ModelsharePackage.ASSET__PICTURE_PATH:
+				setPicturePath((String)newValue);
+				return;
+			case ModelsharePackage.ASSET__DESCRIPTION:
+				setDescription((String)newValue);
+				return;
+			case ModelsharePackage.ASSET__RELATIVE_PATH:
+				setRelativePath((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -304,6 +441,15 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 			case ModelsharePackage.ASSET__PATH:
 				setPath(PATH_EDEFAULT);
 				return;
+			case ModelsharePackage.ASSET__PICTURE_PATH:
+				setPicturePath(PICTURE_PATH_EDEFAULT);
+				return;
+			case ModelsharePackage.ASSET__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
+			case ModelsharePackage.ASSET__RELATIVE_PATH:
+				setRelativePath(RELATIVE_PATH_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -322,6 +468,12 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return folder != null;
 			case ModelsharePackage.ASSET__PATH:
 				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
+			case ModelsharePackage.ASSET__PICTURE_PATH:
+				return PICTURE_PATH_EDEFAULT == null ? picturePath != null : !PICTURE_PATH_EDEFAULT.equals(picturePath);
+			case ModelsharePackage.ASSET__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case ModelsharePackage.ASSET__RELATIVE_PATH:
+				return RELATIVE_PATH_EDEFAULT == null ? relativePath != null : !RELATIVE_PATH_EDEFAULT.equals(relativePath);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -354,6 +506,12 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 		result.append(name);
 		result.append(", path: ");
 		result.append(path);
+		result.append(", picturePath: ");
+		result.append(picturePath);
+		result.append(", description: ");
+		result.append(description);
+		result.append(", relativePath: ");
+		result.append(relativePath);
 		result.append(')');
 		return result.toString();
 	}

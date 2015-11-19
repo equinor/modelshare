@@ -76,6 +76,7 @@ public class TaskInformationImpl extends MinimalEObjectImpl.Container implements
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
 
+
 	/**
 	 * The default value of the '{@link #getFormattedName() <em>Formatted Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -185,7 +186,7 @@ public class TaskInformationImpl extends MinimalEObjectImpl.Container implements
 	public String getFormattedName() {
 		return getName().replaceAll("_", " ");
 	}
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

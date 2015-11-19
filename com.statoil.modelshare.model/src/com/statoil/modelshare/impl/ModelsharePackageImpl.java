@@ -12,13 +12,14 @@ import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
 import com.statoil.modelshare.TaskInformation;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -384,6 +385,33 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAsset_PicturePath() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAsset_Description() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAsset_RelativePath() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getAsset__GetAccess__Account() {
 		return assetEClass.getEOperations().get(0);
 	}
@@ -501,6 +529,9 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(assetEClass, ASSET__NAME);
 		createEReference(assetEClass, ASSET__FOLDER);
 		createEAttribute(assetEClass, ASSET__PATH);
+		createEAttribute(assetEClass, ASSET__PICTURE_PATH);
+		createEAttribute(assetEClass, ASSET__DESCRIPTION);
+		createEAttribute(assetEClass, ASSET__RELATIVE_PATH);
 		createEOperation(assetEClass, ASSET___GET_ACCESS__ACCOUNT);
 
 		taskInformationEClass = createEClass(TASK_INFORMATION);
@@ -579,6 +610,9 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getAsset_Name(), ecorePackage.getEString(), "name", null, 1, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAsset_Folder(), this.getFolder(), this.getFolder_Assets(), "folder", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_Path(), ecorePackage.getEString(), "path", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_PicturePath(), ecorePackage.getEString(), "picturePath", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_Description(), ecorePackage.getEString(), "description", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_RelativePath(), ecorePackage.getEString(), "relativePath", null, 0, 1, Asset.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getAsset__GetAccess__Account(), ecorePackage.getEEnum(), "getAccess", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAccount(), "account", 1, 1, IS_UNIQUE, IS_ORDERED);

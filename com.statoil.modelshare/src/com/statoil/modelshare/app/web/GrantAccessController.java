@@ -33,7 +33,7 @@ import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
-public class GrantAccessController {
+public class GrantAccessController extends AbstractController {
 	
 	static Logger log = Logger.getLogger(GrantAccessController.class.getName());
 	
