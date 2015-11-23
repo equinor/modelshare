@@ -32,11 +32,20 @@ public abstract class AbstractController {
 		}
 		return crumbs;
 	}
+	
+	protected List<AssetProxy> getRootNodes(AssetProxy asset){
+		while(asset.getParent()!=null){
+			asset = asset.getParent();
+		}
+		return asset.getChildren();
+	}
 
 	protected AssetProxy getMenuItem(Client user, String path) {
 		Folder root2 = modelrepository.getRoot(user);
 		AssetProxy root = new AssetProxy(null, root2);
-		List<AssetProxy> list = root.stream().filter(m -> path.equals(m.getRelativePath()))
+		List<AssetProxy> list = root
+				.stream()
+				.filter(m -> path.equals(m.getRelativePath()))
 				.collect(Collectors.toList());
 		if (list.isEmpty()) {
 			return null;

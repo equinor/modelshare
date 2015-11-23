@@ -28,21 +28,11 @@ body {
 	height: 100vh;
 	min-height: 100vh;
   }
-/*
-<div class="popover fade right" role="tooltip" id="popover4279"
-	style="top: 83px; left: 96.85600280761719px; display: block;">
-	<div class="arrow" style="top: 50%;"></div>
-	<h3 class="popover-title" style="display: none;"></h3>
-	<div class="popover-content">
-		<div class="bubble">
-			<img src="pictures?asset=xxx" width="240px">
-		</div>
-	</div>
-</div>
-*/
+
 .arrow {
 	visibility: hidden;
 }
+
 hr {
 	height: 2px;
 	background: #D97BB2;
@@ -78,7 +68,7 @@ hr {
 	width: 100%;
 	min-width: 100%;
 	min-height: 100%;
-	font-size: 100px;
+	font-size: 10px;
 	text-align: right;
 	filter: alpha(opacity = 0);
 	opacity: 0;

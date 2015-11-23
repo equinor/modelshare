@@ -18,19 +18,26 @@
 					<div th:each="child: ${modelNode.children}">
 						<!-- folder -->
 						<div th:if="${child.leaf == false}" class="folder child">
-							<a th:href="@{/archive(item=${child.relativePath},leaf=false)}" 
-								th:text="${child.name}" rel="popover" 
-								th:attr="data-img=@{/pictures(asset=${child.relativePath})}"></a>
+							<a th:href="@{/archive(item=${child.relativePath})}"
+								th:rel="${child.picturePath == null} ? '': 'popover'"
+								th:attr="data-img=@{/pictures(asset=${child.picturePath})}" 
+								th:text="${child.name}"></a>
 						</div>
 						<!-- model -->
 						<div th:if="${child.leaf == true}" class="asset child">
-							<a th:href="@{/showModel(item=${child.relativePath})}" th:text="${child.name}"></a>
+							<a th:href="@{/showModel(item=${child.relativePath})}"
+								th:rel="${child.picturePath == null} ? '': 'popover'" 
+								th:attr="data-img=@{/pictures(asset=${child.picturePath})}"
+								th:text="${child.name}"></a>
 						</div>
 					</div>
 					<!-- model -->
+					<!-- ?
 					<div th:if="${modelNode.leaf == true}" class="asset">
-						<a class="asset" th:href="@{/showModel(item=${modelNode.relativePath})}" th:text="${modelNode.name}"></a>
+						<a th:href="@{/showModel(item=${modelNode.relativePath})}" 
+						th:text="${modelNode.name}"></a>
 					</div>
+					 -->
 				</div>							
 			</div>
 		</div>

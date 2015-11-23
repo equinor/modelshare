@@ -27,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
@@ -69,13 +70,17 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void createFolder(Client user, Folder parentFolder, String name) throws IOException {
+	public void createFolder(Client user, Folder parentFolder, InputStream is, String name) throws IOException {
 		EnumSet<Access> rights = ra.getRights(Paths.get(parentFolder.getPath()), user);
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(parentFolder.toString());
 		}
 		File dir = new File(parentFolder.getPath(), name);
 		dir.mkdir();
+		if (is!=null) {
+			Path path = dir.getParentFile().toPath().resolve(name+".jpg");
+			Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
+		}
 	}
 
 	private void fillFolderContents(Folder folder, Client user) throws IOException {
@@ -86,7 +91,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 		// list all files except those that are hidden
 		File[] listFiles = file.listFiles((FilenameFilter) (dir, name) -> {
-			return (!name.startsWith("."));
+			return (!name.startsWith(".") && !name.endsWith(".jpg") && !name.endsWith(".png"));
 		});
 
 		// recurse into subfolders and add files
@@ -99,14 +104,26 @@ public class ModelRepositoryImpl implements ModelRepository {
 					newFolder.setName(child.getName());
 					newFolder.setPath(child.getAbsolutePath());
 					newFolder.setRelativePath(relativePath);
+					setPicturePath(newFolder, child);
 					folder.getAssets().add(newFolder);
 					fillFolderContents(newFolder, user);
 				} else {
 					Model newFile = getMetaInformation(child.toPath());
 					newFile.setRelativePath(relativePath);
+					setPicturePath(newFile, child);
 					folder.getAssets().add(newFile);
 				}
 			}
+		}
+	}
+
+	private void setPicturePath(Asset asset, File child) {
+		File picture = new File(child.getAbsolutePath()+".jpg");
+		if (picture.exists()){
+			String picturePath = rootPath.relativize(picture.toPath()).toString().replace('\\', '/');
+			asset.setPicturePath(picturePath);
+		} else {
+			asset.setPicturePath(null);
 		}
 	}
 
@@ -291,7 +308,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadModel(Client user, InputStream modelStream, Model model)
+	public void uploadModel(Client user, InputStream modelStream, InputStream pictureStream, Model model)
 			throws IOException, AccessDeniedException {
 		// assert that the user has write access
 		Path path = Paths.get(model.getPath());
@@ -302,6 +319,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 				
 		// do the actual write in one operation
 		Files.copy(modelStream, path, StandardCopyOption.REPLACE_EXISTING);
+
+		// assign the picture if we have one
+		if (pictureStream!=null) {
+			Path p = path.getParent().resolve(path.getFileName()+".jpg");
+			Files.copy(pictureStream, p, StandardCopyOption.REPLACE_EXISTING);
+		}
 
 		// obtain required metadata (TODO: Use EMF serialization) 
 		Properties p = new Properties();
@@ -329,6 +352,15 @@ public class ModelRepositoryImpl implements ModelRepository {
 			log.error("Could not write metadata file", e);
 		}
 		
+	}
+
+	@Override
+	public File getFile(Client user, Path path) throws IOException {
+		if (hasViewAccess(user, path)){
+			return rootPath.resolve(path).toFile();
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -23,12 +23,14 @@
 				return '<img src="' + $(this).data('img') + '" width="240px"/>';
 			}
 		});
-		/* fix the vertical position flickers*/
-		/*
-		$('a[rel=popover]').on('shown.bs.popover', function () {
-			  $('.popover').css('top',parseInt($('.popover').css('top')) - 60 + 'px')
-			})
-		*/
+		$(document).on('change', '.btn-file :file', function() {
+		    var input = $(this),
+		        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+		        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		    var form = input.data('form');
+		    var span = document.getElementById(form).firstChild;
+		    span.textContent = label;		
+		});
 		</script>
 	</div>
 </body>

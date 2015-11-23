@@ -51,14 +51,26 @@ form #usage, form #message {
 	upload model: file 
 */
 form #model, form #asset {
+	margin-bottom: -1px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	color: #999999;	
+}
+
+form #picture {
 	margin-bottom: 10px;
 	border-top-right-radius: 0;
 	border-top-left-radius: 0;
+	color: #999999;	
 }
 
 /* create folder: folder name */
 form #folder-name {
-	margin-bottom: 10px;
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
 }
 
 /*

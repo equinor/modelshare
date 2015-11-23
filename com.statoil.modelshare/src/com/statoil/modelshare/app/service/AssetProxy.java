@@ -12,8 +12,8 @@ import com.statoil.modelshare.TaskInformation;
 
 public class AssetProxy {
 	
-	private Asset asset;
-	private AssetProxy parent;
+	private final Asset asset;
+	private final AssetProxy parent;
 
 	public AssetProxy(AssetProxy parent, Asset asset) {
 		this.asset = asset;
@@ -55,6 +55,10 @@ public class AssetProxy {
 		return asset.getRelativePath();
 	}
 	
+	public String getPicturePath(){
+		return asset.getPicturePath();
+	}
+	
 	public String getName(){
 		return asset.getName();
 	}
@@ -65,5 +69,9 @@ public class AssetProxy {
 
 	public Model getAsset() {
 		return (Model) asset;
+	}
+	
+	public String toString(){
+		return asset.getRelativePath();
 	}
 }

@@ -72,7 +72,7 @@ public class ArchiveController extends AbstractController {
 		AssetProxy n = getMenuItem(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel",  getRootItems(user));
+		map.addAttribute("topLevel", getRootNodes(n));
 		try {
 			String localCopy = modelrepository.localCopy(user, resolvedPath);			
 			map.addAttribute("success", localCopy);
@@ -91,10 +91,12 @@ public class ArchiveController extends AbstractController {
 	}
 	
 	@RequestMapping(value = { "/showModel" }, method = RequestMethod.GET)
-	public String doShow(ModelMap map, @RequestParam(value = "item", required = false) String asset,
-			@RequestParam(required = false) boolean leaf, @RequestParam(required = false) boolean showFiles,
+	public String doShow(ModelMap map, Principal principal,
+			@RequestParam(value = "item", required = false) String asset,
+			@RequestParam(required = false) boolean leaf, 
+			@RequestParam(required = false) boolean showFiles,
 			@RequestParam(required = false) boolean showNewFolder,
-			@RequestParam(required = false) boolean showUploadFile, Principal principal) {
+			@RequestParam(required = false) boolean showUploadFile) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 
@@ -109,7 +111,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel",  getRootItems(user));
+			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception e) {
 			String msg = "Error found when checking access rights";
 			log.log(Level.SEVERE, msg, e);
@@ -120,8 +122,8 @@ public class ArchiveController extends AbstractController {
 	}
 	
 	@RequestMapping(value = { "/archive" }, method = RequestMethod.GET)
-	public String viewArchive(ModelMap map, @RequestParam(value = "item", required = false) String asset,
-			Principal principal) {
+	public String viewArchive(ModelMap map, Principal principal,
+			@RequestParam(value = "item", required = false) String asset) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("client", user);
@@ -132,7 +134,7 @@ public class ArchiveController extends AbstractController {
 			AssetProxy n = getMenuItem(user, asset);
 			map.addAttribute("node", n);
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel", modelrepository.getRoot(user).getAssets());
+			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception e) {
 			String msg = "Could not load assets";
 			log.log(Level.SEVERE, msg, e);
@@ -154,7 +156,8 @@ public class ArchiveController extends AbstractController {
 	 * @return the template to render
 	 */
 	@RequestMapping(value = "/folder", method = RequestMethod.GET)
-	public String folder(ModelMap map, @RequestParam(value = "item", required = false) String asset, Principal principal) {		
+	public String folder(ModelMap map, Principal principal,
+			@RequestParam(value = "item", required = false) String asset) {		
 		Client user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
@@ -162,7 +165,7 @@ public class ArchiveController extends AbstractController {
 		AssetProxy n = getMenuItem(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel",  getRootItems(user));
+		map.addAttribute("topLevel", getRootNodes(n));
 		return "folder";
 	}
 
@@ -187,16 +190,17 @@ public class ArchiveController extends AbstractController {
 		AssetProxy n = getMenuItem(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel",  getRootItems(user));
+		map.addAttribute("topLevel", getRootNodes(n));
 		return "upload";
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String upload(ModelMap map, Principal principal,
-			@RequestParam("model") MultipartFile file,
-			@RequestParam("path") String path, 
-			@RequestParam("usage") String usage,
-			@RequestParam("name") String name) {
+	public String uploadModel(ModelMap map, Principal principal,
+			@RequestParam(value = "model", required = true) MultipartFile file,
+			@RequestParam(value = "picture") MultipartFile picture,
+			@RequestParam(value = "path") String path, 
+			@RequestParam(value = "usage") String usage,
+			@RequestParam(value = "name") String name) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
@@ -214,7 +218,7 @@ public class ArchiveController extends AbstractController {
 			model.setMail(user.getEmail());
 			model.setOrganisation(user.getOrganisation());
 			model.setUsage(usage);
-			modelrepository.uploadModel(user, file.getInputStream(), model);
+			modelrepository.uploadModel(user, file.getInputStream(), picture.isEmpty() ? null: picture.getInputStream(), model);
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to upload a new model!";
 			log.log(Level.SEVERE, msg, ioe);
@@ -230,7 +234,10 @@ public class ArchiveController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/createFolder", method = RequestMethod.POST)
-	public String importParse(ModelMap map, @RequestParam("path") String path, @RequestParam("name") String name, Principal principal)
+	public String uploadFolder(ModelMap map, Principal principal,
+			@RequestParam("path") String path, 
+			@RequestParam("name") String name, 
+			@RequestParam("picture") MultipartFile picture)
 			throws UnsupportedEncodingException {
 
 		Client user = modelrepository.getUser(principal.getName());
@@ -242,7 +249,7 @@ public class ArchiveController extends AbstractController {
 		try {
 			Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
 			parentFolder.setPath(URLDecoder.decode(parentPath.toString(), "UTF-8"));
-			modelrepository.createFolder(user, parentFolder, name);
+			modelrepository.createFolder(user, parentFolder, picture.isEmpty() ? null: picture.getInputStream(), name);
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
 			log.log(Level.SEVERE, msg, ioe);
