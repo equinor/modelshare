@@ -8,11 +8,8 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,15 +26,13 @@ import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.app.config.RepositoryConfig;
-import com.statoil.modelshare.app.service.ArchiveService;
-import com.statoil.modelshare.app.service.MenuItem;
+import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
 @RequestMapping("/")
-public class ArchiveController {
+public class ArchiveController extends AbstractController {
 
-	private ArchiveService service = new ArchiveService();
 	static Logger log = Logger.getLogger(ArchiveController.class.getName());
 
 	@Autowired
@@ -53,7 +48,13 @@ public class ArchiveController {
 	public String getFile(ModelMap map, @RequestParam(value = "asset", required = true) String asset,
 			HttpServletResponse response, Principal principal) {
 
-		Model currentModel = service.getModelFromAssets(asset);
+		
+		Model currentModel = null;
+		try {
+			currentModel = modelrepository.getMetaInformation(Paths.get(URLDecoder.decode(asset, "UTF-8")));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		Client user = modelrepository.getUser(principal.getName());
 		Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 		Path path = Paths.get(asset);
@@ -67,11 +68,11 @@ public class ArchiveController {
 		map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 		map.addAttribute("activeMenuItem", asset);
 		map.addAttribute("title", "Model archive");
-		MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
-		map.addAttribute("node", menuItem);
-		map.addAttribute("topLevel", service.getTopLevel(principal));
-		map.addAttribute("crumbs", getBreadCrumb(asset, true));
-		
+		// common
+		AssetProxy n = getMenuItem(user, asset);
+		map.addAttribute("node", n);
+		map.addAttribute("crumbs", getBreadCrumb(n));
+		map.addAttribute("topLevel",  getRootItems(user));
 		try {
 			String localCopy = modelrepository.localCopy(user, resolvedPath);			
 			map.addAttribute("success", localCopy);
@@ -90,52 +91,52 @@ public class ArchiveController {
 	}
 	
 	@RequestMapping(value = { "/showModel" }, method = RequestMethod.GET)
-	public String doShow(ModelMap model, @RequestParam(value = "item", required = false) String asset,
+	public String doShow(ModelMap map, @RequestParam(value = "item", required = false) String asset,
 			@RequestParam(required = false) boolean leaf, @RequestParam(required = false) boolean showFiles,
 			@RequestParam(required = false) boolean showNewFolder,
 			@RequestParam(required = false) boolean showUploadFile, Principal principal) {
 		try {
-			Model currentModel = service.getModelFromAssets(asset);
 			Client user = modelrepository.getUser(principal.getName());
 
-			model.addAttribute("currentModel", currentModel);
-			model.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
-			model.addAttribute("tasks", currentModel.getTaskInformation());
+			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 
-			model.addAttribute("client", user);
-			model.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
-			model.addAttribute("activeMenuItem", asset);
-			model.addAttribute("title", "Model archive");
-			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
-			model.addAttribute("node", menuItem);
-			model.addAttribute("topLevel", service.getTopLevel(principal));
-			model.addAttribute("crumbs", getBreadCrumb(asset, true));
+			map.addAttribute("client", user);
+			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("activeMenuItem", asset);
+			map.addAttribute("title", "Model archive");
+			// common
+			AssetProxy n = getMenuItem(user, asset);
+			map.addAttribute("node", n);
+			map.addAttribute("currentModel", n.getAsset());
+			map.addAttribute("crumbs", getBreadCrumb(n));
+			map.addAttribute("topLevel",  getRootItems(user));
 		} catch (Exception e) {
 			String msg = "Error found when checking access rights";
 			log.log(Level.SEVERE, msg, e);
-			model.addAttribute("error", msg);
+			map.addAttribute("error", msg);
 			return "errorpage";
 		}
 		return "content";
 	}
 	
 	@RequestMapping(value = { "/archive" }, method = RequestMethod.GET)
-	public String viewArchive(ModelMap model, @RequestParam(value = "item", required = false) String item,
+	public String viewArchive(ModelMap map, @RequestParam(value = "item", required = false) String asset,
 			Principal principal) {
 		try {
-			Client client = modelrepository.getUser(principal.getName());
-			model.addAttribute("client", client);
-			model.addAttribute("activeMenuItem", item); //XXX: Remove
-			model.addAttribute("currentFolder", item);
-			model.addAttribute("title", "Model archive");
-			MenuItem menuItem = service.getMenuItemsFromAssets(principal.getName());
-			model.addAttribute("node", getMenuItem(item, menuItem));
-			model.addAttribute("topLevel", service.getTopLevel(principal));
-			model.addAttribute("crumbs", getBreadCrumb(item, false));
+			Client user = modelrepository.getUser(principal.getName());
+			map.addAttribute("client", user);
+			map.addAttribute("activeMenuItem", asset); //XXX: Remove
+			map.addAttribute("currentFolder", asset);
+			map.addAttribute("title", "Model archive");
+			// common
+			AssetProxy n = getMenuItem(user, asset);
+			map.addAttribute("node", n);
+			map.addAttribute("crumbs", getBreadCrumb(n));
+			map.addAttribute("topLevel", modelrepository.getRoot(user).getAssets());
 		} catch (Exception e) {
 			String msg = "Could not load assets";
 			log.log(Level.SEVERE, msg, e);
-			model.addAttribute("error", msg);
+			map.addAttribute("error", msg);
 			return "errorpage";
 		}
 		return "archive";
@@ -156,9 +157,12 @@ public class ArchiveController {
 	public String folder(ModelMap map, @RequestParam(value = "item", required = false) String asset, Principal principal) {		
 		Client user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
-		map.addAttribute("crumbs", getBreadCrumb(asset, false));
 		map.addAttribute("currentFolder", asset);
-		map.addAttribute("topLevel", service.getTopLevel(principal));
+		// common
+		AssetProxy n = getMenuItem(user, asset);
+		map.addAttribute("node", n);
+		map.addAttribute("crumbs", getBreadCrumb(n));
+		map.addAttribute("topLevel",  getRootItems(user));
 		return "folder";
 	}
 
@@ -178,9 +182,12 @@ public class ArchiveController {
 			@RequestParam(value = "item", required = false) String asset) {		
 		Client user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
-		map.addAttribute("crumbs", getBreadCrumb(asset, false));
 		map.addAttribute("currentFolder", asset);
-		map.addAttribute("topLevel", service.getTopLevel(principal));
+		// common
+		AssetProxy n = getMenuItem(user, asset);
+		map.addAttribute("node", n);
+		map.addAttribute("crumbs", getBreadCrumb(n));
+		map.addAttribute("topLevel",  getRootItems(user));
 		return "upload";
 	}
 
@@ -194,7 +201,7 @@ public class ArchiveController {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
 			map.addAttribute("currentFolder", path);
-			map.addAttribute("topLevel", service.getTopLevel(principal));
+			map.addAttribute("topLevel", getRootItems(user));
 
 			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
 			Path resolvedPath = rootPath.resolve(path);
@@ -263,35 +270,6 @@ public class ArchiveController {
 			e.printStackTrace();
 			return true;
 		}
-	}
-
-	private List<MenuItem> getBreadCrumb(String item, boolean leaf) {
-		ArrayList<MenuItem> crumbs = new ArrayList<MenuItem>();
-		String[] parts = item.split("/");
-		String relativePath = "";
-
-		int length = parts.length ;
-		if (leaf) length--;
-		
-		for (int i = 0; i < length; i++) {
-			relativePath += (relativePath == "") ? parts[i] : "/" + parts[i];
-			Boolean leafNode = (length == i + 1) ? leaf : false;
-			crumbs.add(new MenuItem(parts[i], null, null, relativePath, leafNode));
-		}
-		
-		return crumbs;
-	}
-
-	private MenuItem getMenuItem(String path, MenuItem root) {
-		 List<MenuItem> list = root
-				 .stream()
-				 .filter(m -> m.getRelativePath().equals(path))
-				 .collect(Collectors.toList());
-		 if (list.isEmpty()){
-			 return null;
-		 } else {
-			 return list.get(0);
-		 }
 	}
 
 }

@@ -17,6 +17,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.statoil.modelshare.Asset#getName <em>Name</em>}</li>
  *   <li>{@link com.statoil.modelshare.Asset#getFolder <em>Folder</em>}</li>
  *   <li>{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getAsset()
@@ -106,6 +109,84 @@ public interface Asset extends EObject {
 	 * @generated
 	 */
 	void setPath(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Picture Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Picture Path</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Picture Path</em>' attribute.
+	 * @see #setPicturePath(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_PicturePath()
+	 * @model
+	 * @generated
+	 */
+	String getPicturePath();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Picture Path</em>' attribute.
+	 * @see #getPicturePath()
+	 * @generated
+	 */
+	void setPicturePath(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Description</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Description</em>' attribute.
+	 * @see #setDescription(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Description()
+	 * @model
+	 * @generated
+	 */
+	String getDescription();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Description</em>' attribute.
+	 * @see #getDescription()
+	 * @generated
+	 */
+	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Relative Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Relative Path</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Relative Path</em>' attribute.
+	 * @see #setRelativePath(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_RelativePath()
+	 * @model transient="true"
+	 * @generated
+	 */
+	String getRelativePath();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Relative Path</em>' attribute.
+	 * @see #getRelativePath()
+	 * @generated
+	 */
+	void setRelativePath(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

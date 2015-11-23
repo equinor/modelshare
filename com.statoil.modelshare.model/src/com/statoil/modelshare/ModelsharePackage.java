@@ -269,13 +269,40 @@ public interface ModelsharePackage extends EPackage {
 	int ASSET__PATH = 2;
 
 	/**
+	 * The feature id for the '<em><b>Picture Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSET__PICTURE_PATH = 3;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSET__DESCRIPTION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Relative Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSET__RELATIVE_PATH = 5;
+
+	/**
 	 * The number of structural features of the '<em>Asset</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSET_FEATURE_COUNT = 3;
+	int ASSET_FEATURE_COUNT = 6;
 
 	/**
 	 * The operation id for the '<em>Get Access</em>' operation.
@@ -331,6 +358,33 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int MODEL__PATH = ASSET__PATH;
+
+	/**
+	 * The feature id for the '<em><b>Picture Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__PICTURE_PATH = ASSET__PICTURE_PATH;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__DESCRIPTION = ASSET__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Relative Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__RELATIVE_PATH = ASSET__RELATIVE_PATH;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' attribute.
@@ -522,6 +576,33 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int FOLDER__PATH = ASSET__PATH;
+
+	/**
+	 * The feature id for the '<em><b>Picture Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__PICTURE_PATH = ASSET__PICTURE_PATH;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__DESCRIPTION = ASSET__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Relative Path</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__RELATIVE_PATH = ASSET__RELATIVE_PATH;
 
 	/**
 	 * The feature id for the '<em><b>Assets</b></em>' reference list.
@@ -914,6 +995,39 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getAsset_Path();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Picture Path</em>'.
+	 * @see com.statoil.modelshare.Asset#getPicturePath()
+	 * @see #getAsset()
+	 * @generated
+	 */
+	EAttribute getAsset_PicturePath();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Description</em>'.
+	 * @see com.statoil.modelshare.Asset#getDescription()
+	 * @see #getAsset()
+	 * @generated
+	 */
+	EAttribute getAsset_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Relative Path</em>'.
+	 * @see com.statoil.modelshare.Asset#getRelativePath()
+	 * @see #getAsset()
+	 * @generated
+	 */
+	EAttribute getAsset_RelativePath();
+
+	/**
 	 * Returns the meta object for the '{@link com.statoil.modelshare.Asset#getAccess(com.statoil.modelshare.Account) <em>Get Access</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1229,6 +1343,30 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ASSET__PATH = eINSTANCE.getAsset_Path();
+
+		/**
+		 * The meta object literal for the '<em><b>Picture Path</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSET__PICTURE_PATH = eINSTANCE.getAsset_PicturePath();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSET__DESCRIPTION = eINSTANCE.getAsset_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Relative Path</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSET__RELATIVE_PATH = eINSTANCE.getAsset_RelativePath();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Access</b></em>' operation.

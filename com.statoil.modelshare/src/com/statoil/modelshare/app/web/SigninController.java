@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Torkild U. Resheim, Itema AS
  */
 @Controller
-public class SigninController {
+public class SigninController extends AbstractController {
 
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
 	public String login(ModelMap model, @RequestParam(value = "logout", required = false) String logout) {

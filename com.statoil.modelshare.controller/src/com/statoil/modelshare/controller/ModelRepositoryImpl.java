@@ -93,14 +93,17 @@ public class ModelRepositoryImpl implements ModelRepository {
 		for (File child : listFiles) {
 			// ignore those where the user have no access
 			if (hasViewAccess(user, child.toPath())) {
+				String relativePath = rootPath.relativize(child.toPath()).toString().replace('\\', '/');
 				if (child.isDirectory()) {
 					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
 					newFolder.setName(child.getName());
 					newFolder.setPath(child.getAbsolutePath());
+					newFolder.setRelativePath(relativePath);
 					folder.getAssets().add(newFolder);
 					fillFolderContents(newFolder, user);
 				} else {
 					Model newFile = getMetaInformation(child.toPath());
+					newFile.setRelativePath(relativePath);
 					folder.getAssets().add(newFile);
 				}
 			}
@@ -182,6 +185,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setPath(rootPath.toString());
 		root.setName("");
+		root.setRelativePath("/");
 		try {
 			fillFolderContents(root, user);
 		} catch (IOException e) {
@@ -210,6 +214,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return rights.contains(Access.VIEW);
 	}
 
+	// XXX: This does not belong here!
 	@Override
 	public boolean isValidEmailAddress(String email) {
 		boolean result = true;

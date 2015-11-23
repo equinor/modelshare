@@ -37,12 +37,13 @@ import com.statoil.modelshare.controller.ModelRepository;
  * @author Torkild U. Resheim, Itema AS
  */
 @Controller
-public class RequestController {
+public class RequestController extends AbstractController {
 
 	static Log log = LogFactory.getLog(RequestController.class);
 
 	@Autowired
 	private ModelRepository modelrepository;
+
 	@Autowired
 	private SMTPConfiguration smtpConfig;
 

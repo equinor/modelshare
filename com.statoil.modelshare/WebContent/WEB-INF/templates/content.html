@@ -48,7 +48,7 @@
 				<h3>Contents</h3>
 
 				<!-- Model "task" descriptions -->
-				<div th:each="task : ${tasks}" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				<div th:each="task : ${node.tasks}" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 					<div class="panel panel-default"> 
 						<div class="panel-heading" role="tab" th:id="'h_'+${task.name}"> 
 							<h4 class="panel-title"> 
