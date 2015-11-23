@@ -29,6 +29,10 @@ body {
 	min-height: 100vh;
   }
 
+.arrow {
+	visibility: hidden;
+}
+
 hr {
 	height: 2px;
 	background: #D97BB2;
@@ -64,7 +68,7 @@ hr {
 	width: 100%;
 	min-width: 100%;
 	min-height: 100%;
-	font-size: 100px;
+	font-size: 10px;
 	text-align: right;
 	filter: alpha(opacity = 0);
 	opacity: 0;

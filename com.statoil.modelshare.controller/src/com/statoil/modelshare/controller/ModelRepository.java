@@ -1,5 +1,6 @@
 package com.statoil.modelshare.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
@@ -131,14 +132,16 @@ public interface ModelRepository {
 	 * 
 	 * @param user
 	 *            the user performing the upload
-	 * @param is
+	 * @param ms
 	 *            the source stream for the model
+	 * @param ps
+	 *            the source stream for the model picture
 	 * @param model
 	 *            model description
 	 * @throws AccessDeniedException
 	 *             if the user does not have write access
 	 */
-	public void uploadModel(Client user, InputStream is, Model model) throws IOException, AccessDeniedException;
+	public void uploadModel(Client user, InputStream ms, InputStream ps, Model model) throws IOException, AccessDeniedException;
 
 	/**
 	 * Creates a folder on the given parent folder.
@@ -148,7 +151,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have write access
 	 */
-	public void createFolder(Client user, Folder parentFolder, String name) throws IOException;
+	public void createFolder(Client user, Folder parentFolder, InputStream is, String name) throws IOException;
 
 	/**
 	 * Gets properties from the meta file and creates a model object to be
@@ -158,6 +161,9 @@ public interface ModelRepository {
 	 * @return model object
 	 */
 	public Model getMetaInformation(Path path);
+	
+	
+	public File getFile(Client user, Path path) throws IOException;
 
 	/**
 	 * Checks an email address for validity

@@ -60,6 +60,14 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * This is true if the Name attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean nameESet;
+	/**
 	 * The cached value of the '{@link #getFolder() <em>Folder</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -89,6 +97,14 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	protected String path = PATH_EDEFAULT;
 
 	/**
+	 * This is true if the Path attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pathESet;
+	/**
 	 * The default value of the '{@link #getPicturePath() <em>Picture Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,6 +124,14 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	protected String picturePath = PICTURE_PATH_EDEFAULT;
 
 	/**
+	 * This is true if the Picture Path attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean picturePathESet;
+	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -126,6 +150,14 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
 	/**
+	 * This is true if the Description attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean descriptionESet;
+	/**
 	 * The default value of the '{@link #getRelativePath() <em>Relative Path</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -143,6 +175,15 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected String relativePath = RELATIVE_PATH_EDEFAULT;
+
+	/**
+	 * This is true if the Relative Path attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean relativePathESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -180,8 +221,33 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
+		boolean oldNameESet = nameESet;
+		nameESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__NAME, oldName, name, !oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetName() {
+		String oldName = name;
+		boolean oldNameESet = nameESet;
+		name = NAME_EDEFAULT;
+		nameESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ModelsharePackage.ASSET__NAME, oldName, NAME_EDEFAULT, oldNameESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetName() {
+		return nameESet;
 	}
 
 	/**
@@ -261,8 +327,33 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void setPath(String newPath) {
 		String oldPath = path;
 		path = newPath;
+		boolean oldPathESet = pathESet;
+		pathESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PATH, oldPath, path));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PATH, oldPath, path, !oldPathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPath() {
+		String oldPath = path;
+		boolean oldPathESet = pathESet;
+		path = PATH_EDEFAULT;
+		pathESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ModelsharePackage.ASSET__PATH, oldPath, PATH_EDEFAULT, oldPathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPath() {
+		return pathESet;
 	}
 
 	/**
@@ -282,8 +373,33 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void setPicturePath(String newPicturePath) {
 		String oldPicturePath = picturePath;
 		picturePath = newPicturePath;
+		boolean oldPicturePathESet = picturePathESet;
+		picturePathESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PICTURE_PATH, oldPicturePath, picturePath));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__PICTURE_PATH, oldPicturePath, picturePath, !oldPicturePathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPicturePath() {
+		String oldPicturePath = picturePath;
+		boolean oldPicturePathESet = picturePathESet;
+		picturePath = PICTURE_PATH_EDEFAULT;
+		picturePathESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ModelsharePackage.ASSET__PICTURE_PATH, oldPicturePath, PICTURE_PATH_EDEFAULT, oldPicturePathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPicturePath() {
+		return picturePathESet;
 	}
 
 	/**
@@ -303,8 +419,33 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
+		boolean oldDescriptionESet = descriptionESet;
+		descriptionESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__DESCRIPTION, oldDescription, description));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__DESCRIPTION, oldDescription, description, !oldDescriptionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetDescription() {
+		String oldDescription = description;
+		boolean oldDescriptionESet = descriptionESet;
+		description = DESCRIPTION_EDEFAULT;
+		descriptionESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ModelsharePackage.ASSET__DESCRIPTION, oldDescription, DESCRIPTION_EDEFAULT, oldDescriptionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetDescription() {
+		return descriptionESet;
 	}
 
 	/**
@@ -324,8 +465,33 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void setRelativePath(String newRelativePath) {
 		String oldRelativePath = relativePath;
 		relativePath = newRelativePath;
+		boolean oldRelativePathESet = relativePathESet;
+		relativePathESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__RELATIVE_PATH, oldRelativePath, relativePath));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.ASSET__RELATIVE_PATH, oldRelativePath, relativePath, !oldRelativePathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetRelativePath() {
+		String oldRelativePath = relativePath;
+		boolean oldRelativePathESet = relativePathESet;
+		relativePath = RELATIVE_PATH_EDEFAULT;
+		relativePathESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ModelsharePackage.ASSET__RELATIVE_PATH, oldRelativePath, RELATIVE_PATH_EDEFAULT, oldRelativePathESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetRelativePath() {
+		return relativePathESet;
 	}
 
 	/**
@@ -433,22 +599,22 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ModelsharePackage.ASSET__NAME:
-				setName(NAME_EDEFAULT);
+				unsetName();
 				return;
 			case ModelsharePackage.ASSET__FOLDER:
 				setFolder((Folder)null);
 				return;
 			case ModelsharePackage.ASSET__PATH:
-				setPath(PATH_EDEFAULT);
+				unsetPath();
 				return;
 			case ModelsharePackage.ASSET__PICTURE_PATH:
-				setPicturePath(PICTURE_PATH_EDEFAULT);
+				unsetPicturePath();
 				return;
 			case ModelsharePackage.ASSET__DESCRIPTION:
-				setDescription(DESCRIPTION_EDEFAULT);
+				unsetDescription();
 				return;
 			case ModelsharePackage.ASSET__RELATIVE_PATH:
-				setRelativePath(RELATIVE_PATH_EDEFAULT);
+				unsetRelativePath();
 				return;
 		}
 		super.eUnset(featureID);
@@ -463,17 +629,17 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case ModelsharePackage.ASSET__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+				return isSetName();
 			case ModelsharePackage.ASSET__FOLDER:
 				return folder != null;
 			case ModelsharePackage.ASSET__PATH:
-				return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
+				return isSetPath();
 			case ModelsharePackage.ASSET__PICTURE_PATH:
-				return PICTURE_PATH_EDEFAULT == null ? picturePath != null : !PICTURE_PATH_EDEFAULT.equals(picturePath);
+				return isSetPicturePath();
 			case ModelsharePackage.ASSET__DESCRIPTION:
-				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+				return isSetDescription();
 			case ModelsharePackage.ASSET__RELATIVE_PATH:
-				return RELATIVE_PATH_EDEFAULT == null ? relativePath != null : !RELATIVE_PATH_EDEFAULT.equals(relativePath);
+				return isSetRelativePath();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -503,15 +669,15 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
-		result.append(name);
+		if (nameESet) result.append(name); else result.append("<unset>");
 		result.append(", path: ");
-		result.append(path);
+		if (pathESet) result.append(path); else result.append("<unset>");
 		result.append(", picturePath: ");
-		result.append(picturePath);
+		if (picturePathESet) result.append(picturePath); else result.append("<unset>");
 		result.append(", description: ");
-		result.append(description);
+		if (descriptionESet) result.append(description); else result.append("<unset>");
 		result.append(", relativePath: ");
-		result.append(relativePath);
+		if (relativePathESet) result.append(relativePath); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

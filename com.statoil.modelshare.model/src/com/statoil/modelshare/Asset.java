@@ -36,9 +36,11 @@ public interface Asset extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
 	 * @see #setName(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Name()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	String getName();
@@ -48,10 +50,35 @@ public interface Asset extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #isSetName()
+	 * @see #unsetName()
 	 * @see #getName()
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.statoil.modelshare.Asset#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	void unsetName();
+
+	/**
+	 * Returns whether the value of the '{@link com.statoil.modelshare.Asset#getName <em>Name</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Name</em>' attribute is set.
+	 * @see #unsetName()
+	 * @see #getName()
+	 * @see #setName(String)
+	 * @generated
+	 */
+	boolean isSetName();
 
 	/**
 	 * Returns the value of the '<em><b>Folder</b></em>' reference.
@@ -93,9 +120,11 @@ public interface Asset extends EObject {
 	 * Absolute file system path to the resource.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Path</em>' attribute.
+	 * @see #isSetPath()
+	 * @see #unsetPath()
 	 * @see #setPath(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Path()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	String getPath();
@@ -105,10 +134,35 @@ public interface Asset extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Path</em>' attribute.
+	 * @see #isSetPath()
+	 * @see #unsetPath()
 	 * @see #getPath()
 	 * @generated
 	 */
 	void setPath(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPath()
+	 * @see #getPath()
+	 * @see #setPath(String)
+	 * @generated
+	 */
+	void unsetPath();
+
+	/**
+	 * Returns whether the value of the '{@link com.statoil.modelshare.Asset#getPath <em>Path</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Path</em>' attribute is set.
+	 * @see #unsetPath()
+	 * @see #getPath()
+	 * @see #setPath(String)
+	 * @generated
+	 */
+	boolean isSetPath();
 
 	/**
 	 * Returns the value of the '<em><b>Picture Path</b></em>' attribute.
@@ -119,9 +173,11 @@ public interface Asset extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Picture Path</em>' attribute.
+	 * @see #isSetPicturePath()
+	 * @see #unsetPicturePath()
 	 * @see #setPicturePath(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_PicturePath()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	String getPicturePath();
@@ -131,10 +187,35 @@ public interface Asset extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Picture Path</em>' attribute.
+	 * @see #isSetPicturePath()
+	 * @see #unsetPicturePath()
 	 * @see #getPicturePath()
 	 * @generated
 	 */
 	void setPicturePath(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPicturePath()
+	 * @see #getPicturePath()
+	 * @see #setPicturePath(String)
+	 * @generated
+	 */
+	void unsetPicturePath();
+
+	/**
+	 * Returns whether the value of the '{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Picture Path</em>' attribute is set.
+	 * @see #unsetPicturePath()
+	 * @see #getPicturePath()
+	 * @see #setPicturePath(String)
+	 * @generated
+	 */
+	boolean isSetPicturePath();
 
 	/**
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
@@ -145,9 +226,11 @@ public interface Asset extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Description</em>' attribute.
+	 * @see #isSetDescription()
+	 * @see #unsetDescription()
 	 * @see #setDescription(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Description()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	String getDescription();
@@ -157,10 +240,35 @@ public interface Asset extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Description</em>' attribute.
+	 * @see #isSetDescription()
+	 * @see #unsetDescription()
 	 * @see #getDescription()
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDescription()
+	 * @see #getDescription()
+	 * @see #setDescription(String)
+	 * @generated
+	 */
+	void unsetDescription();
+
+	/**
+	 * Returns whether the value of the '{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Description</em>' attribute is set.
+	 * @see #unsetDescription()
+	 * @see #getDescription()
+	 * @see #setDescription(String)
+	 * @generated
+	 */
+	boolean isSetDescription();
 
 	/**
 	 * Returns the value of the '<em><b>Relative Path</b></em>' attribute.
@@ -171,9 +279,11 @@ public interface Asset extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Relative Path</em>' attribute.
+	 * @see #isSetRelativePath()
+	 * @see #unsetRelativePath()
 	 * @see #setRelativePath(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_RelativePath()
-	 * @model transient="true"
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	String getRelativePath();
@@ -183,10 +293,35 @@ public interface Asset extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Relative Path</em>' attribute.
+	 * @see #isSetRelativePath()
+	 * @see #unsetRelativePath()
 	 * @see #getRelativePath()
 	 * @generated
 	 */
 	void setRelativePath(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetRelativePath()
+	 * @see #getRelativePath()
+	 * @see #setRelativePath(String)
+	 * @generated
+	 */
+	void unsetRelativePath();
+
+	/**
+	 * Returns whether the value of the '{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Relative Path</em>' attribute is set.
+	 * @see #unsetRelativePath()
+	 * @see #getRelativePath()
+	 * @see #setRelativePath(String)
+	 * @generated
+	 */
+	boolean isSetRelativePath();
 
 	/**
 	 * <!-- begin-user-doc -->

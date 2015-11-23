@@ -24,7 +24,8 @@
 							<input class="form-control" type="text" id="name" name="name" placeholder="Model name" autofocus="autofocus"/>
 							<textarea class="form-control" id="usage" name="usage" placeholder="Description"></textarea>
 							<input type="hidden" name="path" th:value="${currentFolder}" />
-							<input class="form-control" type="file" id="model" name="model" />
+							<span class="btn-file form-control" id="model">Model file<input type="file" data-form="model" name="model" /></span>
+							<span class="btn-file form-control" id="picture">Picture file<input type="file" data-form="picture" name="picture" accept="image/jpeg" /></span>
 							<input class="btn btn-primary btn-block" type="submit"
 								value="Upload" />
 						</form>
