@@ -287,6 +287,9 @@ public class RepositoryAccessControl {
 	}
 
 	private Group getGroup(List<Account> accounts, String name) {
+		if (name.isEmpty()){
+			return null;
+		}
 		for (Account account : accounts) {
 			if (account.getIdentifier().equals(name) && account instanceof Group) {
 				return (Group) account;

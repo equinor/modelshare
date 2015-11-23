@@ -1,6 +1,6 @@
 package com.statoil.modelshare.app.web;
 
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -92,11 +92,7 @@ public class ArchiveController extends AbstractController {
 	
 	@RequestMapping(value = { "/showModel" }, method = RequestMethod.GET)
 	public String doShow(ModelMap map, Principal principal,
-			@RequestParam(value = "item", required = false) String asset,
-			@RequestParam(required = false) boolean leaf, 
-			@RequestParam(required = false) boolean showFiles,
-			@RequestParam(required = false) boolean showNewFolder,
-			@RequestParam(required = false) boolean showUploadFile) {
+			@RequestParam(value = "item", required=true) String asset) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
 
@@ -112,12 +108,12 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
-		} catch (Exception e) {
-			String msg = "Error found when checking access rights";
-			log.log(Level.SEVERE, msg, e);
+		} catch (Exception ioe) {
+			String msg = "Cannot show item "+asset;
+			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "errorpage";
-		}
+			return "content";
+		}		
 		return "content";
 	}
 	
@@ -198,39 +194,41 @@ public class ArchiveController extends AbstractController {
 	public String uploadModel(ModelMap map, Principal principal,
 			@RequestParam(value = "model", required = true) MultipartFile file,
 			@RequestParam(value = "picture") MultipartFile picture,
-			@RequestParam(value = "path") String path, 
+			@RequestParam(value = "path", required = true) String path, 
 			@RequestParam(value = "usage") String usage,
-			@RequestParam(value = "name") String name) {
-		try {
+			@RequestParam(value = "name", required = true) String name) {
+		
+		try ( 	BufferedInputStream ms = new BufferedInputStream(file.getInputStream());
+				BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())) {
 			Client user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
 			map.addAttribute("currentFolder", path);
 			map.addAttribute("topLevel", getRootItems(user));
-
-			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
-			Path resolvedPath = rootPath.resolve(path);
-			
+			if (file.isEmpty()){
+				map.addAttribute("error", "A model file must be specified!");
+				return "upload";	
+			}
 			Model model = ModelshareFactory.eINSTANCE.createModel();
 			// note that the path _must_ be complete
-			model.setPath(Paths.get(URLDecoder.decode(resolvedPath.toString(), "UTF-8"), file.getOriginalFilename()).toString());
-			model.setName(name);
+			model.setRelativePath(Paths.get(URLDecoder.decode(path, "UTF-8"), file.getOriginalFilename()).toString());
+			model.setName(name.isEmpty() ? file.getOriginalFilename(): name);
 			model.setOwner(user.getName());
 			model.setMail(user.getEmail());
 			model.setOrganisation(user.getOrganisation());
 			model.setUsage(usage);
-			modelrepository.uploadModel(user, file.getInputStream(), picture.isEmpty() ? null: picture.getInputStream(), model);
+			modelrepository.uploadModel(user, ms, ps, model);
+			return "redirect:showModel?item=" + model.getRelativePath().replace('\\', '/');
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to upload a new model!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
 			return "upload";		
-		} catch (IOException ioe) {
-			String msg = "File system error!";
+		} catch (Exception ioe) {
+			String msg = "Could not upload model: "+ioe.getMessage();
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "upload";
+			return "upload";		
 		}
-		return "redirect:showModel?item=" + path + File.separator + file.getOriginalFilename() + "&leaf=true";
 	}
 
 	@RequestMapping(value = "/createFolder", method = RequestMethod.POST)
@@ -243,26 +241,31 @@ public class ArchiveController extends AbstractController {
 		Client user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", path);
+		map.addAttribute("topLevel", getRootItems(user));
 		
-		Path parentPath = Paths.get(modelrepository.getRoot(user).getPath(), path);
-
-		try {
+		if (name.isEmpty()){
+			map.addAttribute("error", "A folder name must be specified");
+			return "folder";	
+		}
+		
+		try (BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())){
+			Path parentPath = Paths.get(modelrepository.getRoot(user).getPath(), path);
 			Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
 			parentFolder.setPath(URLDecoder.decode(parentPath.toString(), "UTF-8"));
-			modelrepository.createFolder(user, parentFolder, picture.isEmpty() ? null: picture.getInputStream(), name);
+			modelrepository.createFolder(user, parentFolder, ps, name);
+			// upon success
+			return "redirect:archive.html?item=" + path + '/' + name;
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";		
-		} catch (IOException ioe) {
-			String msg = "File system error!";
+		} catch (Exception ioe) {
+			String msg = "Could not create folder: "+ioe.getMessage();
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";
 		}
-		// upon success
-		return "redirect:archive.html?item=" + path + File.separator + name;
 	}
 
 	private boolean hasViewOnlyAccess(String item, Client client) {

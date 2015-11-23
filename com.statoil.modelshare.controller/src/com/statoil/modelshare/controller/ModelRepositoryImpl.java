@@ -311,7 +311,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public void uploadModel(Client user, InputStream modelStream, InputStream pictureStream, Model model)
 			throws IOException, AccessDeniedException {
 		// assert that the user has write access
-		Path path = Paths.get(model.getPath());
+		Path path = rootPath.resolve(model.getRelativePath());
 		EnumSet<Access> rights = ra.getRights(path, user);
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(path.toString());

@@ -45,7 +45,7 @@ public class ImageController {
 			File file = repository.getFile(user, Paths.get(asset));
 			if (file.exists() && file.isFile()) {
 				return ResponseEntity.ok().contentLength(file.length()).contentType(getMimeType(file))
-						.body(new InputStreamResource(Files.newInputStream(file.toPath(), StandardOpenOption.READ)));
+						.body(new InputStreamResource(new BufferedInputStream(Files.newInputStream(file.toPath(), StandardOpenOption.READ))));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
