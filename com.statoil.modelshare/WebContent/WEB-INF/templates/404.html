@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+
+		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+				
+	    <div class="alert alert-danger alert-dismissible" role="alert">
+	    	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	    	<strong>Error 404: </strong>The requested resource is not available!
+	    </div>
+		
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+</body>
+</html>

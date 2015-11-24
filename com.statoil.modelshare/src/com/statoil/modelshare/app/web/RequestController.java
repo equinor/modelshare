@@ -62,7 +62,7 @@ public class RequestController extends AbstractController {
 			String msg = "Error getting model from repository";
 			log.fatal(msg, e);
 			model.addAttribute("error", msg);
-			return "errorpage";
+			return "request";
 		}
 		return "request";
 	}
@@ -93,19 +93,19 @@ public class RequestController extends AbstractController {
 				String msg = "Error sending mail. Contact system responsible.";
 				log.fatal(msg, e);
 				modelMap.addAttribute("error", msg);
-				return "errorpage";
+				return "request";
 			} catch (UnsupportedEncodingException ue) {
 				String msg = "Error creating new URL when sending mail. Contact system responsible.";
 				log.fatal(msg, ue);
 				modelMap.addAttribute("error", msg);
-				return "errorpage";
+				return "request";
 			}
 			
 		} else {
 			String msg = "Missing well formed e-mail address";
 			log.fatal(msg);
 			modelMap.addAttribute("error", msg);
-			return "errorpage";
+			return "request";
 		}
 		Model model = null;
 		try {
@@ -113,8 +113,8 @@ public class RequestController extends AbstractController {
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
 			log.fatal(msg, e);
-			modelMap.addAttribute("error", msg);
-			return "errorpage";
+			modelMap.addAttribute("request", msg);
+			return "error";
 		}
 		return "redirect:showModel?item=" + model.getPath() + "&leaf=true";
 	}

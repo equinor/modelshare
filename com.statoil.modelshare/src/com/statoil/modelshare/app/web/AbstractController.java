@@ -5,13 +5,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 
 import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
+/**
+ * @author Torkild U. Resheim, Itema AS
+ */
 public abstract class AbstractController {
+	
+	@ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleResourceNotFoundException() {
+        return "404";
+    }
 
 	@Autowired
 	private ModelRepository modelrepository;
@@ -48,7 +62,7 @@ public abstract class AbstractController {
 				.filter(m -> path.equals(m.getRelativePath()))
 				.collect(Collectors.toList());
 		if (list.isEmpty()) {
-			return null;
+			throw new ResourceNotFoundException("The asset \""+path+"\" is not available.");
 		} else {
 			return list.get(0);
 		}
