@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -132,10 +133,10 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception e) {
-			String msg = "Could not load assets";
+			String msg = "Could not load asset: "+e.getMessage();
 			log.log(Level.SEVERE, msg, e);
 			map.addAttribute("error", msg);
-			return "errorpage";
+			return "archive";
 		}
 		return "archive";
 	}
@@ -247,14 +248,19 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("error", "A folder name must be specified");
 			return "folder";	
 		}
+
+		// ensure we have the correct encoding
+		name = URLDecoder.decode(name.toString(), "UTF-8");
+		path = URLDecoder.decode(path.toString(), "UTF-8");
 		
 		try (BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())){
+
 			Path parentPath = Paths.get(modelrepository.getRoot(user).getPath(), path);
 			Folder parentFolder = ModelshareFactory.eINSTANCE.createFolder();
-			parentFolder.setPath(URLDecoder.decode(parentPath.toString(), "UTF-8"));
+			parentFolder.setPath(parentPath.toString());
 			modelrepository.createFolder(user, parentFolder, ps, name);
 			// upon success
-			return "redirect:archive.html?item=" + path + '/' + name;
+			return "redirect:archive.html?item=" + URLEncoder.encode(path + '/' + name, "UTF-8");
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
 			log.log(Level.SEVERE, msg, ioe);

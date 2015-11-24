@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head th:replace="../fragments/header :: header"></head>
 <body>
 
@@ -52,7 +52,7 @@
 
 		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
 		
-		<div class="panel panel-primary">
+		<div class="panel panel-primary" th:if="${node!=null}">
 			<div class="panel-body" th:if="${not #lists.isEmpty(node.children)}"
 				th:with="maxIndex=${#lists.size(node.children.?[leaf==false])-1}">
 				<!-- show child folders of the current folder -->

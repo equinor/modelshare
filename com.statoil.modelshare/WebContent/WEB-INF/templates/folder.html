@@ -21,7 +21,7 @@
 						</div>
 						<hr />
 						<form action="archive.html" th:action="@{/createFolder}" method="post"
-							enctype="multipart/form-data">
+							enctype="multipart/form-data" accept-charset="UTF-8" >
 							<input type="hidden" name="path" th:value="${currentFolder}" />
 							<input class="form-control" type="text" id="folder-name" name="name" placeholder="Folder name" autofocus="autofocus"/>
 							<span class="btn-file form-control" id="picture">Picture file<input type="file" data-form="picture" name="picture" accept="image/jpeg" /></span>
