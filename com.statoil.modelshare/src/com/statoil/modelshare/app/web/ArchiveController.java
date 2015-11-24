@@ -209,13 +209,13 @@ public class ArchiveController extends AbstractController {
 				return "upload";	
 			}
 			Model model = ModelshareFactory.eINSTANCE.createModel();
-			// note that the path _must_ be complete
 			model.setRelativePath(Paths.get(URLDecoder.decode(path, "UTF-8"), file.getOriginalFilename()).toString());
 			model.setName(name.isEmpty() ? file.getOriginalFilename(): name);
 			model.setOwner(user.getName());
 			model.setMail(user.getEmail());
-			model.setOrganisation(user.getOrganisation());
-			model.setUsage(usage);
+			// organization cannot be blank
+			model.setOrganisation(user.getOrganisation() == null ? "" : user.getOrganisation());
+			model.setUsage(usage == null ? "" : usage);
 			modelrepository.uploadModel(user, ms, ps, model);
 			return "redirect:showModel?item=" + model.getRelativePath().replace('\\', '/');
 		} catch (AccessDeniedException ioe) {
