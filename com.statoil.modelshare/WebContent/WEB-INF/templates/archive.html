@@ -31,13 +31,6 @@
 								th:text="${child.name}"></a>
 						</div>
 					</div>
-					<!-- model -->
-					<!-- ?
-					<div th:if="${modelNode.leaf == true}" class="asset">
-						<a th:href="@{/showModel(item=${modelNode.relativePath})}" 
-						th:text="${modelNode.name}"></a>
-					</div>
-					 -->
 				</div>							
 			</div>
 		</div>
@@ -77,7 +70,7 @@
 							</div>
 							<div class="panel-body">
 								<div th:each="model: ${node.children.?[leaf==true]}">
-									<a class="asset" th:href="@{/showModel(item=${model.relativePath},leaf=true)}" th:text="${model.name}"></a>
+									<a class="asset" th:href="@{/showModel(item=${model.relativePath})}" th:text="${model.name}"></a>
 								</div>
 							</div>
 						</div>

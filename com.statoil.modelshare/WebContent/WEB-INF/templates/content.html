@@ -24,8 +24,10 @@
 								<label class="form-label" for="owner">Owned by:</label>
 							</td>
 							<td>
-								<a th:href="'mailto:'+${currentModel.mail}"><span class="form-field" id="owner" th:text="${currentModel.owner}"></span>
-								<span class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span></a><br/>
+								<a th:href="'mailto:'+${currentModel.mail}">
+									<span class="form-field" id="owner" th:text="${currentModel.owner}"></span>
+									<span th:if="${!#strings.isEmpty(currentModel.organisation)}" class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span>
+								</a>
 							</td>
 						</tr>
 						<tr>
@@ -72,13 +74,14 @@
 					<div class="panel panel-default"> 
 						<div class="panel-heading" role="tab"> 
 							<h4 class="panel-title"> 
-								<span class="glyphicon glyphicon-folder-open" aria-hidden="true"> </span>
-				          		<span th:text="${folder.formattedName}"></span> 
+								<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+				          		&nbsp;<span th:text="${folder.formattedName}"></span> 
 							</h4> 
 						</div>
 						<div class="panel-body" th:utext="${folder.formattedDescription}"></div>							
 						<div class="list-group">
-							<div th:each="task : ${folder.taskDetails}" class="list-group-item">								<h5 th:text="${task.formattedName}" class="list-group-item-heading"></h5>
+							<div th:each="task : ${folder.taskDetails}" class="list-group-item">								
+								<h5 th:text="${task.formattedName}" class="list-group-item-heading"></h5>
 								<p class="list-group-item-text" th:utext="${task.formattedDescription}"></p>							
 							</div>
 						</div>
