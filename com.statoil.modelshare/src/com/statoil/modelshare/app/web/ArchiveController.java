@@ -50,31 +50,26 @@ public class ArchiveController extends AbstractController {
 			HttpServletResponse response, Principal principal) {
 
 		
-		Model currentModel = null;
 		try {
-			currentModel = modelrepository.getMetaInformation(Paths.get(URLDecoder.decode(asset, "UTF-8")));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		Client user = modelrepository.getUser(principal.getName());
-		Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
-		Path path = Paths.get(asset);
-		Path resolvedPath = rootPath.resolve(path);
-
-		map.addAttribute("currentModel", currentModel);
-		map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
-		map.addAttribute("tasks", currentModel.getTaskInformation());
-
-		map.addAttribute("client", user);
-		map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
-		map.addAttribute("activeMenuItem", asset);
-		map.addAttribute("title", "Model archive");
-		// common
-		AssetProxy n = getMenuItem(user, asset);
-		map.addAttribute("node", n);
-		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel", getRootNodes(n));
-		try {
+			Client user = modelrepository.getUser(principal.getName());
+			Model currentModel = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
+			Path path = Paths.get(asset);
+			Path resolvedPath = rootPath.resolve(path);
+	
+			map.addAttribute("currentModel", currentModel);
+			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
+			map.addAttribute("tasks", currentModel.getTaskDetails());
+	
+			map.addAttribute("client", user);
+			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("activeMenuItem", asset);
+			map.addAttribute("title", "Model archive");
+			// common
+			AssetProxy n = getMenuItem(user, asset);
+			map.addAttribute("node", n);
+			map.addAttribute("crumbs", getBreadCrumb(n));
+			map.addAttribute("topLevel", getRootNodes(n));
 			String localCopy = modelrepository.localCopy(user, resolvedPath);			
 			map.addAttribute("success", localCopy);
 		} catch (AccessDeniedException ioe) {

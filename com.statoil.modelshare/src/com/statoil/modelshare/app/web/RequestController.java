@@ -53,27 +53,18 @@ public class RequestController extends AbstractController {
 			Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			Model downloadModel = getModelFromAssets(asset);
+			Model currentModel = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 			model.put("from", user.getName());
 			model.put("mailfrom", user.getEmail());
-			model.put("to", downloadModel.getMail());
+			model.put("to", currentModel.getMail());
 			model.put("asset", asset);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			String msg = "Error getting model from repository";
 			log.fatal(msg, e);
 			model.addAttribute("error", msg);
 			return "request";
 		}
 		return "request";
-	}
-
-	public Model getModelFromAssets(String encodedPath) throws UnsupportedEncodingException {
-		if (encodedPath != null) {
-			Model metaInformation = modelrepository
-					.getMetaInformation(Paths.get(URLDecoder.decode(encodedPath, "UTF-8")));
-			return metaInformation;
-		}
-		return null;
 	}
 
 	@RequestMapping(value = "/request", method = RequestMethod.POST)
@@ -109,7 +100,8 @@ public class RequestController extends AbstractController {
 		}
 		Model model = null;
 		try {
-			model = getModelFromAssets(asset);
+			Client user = modelrepository.getUser(principal.getName());
+			model = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
 			log.fatal(msg, e);

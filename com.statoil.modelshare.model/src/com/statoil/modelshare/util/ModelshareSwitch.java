@@ -106,9 +106,23 @@ public class ModelshareSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ModelsharePackage.TASK_INFORMATION: {
-				TaskInformation taskInformation = (TaskInformation)theEObject;
-				T result = caseTaskInformation(taskInformation);
+			case ModelsharePackage.TASK_DETAILS: {
+				TaskDetails taskDetails = (TaskDetails)theEObject;
+				T result = caseTaskDetails(taskDetails);
+				if (result == null) result = caseAbstractTask(taskDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ModelsharePackage.ABSTRACT_TASK: {
+				AbstractTask abstractTask = (AbstractTask)theEObject;
+				T result = caseAbstractTask(abstractTask);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ModelsharePackage.TASK_FOLDER: {
+				TaskFolder taskFolder = (TaskFolder)theEObject;
+				T result = caseTaskFolder(taskFolder);
+				if (result == null) result = caseAbstractTask(taskFolder);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -207,17 +221,47 @@ public class ModelshareSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Task Information</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Task Details</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Task Information</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Task Details</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTaskInformation(TaskInformation object) {
+	public T caseTaskDetails(TaskDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Task</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Task</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractTask(AbstractTask object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Task Folder</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Task Folder</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTaskFolder(TaskFolder object) {
 		return null;
 	}
 

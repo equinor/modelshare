@@ -15,7 +15,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelsharePackage;
-import com.statoil.modelshare.TaskInformation;
+import com.statoil.modelshare.TaskDetails;
+import com.statoil.modelshare.TaskFolder;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,8 +31,10 @@ import com.statoil.modelshare.TaskInformation;
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getMail <em>Mail</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getLastUpdated <em>Last Updated</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#isStask <em>Stask</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getTaskInformation <em>Task Information</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getTaskDetails <em>Task Details</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getUsage <em>Usage</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getTaskFolders <em>Task Folders</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.ModelImpl#getSimaVersion <em>Sima Version</em>}</li>
  * </ul>
  *
  * @generated
@@ -128,14 +131,14 @@ public class ModelImpl extends AssetImpl implements Model {
 	 */
 	protected boolean stask = STASK_EDEFAULT;
 	/**
-	 * The cached value of the '{@link #getTaskInformation() <em>Task Information</em>}' containment reference list.
+	 * The cached value of the '{@link #getTaskDetails() <em>Task Details</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTaskInformation()
+	 * @see #getTaskDetails()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<TaskInformation> taskInformation;
+	protected EList<TaskDetails> taskDetails;
 	/**
 	 * The default value of the '{@link #getUsage() <em>Usage</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -154,6 +157,33 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * @ordered
 	 */
 	protected String usage = USAGE_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getTaskFolders() <em>Task Folders</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTaskFolders()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<TaskFolder> taskFolders;
+	/**
+	 * The default value of the '{@link #getSimaVersion() <em>Sima Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimaVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIMA_VERSION_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getSimaVersion() <em>Sima Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimaVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String simaVersion = SIMA_VERSION_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -283,11 +313,11 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<TaskInformation> getTaskInformation() {
-		if (taskInformation == null) {
-			taskInformation = new EObjectContainmentEList<TaskInformation>(TaskInformation.class, this, ModelsharePackage.MODEL__TASK_INFORMATION);
+	public EList<TaskDetails> getTaskDetails() {
+		if (taskDetails == null) {
+			taskDetails = new EObjectContainmentEList<TaskDetails>(TaskDetails.class, this, ModelsharePackage.MODEL__TASK_DETAILS);
 		}
-		return taskInformation;
+		return taskDetails;
 	}
 
 	/**
@@ -326,11 +356,46 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<TaskFolder> getTaskFolders() {
+		if (taskFolders == null) {
+			taskFolders = new EObjectContainmentEList<TaskFolder>(TaskFolder.class, this, ModelsharePackage.MODEL__TASK_FOLDERS);
+		}
+		return taskFolders;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getSimaVersion() {
+		return simaVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSimaVersion(String newSimaVersion) {
+		String oldSimaVersion = simaVersion;
+		simaVersion = newSimaVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.MODEL__SIMA_VERSION, oldSimaVersion, simaVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ModelsharePackage.MODEL__TASK_INFORMATION:
-				return ((InternalEList<?>)getTaskInformation()).basicRemove(otherEnd, msgs);
+			case ModelsharePackage.MODEL__TASK_DETAILS:
+				return ((InternalEList<?>)getTaskDetails()).basicRemove(otherEnd, msgs);
+			case ModelsharePackage.MODEL__TASK_FOLDERS:
+				return ((InternalEList<?>)getTaskFolders()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -353,10 +418,14 @@ public class ModelImpl extends AssetImpl implements Model {
 				return getLastUpdated();
 			case ModelsharePackage.MODEL__STASK:
 				return isStask();
-			case ModelsharePackage.MODEL__TASK_INFORMATION:
-				return getTaskInformation();
+			case ModelsharePackage.MODEL__TASK_DETAILS:
+				return getTaskDetails();
 			case ModelsharePackage.MODEL__USAGE:
 				return getUsage();
+			case ModelsharePackage.MODEL__TASK_FOLDERS:
+				return getTaskFolders();
+			case ModelsharePackage.MODEL__SIMA_VERSION:
+				return getSimaVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -385,12 +454,19 @@ public class ModelImpl extends AssetImpl implements Model {
 			case ModelsharePackage.MODEL__STASK:
 				setStask((Boolean)newValue);
 				return;
-			case ModelsharePackage.MODEL__TASK_INFORMATION:
-				getTaskInformation().clear();
-				getTaskInformation().addAll((Collection<? extends TaskInformation>)newValue);
+			case ModelsharePackage.MODEL__TASK_DETAILS:
+				getTaskDetails().clear();
+				getTaskDetails().addAll((Collection<? extends TaskDetails>)newValue);
 				return;
 			case ModelsharePackage.MODEL__USAGE:
 				setUsage((String)newValue);
+				return;
+			case ModelsharePackage.MODEL__TASK_FOLDERS:
+				getTaskFolders().clear();
+				getTaskFolders().addAll((Collection<? extends TaskFolder>)newValue);
+				return;
+			case ModelsharePackage.MODEL__SIMA_VERSION:
+				setSimaVersion((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -419,11 +495,17 @@ public class ModelImpl extends AssetImpl implements Model {
 			case ModelsharePackage.MODEL__STASK:
 				setStask(STASK_EDEFAULT);
 				return;
-			case ModelsharePackage.MODEL__TASK_INFORMATION:
-				getTaskInformation().clear();
+			case ModelsharePackage.MODEL__TASK_DETAILS:
+				getTaskDetails().clear();
 				return;
 			case ModelsharePackage.MODEL__USAGE:
 				setUsage(USAGE_EDEFAULT);
+				return;
+			case ModelsharePackage.MODEL__TASK_FOLDERS:
+				getTaskFolders().clear();
+				return;
+			case ModelsharePackage.MODEL__SIMA_VERSION:
+				setSimaVersion(SIMA_VERSION_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -447,10 +529,14 @@ public class ModelImpl extends AssetImpl implements Model {
 				return LAST_UPDATED_EDEFAULT == null ? lastUpdated != null : !LAST_UPDATED_EDEFAULT.equals(lastUpdated);
 			case ModelsharePackage.MODEL__STASK:
 				return stask != STASK_EDEFAULT;
-			case ModelsharePackage.MODEL__TASK_INFORMATION:
-				return taskInformation != null && !taskInformation.isEmpty();
+			case ModelsharePackage.MODEL__TASK_DETAILS:
+				return taskDetails != null && !taskDetails.isEmpty();
 			case ModelsharePackage.MODEL__USAGE:
 				return USAGE_EDEFAULT == null ? usage != null : !USAGE_EDEFAULT.equals(usage);
+			case ModelsharePackage.MODEL__TASK_FOLDERS:
+				return taskFolders != null && !taskFolders.isEmpty();
+			case ModelsharePackage.MODEL__SIMA_VERSION:
+				return SIMA_VERSION_EDEFAULT == null ? simaVersion != null : !SIMA_VERSION_EDEFAULT.equals(simaVersion);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -477,6 +563,8 @@ public class ModelImpl extends AssetImpl implements Model {
 		result.append(stask);
 		result.append(", usage: ");
 		result.append(usage);
+		result.append(", simaVersion: ");
+		result.append(simaVersion);
 		result.append(')');
 		return result.toString();
 	}

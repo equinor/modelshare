@@ -2,7 +2,6 @@ package com.statoil.modelshare.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,9 +13,10 @@ import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.internet.AddressException;
@@ -24,6 +24,11 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -32,10 +37,9 @@ import com.statoil.modelshare.Client;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
-import com.statoil.modelshare.TaskInformation;
+import com.statoil.modelshare.ModelsharePackage;
 import com.statoil.modelshare.security.RepositoryAccessControl;
 import com.statoil.modelshare.util.ParseUtility;
-import com.statoil.modelshare.util.UnzipUtility;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -66,7 +70,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public ModelRepositoryImpl(Path path, Path userRoot) {
 		rootPath = path.toAbsolutePath();
 		ra = new RepositoryAccessControl(rootPath);
-		this.userRoot = userRoot;
+		this.userRoot = userRoot;		
+		// register the extension
+		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+	    Map<String, Object> m = reg.getExtensionToFactoryMap();
+	    m.put("modeldata", new XMIResourceFactoryImpl());
 	}
 
 	@Override
@@ -91,7 +99,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 		// list all files except those that are hidden
 		File[] listFiles = file.listFiles((FilenameFilter) (dir, name) -> {
-			return (!name.startsWith(".") && !name.endsWith(".jpg") && !name.endsWith(".png"));
+			return (!name.startsWith(".") 
+					&& !name.endsWith(".jpg") 
+					&& !name.endsWith(".modeldata"));
 		});
 
 		// recurse into subfolders and add files
@@ -108,7 +118,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 					folder.getAssets().add(newFolder);
 					fillFolderContents(newFolder, user);
 				} else {
-					Model newFile = getMetaInformation(child.toPath());
+					Model newFile = getMetaInformation(user, child.toPath());
 					newFile.setRelativePath(relativePath);
 					setPicturePath(newFile, child);
 					folder.getAssets().add(newFile);
@@ -152,49 +162,59 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public Model getMetaInformation(Path path) {
+	public Model getMetaInformation(Client owner, Path path) throws IOException {
 		Properties resultProps = new Properties();
 		Path resolvedPath = rootPath.resolve(path);
 		String fileName = resolvedPath.getFileName().toString();
-		File file = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
+		
+		File metaFile = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
+		File dataFile = new File(resolvedPath.toFile()+".modeldata");
+		
+		if (dataFile.exists()){
+			// required to initialize the package URI
+			@SuppressWarnings("unused")
+			ModelsharePackage mf = ModelsharePackage.eINSTANCE;
+			ResourceSet rs = new ResourceSetImpl();
+			Resource resource = rs.getResource(URI.createFileURI(dataFile.getAbsolutePath()), true);
+			resource.load(null);
+		    return (Model)resource.getContents().get(0);			
+		}
 		// the file may not exist due to parsing errors when uploading the file
-		if (file.exists()){
+		else if (metaFile.exists()){
 			try {
-				final FileInputStream in = new FileInputStream(file);
+				final FileInputStream in = new FileInputStream(metaFile);
 				resultProps.loadFromXML(in);
 				in.close();
-			} catch (IOException ioe) {
-				log.error("Error reading meta information from " + file.getAbsolutePath());
-			}
-		}
-
-		Model model = ModelshareFactory.eINSTANCE.createModel();
-		if (file.exists()) {
-			model.setOwner(resultProps.getProperty("owner"));
-			model.setLastUpdated(resultProps.getProperty("lastUpdated"));
-			model.setName(resultProps.getProperty("name"));
-			model.setOrganisation(resultProps.getProperty("organisation"));
-			model.setPath(path.toString());
-			model.setUsage(resultProps.getProperty("usage"));
-			model.setMail(resultProps.getProperty("mail"));
-	
-			for (Enumeration<?> e = resultProps.propertyNames(); e.hasMoreElements();) {
-				String element = (String) e.nextElement();
-				if (element.startsWith("task")) {
-					TaskInformation taskInfo = ModelshareFactory.eINSTANCE.createTaskInformation();
-					int start = element.indexOf(".");
-					int end = element.lastIndexOf(".");
-					String taskName = element.substring(start + 1, end);
-					taskInfo.setName(taskName);
-					taskInfo.setDescription(resultProps.getProperty(element));
-					model.getTaskInformation().add(taskInfo);
+				Model model = ModelshareFactory.eINSTANCE.createModel();
+				model.setOwner(resultProps.getProperty("owner"));
+				model.setLastUpdated(resultProps.getProperty("lastUpdated"));
+				model.setName(resultProps.getProperty("name"));
+				model.setOrganisation(resultProps.getProperty("organisation"));
+				model.setPath(path.toString());
+				model.setUsage(resultProps.getProperty("usage"));
+				model.setMail(resultProps.getProperty("mail"));
+				if (resolvedPath.getFileName().endsWith(".stask")){
+					ParseUtility.parseSimaModel(resolvedPath, model);
 				}
+				saveModelData(model, resolvedPath);
+				// TODO: delete .meta file
+				return model;
+			} catch (IOException ioe) {
+				log.error("Error reading meta information from " + metaFile.getAbsolutePath());
 			}
-		} else {
-			model.setName(path.getFileName().toString());
-			model.setPath(path.toString());
-			model.setUsage("Metadata is not on record for this model. Try re-uploading it in case the SIMA model is now supported.");			
 		}
+		// dummy model
+		Model model = ModelshareFactory.eINSTANCE.createModel();
+		model.setName(path.getFileName().toString());
+		model.setOwner("Unkown");
+		model.setMail("Unknown");
+		model.setOrganisation("");
+		model.setLastUpdated(LocalDateTime.now().toString());
+		model.setPath(path.toString());
+		model.setUsage("Metadata is not on record for this model. Content has been generated on the fly and is not persisted.");
+		if (fileName.endsWith(".stask")){
+			ParseUtility.parseSimaModel(resolvedPath, model);
+		}				
 		return model;
 	}
 
@@ -278,34 +298,6 @@ public class ModelRepositoryImpl implements ModelRepository {
 	public void setPassword(String name, String hash) {
 		ra.setPassword(name, hash);
 	}
-	/**
-	 * Unzip stask and parses the xmi files for task names and descriptions
-	 * 
-	 * @throws IOException if the SIMA workspace file could not be read
-	 */
-	private List<TaskInformation> unzipAndGetStaskInformation(Path path) throws IOException {
-		try {
-			List<TaskInformation> tasks = new ArrayList<>();
-			Path tempPath = Files.createTempDirectory("modelshare");
-			UnzipUtility unzipper = new UnzipUtility();
-			unzipper.unzip(path, tempPath);
-			List<File> unzippedFiles = unzipper.getunzippedFiles();
-			for (int i = 0; i < unzippedFiles.size(); i++) {
-				File f = unzippedFiles.get(i);
-				if (!f.getName().equals("folders.xmi")){
-					try {
-						TaskInformation taskInfo = ParseUtility.parseStaskXMI(f);
-						tasks.add(taskInfo);
-					} catch (Exception e) {
-						log.fatal("Could not parse SIMA task information in file \""+f.getName()+"\"", e);
-					}
-				}
-			}
-			return tasks;
-		} catch (Exception e) {
-			throw new IOException("Could not parse SIMA workspace file", e);
-		}
-	}
 
 	@Override
 	public void uploadModel(Client user, InputStream modelStream, InputStream pictureStream, Model model)
@@ -316,42 +308,52 @@ public class ModelRepositoryImpl implements ModelRepository {
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(path.toString());
 		}
-				
+
 		// do the actual write in one operation
 		Files.copy(modelStream, path, StandardCopyOption.REPLACE_EXISTING);
 
 		// assign the picture if we have one
-		if (pictureStream!=null) {
-			Path p = path.getParent().resolve(path.getFileName()+".jpg");
+		if (pictureStream != null) {
+			Path p = path.getParent().resolve(path.getFileName() + ".jpg");
 			Files.copy(pictureStream, p, StandardCopyOption.REPLACE_EXISTING);
 		}
 
-		// obtain required metadata (TODO: Use EMF serialization) 
-		Properties p = new Properties();
-		p.setProperty("owner", model.getOwner());
-		p.setProperty("organisation", model.getOrganisation());
-		p.setProperty("name", model.getName());
-		p.setProperty("usage", model.getUsage());
-		p.setProperty("mail", model.getMail());
-		p.setProperty("lastUpdated", LocalDateTime.now().toString());
-		
 		// obtain SIMA information if any
-		if (path.getFileName().toString().endsWith(".stask")){
-			List<TaskInformation> tasks = unzipAndGetStaskInformation(path);
-			for (TaskInformation taskInfo : tasks) {
-				p.setProperty("task." + taskInfo.getName() + ".description", taskInfo.getDescription());
-			}
+		if (path.getFileName().toString().endsWith(".stask")) {
+			ParseUtility.parseSimaModel(path, model);
 		}
+
+		saveModelData(model, path);
+	}
+
+	/**
+	 * 
+	 * @param model
+	 *            the model instance
+	 * @param path
+	 *            path to the model file
+	 * @throws IOException
+	 */
+	private void saveModelData(Model model, Path path) throws IOException {
 		
-		// write the metadata
-		Path metaData = Paths.get(path.getParent().toString(),"."+path.getFileName()+".meta");
-		try (FileOutputStream fos = new FileOutputStream(metaData.toFile())) {
-			p.storeToXML(fos, "Statoil model meta properties file", "UTF-8");
-			fos.close();
-		} catch (Exception e) {
-			log.error("Could not write metadata file", e);
+		// register the XMI resource factory for the .modeldata extension
+		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+	    Map<String, Object> m = reg.getExtensionToFactoryMap();
+	    m.put("modeldata", new XMIResourceFactoryImpl());
+
+	    // obtain a new resource set
+		ResourceSet resSet = new ResourceSetImpl();
+
+		// create a resource
+		URI uri = URI.createURI(path + ".modeldata");
+		Resource resource = resSet.createResource(uri);
+		if (resource == null) {
+			throw new RuntimeException("Could not create ECore resource for "+uri);
 		}
-		
+		resource.getContents().add(model);
+
+		// now save the content.
+		resource.save(Collections.EMPTY_MAP);
 	}
 
 	@Override

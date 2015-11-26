@@ -27,8 +27,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/mail"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/lastUpdated"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/stask"/>
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Model/taskInformation"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Model/taskDetails"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/usage"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelshare.ecore#//Model/taskFolders"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/simaVersion"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Group"/>
     <genClasses ecoreClass="modelshare.ecore#//Account">
@@ -51,11 +53,17 @@
         <genParameters ecoreParameter="modelshare.ecore#//Asset/getAccess/account"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="modelshare.ecore#//TaskInformation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/description"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/formattedName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskInformation/formattedDescription"/>
+    <genClasses ecoreClass="modelshare.ecore#//TaskDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//TaskDetails/identifier"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//AbstractTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//AbstractTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//AbstractTask/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//AbstractTask/formattedName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//AbstractTask/formattedDescription"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//TaskFolder">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelshare.ecore#//TaskFolder/taskDetails"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

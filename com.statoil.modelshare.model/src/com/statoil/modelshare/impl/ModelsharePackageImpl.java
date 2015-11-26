@@ -2,6 +2,7 @@
  */
 package com.statoil.modelshare.impl;
 
+import com.statoil.modelshare.AbstractTask;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Asset;
@@ -11,8 +12,8 @@ import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
-import com.statoil.modelshare.TaskInformation;
-
+import com.statoil.modelshare.TaskDetails;
+import com.statoil.modelshare.TaskFolder;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -76,7 +77,21 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass taskInformationEClass = null;
+	private EClass taskDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractTaskEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass taskFolderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -259,7 +274,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getModel_TaskInformation() {
+	public EReference getModel_TaskDetails() {
 		return (EReference)modelEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -270,6 +285,24 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 */
 	public EAttribute getModel_Usage() {
 		return (EAttribute)modelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getModel_TaskFolders() {
+		return (EReference)modelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getModel_SimaVersion() {
+		return (EAttribute)modelEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -421,8 +454,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTaskInformation() {
-		return taskInformationEClass;
+	public EClass getTaskDetails() {
+		return taskDetailsEClass;
 	}
 
 	/**
@@ -430,8 +463,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTaskInformation_Name() {
-		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(0);
+	public EAttribute getTaskDetails_Identifier() {
+		return (EAttribute)taskDetailsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -439,8 +472,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTaskInformation_Description() {
-		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(1);
+	public EClass getAbstractTask() {
+		return abstractTaskEClass;
 	}
 
 	/**
@@ -448,8 +481,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTaskInformation_FormattedName() {
-		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(2);
+	public EAttribute getAbstractTask_Name() {
+		return (EAttribute)abstractTaskEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -457,8 +490,44 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTaskInformation_FormattedDescription() {
-		return (EAttribute)taskInformationEClass.getEStructuralFeatures().get(3);
+	public EAttribute getAbstractTask_Description() {
+		return (EAttribute)abstractTaskEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAbstractTask_FormattedName() {
+		return (EAttribute)abstractTaskEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAbstractTask_FormattedDescription() {
+		return (EAttribute)abstractTaskEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getTaskFolder() {
+		return taskFolderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTaskFolder_TaskDetails() {
+		return (EReference)taskFolderEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -511,8 +580,10 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(modelEClass, MODEL__MAIL);
 		createEAttribute(modelEClass, MODEL__LAST_UPDATED);
 		createEAttribute(modelEClass, MODEL__STASK);
-		createEReference(modelEClass, MODEL__TASK_INFORMATION);
+		createEReference(modelEClass, MODEL__TASK_DETAILS);
 		createEAttribute(modelEClass, MODEL__USAGE);
+		createEReference(modelEClass, MODEL__TASK_FOLDERS);
+		createEAttribute(modelEClass, MODEL__SIMA_VERSION);
 
 		groupEClass = createEClass(GROUP);
 
@@ -534,11 +605,17 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(assetEClass, ASSET__RELATIVE_PATH);
 		createEOperation(assetEClass, ASSET___GET_ACCESS__ACCOUNT);
 
-		taskInformationEClass = createEClass(TASK_INFORMATION);
-		createEAttribute(taskInformationEClass, TASK_INFORMATION__NAME);
-		createEAttribute(taskInformationEClass, TASK_INFORMATION__DESCRIPTION);
-		createEAttribute(taskInformationEClass, TASK_INFORMATION__FORMATTED_NAME);
-		createEAttribute(taskInformationEClass, TASK_INFORMATION__FORMATTED_DESCRIPTION);
+		taskDetailsEClass = createEClass(TASK_DETAILS);
+		createEAttribute(taskDetailsEClass, TASK_DETAILS__IDENTIFIER);
+
+		abstractTaskEClass = createEClass(ABSTRACT_TASK);
+		createEAttribute(abstractTaskEClass, ABSTRACT_TASK__NAME);
+		createEAttribute(abstractTaskEClass, ABSTRACT_TASK__DESCRIPTION);
+		createEAttribute(abstractTaskEClass, ABSTRACT_TASK__FORMATTED_NAME);
+		createEAttribute(abstractTaskEClass, ABSTRACT_TASK__FORMATTED_DESCRIPTION);
+
+		taskFolderEClass = createEClass(TASK_FOLDER);
+		createEReference(taskFolderEClass, TASK_FOLDER__TASK_DETAILS);
 
 		// Create enums
 		accessEEnum = createEEnum(ACCESS);
@@ -576,6 +653,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		modelEClass.getESuperTypes().add(this.getAsset());
 		groupEClass.getESuperTypes().add(this.getAccount());
 		folderEClass.getESuperTypes().add(this.getAsset());
+		taskDetailsEClass.getESuperTypes().add(this.getAbstractTask());
+		taskFolderEClass.getESuperTypes().add(this.getAbstractTask());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(clientEClass, Client.class, "Client", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -591,8 +670,10 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getModel_Mail(), ecorePackage.getEString(), "mail", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModel_LastUpdated(), ecorePackage.getEString(), "lastUpdated", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModel_Stask(), ecorePackage.getEBoolean(), "stask", "false", 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getModel_TaskInformation(), this.getTaskInformation(), null, "taskInformation", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModel_TaskDetails(), this.getTaskDetails(), null, "taskDetails", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModel_Usage(), ecorePackage.getEString(), "usage", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModel_TaskFolders(), this.getTaskFolder(), null, "taskFolders", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModel_SimaVersion(), ecorePackage.getEString(), "simaVersion", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -617,11 +698,17 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		EOperation op = initEOperation(getAsset__GetAccess__Account(), ecorePackage.getEEnum(), "getAccess", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAccount(), "account", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(taskInformationEClass, TaskInformation.class, "TaskInformation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTaskInformation_Name(), ecorePackage.getEString(), "name", null, 0, 1, TaskInformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTaskInformation_Description(), ecorePackage.getEString(), "description", null, 0, 1, TaskInformation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTaskInformation_FormattedName(), ecorePackage.getEString(), "formattedName", null, 0, 1, TaskInformation.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTaskInformation_FormattedDescription(), ecorePackage.getEString(), "formattedDescription", null, 0, 1, TaskInformation.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEClass(taskDetailsEClass, TaskDetails.class, "TaskDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTaskDetails_Identifier(), ecorePackage.getEString(), "identifier", null, 0, 1, TaskDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractTaskEClass, AbstractTask.class, "AbstractTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractTask_Name(), ecorePackage.getEString(), "name", null, 0, 1, AbstractTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractTask_Description(), ecorePackage.getEString(), "description", null, 0, 1, AbstractTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractTask_FormattedName(), ecorePackage.getEString(), "formattedName", null, 0, 1, AbstractTask.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAbstractTask_FormattedDescription(), ecorePackage.getEString(), "formattedDescription", null, 0, 1, AbstractTask.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+
+		initEClass(taskFolderEClass, TaskFolder.class, "TaskFolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTaskFolder_TaskDetails(), this.getTaskDetails(), null, "taskDetails", null, 0, -1, TaskFolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessEEnum, Access.class, "Access");

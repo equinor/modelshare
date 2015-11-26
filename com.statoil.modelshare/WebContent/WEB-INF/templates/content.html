@@ -18,10 +18,33 @@
 				<div class="media">
 				  	<div class="media-body">
 						<h2 class="media-heading" th:text="${currentModel.name}"></h2>
-						<label class="form-label" for="owner">Owned by:</label>
-						<a th:href="'mailto:'+${currentModel.mail}"><span class="form-field" id="owner" th:text="${currentModel.owner}"></span><span class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span></a><br/>
-						<label class="form-label" for="lastUpdated">Last updated: </label><span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span><br/>
-						<label class="form-label" for="owner">Model type: </label>
+						<table>
+						<tr>
+							<td width="50%">
+								<label class="form-label" for="owner">Owned by:</label>
+							</td>
+							<td>
+								<a th:href="'mailto:'+${currentModel.mail}"><span class="form-field" id="owner" th:text="${currentModel.owner}"></span>
+								<span class="form-field" id="organisation" th:text="', '+${currentModel.organisation}" ></span></a><br/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="form-label" for="lastUpdated">Last updated: </label>
+							</td>
+							<td>
+								<span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="form-label" for="type">Model type: </label>
+							</td>
+							<td>
+								<span class="form-field" id="type" th:text="${currentModel.simaVersion}" ></span>
+							</td>
+						</tr>
+						</table>
 					</div>
 			  		<div class="media-right media-top" th:if="${currentModel.picturePath}">
 		      			<img class="media-object" width="320px" th:src="@{/pictures(asset=${currentModel.picturePath})}"></img>
@@ -44,6 +67,23 @@
 				</p>
 							
 				<h3>Contents</h3>
+				<!-- Model "task" folders -->
+				<div th:each="folder : ${node.folders}" class="panel-group">
+					<div class="panel panel-default"> 
+						<div class="panel-heading" role="tab"> 
+							<h4 class="panel-title"> 
+								<span class="glyphicon glyphicon-folder-open" aria-hidden="true"> </span>
+				          		<span th:text="${folder.formattedName}"></span> 
+							</h4> 
+						</div>
+						<div class="panel-body" th:utext="${folder.formattedDescription}"></div>							
+						<div class="list-group">
+							<div th:each="task : ${folder.taskDetails}" class="list-group-item">								<h5 th:text="${task.formattedName}" class="list-group-item-heading"></h5>
+								<p class="list-group-item-text" th:utext="${task.formattedDescription}"></p>							
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<!-- Model "task" descriptions -->
 				<div th:each="task : ${node.tasks}" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">

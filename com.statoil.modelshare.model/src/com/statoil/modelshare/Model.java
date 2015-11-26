@@ -18,8 +18,10 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.statoil.modelshare.Model#getMail <em>Mail</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#getLastUpdated <em>Last Updated</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#isStask <em>Stask</em>}</li>
- *   <li>{@link com.statoil.modelshare.Model#getTaskInformation <em>Task Information</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Model#getTaskDetails <em>Task Details</em>}</li>
  *   <li>{@link com.statoil.modelshare.Model#getUsage <em>Usage</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Model#getTaskFolders <em>Task Folders</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Model#getSimaVersion <em>Sima Version</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getModel()
@@ -160,20 +162,20 @@ public interface Model extends Asset {
 	void setStask(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Task Information</b></em>' containment reference list.
-	 * The list contents are of type {@link com.statoil.modelshare.TaskInformation}.
+	 * Returns the value of the '<em><b>Task Details</b></em>' containment reference list.
+	 * The list contents are of type {@link com.statoil.modelshare.TaskDetails}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Task Information</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Task Details</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Task Information</em>' containment reference list.
-	 * @see com.statoil.modelshare.ModelsharePackage#getModel_TaskInformation()
+	 * @return the value of the '<em>Task Details</em>' containment reference list.
+	 * @see com.statoil.modelshare.ModelsharePackage#getModel_TaskDetails()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<TaskInformation> getTaskInformation();
+	EList<TaskDetails> getTaskDetails();
 
 	/**
 	 * Returns the value of the '<em><b>Usage</b></em>' attribute.
@@ -200,4 +202,46 @@ public interface Model extends Asset {
 	 * @generated
 	 */
 	void setUsage(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Task Folders</b></em>' containment reference list.
+	 * The list contents are of type {@link com.statoil.modelshare.TaskFolder}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Task Folders</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Task Folders</em>' containment reference list.
+	 * @see com.statoil.modelshare.ModelsharePackage#getModel_TaskFolders()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<TaskFolder> getTaskFolders();
+
+	/**
+	 * Returns the value of the '<em><b>Sima Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sima Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sima Version</em>' attribute.
+	 * @see #setSimaVersion(String)
+	 * @see com.statoil.modelshare.ModelsharePackage#getModel_SimaVersion()
+	 * @model
+	 * @generated
+	 */
+	String getSimaVersion();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.Model#getSimaVersion <em>Sima Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sima Version</em>' attribute.
+	 * @see #getSimaVersion()
+	 * @generated
+	 */
+	void setSimaVersion(String value);
 } // Model

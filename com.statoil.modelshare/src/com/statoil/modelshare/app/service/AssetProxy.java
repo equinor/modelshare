@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
-import com.statoil.modelshare.TaskInformation;
+import com.statoil.modelshare.TaskDetails;
+import com.statoil.modelshare.TaskFolder;
 
 public class AssetProxy {
 	
@@ -63,8 +64,12 @@ public class AssetProxy {
 		return asset.getName();
 	}
 	
-	public List<TaskInformation> getTasks(){
-		return ((Model)asset).getTaskInformation();
+	public List<TaskDetails> getTasks(){
+		return ((Model)asset).getTaskDetails();
+	}
+
+	public List<TaskFolder> getFolders(){
+		return ((Model)asset).getTaskFolders();
 	}
 
 	public Model getAsset() {

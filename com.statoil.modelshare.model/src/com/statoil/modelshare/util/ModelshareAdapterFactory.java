@@ -92,8 +92,16 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 				return createAssetAdapter();
 			}
 			@Override
-			public Adapter caseTaskInformation(TaskInformation object) {
-				return createTaskInformationAdapter();
+			public Adapter caseTaskDetails(TaskDetails object) {
+				return createTaskDetailsAdapter();
+			}
+			@Override
+			public Adapter caseAbstractTask(AbstractTask object) {
+				return createAbstractTaskAdapter();
+			}
+			@Override
+			public Adapter caseTaskFolder(TaskFolder object) {
+				return createTaskFolderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -200,16 +208,44 @@ public class ModelshareAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.TaskInformation <em>Task Information</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.TaskDetails <em>Task Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.statoil.modelshare.TaskInformation
+	 * @see com.statoil.modelshare.TaskDetails
 	 * @generated
 	 */
-	public Adapter createTaskInformationAdapter() {
+	public Adapter createTaskDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.AbstractTask <em>Abstract Task</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.statoil.modelshare.AbstractTask
+	 * @generated
+	 */
+	public Adapter createAbstractTaskAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.statoil.modelshare.TaskFolder <em>Task Folder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.statoil.modelshare.TaskFolder
+	 * @generated
+	 */
+	public Adapter createTaskFolderAdapter() {
 		return null;
 	}
 

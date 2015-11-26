@@ -36,7 +36,7 @@ public class UnzipUtility {
 			ZipEntry ze = zis.getNextEntry();
 			while (ze != null) {
 				String fileName = ze.getName();
-				if (ze.getName().endsWith(".xmi")) {
+				if (ze.getName().endsWith(".xmi") || ze.getName().equals("meta.properties")) {
 					File newFile = new File(destDir + File.separator + fileName);
 					// create directories for sub directories in zip
 					new File(newFile.getParent()).mkdirs();

@@ -432,13 +432,13 @@ public interface ModelsharePackage extends EPackage {
 	int MODEL__STASK = ASSET_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Task Information</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Task Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL__TASK_INFORMATION = ASSET_FEATURE_COUNT + 5;
+	int MODEL__TASK_DETAILS = ASSET_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Usage</b></em>' attribute.
@@ -450,13 +450,31 @@ public interface ModelsharePackage extends EPackage {
 	int MODEL__USAGE = ASSET_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Task Folders</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__TASK_FOLDERS = ASSET_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Sima Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__SIMA_VERSION = ASSET_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_FEATURE_COUNT = ASSET_FEATURE_COUNT + 7;
+	int MODEL_FEATURE_COUNT = ASSET_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Access</em>' operation.
@@ -641,14 +659,14 @@ public interface ModelsharePackage extends EPackage {
 	int FOLDER_OPERATION_COUNT = ASSET_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.statoil.modelshare.impl.TaskInformationImpl <em>Task Information</em>}' class.
+	 * The meta object id for the '{@link com.statoil.modelshare.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.statoil.modelshare.impl.TaskInformationImpl
-	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskInformation()
+	 * @see com.statoil.modelshare.impl.AbstractTaskImpl
+	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getAbstractTask()
 	 * @generated
 	 */
-	int TASK_INFORMATION = 6;
+	int ABSTRACT_TASK = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -657,7 +675,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION__NAME = 0;
+	int ABSTRACT_TASK__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -666,7 +684,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION__DESCRIPTION = 1;
+	int ABSTRACT_TASK__DESCRIPTION = 1;
 
 	/**
 	 * The feature id for the '<em><b>Formatted Name</b></em>' attribute.
@@ -675,7 +693,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION__FORMATTED_NAME = 2;
+	int ABSTRACT_TASK__FORMATTED_NAME = 2;
 
 	/**
 	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
@@ -684,25 +702,171 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION__FORMATTED_DESCRIPTION = 3;
+	int ABSTRACT_TASK__FORMATTED_DESCRIPTION = 3;
 
 	/**
-	 * The number of structural features of the '<em>Task Information</em>' class.
+	 * The number of structural features of the '<em>Abstract Task</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION_FEATURE_COUNT = 4;
+	int ABSTRACT_TASK_FEATURE_COUNT = 4;
 
 	/**
-	 * The number of operations of the '<em>Task Information</em>' class.
+	 * The number of operations of the '<em>Abstract Task</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_INFORMATION_OPERATION_COUNT = 0;
+	int ABSTRACT_TASK_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.statoil.modelshare.impl.TaskDetailsImpl <em>Task Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.statoil.modelshare.impl.TaskDetailsImpl
+	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskDetails()
+	 * @generated
+	 */
+	int TASK_DETAILS = 6;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS__NAME = ABSTRACT_TASK__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS__DESCRIPTION = ABSTRACT_TASK__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS__FORMATTED_NAME = ABSTRACT_TASK__FORMATTED_NAME;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS__FORMATTED_DESCRIPTION = ABSTRACT_TASK__FORMATTED_DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS__IDENTIFIER = ABSTRACT_TASK_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Task Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS_FEATURE_COUNT = ABSTRACT_TASK_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Task Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DETAILS_OPERATION_COUNT = ABSTRACT_TASK_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.statoil.modelshare.impl.TaskFolderImpl <em>Task Folder</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.statoil.modelshare.impl.TaskFolderImpl
+	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskFolder()
+	 * @generated
+	 */
+	int TASK_FOLDER = 8;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER__NAME = ABSTRACT_TASK__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER__DESCRIPTION = ABSTRACT_TASK__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER__FORMATTED_NAME = ABSTRACT_TASK__FORMATTED_NAME;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER__FORMATTED_DESCRIPTION = ABSTRACT_TASK__FORMATTED_DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Task Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER__TASK_DETAILS = ABSTRACT_TASK_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Task Folder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER_FEATURE_COUNT = ABSTRACT_TASK_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Task Folder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_FOLDER_OPERATION_COUNT = ABSTRACT_TASK_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.statoil.modelshare.Access <em>Access</em>}' enum.
@@ -712,7 +876,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getAccess()
 	 * @generated
 	 */
-	int ACCESS = 7;
+	int ACCESS = 9;
 
 
 	/**
@@ -846,15 +1010,15 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getModel_Stask();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.statoil.modelshare.Model#getTaskInformation <em>Task Information</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.statoil.modelshare.Model#getTaskDetails <em>Task Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Task Information</em>'.
-	 * @see com.statoil.modelshare.Model#getTaskInformation()
+	 * @return the meta object for the containment reference list '<em>Task Details</em>'.
+	 * @see com.statoil.modelshare.Model#getTaskDetails()
 	 * @see #getModel()
 	 * @generated
 	 */
-	EReference getModel_TaskInformation();
+	EReference getModel_TaskDetails();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Model#getUsage <em>Usage</em>}'.
@@ -866,6 +1030,28 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getModel_Usage();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.statoil.modelshare.Model#getTaskFolders <em>Task Folders</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Task Folders</em>'.
+	 * @see com.statoil.modelshare.Model#getTaskFolders()
+	 * @see #getModel()
+	 * @generated
+	 */
+	EReference getModel_TaskFolders();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Model#getSimaVersion <em>Sima Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sima Version</em>'.
+	 * @see com.statoil.modelshare.Model#getSimaVersion()
+	 * @see #getModel()
+	 * @generated
+	 */
+	EAttribute getModel_SimaVersion();
 
 	/**
 	 * Returns the meta object for class '{@link com.statoil.modelshare.Group <em>Group</em>}'.
@@ -1038,58 +1224,100 @@ public interface ModelsharePackage extends EPackage {
 	EOperation getAsset__GetAccess__Account();
 
 	/**
-	 * Returns the meta object for class '{@link com.statoil.modelshare.TaskInformation <em>Task Information</em>}'.
+	 * Returns the meta object for class '{@link com.statoil.modelshare.TaskDetails <em>Task Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Task Information</em>'.
-	 * @see com.statoil.modelshare.TaskInformation
+	 * @return the meta object for class '<em>Task Details</em>'.
+	 * @see com.statoil.modelshare.TaskDetails
 	 * @generated
 	 */
-	EClass getTaskInformation();
+	EClass getTaskDetails();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskDetails#getIdentifier <em>Identifier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Identifier</em>'.
+	 * @see com.statoil.modelshare.TaskDetails#getIdentifier()
+	 * @see #getTaskDetails()
+	 * @generated
+	 */
+	EAttribute getTaskDetails_Identifier();
+
+	/**
+	 * Returns the meta object for class '{@link com.statoil.modelshare.AbstractTask <em>Abstract Task</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Task</em>'.
+	 * @see com.statoil.modelshare.AbstractTask
+	 * @generated
+	 */
+	EClass getAbstractTask();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.AbstractTask#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.statoil.modelshare.TaskInformation#getName()
-	 * @see #getTaskInformation()
+	 * @see com.statoil.modelshare.AbstractTask#getName()
+	 * @see #getAbstractTask()
 	 * @generated
 	 */
-	EAttribute getTaskInformation_Name();
+	EAttribute getAbstractTask_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getDescription <em>Description</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.AbstractTask#getDescription <em>Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see com.statoil.modelshare.TaskInformation#getDescription()
-	 * @see #getTaskInformation()
+	 * @see com.statoil.modelshare.AbstractTask#getDescription()
+	 * @see #getAbstractTask()
 	 * @generated
 	 */
-	EAttribute getTaskInformation_Description();
+	EAttribute getAbstractTask_Description();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getFormattedName <em>Formatted Name</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.AbstractTask#getFormattedName <em>Formatted Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Formatted Name</em>'.
-	 * @see com.statoil.modelshare.TaskInformation#getFormattedName()
-	 * @see #getTaskInformation()
+	 * @see com.statoil.modelshare.AbstractTask#getFormattedName()
+	 * @see #getAbstractTask()
 	 * @generated
 	 */
-	EAttribute getTaskInformation_FormattedName();
+	EAttribute getAbstractTask_FormattedName();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.TaskInformation#getFormattedDescription <em>Formatted Description</em>}'.
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.AbstractTask#getFormattedDescription <em>Formatted Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Formatted Description</em>'.
-	 * @see com.statoil.modelshare.TaskInformation#getFormattedDescription()
-	 * @see #getTaskInformation()
+	 * @see com.statoil.modelshare.AbstractTask#getFormattedDescription()
+	 * @see #getAbstractTask()
 	 * @generated
 	 */
-	EAttribute getTaskInformation_FormattedDescription();
+	EAttribute getAbstractTask_FormattedDescription();
+
+	/**
+	 * Returns the meta object for class '{@link com.statoil.modelshare.TaskFolder <em>Task Folder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Task Folder</em>'.
+	 * @see com.statoil.modelshare.TaskFolder
+	 * @generated
+	 */
+	EClass getTaskFolder();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.statoil.modelshare.TaskFolder#getTaskDetails <em>Task Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Task Details</em>'.
+	 * @see com.statoil.modelshare.TaskFolder#getTaskDetails()
+	 * @see #getTaskFolder()
+	 * @generated
+	 */
+	EReference getTaskFolder_TaskDetails();
 
 	/**
 	 * Returns the meta object for enum '{@link com.statoil.modelshare.Access <em>Access</em>}'.
@@ -1225,12 +1453,12 @@ public interface ModelsharePackage extends EPackage {
 		EAttribute MODEL__STASK = eINSTANCE.getModel_Stask();
 
 		/**
-		 * The meta object literal for the '<em><b>Task Information</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Task Details</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MODEL__TASK_INFORMATION = eINSTANCE.getModel_TaskInformation();
+		EReference MODEL__TASK_DETAILS = eINSTANCE.getModel_TaskDetails();
 
 		/**
 		 * The meta object literal for the '<em><b>Usage</b></em>' attribute feature.
@@ -1239,6 +1467,22 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL__USAGE = eINSTANCE.getModel_Usage();
+
+		/**
+		 * The meta object literal for the '<em><b>Task Folders</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MODEL__TASK_FOLDERS = eINSTANCE.getModel_TaskFolders();
+
+		/**
+		 * The meta object literal for the '<em><b>Sima Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MODEL__SIMA_VERSION = eINSTANCE.getModel_SimaVersion();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.impl.GroupImpl <em>Group</em>}' class.
@@ -1377,14 +1621,32 @@ public interface ModelsharePackage extends EPackage {
 		EOperation ASSET___GET_ACCESS__ACCOUNT = eINSTANCE.getAsset__GetAccess__Account();
 
 		/**
-		 * The meta object literal for the '{@link com.statoil.modelshare.impl.TaskInformationImpl <em>Task Information</em>}' class.
+		 * The meta object literal for the '{@link com.statoil.modelshare.impl.TaskDetailsImpl <em>Task Details</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.statoil.modelshare.impl.TaskInformationImpl
-		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskInformation()
+		 * @see com.statoil.modelshare.impl.TaskDetailsImpl
+		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskDetails()
 		 * @generated
 		 */
-		EClass TASK_INFORMATION = eINSTANCE.getTaskInformation();
+		EClass TASK_DETAILS = eINSTANCE.getTaskDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Identifier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TASK_DETAILS__IDENTIFIER = eINSTANCE.getTaskDetails_Identifier();
+
+		/**
+		 * The meta object literal for the '{@link com.statoil.modelshare.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.statoil.modelshare.impl.AbstractTaskImpl
+		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getAbstractTask()
+		 * @generated
+		 */
+		EClass ABSTRACT_TASK = eINSTANCE.getAbstractTask();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -1392,7 +1654,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TASK_INFORMATION__NAME = eINSTANCE.getTaskInformation_Name();
+		EAttribute ABSTRACT_TASK__NAME = eINSTANCE.getAbstractTask_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
@@ -1400,7 +1662,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TASK_INFORMATION__DESCRIPTION = eINSTANCE.getTaskInformation_Description();
+		EAttribute ABSTRACT_TASK__DESCRIPTION = eINSTANCE.getAbstractTask_Description();
 
 		/**
 		 * The meta object literal for the '<em><b>Formatted Name</b></em>' attribute feature.
@@ -1408,7 +1670,7 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TASK_INFORMATION__FORMATTED_NAME = eINSTANCE.getTaskInformation_FormattedName();
+		EAttribute ABSTRACT_TASK__FORMATTED_NAME = eINSTANCE.getAbstractTask_FormattedName();
 
 		/**
 		 * The meta object literal for the '<em><b>Formatted Description</b></em>' attribute feature.
@@ -1416,7 +1678,25 @@ public interface ModelsharePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TASK_INFORMATION__FORMATTED_DESCRIPTION = eINSTANCE.getTaskInformation_FormattedDescription();
+		EAttribute ABSTRACT_TASK__FORMATTED_DESCRIPTION = eINSTANCE.getAbstractTask_FormattedDescription();
+
+		/**
+		 * The meta object literal for the '{@link com.statoil.modelshare.impl.TaskFolderImpl <em>Task Folder</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.statoil.modelshare.impl.TaskFolderImpl
+		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getTaskFolder()
+		 * @generated
+		 */
+		EClass TASK_FOLDER = eINSTANCE.getTaskFolder();
+
+		/**
+		 * The meta object literal for the '<em><b>Task Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TASK_FOLDER__TASK_DETAILS = eINSTANCE.getTaskFolder_TaskDetails();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.Access <em>Access</em>}' enum.
