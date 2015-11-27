@@ -34,6 +34,9 @@ public class ParseUtility {
 
 	public static void parseSimaModel(Path path, Model model) throws IOException {
 		try {
+
+			log.info("Parsing SIMA model at "+path);
+			
 			Path tempPath = Files.createTempDirectory("modelshare");
 			UnzipUtility unzipper = new UnzipUtility();
 			unzipper.unzip(path, tempPath);

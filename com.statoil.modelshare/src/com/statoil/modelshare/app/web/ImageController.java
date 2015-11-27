@@ -1,20 +1,12 @@
 package com.statoil.modelshare.app.web;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 
-import org.apache.tika.config.TikaConfig;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.metadata.TikaMetadataKeys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,8 +23,6 @@ import com.statoil.modelshare.controller.ModelRepository;
  */
 @Controller
 public class ImageController {
-
-	private static TikaConfig tika;
 
 	@Autowired
 	private ModelRepository repository;
@@ -54,20 +44,4 @@ public class ImageController {
 		return null;
 	}
 
-//	private MediaType getMimeType(File file) {
-//		try {
-//			if (tika == null) {
-//				tika = new TikaConfig();
-//			}
-//			Metadata metadata = new Metadata();
-//			metadata.set(TikaMetadataKeys.RESOURCE_NAME_KEY, file.getName());
-//			BufferedInputStream bis = new BufferedInputStream(
-//					Files.newInputStream(file.toPath(), StandardOpenOption.READ));
-//			return MediaType.parseMediaType(tika.getDetector().detect(bis, metadata).toString());
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		} catch (TikaException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
 }

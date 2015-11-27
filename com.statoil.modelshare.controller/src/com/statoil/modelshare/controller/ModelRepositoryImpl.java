@@ -101,7 +101,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 		File[] listFiles = file.listFiles((FilenameFilter) (dir, name) -> {
 			return (!name.startsWith(".") 
 					&& !name.endsWith(".jpg") 
-					&& !name.endsWith(".modeldata"));
+					&& !name.endsWith(".modeldata")
+					&& !name.equals("pages"));
 		});
 
 		// recurse into subfolders and add files

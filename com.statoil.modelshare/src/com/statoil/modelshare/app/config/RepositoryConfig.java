@@ -1,5 +1,6 @@
 package com.statoil.modelshare.app.config;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.lang.SystemUtils;
@@ -36,10 +37,6 @@ public class RepositoryConfig {
 	@Value("${help.text}")
 	private final String helpText = null;
 
-	@Autowired
-	@Value("${welcome.text}")
-	private final String welcomeText = null;
-
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
 		return new PropertySourcesPlaceholderConfigurer();
@@ -72,13 +69,8 @@ public class RepositoryConfig {
 		return repositoryTerms;
 	}
 	
-	@Bean
-	public String getHelpText() {
-		return helpText;
+	public Path getRootFolder() {
+		return Paths.get(repositoryRoot);
 	}
 
-	@Bean
-	public String getWelcomeText() {
-		return welcomeText;
-	}
 }
