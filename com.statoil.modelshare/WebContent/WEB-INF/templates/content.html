@@ -38,9 +38,9 @@
 								<span class="form-field" id="lastUpdated" th:text="${currentModel.lastUpdated}" ></span>
 							</td>
 						</tr>
-						<tr>
+						<tr th:if="${currentModel.simaVersion}">
 							<td>
-								<label class="form-label" for="type">Model type: </label>
+								<label class="form-label" for="type">SIMA version: </label>
 							</td>
 							<td>
 								<span class="form-field" id="type" th:text="${currentModel.simaVersion}" ></span>
@@ -78,11 +78,19 @@
 				          		&nbsp;<span th:text="${folder.formattedName}"></span> 
 							</h4> 
 						</div>
-						<div class="panel-body" th:utext="${folder.formattedDescription}"></div>							
-						<div class="list-group">
-							<div th:each="task : ${folder.taskDetails}" class="list-group-item">								
-								<h5 th:text="${task.formattedName}" class="list-group-item-heading"></h5>
-								<p class="list-group-item-text" th:utext="${task.formattedDescription}"></p>							
+						<div class="panel-body">
+							<div th:utext="${folder.formattedDescription}"></div>
+							<!-- tasks within the folder -->
+							<a class="btn pull-right" role="button" data-toggle="collapse" 
+								th:href="'#cd_'+${#strings.replace(folder.name,' ','_')}" aria-expanded="false" 
+								th:attr="aria-controls='cd_'+${#strings.replace(folder.name,' ','_')}">Details</a>							
+							<div class="collapse" th:id="'cd_'+${#strings.replace(folder.name,' ','_')}">
+								<div class="well">
+									<div th:each="task : ${folder.taskDetails}">								
+										<h5 th:text="${task.formattedName}"></h5>
+										<p th:utext="${task.formattedDescription}"></p>							
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

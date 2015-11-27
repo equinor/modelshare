@@ -352,6 +352,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 			throw new RuntimeException("Could not create ECore resource for "+uri);
 		}
 		resource.getContents().add(model);
+		
+		model.setLastUpdated(LocalDateTime.now().toString());
 
 		// now save the content.
 		resource.save(Collections.EMPTY_MAP);
