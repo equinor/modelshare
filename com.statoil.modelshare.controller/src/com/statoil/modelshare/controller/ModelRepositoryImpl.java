@@ -171,21 +171,13 @@ public class ModelRepositoryImpl implements ModelRepository {
 		File metaFile = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
 		File dataFile = new File(resolvedPath.toFile()+".modeldata");
 		
-		if (dataFile.exists()){
-			// required to initialize the package URI
-			@SuppressWarnings("unused")
-			ModelsharePackage mf = ModelsharePackage.eINSTANCE;
-			ResourceSet rs = new ResourceSetImpl();
-			Resource resource = rs.getResource(URI.createFileURI(dataFile.getAbsolutePath()), true);
-			resource.load(null);
-		    return (Model)resource.getContents().get(0);			
-		}
-		// the file may not exist due to parsing errors when uploading the file
-		else if (metaFile.exists()){
+		if (metaFile.exists()){
 			try {
+				// read the old properties
 				final FileInputStream in = new FileInputStream(metaFile);
 				resultProps.loadFromXML(in);
 				in.close();
+				// create a new model instance
 				Model model = ModelshareFactory.eINSTANCE.createModel();
 				model.setOwner(resultProps.getProperty("owner"));
 				model.setLastUpdated(resultProps.getProperty("lastUpdated"));
@@ -194,16 +186,30 @@ public class ModelRepositoryImpl implements ModelRepository {
 				model.setPath(path.toString());
 				model.setUsage(resultProps.getProperty("usage"));
 				model.setMail(resultProps.getProperty("mail"));
-				if (resolvedPath.getFileName().endsWith(".stask")){
+				// parse the SIMA-model file
+				if (fileName.endsWith(".stask")){
+					model.getTaskDetails().clear();
+					model.getTaskFolders().clear();
 					ParseUtility.parseSimaModel(resolvedPath, model);
 				}
 				saveModelData(model, resolvedPath);
-				// TODO: delete .meta file
+				metaFile.delete();
 				return model;
 			} catch (IOException ioe) {
 				log.error("Error reading meta information from " + metaFile.getAbsolutePath());
 			}
 		}
+		else if (dataFile.exists()){
+			// required to initialize the package URI
+			@SuppressWarnings("unused")
+			ModelsharePackage mf = ModelsharePackage.eINSTANCE;
+			ResourceSet rs = new ResourceSetImpl();
+			Resource resource = rs.getResource(URI.createFileURI(dataFile.getAbsolutePath()), true);
+			resource.load(null);
+		    return (Model)resource.getContents().get(0);
+			
+		}
+		// the file may not exist due to parsing errors when uploading the file
 		// dummy model
 		Model model = ModelshareFactory.eINSTANCE.createModel();
 		model.setName(path.getFileName().toString());
@@ -336,17 +342,20 @@ public class ModelRepositoryImpl implements ModelRepository {
 	 * @throws IOException
 	 */
 	private void saveModelData(Model model, Path path) throws IOException {
-		
+			    
 		// register the XMI resource factory for the .modeldata extension
-		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-	    Map<String, Object> m = reg.getExtensionToFactoryMap();
-	    m.put("modeldata", new XMIResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap()
+			.put("modeldata", new XMIResourceFactoryImpl());
 
-	    // obtain a new resource set
+		// register XMI resource factory for all other extensions
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap()
+			.put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+
+		 // obtain a new resource set
 		ResourceSet resSet = new ResourceSetImpl();
 
 		// create a resource
-		URI uri = URI.createURI(path + ".modeldata");
+		URI uri = URI.createFileURI(path + ".modeldata");
 		Resource resource = resSet.createResource(uri);
 		if (resource == null) {
 			throw new RuntimeException("Could not create ECore resource for "+uri);
