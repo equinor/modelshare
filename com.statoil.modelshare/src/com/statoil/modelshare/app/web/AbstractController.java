@@ -1,5 +1,7 @@
 package com.statoil.modelshare.app.web;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +56,22 @@ public abstract class AbstractController {
 		return asset.getChildren();
 	}
 
-	protected AssetProxy getMenuItem(Client user, String path) {
+	/**
+	 * Returns an asset for the given path and user. If the user does not have
+	 * access to the asset or the asset does not exist; and
+	 * {@link ResourceNotFoundException} will be thrown.
+	 * 
+	 * @param user
+	 *            the user to get the asset for
+	 * @param path
+	 *            the relative path to the asset
+	 * @return the asset proxy
+	 */
+	protected AssetProxy getAssetAtPath(Client user, String path) {
+		Path p = Paths.get(path);
+		if (p.isAbsolute()){
+			throw new IllegalArgumentException("The path is not relative: "+path);
+		}
 		Folder root2 = modelrepository.getRoot(user);
 		AssetProxy root = new AssetProxy(null, root2);
 		List<AssetProxy> list = root

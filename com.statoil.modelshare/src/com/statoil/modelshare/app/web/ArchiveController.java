@@ -66,7 +66,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
 			// common
-			AssetProxy n = getMenuItem(user, asset);
+			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
@@ -99,7 +99,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
 			// common
-			AssetProxy n = getMenuItem(user, asset);
+			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("crumbs", getBreadCrumb(n));
@@ -123,7 +123,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("currentFolder", asset);
 			map.addAttribute("title", "Model archive");
 			// common
-			AssetProxy n = getMenuItem(user, asset);
+			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
@@ -154,7 +154,7 @@ public class ArchiveController extends AbstractController {
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
 		// common
-		AssetProxy n = getMenuItem(user, asset);
+		AssetProxy n = getAssetAtPath(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
 		map.addAttribute("topLevel", getRootNodes(n));
@@ -179,7 +179,7 @@ public class ArchiveController extends AbstractController {
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
 		// common
-		AssetProxy n = getMenuItem(user, asset);
+		AssetProxy n = getAssetAtPath(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
 		map.addAttribute("topLevel", getRootNodes(n));
