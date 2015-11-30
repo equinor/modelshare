@@ -72,9 +72,9 @@ public abstract class AbstractController {
 		if (p.isAbsolute()){
 			throw new IllegalArgumentException("The path is not relative: "+path);
 		}
-		Folder root2 = modelrepository.getRoot(user);
-		AssetProxy root = new AssetProxy(null, root2);
-		List<AssetProxy> list = root
+		Folder root = modelrepository.getRoot(user);
+		AssetProxy rootProxy = new AssetProxy(null, root);
+		List<AssetProxy> list = rootProxy
 				.stream()
 				.filter(m -> path.equals(m.getRelativePath()))
 				.collect(Collectors.toList());

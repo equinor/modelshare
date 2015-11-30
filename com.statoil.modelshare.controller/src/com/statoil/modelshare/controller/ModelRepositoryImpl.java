@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -22,6 +23,9 @@ import java.util.Properties;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
@@ -50,10 +54,24 @@ public class ModelRepositoryImpl implements ModelRepository {
 	
 	static Log downloadLog = LogFactory.getLog("downloadLogger");
 
+	/** Root for storing repository files */
 	private Path rootPath;
 
+	/** Root for user home folders */
 	private Path userRoot;
+	
+	/** Cached root folders */
+	private Map<Client,CachedFolder> rootCache;
+	
 	private RepositoryAccessControl ra;
+	
+	/**
+	 * A simple folder cache.
+	 */
+	private class CachedFolder {
+		private Folder folder;
+		private LocalDateTime timestamp;
+	}
 
 	@SuppressWarnings("unused")
 	private ModelRepositoryImpl() {
@@ -75,6 +93,49 @@ public class ModelRepositoryImpl implements ModelRepository {
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 	    Map<String, Object> m = reg.getExtensionToFactoryMap();
 	    m.put("modeldata", new XMIResourceFactoryImpl());
+	    rootCache = Collections.synchronizedMap(new HashMap<>());
+	    
+	    FileAlterationObserver fao = new FileAlterationObserver(rootPath.toFile());
+	    fao.addListener(new FileAlterationListenerAdaptor(){
+
+			@Override
+			public void onDirectoryCreate(File directory) {
+				rootCache.clear();
+			}
+
+			@Override
+			public void onDirectoryChange(File directory) {
+				rootCache.clear();
+			}
+
+			@Override
+			public void onDirectoryDelete(File directory) {
+				rootCache.clear();
+			}
+
+			@Override
+			public void onFileCreate(File file) {
+				rootCache.clear();
+			}
+
+			@Override
+			public void onFileChange(File file) {
+				rootCache.clear();
+			}
+
+			@Override
+			public void onFileDelete(File file) {
+				rootCache.clear();
+			}
+	    	
+	    });
+	    FileAlterationMonitor fam = new FileAlterationMonitor();
+	    fam.addObserver(fao);
+	    try {
+			fam.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -89,6 +150,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 			Path path = dir.getParentFile().toPath().resolve(name+".jpg");
 			Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
 		}
+
+		// clear the cache for all users
+		rootCache.clear();
 	}
 
 	private void fillFolderContents(Folder folder, Client user) throws IOException {
@@ -224,8 +288,15 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}				
 		return model;
 	}
-
+	
 	public Folder getRoot(Client user) {
+		
+		// use the cache if it exists
+		CachedFolder c = rootCache.get(user);
+		if (c!=null && LocalDateTime.now().isBefore(c.timestamp.plusMinutes(5))){
+			return c.folder;
+		}
+		
 		Folder root = ModelshareFactory.eINSTANCE.createFolder();
 		root.setPath(rootPath.toString());
 		root.setName("");
@@ -233,8 +304,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 		try {
 			fillFolderContents(root, user);
 		} catch (IOException e) {
+			rootCache.remove(user);
 			throw new RuntimeException(e);
 		}
+		
+		// cache the folder
+		c = new CachedFolder();
+		c.folder = root;
+		c.timestamp = LocalDateTime.now();
+		rootCache.put(user, c);
+		
 		return root;
 	}
 
@@ -331,6 +410,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 
 		saveModelData(model, path);
+		
+		// clear the cache for all users
+		rootCache.clear();
 	}
 
 	/**
