@@ -120,6 +120,7 @@ public interface ModelRepository {
 	 *            the user that requests the asset
 	 * @param path
 	 *            the root relative path to the asset
+	 * @return a description of what actually happened
 	 * @throws IOException
 	 *             if the file could not be read
 	 * @throws AccessDeniedException

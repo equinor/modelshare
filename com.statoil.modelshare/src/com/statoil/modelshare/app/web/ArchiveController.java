@@ -52,24 +52,25 @@ public class ArchiveController extends AbstractController {
 		
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			Model currentModel = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
-			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
-			Path path = Paths.get(asset);
-			Path resolvedPath = rootPath.resolve(path);
 	
-			map.addAttribute("currentModel", currentModel);
 			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
-			map.addAttribute("tasks", currentModel.getTaskDetails());
 	
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
+
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
+			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
+	
+			// do the actual copy
+			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
+			Path path = Paths.get(asset);
+			Path resolvedPath = rootPath.resolve(path);
 			String localCopy = modelrepository.localCopy(user, resolvedPath);			
 			map.addAttribute("success", localCopy);
 		} catch (AccessDeniedException ioe) {
@@ -98,6 +99,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
+
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);

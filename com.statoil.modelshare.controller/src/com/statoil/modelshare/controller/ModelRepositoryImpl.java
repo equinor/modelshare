@@ -353,17 +353,23 @@ public class ModelRepositoryImpl implements ModelRepository {
 	@Override
 	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException {
 		String localUser = user.getLocalUser();
+		// a local user must be specified
 		if (localUser == null || localUser.isEmpty()) {
 			throw new AccessDeniedException(null, null, "Cannot copy file. User does not have a local account");
 		}
 		EnumSet<Access> rights = ra.getRights(path, user);
 		if (rights.contains(Access.READ)) {
 			Path target = userRoot.resolve(Paths.get(localUser, "Documents", "Model-export",path.getFileName().toString()));
-			target.toFile().mkdirs();
+			String message = "Model copied to "+target.toString();
+			File file = target.toFile();
+			if (file.exists()){
+				message = "Model copied to "+target.toString()+". Existing file was overwritten.";
+			}
+			file.mkdirs();
 			Files.copy(rootPath.resolve(path), target, StandardCopyOption.REPLACE_EXISTING);
 			Object[] messageArgs = { path, user.getIdentifier() };
 			downloadLog.info(MessageFormat.format("Model \"{0}\" was downloaded by {1}", messageArgs));
-			return "Model copied to "+target.toString();
+			return message;
 		} else {
 			throw new AccessDeniedException(path.toString());
 		}
