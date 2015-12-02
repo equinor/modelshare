@@ -8,7 +8,7 @@ Set-Alias sz "$env:ProgramFiles\7-Zip\7z.exe"
 $userPath = "C:\Users\morte_o3ehocu";
 
 #set source and destination folders
-$sourceFolder = "$userPath\Dropbox (Itema)\Statoil";
+$sourceFolder = "$userPath\Temp\Statoil (1)";
 $destinationFolder = "$userPath\Desktop\Modelshare\Repository";
 $modelAccessFile = "$userPath\Desktop\rights.access";
 $modelDestinationSubFolder = "output\x3d";
@@ -80,7 +80,7 @@ ForEach($folder in $rootLevelFolders) {
 Write-Host;
 
 #get source folders
-$sourceFolders = Get-ChildItem $sourceFolder -Directory;
+$sourceFolders = Get-ChildItem $sourceFolder -Directory -Filter statoil*;
 
 ForEach($folder in $sourceFolders) {
     #get installation name
@@ -114,7 +114,7 @@ ForEach($folder in $sourceFolders) {
         $output = New-Item $destinationFolder\$outputRootFolder\$modelName -Type Directory;
     
         #create sub folders
-        Write-Host ("{0}: {1}" -f "Creating model sub folders folders in", $output);
+        Write-Host ("{0}: {1}" -f "Creating model sub folders in", $output);
         ForEach($folder in $outputLevelFolders) {
             $newFolder = New-Item $output\$folder -Type Directory;
             Write-Host $newFolder;
@@ -122,7 +122,7 @@ ForEach($folder in $sourceFolders) {
 
         #Modelling
         Write-Host "Copying to Modelling";
-        $sourceRoot = "$sourceFolder\$installationName\$modelDestinationSubFolder\$installationName";
+        $sourceRoot = "$sourceFolder\$installationName";
         
         #copy .access file
         Write-Host "Copying .access file to Modelling folder";
@@ -140,7 +140,7 @@ ForEach($folder in $sourceFolders) {
             $destination = "$output\Modelling\$zipArchiveName";
 
             Write-Host ("Zipping folder {0} to archive {1}" -f $source, $destination);
-            DoZip $source $destination;
+            CreateZip $source $destination;
         }
 
         #Visualisation
@@ -164,8 +164,31 @@ ForEach($folder in $sourceFolders) {
         Write-Host;
     }
 
-    Function DoZip($sourceFolder, $destinationFile) {
+    Function CreateZip($sourceFolder, $destinationFile) {
         Write-Host ("sz a -tzip -r {0} {1}" -f $destinationFile, $sourceFolder);
         sz a -tzip -r $destinationFile $sourceFolder;
+    }
+
+    Function CreateFolder($folder) {
+        Write-Host ("Creating folder {0}" -f $folder);
+        $newFolder = $null;
+        If (-not (Test-Path $folder)) {
+            $newFolder = New-Item $folder -Type Directory;
+        } Else {
+            $newFolder = $folder;
+        }
+        Return $newFolder;
+    }
+
+    Function CopyFiles($source, $destination) {
+        Write-Host ("Copying file {0} to {1}" -f $source, $destination);
+        $files = Get-Item $source;
+        ForEach($file in $files) {
+            $fileName = $file.Name;
+            If (Test-Path "$destination\$fileName") {
+                Rename-Item "$destination\$fileName" "$destination\$fileName.old";
+            }
+        }
+        Copy-Item $source -Destination $destination;
     }
 }
