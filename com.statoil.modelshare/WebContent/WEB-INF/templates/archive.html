@@ -70,7 +70,10 @@
 							</div>
 							<div class="panel-body">
 								<div th:each="model: ${node.children.?[leaf==true]}">
-									<a class="asset" th:href="@{/showModel(item=${model.relativePath})}" th:text="${model.name}"></a>
+									<a th:href="@{/showModel(item=${model.relativePath})}"
+									th:rel="${model.picturePath == null} ? '': 'popover'" 
+									th:attr="data-img=@{/pictures(asset=${model.picturePath})}"
+									th:text="${model.name}"></a>
 								</div>
 							</div>
 						</div>
