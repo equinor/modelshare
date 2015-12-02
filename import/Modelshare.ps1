@@ -146,16 +146,16 @@ ForEach($folder in $sourceFolders) {
         #Visualisation
         Write-Host "Copying to Visualisation";
         #copy .hsf
-        Copy-Item $sourceFolder\$installationName\$modelDestinationSubFolder\$installationName\hoops\*.hsf -Destination $output\Visualisation
+        Copy-Item $sourceFolder\$installationName\hoops\*.hsf -Destination $output\Visualisation
         #copy .vtf
-        Copy-Item $sourceFolder\$installationName\$modelDestinationSubFolder\$installationName\vtf\*.vtf -Destination $output\Visualisation
+        Copy-Item $sourceFolder\$installationName\vtf\*.vtf -Destination $output\Visualisation
         #copy .wrl
-        Copy-Item $sourceFolder\$installationName\$modelDestinationSubFolder\$installationName\vrml\*.wrl -Destination $output\Visualisation
+        Copy-Item $sourceFolder\$installationName\vrml\*.wrl -Destination $output\Visualisation
 
         #Analysis
         Write-Host "Copying to Analysis";
         #copy .stl
-        Copy-Item $sourceFolder\$installationName\$modelDestinationSubFolder\$installationName\stl\*.stl -Destination $output\Analysis
+        Copy-Item $sourceFolder\$installationName\stl\*.stl -Destination $output\Analysis
     
         Write-Host;
     }
