@@ -24,10 +24,11 @@
 		});
 		
 		$(document).ready( function() {
-		    $('.btn-file :file').on('fileselect', function(event, label) {
-		        console.log("Something has happened: " + label);
-		        $('.input-group #fileName').val(label);
-		        $('.save').removeAttr('disabled');
+			$('.btn-file :file').on('fileselect', function(event, label) {
+		    	var css =  {};
+		    	css.color = label ? '#5cb85c' : '#999999';
+		    	css.fontWeight = label ? 'bold' : 'normal';
+		    	$(event.target).parent().css(css);
 		    });
 		    
 		    //confirm download dialog fragment
