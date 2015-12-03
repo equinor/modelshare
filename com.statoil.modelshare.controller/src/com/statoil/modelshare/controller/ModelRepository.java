@@ -162,7 +162,7 @@ public interface ModelRepository {
 	 * @return model object
 	 * @throws IOException 
 	 */
-	public Model getMetaInformation(Client user, Path path) throws IOException;
+	public Model getModel(Client user, Path path) throws IOException;
 	
 	
 	public File getFile(Client user, Path path) throws IOException;

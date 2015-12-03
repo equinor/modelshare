@@ -155,8 +155,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 		rootCache.clear();
 	}
 
-	private void fillFolderContents(Folder folder, Client user) throws IOException {
-		File file = new File(folder.getPath());
+	private void fillFolderContents(Folder rootFolder, Client user) throws IOException {
+		File file = new File(rootFolder.getPath());
 		if (!file.exists()) {
 			return;
 		}
@@ -175,18 +175,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 			if (hasViewAccess(user, child.toPath())) {
 				String relativePath = rootPath.relativize(child.toPath()).toString().replace('\\', '/');
 				if (child.isDirectory()) {
-					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
-					newFolder.setName(child.getName());
-					newFolder.setPath(child.getAbsolutePath());
-					newFolder.setRelativePath(relativePath);
-					setPicturePath(newFolder, child);
-					folder.getAssets().add(newFolder);
-					fillFolderContents(newFolder, user);
+					Folder folder = ModelshareFactory.eINSTANCE.createFolder();
+					folder.setName(child.getName());
+					folder.setPath(child.getAbsolutePath());
+					folder.setRelativePath(relativePath);
+					setPicturePath(folder, child);
+					rootFolder.getAssets().add(folder);
+					fillFolderContents(folder, user);
 				} else {
-					Model newFile = getMetaInformation(user, child.toPath());
-					newFile.setRelativePath(relativePath);
-					setPicturePath(newFile, child);
-					folder.getAssets().add(newFile);
+					Model model = getModel(user, child.toPath());
+					model.setPath(child.getAbsolutePath());
+					model.setRelativePath(relativePath);
+					setPicturePath(model, child);
+					rootFolder.getAssets().add(model);
 				}
 			}
 		}
@@ -227,7 +228,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public Model getMetaInformation(Client owner, Path path) throws IOException {
+	public Model getModel(Client owner, Path path) throws IOException {
 		Properties resultProps = new Properties();
 		Path resolvedPath = rootPath.resolve(path);
 		String fileName = resolvedPath.getFileName().toString();
@@ -237,17 +238,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 		
 		if (metaFile.exists()){
 			try {
-				// read the old properties
+				// read the old properties if present
 				final FileInputStream in = new FileInputStream(metaFile);
 				resultProps.loadFromXML(in);
 				in.close();
 				// create a new model instance
 				Model model = ModelshareFactory.eINSTANCE.createModel();
+				String relativePath = rootPath.relativize(path).toString().replace('\\', '/');
 				model.setOwner(resultProps.getProperty("owner"));
 				model.setLastUpdated(resultProps.getProperty("lastUpdated"));
 				model.setName(resultProps.getProperty("name"));
 				model.setOrganisation(resultProps.getProperty("organisation"));
 				model.setPath(path.toString());
+				model.setRelativePath(relativePath);
 				model.setUsage(resultProps.getProperty("usage"));
 				model.setMail(resultProps.getProperty("mail"));
 				// parse the SIMA-model file

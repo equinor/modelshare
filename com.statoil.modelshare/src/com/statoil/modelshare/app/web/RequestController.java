@@ -53,7 +53,7 @@ public class RequestController extends AbstractController {
 			Principal principal) {
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			Model currentModel = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
+			Model currentModel = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 			model.put("from", user.getName());
 			model.put("mailfrom", user.getEmail());
 			model.put("to", currentModel.getMail());
@@ -101,7 +101,7 @@ public class RequestController extends AbstractController {
 		Model model = null;
 		try {
 			Client user = modelrepository.getUser(principal.getName());
-			model = modelrepository.getMetaInformation(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
+			model = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
 			log.fatal(msg, e);
