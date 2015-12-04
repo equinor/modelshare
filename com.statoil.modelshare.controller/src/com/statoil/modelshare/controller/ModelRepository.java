@@ -54,8 +54,8 @@ public interface ModelRepository {
 	/**
 	 * Returns a map of all accounts that have access to the specific resource.
 	 * 
-	 * @param owner
-	 *            the account requesting the data
+	 * @param requestor
+	 *            the user requesting the data
 	 * @param asset
 	 *            the asset to get the access for
 	 * @return a map of accounts with access to the resource
@@ -63,15 +63,15 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the <i>owner</i> don't have the required credentials
 	 */
-	public Map<Account, EnumSet<Access>> getRights(Account owner, Path asset) throws AccessDeniedException, IOException;
+	public Map<Account, EnumSet<Access>> getRights(User requestor, Path asset) throws AccessDeniedException, IOException;
 
 	/**
 	 * Sets the access rights for the specified user on a particular resource.
 	 * 
-	 * @param owner
-	 *            the account requesting the data
+	 * @param requestor
+	 *            the user requesting the data
 	 * @param user
-	 *            the user getting the rights
+	 *            the user for which to modify the rights
 	 * @param asset
 	 *            the asset to set the rights for
 	 * @param rights
@@ -80,7 +80,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the <i>owner</i> don't have the required credentials
 	 */
-	public void setRights(Account owner, User user, Path asset, EnumSet<Access> rights) throws IOException;
+	public void modifyRights(User requestor, User user, Path asset, EnumSet<Access> rights) throws IOException;
 	
 	/**
 	 * Returns the user with the given identifier if found, otherwise
@@ -129,7 +129,7 @@ public interface ModelRepository {
 	/**
 	 * Convenience method to set download rights on a file / folder for a user
 	 * 
-	 * @param owner
+	 * @param requestor
 	 *            the account requesting the data
 	 * @param user
 	 *            the user to set access for
@@ -139,7 +139,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the owner does not have write access
 	 */
-	public void setDownloadRights(Account owner, User user, Path path) throws AccessDeniedException, IOException;
+	public void setDownloadRights(User requestor, User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
 	 * Returns the {@link InputStream} for the path if the client has access to
@@ -154,13 +154,13 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have read access
 	 */
-	public InputStream downloadModel(Account user, Path path) throws AccessDeniedException, IOException;
+	public InputStream downloadModel(User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
 	 * Copies the asset to the local user directory if possible
 	 * 
 	 * @param user
-	 *            the account requesting the data
+	 *            the user requesting a local copy
 	 * @param path
 	 *            the root relative path to the asset
 	 * @return a description of what actually happened
@@ -190,6 +190,8 @@ public interface ModelRepository {
 	/**
 	 * Creates a folder on the given parent folder.
 	 * 
+	 * @param user
+	 *            the user creating the folder
 	 * @throws IOException
 	 *             if the folder could not be created
 	 * @throws AccessDeniedException
@@ -201,13 +203,26 @@ public interface ModelRepository {
 	 * Gets properties from the meta file and creates a model object to be
 	 * returned
 	 * 
+	 * @param user
+	 *            the user requesting the model
 	 * @param path
+	 *            path to the asset
 	 * @return model object
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public Model getModel(User user, Path path) throws IOException;
-	
-	
+
+	/**
+	 * Returns a {@link File} instance for the asset in the specified path. This
+	 * would typically be a picture of a model residing in the same folder.
+	 * 
+	 * @param user
+	 *            the user requesting the asset
+	 * @param path
+	 *            path to the asset
+	 * @return
+	 * @throws IOException
+	 */
 	public File getFile(User user, Path path) throws IOException;
 
 	/**

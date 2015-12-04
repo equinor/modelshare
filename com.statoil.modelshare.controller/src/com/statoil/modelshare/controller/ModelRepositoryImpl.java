@@ -223,8 +223,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 	
 	@Override
-	public Map<Account, EnumSet<Access>> getRights(Account user, Path path) throws AccessDeniedException, IOException{
-		EnumSet<Access> rights = ra.getRights(path, user);
+	public Map<Account, EnumSet<Access>> getRights(User requestor, Path path) throws AccessDeniedException, IOException{
+		EnumSet<Access> rights = ra.getRights(path, requestor);
 		if (rights.contains(Access.WRITE)) {
 			return ra.getRights(path);
 		} else {
@@ -233,22 +233,22 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 	
 	@Override
-	public void setRights(Account owner, User user, Path path, EnumSet<Access> rights) throws AccessDeniedException, IOException {
-		EnumSet<Access> access = ra.getRights(path, owner);
+	public void modifyRights(User requestor, User user, Path path, EnumSet<Access> rights) throws AccessDeniedException, IOException {
+		EnumSet<Access> access = ra.getRights(path, requestor);
 		if (access.contains(Access.WRITE)) {
-			ra.setRights(path, user, rights);
+			ra.modifyRights(path, user, rights);
 		} else {
 			throw new AccessDeniedException(path.toString());
 		}
 	}
 
 	@Override
-	public void setDownloadRights(Account owner, User user, Path path) throws AccessDeniedException, IOException {
-		setRights(owner, user, path, EnumSet.of(Access.READ));
+	public void setDownloadRights(User requestor, User user, Path path) throws AccessDeniedException, IOException {
+		modifyRights(requestor, user, path, EnumSet.of(Access.READ));
 	}
 
 	@Override
-	public InputStream downloadModel(Account user, Path path) throws IOException {
+	public InputStream downloadModel(User user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
 		EnumSet<Access> rights = ra.getRights(path, user);
 		if (rights.contains(Access.READ)) {

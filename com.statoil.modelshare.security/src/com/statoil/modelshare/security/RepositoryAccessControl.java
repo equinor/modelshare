@@ -437,7 +437,7 @@ public class RepositoryAccessControl {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public synchronized void setRights(Path path, Account account, EnumSet<Access> rights) throws FileNotFoundException, IOException {
+	public synchronized void modifyRights(Path path, Account account, EnumSet<Access> rights) throws FileNotFoundException, IOException {
 		// determine the name of the .access file
 		String name = null;
 		if (path.toAbsolutePath().toFile().isDirectory()) {

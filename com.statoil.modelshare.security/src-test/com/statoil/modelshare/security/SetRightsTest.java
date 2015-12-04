@@ -48,7 +48,7 @@ public class SetRightsTest {
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		
-		ra.setRights(model.toPath(), user, EnumSet.of(Access.VIEW, Access.READ));
+		ra.modifyRights(model.toPath(), user, EnumSet.of(Access.VIEW, Access.READ));
 		EnumSet<Access> newRights = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), ident);
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights);
 	}
@@ -80,22 +80,22 @@ public class SetRightsTest {
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.NO_READ, Access.NO_WRITE), rights);
 
 		// partial modification
-		ra.setRights(model.toPath(), u1, EnumSet.of(Access.NO_VIEW));
+		ra.modifyRights(model.toPath(), u1, EnumSet.of(Access.NO_VIEW));
 		EnumSet<Access> newRights1 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t1");
 		Assert.assertEquals(EnumSet.of(Access.NO_VIEW, Access.NO_READ, Access.NO_WRITE), newRights1);
 
 		// complete modification
-		ra.setRights(model.toPath(), u1, EnumSet.of(Access.VIEW, Access.READ, Access.WRITE));
+		ra.modifyRights(model.toPath(), u1, EnumSet.of(Access.VIEW, Access.READ, Access.WRITE));
 		EnumSet<Access> newRights2 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t1");
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.WRITE, Access.READ), newRights2);
 
 		// add account to .access
-		ra.setRights(model.toPath(), u2, EnumSet.of(Access.VIEW));
+		ra.modifyRights(model.toPath(), u2, EnumSet.of(Access.VIEW));
 		EnumSet<Access> newRights3 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t2");
 		Assert.assertEquals(EnumSet.of(Access.VIEW), newRights3);
 		
 		// modify newly added account
-		ra.setRights(model.toPath(), u2, EnumSet.of(Access.READ));
+		ra.modifyRights(model.toPath(), u2, EnumSet.of(Access.READ));
 		EnumSet<Access> newRights4 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t2");
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights4);
 	}
