@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
@@ -52,7 +52,7 @@ public class RequestController extends AbstractController {
 			@RequestParam(value = "asset", required = true) String asset,
 			Principal principal) {
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 			Model currentModel = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 			model.put("from", user.getName());
 			model.put("mailfrom", user.getEmail());
@@ -77,7 +77,7 @@ public class RequestController extends AbstractController {
 
 		if (modelrepository.isValidEmailAddress(mailTo)) {
 			try {
-				Client user = modelrepository.getUser(principal.getName());
+				User user = modelrepository.getUser(principal.getName());
 				String url = makeUrl(request, asset, user);
 				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {
@@ -100,7 +100,7 @@ public class RequestController extends AbstractController {
 		}
 		Model model = null;
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 			model = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
@@ -111,13 +111,13 @@ public class RequestController extends AbstractController {
 		return "redirect:showModel?item=" + model.getPath() + "&leaf=true";
 	}
 	
-	private String makeUrl(HttpServletRequest request, String asset, Client user) {
+	private String makeUrl(HttpServletRequest request, String asset, User user) {
 	    String url = request.getRequestURL().toString();
 	    url = url.substring(0, url.lastIndexOf("/")) + "/grantaccess";
 		return url + "?asset=" + asset + "&user=" + user.getEmail() + "&grant=true";
 	}
 
-	private void sendEmail(String message, String mailTo, Client user, String asset, String url) throws MessagingException, UnsupportedEncodingException {
+	private void sendEmail(String message, String mailTo, User user, String asset, String url) throws MessagingException, UnsupportedEncodingException {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
 		properties.setProperty("mail.smtp.port", String.valueOf(smtpConfig.getPort()));

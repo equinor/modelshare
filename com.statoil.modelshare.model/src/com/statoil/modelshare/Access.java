@@ -26,7 +26,7 @@ public enum Access implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	VIEW(1, "View", "View"),
+	VIEW(1, "View", "+v"),
 
 	/**
 	 * The '<em><b>Read</b></em>' literal object.
@@ -36,7 +36,7 @@ public enum Access implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	READ(2, "Read", "Read"),
+	READ(2, "Read", "+r"),
 
 	/**
 	 * The '<em><b>Write</b></em>' literal object.
@@ -46,7 +46,55 @@ public enum Access implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	WRITE(4, "Write", "Write");
+	WRITE(4, "Write", "+w"), /**
+	 * The '<em><b>No View</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #NO_VIEW_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	NO_VIEW(3, "NoView", "-v"), /**
+	 * The '<em><b>No Read</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #NO_READ_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	NO_READ(4, "NoRead", "-r"), /**
+	 * The '<em><b>No Write</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #NO_WRITE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	NO_WRITE(5, "NoWrite", "-w"), /**
+	 * The '<em><b>Inherit View</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_VIEW_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INHERIT_VIEW(6, "InheritView", "?v"), /**
+	 * The '<em><b>Inherit Read</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_READ_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INHERIT_READ(7, "InheritRead", "?r"), /**
+	 * The '<em><b>Inherit Write</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_WRITE_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	INHERIT_WRITE(8, "InheritWrite", "?w");
 
 	/**
 	 * The '<em><b>View</b></em>' literal value.
@@ -57,7 +105,7 @@ public enum Access implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #VIEW
-	 * @model name="View"
+	 * @model name="View" literal="+v"
 	 * @generated
 	 * @ordered
 	 */
@@ -72,7 +120,7 @@ public enum Access implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #READ
-	 * @model name="Read"
+	 * @model name="Read" literal="+r"
 	 * @generated
 	 * @ordered
 	 */
@@ -87,11 +135,101 @@ public enum Access implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #WRITE
-	 * @model name="Write"
+	 * @model name="Write" literal="+w"
 	 * @generated
 	 * @ordered
 	 */
 	public static final int WRITE_VALUE = 4;
+
+	/**
+	 * The '<em><b>No View</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>No View</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #NO_VIEW
+	 * @model name="NoView" literal="-v"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int NO_VIEW_VALUE = 3;
+
+	/**
+	 * The '<em><b>No Read</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>No Read</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #NO_READ
+	 * @model name="NoRead" literal="-r"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int NO_READ_VALUE = 4;
+
+	/**
+	 * The '<em><b>No Write</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>No Write</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #NO_WRITE
+	 * @model name="NoWrite" literal="-w"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int NO_WRITE_VALUE = 5;
+
+	/**
+	 * The '<em><b>Inherit View</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>Inherit View</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_VIEW
+	 * @model name="InheritView" literal="?v"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INHERIT_VIEW_VALUE = 6;
+
+	/**
+	 * The '<em><b>Inherit Read</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>Inherit Read</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_READ
+	 * @model name="InheritRead" literal="?r"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INHERIT_READ_VALUE = 7;
+
+	/**
+	 * The '<em><b>Inherit Write</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>Inherit Write</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #INHERIT_WRITE
+	 * @model name="InheritWrite" literal="?w"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int INHERIT_WRITE_VALUE = 8;
 
 	/**
 	 * An array of all the '<em><b>Access</b></em>' enumerators.
@@ -104,6 +242,12 @@ public enum Access implements Enumerator {
 			VIEW,
 			READ,
 			WRITE,
+			NO_VIEW,
+			NO_READ,
+			NO_WRITE,
+			INHERIT_VIEW,
+			INHERIT_READ,
+			INHERIT_WRITE,
 		};
 
 	/**
@@ -163,6 +307,11 @@ public enum Access implements Enumerator {
 			case VIEW_VALUE: return VIEW;
 			case READ_VALUE: return READ;
 			case WRITE_VALUE: return WRITE;
+			case NO_VIEW_VALUE: return NO_VIEW;
+			case NO_WRITE_VALUE: return NO_WRITE;
+			case INHERIT_VIEW_VALUE: return INHERIT_VIEW;
+			case INHERIT_READ_VALUE: return INHERIT_READ;
+			case INHERIT_WRITE_VALUE: return INHERIT_WRITE;
 		}
 		return null;
 	}

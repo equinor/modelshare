@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.statoil.modelshare.Account;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Group;
 
 public class PasswordFileTest {
@@ -61,49 +61,49 @@ public class PasswordFileTest {
 	@Test
 	public final void testBasicUser(){
 		Account account = ra.getAccounts().get(2);
-		Assert.assertTrue(account instanceof Client);
+		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("a@company-a", account.getIdentifier());
 		Assert.assertEquals("User A", account.getName());
 		Assert.assertEquals("users", account.getGroup().getIdentifier());		
-		Assert.assertEquals("a@company-a", ((Client)account).getEmail());
-		Assert.assertEquals(null, ((Client)account).getOrganisation());
-		Assert.assertEquals(null, ((Client)account).getLocalUser());
+		Assert.assertEquals("a@company-a", ((User)account).getEmail());
+		Assert.assertEquals(null, ((User)account).getOrganisation());
+		Assert.assertEquals(null, ((User)account).getLocalUser());
 	}
 
 	@Test
 	public final void testUserWithOrganization(){
 		Account account = ra.getAccounts().get(3);
-		Assert.assertTrue(account instanceof Client);
+		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("b@company-b", account.getIdentifier());
 		Assert.assertEquals("User B", account.getName());
 		Assert.assertEquals("users", account.getGroup().getIdentifier());
-		Assert.assertEquals("b@company-b", ((Client)account).getEmail());
-		Assert.assertEquals("Company B", ((Client)account).getOrganisation());
-		Assert.assertEquals(null, ((Client)account).getLocalUser());
+		Assert.assertEquals("b@company-b", ((User)account).getEmail());
+		Assert.assertEquals("Company B", ((User)account).getOrganisation());
+		Assert.assertEquals(null, ((User)account).getLocalUser());
 	}
 
 	@Test
 	public final void testUserWithLocalUser(){
 		Account account = ra.getAccounts().get(4);
-		Assert.assertTrue(account instanceof Client);
+		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("c@company-c", account.getIdentifier());
 		Assert.assertEquals("User C", account.getName());
 		Assert.assertEquals("users", account.getGroup().getIdentifier());
-		Assert.assertEquals("c@company-c", ((Client)account).getEmail());
-		Assert.assertEquals(null, ((Client)account).getOrganisation());
-		Assert.assertEquals("LocalUserC", ((Client)account).getLocalUser());
+		Assert.assertEquals("c@company-c", ((User)account).getEmail());
+		Assert.assertEquals(null, ((User)account).getOrganisation());
+		Assert.assertEquals("LocalUserC", ((User)account).getLocalUser());
 	}
 	
 	@Test
 	public final void testUserWithLocalUserAndOrganization(){
 		Account account = ra.getAccounts().get(5);
-		Assert.assertTrue(account instanceof Client);
+		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("d@company-d", account.getIdentifier());
 		Assert.assertEquals("User D", account.getName());
 		Assert.assertEquals("users", account.getGroup().getIdentifier());
-		Assert.assertEquals("d@company-d", ((Client)account).getEmail());
-		Assert.assertEquals("Company D", ((Client)account).getOrganisation());
-		Assert.assertEquals("LocalUserD", ((Client)account).getLocalUser());
+		Assert.assertEquals("d@company-d", ((User)account).getEmail());
+		Assert.assertEquals("Company D", ((User)account).getOrganisation());
+		Assert.assertEquals("LocalUserD", ((User)account).getLocalUser());
 	}
 	
 	@Test

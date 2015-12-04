@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -41,7 +41,7 @@ public class DownloadController extends AbstractController {
 	public String getFile(@RequestParam(value = "asset", required = true) String asset, HttpServletResponse response,
 			Principal principal) {
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 			Path path = Paths.get(asset);
 			String name = path.getFileName().toString();
 

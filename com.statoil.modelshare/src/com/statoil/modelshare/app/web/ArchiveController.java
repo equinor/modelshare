@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
@@ -51,7 +51,7 @@ public class ArchiveController extends AbstractController {
 
 		
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 	
 			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 	
@@ -91,7 +91,7 @@ public class ArchiveController extends AbstractController {
 	public String doShow(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required=true) String asset) {
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 
 			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 
@@ -119,7 +119,7 @@ public class ArchiveController extends AbstractController {
 	public String viewArchive(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {
 		try {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 			map.addAttribute("client", user);
 			map.addAttribute("activeMenuItem", asset); //XXX: Remove
 			map.addAttribute("currentFolder", asset);
@@ -152,7 +152,7 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = "/folder", method = RequestMethod.GET)
 	public String folder(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
-		Client user = modelrepository.getUser(principal.getName());
+		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
 		// common
@@ -177,7 +177,7 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public String upload(ModelMap map,Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
-		Client user = modelrepository.getUser(principal.getName());
+		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
 		// common
@@ -198,7 +198,7 @@ public class ArchiveController extends AbstractController {
 		
 		try ( 	BufferedInputStream ms = new BufferedInputStream(file.getInputStream());
 				BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())) {
-			Client user = modelrepository.getUser(principal.getName());
+			User user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
 			map.addAttribute("currentFolder", path);
 			map.addAttribute("topLevel", getRootItems(user));
@@ -236,7 +236,7 @@ public class ArchiveController extends AbstractController {
 			@RequestParam("picture") MultipartFile picture)
 			throws UnsupportedEncodingException {
 
-		Client user = modelrepository.getUser(principal.getName());
+		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", path);
 		map.addAttribute("topLevel", getRootItems(user));
@@ -271,7 +271,7 @@ public class ArchiveController extends AbstractController {
 		}
 	}
 
-	private boolean hasViewOnlyAccess(String item, Client client) {
+	private boolean hasViewOnlyAccess(String item, User client) {
 		boolean hasReadAccess;
 		try {
 			hasReadAccess = modelrepository.hasDownloadAccess(client, Paths.get(item));

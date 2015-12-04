@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.statoil.modelshare.Access;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.ModelshareFactory;
 
@@ -23,7 +23,6 @@ public class SetRightsTest {
 	
 	private static Group adminGroup;
 	private static Group userGroup;
-	EnumSet<Access> access = EnumSet.noneOf(Access.class);
 	private static RepositoryAccessControl ra;
 	
 	@BeforeClass
@@ -38,46 +37,67 @@ public class SetRightsTest {
 	@Test
 	public void testSetDownloadRights_ByCreatingAccessFile() throws IOException {
 		File modelFolder = tempFolder.newFolder("Model_B");
-		File model = new File(modelFolder, "testmodel.obj");
+		File model = new File(modelFolder, "model_b");
 		String ident = "read.access";
 		
-		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(access,model.toPath(), ident));
+		Assert.assertEquals(EnumSet.noneOf(Access.class), ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), ident));
 
-		Client user = ModelshareFactory.eINSTANCE.createClient();
+		User user = ModelshareFactory.eINSTANCE.createUser();
 		user.setName("Test Banan");
 		user.setIdentifier(ident);
 		user.setEmail(ident);
 		user.setGroup(userGroup);
 		
-		ra.setDownloadRights(model.toPath(), user);
-		EnumSet<Access> newRights = ra.getAccess(access,model.toPath(), ident);
+		ra.setRights(model.toPath(), user, EnumSet.of(Access.VIEW, Access.READ));
+		EnumSet<Access> newRights = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), ident);
 		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights);
 	}
 	
 	@Test
 	public void testSetDownloadRightsByChangingExistingAccessFile() throws IOException {
 		File modelFolder = tempFolder.newFolder("Model_C");
-		File model = new File(modelFolder, "testmodel.obj");
-		File accessFile = new File(modelFolder, ".testmodel.obj.access");
-		String ident = "read.access";
+		File model = new File(modelFolder, "model_c");
+		File accessFile = new File(modelFolder, ".model_c.access");
 		
 		FileWriter writer = new FileWriter(accessFile);
-		writer.write(ident + " +v -r -w");
-		writer.flush();
+		writer.write("t1 +v -r -w");
 		writer.close();
+				
+		User u1 = ModelshareFactory.eINSTANCE.createUser();
+		u1.setName("Test1");
+		u1.setIdentifier("t1");
+		u1.setEmail("t1@test.net");
+		u1.setGroup(userGroup);
 		
-		EnumSet<Access> rights = ra.getAccess(access,model.toPath(), ident);
-		Assert.assertEquals(EnumSet.of(Access.VIEW), rights);
+		User u2 = ModelshareFactory.eINSTANCE.createUser();
+		u2.setName("Test1");
+		u2.setIdentifier("t2");
+		u2.setEmail("t2@test.net");
+		u2.setGroup(userGroup);
+
+		// test initial state
+		EnumSet<Access> rights = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t1");
+		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.NO_READ, Access.NO_WRITE), rights);
+
+		// partial modification
+		ra.setRights(model.toPath(), u1, EnumSet.of(Access.NO_VIEW));
+		EnumSet<Access> newRights1 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t1");
+		Assert.assertEquals(EnumSet.of(Access.NO_VIEW, Access.NO_READ, Access.NO_WRITE), newRights1);
+
+		// complete modification
+		ra.setRights(model.toPath(), u1, EnumSet.of(Access.VIEW, Access.READ, Access.WRITE));
+		EnumSet<Access> newRights2 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t1");
+		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.WRITE, Access.READ), newRights2);
+
+		// add account to .access
+		ra.setRights(model.toPath(), u2, EnumSet.of(Access.VIEW));
+		EnumSet<Access> newRights3 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t2");
+		Assert.assertEquals(EnumSet.of(Access.VIEW), newRights3);
 		
-		Client user = ModelshareFactory.eINSTANCE.createClient();
-		user.setName("Test Testesen");
-		user.setIdentifier(ident);
-		user.setEmail(ident);
-		user.setGroup(userGroup);
-		
-		ra.setDownloadRights(model.toPath(), user);
-		EnumSet<Access> newRights = ra.getAccess(access,model.toPath(), ident);
-		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights);
+		// modify newly added account
+		ra.setRights(model.toPath(), u2, EnumSet.of(Access.READ));
+		EnumSet<Access> newRights4 = ra.getAccess(EnumSet.noneOf(Access.class), model.toPath(), "t2");
+		Assert.assertEquals(EnumSet.of(Access.VIEW, Access.READ), newRights4);
 	}
 	
 

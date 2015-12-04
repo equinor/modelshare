@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
 
@@ -60,8 +60,8 @@ public class GrantAccessController extends AbstractController {
 		map.addAttribute("asset", asset);
 		map.addAttribute("user", userId);
 
-		Client owner = modelrepository.getUser(principal.getName());
-		Client user = modelrepository.getUser(userId);
+		User owner = modelrepository.getUser(principal.getName());
+		User user = modelrepository.getUser(userId);
 		try {
 			Path path = Paths.get(URLDecoder.decode(asset, "UTF-8"));
 			if (!modelrepository.hasDownloadAccess(user, path)) {
@@ -75,7 +75,7 @@ public class GrantAccessController extends AbstractController {
 			}
 			
 			// Send mail to requesting user that download now can be done
-			Client requestUser = modelrepository.getUser(principal.getName());
+			User requestUser = modelrepository.getUser(principal.getName());
 			if (modelrepository.isValidEmailAddress(requestUser.getEmail())) {
 				try {
 					sendEmail("You are now granted access to download model " + asset, requestUser.getEmail(), requestUser);
@@ -108,7 +108,7 @@ public class GrantAccessController extends AbstractController {
 		return "grantaccess";
 	}
 	
-	private void sendEmail(String message, String mailTo, Client user) throws MessagingException {
+	private void sendEmail(String message, String mailTo, User user) throws MessagingException {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
 		properties.setProperty("mail.smtp.port", String.valueOf(smtpConfig.getPort()));
