@@ -207,6 +207,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
+	public List<Account> getAccounts() {
+		return ra.getAccounts();
+	}
+	
+	@Override
 	public List<User> getUsers() {
 		return ra.getAccounts()
 				.stream()

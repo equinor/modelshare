@@ -6,11 +6,17 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -29,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.statoil.modelshare.Access;
+import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
@@ -151,18 +159,37 @@ public class GrantAccessController extends AbstractController {
 		
 		Transport.send(mimeMessage);
 	}
-	
-	
-	// alle grupper
-	// alle med eksplisitt tilgang (-grupper)
-	// alle som ikke har eksplisitt tilgang (-grupper)
-	
-	private List<Group> getGroups(){
-		return modelrepository.getGroups();
+		
+	/**
+	 * Returns a map of all groups with explicit access to the asset at the given path. 
+	 */
+	private Map<Account, EnumSet<Access>> getGroupsWithAccess(User user, Path path) throws AccessDeniedException, IOException{
+		return modelrepository
+				.getRights(user, path).entrySet()
+				.stream()
+				.filter(entry -> entry.getKey() instanceof Group)
+				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 	}
-	
-	private List<User> getUsersWithAccess(User user, Path path){
-		modelrepository.getRights(user, path);
+
+	/**
+	 * Returns a map of all users with explicit access to the asset at the given path. 
+	 */
+	private Map<Account, EnumSet<Access>> getUsersWithAccess(User user, Path path) throws AccessDeniedException, IOException{
+		return modelrepository
+				.getRights(user, path).entrySet()
+				.stream()
+				.filter(entry -> entry.getKey() instanceof User)
+				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 	}
  	
+	/**
+	 * Returns a list of all accounts with no explicit access to the asset at the given path. 
+	 */
+	private List<Account> getAccountsWithoutAccess(User user, Path path) throws AccessDeniedException, IOException{
+		Set<Account> explicitAccounts = modelrepository.getRights(user, path).keySet();
+		return modelrepository.getAccounts()
+				.stream()
+				.filter(u -> !explicitAccounts.contains(u))
+				.collect(Collectors.toList());		
+	}
 }

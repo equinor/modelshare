@@ -112,13 +112,23 @@ public class RepositoryAccessControl {
 	}
 		
 	/**
-	 * For all accounts listed for the specific asset a set is returned containing the inherited rights.
+	 * For all accounts listed for the specific asset a set is returned
+	 * containing the inherited rights. This method is different from
+	 * {@link #getRights(Path)} in that it includes all users with explicit
+	 * access and also the complex set of access control flags. For example:
+	 * 
+	 * <pre>
+	 * anon@ymous +r ?v -w
+	 * </pre>
+	 * 
+	 * Which indicates that the user is granted read access, inherits view
+	 * access and is refused write access.
 	 * 
 	 * @param path
 	 *            path to the asset.
 	 * @return a map of account and access rights
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 * @see #getRights(Path, Account)
 	 */
 	public synchronized Map<Account, EnumSet<Access>> getRights(Path path) throws FileNotFoundException, IOException {
