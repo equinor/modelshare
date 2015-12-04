@@ -52,7 +52,9 @@ public interface ModelRepository {
 	public List<Group> getGroups();
 	
 	/**
-	 * Returns a map of all accounts that have access to the specific resource.
+	 * Returns a map of all accounts that have explicit access to the specific
+	 * resource. This does not include accounts that have inherited access to
+	 * the resource.
 	 * 
 	 * @param requestor
 	 *            the user requesting the data
@@ -61,7 +63,7 @@ public interface ModelRepository {
 	 * @return a map of accounts with access to the resource
 	 * @throws IOException
 	 * @throws AccessDeniedException
-	 *             if the <i>owner</i> don't have the required credentials
+	 *             if the <i>requestor</i> don't have the required credentials
 	 */
 	public Map<Account, EnumSet<Access>> getRights(User requestor, Path asset) throws AccessDeniedException, IOException;
 
@@ -78,7 +80,7 @@ public interface ModelRepository {
 	 *            the set of access rights
 	 * @throws IOException
 	 * @throws AccessDeniedException
-	 *             if the <i>owner</i> don't have the required credentials
+	 *             if the <i>requestor</i> don't have the required credentials
 	 */
 	public void modifyRights(User requestor, User user, Path asset, EnumSet<Access> rights) throws IOException;
 	
@@ -137,7 +139,7 @@ public interface ModelRepository {
 	 *            the folder / file to set access on
 	 * @throws IOException
 	 * @throws AccessDeniedException
-	 *             if the owner does not have write access
+	 *             if the <i>requestor</i> does not have write access
 	 */
 	public void setDownloadRights(User requestor, User user, Path path) throws AccessDeniedException, IOException;
 
@@ -152,7 +154,7 @@ public interface ModelRepository {
 	 * @throws IOException
 	 *             if the file could not be read
 	 * @throws AccessDeniedException
-	 *             if the user does not have read access
+	 *             if the <i>user</i> does not have write access
 	 */
 	public InputStream downloadModel(User user, Path path) throws AccessDeniedException, IOException;
 
@@ -167,7 +169,7 @@ public interface ModelRepository {
 	 * @throws IOException
 	 *             if the file could not be read
 	 * @throws AccessDeniedException
-	 *             if the user does not have read access
+	 *             if the <i>user</i> does not have write access
 	 */
 	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
 
@@ -183,7 +185,7 @@ public interface ModelRepository {
 	 * @param model
 	 *            model description
 	 * @throws AccessDeniedException
-	 *             if the user does not have write access
+	 *             if the <i>user</i> does not have write access
 	 */
 	public void uploadModel(User user, InputStream ms, InputStream ps, Model model) throws IOException, AccessDeniedException;
 
@@ -195,7 +197,7 @@ public interface ModelRepository {
 	 * @throws IOException
 	 *             if the folder could not be created
 	 * @throws AccessDeniedException
-	 *             if the user does not have write access
+	 *             if the <i>user</i> does not have write access
 	 */
 	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
 

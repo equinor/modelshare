@@ -112,7 +112,7 @@ public class RepositoryAccessControl {
 	}
 		
 	/**
-	 * For all accounts listed for the specific asset a set is returned containing the inherited rights. 
+	 * For all accounts listed for the specific asset a set is returned containing the inherited rights.
 	 * 
 	 * @param path
 	 *            path to the asset.
