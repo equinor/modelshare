@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+
+	<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+
+	<div class="container" role="main">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="wizard-container">
+					<div class="card wizard-card ct-wizard-orange" id="wizard">
+						<div class="wizard-header">
+							<h3>Set access rights for:</h3>
+							<h5 class="text-center">
+							'<span th:text="${path}"></span>'
+							</h5>
+						</div>
+						<hr />
+						<form action="saveAccess" method="post">
+							<table class="table table-striped access-table">
+								<thead>
+									<tr>
+										<th>User/Group</th>
+										<th class="text-center">Read</th>
+										<th class="text-center">View</th>
+										<th class="text-center">Write</th>
+									</tr>
+								</thead>
+								<tr>
+									<td>USERS</td>
+									<td class="text-center">
+										<input type="checkbox" name="access" value="123-r" />
+									</td> 
+									<td class="text-center">
+      									<input type="checkbox" name="access" value="123-v" />
+									</td>
+									<td class="text-center">
+	 									<input type="checkbox" name="access" value="123-w" />
+									</td>
+								</tr>
+								<tr>
+									<td>Gøran Henriksen</td>
+									<td class="text-center">
+										<input type="checkbox" name="access" value="321-r" />
+									</td> 
+									<td class="text-center">
+      									<input type="checkbox" name="access" value="321-v" />
+									</td>
+									<td class="text-center">
+	 									<input type="checkbox" name="access" value="321-w" />
+									</td>
+								</tr>
+							</table>
+							<input type="hidden" name="path" th:value="${path}" />
+							<input class="btn btn-primary btn-block" type="submit" value="Save changes" />
+						</form>				
+						<!-- 
+							1. Need write access rights to folder or model. Show key in breadcrumb
+							2. List groups + users
+							3. Add group or user.
+							4. Save changes
+							5. Should not be able to remove YOUR access :)
+						 -->
+						<div class="wizard-footer">
+							<div th:replace="../fragments/alert :: alert(${error},${info})">...</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+</body>
+</html>

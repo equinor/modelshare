@@ -108,6 +108,24 @@ public class GrantAccessController extends AbstractController {
 		return "grantaccess";
 	}
 	
+	@RequestMapping(value = "/manageaccess", method = RequestMethod.GET)
+	public String manageAccessView(ModelMap model,
+			@RequestParam("path") String path) {
+		
+		model.addAttribute("path", path);
+		
+		return "manageaccess";
+	}
+	@RequestMapping(value = "/saveAccess", method = RequestMethod.POST)
+	public String saveAccess(ModelMap model,
+			@RequestParam("path") String path,
+			@RequestParam(value = "access", required = false) String[] access) {
+		
+		//model.addAttribute("path", path);
+		
+		return "redirect:/manageaccess?path=" + path;
+	}
+	
 	private void sendEmail(String message, String mailTo, User user) throws MessagingException {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
