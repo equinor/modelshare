@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.statoil.modelshare.Group;
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
@@ -148,6 +150,19 @@ public class GrantAccessController extends AbstractController {
 		mimeMessage.setContent(multipart);
 		
 		Transport.send(mimeMessage);
+	}
+	
+	
+	// alle grupper
+	// alle med eksplisitt tilgang (-grupper)
+	// alle som ikke har eksplisitt tilgang (-grupper)
+	
+	private List<Group> getGroups(){
+		return modelrepository.getGroups();
+	}
+	
+	private List<User> getUsersWithAccess(User user, Path path){
+		modelrepository.getRights(user, path);
 	}
  	
 }
