@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.statoil.modelshare.Asset;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
@@ -31,7 +31,7 @@ public class ModelRepositoryTest {
 	
 	@Test
 	public void testGetRoot(){
-		Client user = ModelshareFactory.eINSTANCE.createClient();
+		User user = ModelshareFactory.eINSTANCE.createUser();
 		user.setIdentifier("administrators");
 		Folder root = repo.getRoot(user);
 		EList<Asset> eContents = root.getAssets();

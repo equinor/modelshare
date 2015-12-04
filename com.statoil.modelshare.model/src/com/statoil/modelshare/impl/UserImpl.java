@@ -2,8 +2,8 @@
  */
 package com.statoil.modelshare.impl;
 
-import com.statoil.modelshare.Client;
 import com.statoil.modelshare.ModelsharePackage;
+import com.statoil.modelshare.User;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -13,22 +13,22 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Client</b></em>'.
+ * An implementation of the model object '<em><b>User</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getOrganisation <em>Organisation</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getEmail <em>Email</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getPassword <em>Password</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ClientImpl#isForceChangePassword <em>Force Change Password</em>}</li>
- *   <li>{@link com.statoil.modelshare.impl.ClientImpl#getLocalUser <em>Local User</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#getOrganisation <em>Organisation</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#getEmail <em>Email</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#getPassword <em>Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#isForceChangePassword <em>Force Change Password</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#getLocalUser <em>Local User</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ClientImpl extends AccountImpl implements Client {
+public class UserImpl extends AccountImpl implements User {
 	/**
 	 * The default value of the '{@link #getOrganisation() <em>Organisation</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -134,7 +134,7 @@ public class ClientImpl extends AccountImpl implements Client {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ClientImpl() {
+	protected UserImpl() {
 		super();
 	}
 
@@ -145,7 +145,7 @@ public class ClientImpl extends AccountImpl implements Client {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ModelsharePackage.Literals.CLIENT;
+		return ModelsharePackage.Literals.USER;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class ClientImpl extends AccountImpl implements Client {
 		String oldOrganisation = organisation;
 		organisation = newOrganisation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__ORGANISATION, oldOrganisation, organisation));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__ORGANISATION, oldOrganisation, organisation));
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class ClientImpl extends AccountImpl implements Client {
 		String oldEmail = email;
 		email = newEmail;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__EMAIL, oldEmail, email));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__EMAIL, oldEmail, email));
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class ClientImpl extends AccountImpl implements Client {
 		String oldPassword = password;
 		password = newPassword;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__PASSWORD, oldPassword, password));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__PASSWORD, oldPassword, password));
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class ClientImpl extends AccountImpl implements Client {
 		boolean oldForceChangePassword = forceChangePassword;
 		forceChangePassword = newForceChangePassword;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD, oldForceChangePassword, forceChangePassword));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__FORCE_CHANGE_PASSWORD, oldForceChangePassword, forceChangePassword));
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class ClientImpl extends AccountImpl implements Client {
 		String oldLocalUser = localUser;
 		localUser = newLocalUser;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.CLIENT__LOCAL_USER, oldLocalUser, localUser));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__LOCAL_USER, oldLocalUser, localUser));
 	}
 
 	/**
@@ -261,15 +261,15 @@ public class ClientImpl extends AccountImpl implements Client {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ModelsharePackage.CLIENT__ORGANISATION:
+			case ModelsharePackage.USER__ORGANISATION:
 				return getOrganisation();
-			case ModelsharePackage.CLIENT__EMAIL:
+			case ModelsharePackage.USER__EMAIL:
 				return getEmail();
-			case ModelsharePackage.CLIENT__PASSWORD:
+			case ModelsharePackage.USER__PASSWORD:
 				return getPassword();
-			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
+			case ModelsharePackage.USER__FORCE_CHANGE_PASSWORD:
 				return isForceChangePassword();
-			case ModelsharePackage.CLIENT__LOCAL_USER:
+			case ModelsharePackage.USER__LOCAL_USER:
 				return getLocalUser();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -283,19 +283,19 @@ public class ClientImpl extends AccountImpl implements Client {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ModelsharePackage.CLIENT__ORGANISATION:
+			case ModelsharePackage.USER__ORGANISATION:
 				setOrganisation((String)newValue);
 				return;
-			case ModelsharePackage.CLIENT__EMAIL:
+			case ModelsharePackage.USER__EMAIL:
 				setEmail((String)newValue);
 				return;
-			case ModelsharePackage.CLIENT__PASSWORD:
+			case ModelsharePackage.USER__PASSWORD:
 				setPassword((String)newValue);
 				return;
-			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
+			case ModelsharePackage.USER__FORCE_CHANGE_PASSWORD:
 				setForceChangePassword((Boolean)newValue);
 				return;
-			case ModelsharePackage.CLIENT__LOCAL_USER:
+			case ModelsharePackage.USER__LOCAL_USER:
 				setLocalUser((String)newValue);
 				return;
 		}
@@ -310,19 +310,19 @@ public class ClientImpl extends AccountImpl implements Client {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.CLIENT__ORGANISATION:
+			case ModelsharePackage.USER__ORGANISATION:
 				setOrganisation(ORGANISATION_EDEFAULT);
 				return;
-			case ModelsharePackage.CLIENT__EMAIL:
+			case ModelsharePackage.USER__EMAIL:
 				setEmail(EMAIL_EDEFAULT);
 				return;
-			case ModelsharePackage.CLIENT__PASSWORD:
+			case ModelsharePackage.USER__PASSWORD:
 				setPassword(PASSWORD_EDEFAULT);
 				return;
-			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
+			case ModelsharePackage.USER__FORCE_CHANGE_PASSWORD:
 				setForceChangePassword(FORCE_CHANGE_PASSWORD_EDEFAULT);
 				return;
-			case ModelsharePackage.CLIENT__LOCAL_USER:
+			case ModelsharePackage.USER__LOCAL_USER:
 				setLocalUser(LOCAL_USER_EDEFAULT);
 				return;
 		}
@@ -337,15 +337,15 @@ public class ClientImpl extends AccountImpl implements Client {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ModelsharePackage.CLIENT__ORGANISATION:
+			case ModelsharePackage.USER__ORGANISATION:
 				return ORGANISATION_EDEFAULT == null ? organisation != null : !ORGANISATION_EDEFAULT.equals(organisation);
-			case ModelsharePackage.CLIENT__EMAIL:
+			case ModelsharePackage.USER__EMAIL:
 				return EMAIL_EDEFAULT == null ? email != null : !EMAIL_EDEFAULT.equals(email);
-			case ModelsharePackage.CLIENT__PASSWORD:
+			case ModelsharePackage.USER__PASSWORD:
 				return PASSWORD_EDEFAULT == null ? password != null : !PASSWORD_EDEFAULT.equals(password);
-			case ModelsharePackage.CLIENT__FORCE_CHANGE_PASSWORD:
+			case ModelsharePackage.USER__FORCE_CHANGE_PASSWORD:
 				return forceChangePassword != FORCE_CHANGE_PASSWORD_EDEFAULT;
-			case ModelsharePackage.CLIENT__LOCAL_USER:
+			case ModelsharePackage.USER__LOCAL_USER:
 				return LOCAL_USER_EDEFAULT == null ? localUser != null : !LOCAL_USER_EDEFAULT.equals(localUser);
 		}
 		return super.eIsSet(featureID);
@@ -361,5 +361,5 @@ public class ClientImpl extends AccountImpl implements Client {
 		if (eIsProxy()) return super.toString();
 		return getIdentifier();
 	}
-
-} //ClientImpl
+	
+} //UserImpl

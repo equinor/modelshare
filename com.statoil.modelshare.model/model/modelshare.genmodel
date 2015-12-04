@@ -13,13 +13,19 @@
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/View"/>
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Read"/>
       <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/Write"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/NoView"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/NoRead"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/NoWrite"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/InheritView"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/InheritRead"/>
+      <genEnumLiterals ecoreEnumLiteral="modelshare.ecore#//Access/InheritWrite"/>
     </genEnums>
-    <genClasses ecoreClass="modelshare.ecore#//Client">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/organisation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/email"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/password"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/forceChangePassword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Client/localUser"/>
+    <genClasses ecoreClass="modelshare.ecore#//User">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/organisation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/forceChangePassword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/localUser"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>

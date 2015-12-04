@@ -117,14 +117,14 @@ public interface Asset extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Absolute file system path to the resource.
+	 * Absolute file system path to the resource. This is represented in a platform specific format.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Path</em>' attribute.
 	 * @see #isSetPath()
 	 * @see #unsetPath()
 	 * @see #setPath(String)
 	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_Path()
-	 * @model unsettable="true"
+	 * @model unsettable="true" transient="true"
 	 * @generated
 	 */
 	String getPath();
@@ -278,6 +278,9 @@ public interface Asset extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The relative path to the resource, calculated from the repository root and represented in a platform independent manner.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Relative Path</em>' attribute.
 	 * @see #isSetRelativePath()
 	 * @see #unsetRelativePath()

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -62,7 +62,7 @@ public class PasswdController extends AbstractController {
 
 	@RequestMapping(value = "/passwd", method = RequestMethod.GET)
 	public String showPasswordView(ModelMap map, Principal principal) {
-		Client user = modelrepository.getUser(principal.getName());
+		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("topLevel", modelrepository.getRoot(user).getAssets());
 		return "passwd";
 	}

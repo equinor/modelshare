@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.statoil.modelshare.Client;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -39,7 +38,7 @@ public class FilebasedAuthenticationProvider extends AbstractUserDetailsAuthenti
 	protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
 
-		Client client = repository.getUser(username);
+		com.statoil.modelshare.User client = repository.getUser(username);
 		if (client==null){
 			throw new BadCredentialsException("Bad credentials");
 		}

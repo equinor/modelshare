@@ -4,22 +4,25 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.stream.Stream;
+import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.logging.Log;
@@ -27,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.ModelshareFactory;
 
@@ -107,8 +110,19 @@ public class RepositoryAccessControl {
 		thread.setDaemon(true);
 		thread.start();
 	}
-
-	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
+		
+	/**
+	 * For all accounts listed for the specific asset a set is returned containing the inherited rights. 
+	 * 
+	 * @param path
+	 *            path to the asset.
+	 * @return a map of account and access rights
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @see #getRights(Path, Account)
+	 */
+	public synchronized Map<Account, EnumSet<Access>> getRights(Path path) throws FileNotFoundException, IOException {
+		// determine the name to the .access file
 		String name = null;
 		if (path.toAbsolutePath().toFile().isDirectory()) {
 			name = path.getFileName() + File.separator + ".access";
@@ -118,47 +132,61 @@ public class RepositoryAccessControl {
 		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
 		File file = filePath.toFile();
 		if (!file.exists()) {
+			return new HashMap<>();
+		}
+
+		// read the list of accounts in the file
+		List<String> identifiers = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(new BOMInputStream(new FileInputStream(file))))) {
+			String in = null;
+			while ((in = br.readLine()) != null) {
+				if (!in.startsWith("#") && in.length() > 0) {
+					String[] split = in.trim().split("\\s+");
+					identifiers.add(split[0]);
+				}	
+			}
+		}
+
+		// collect rights for all accounts listed
+		Map<Account, EnumSet<Access>> rights = new HashMap<>();
+		for (String id : identifiers) {
+			Optional<Account> account = getAccounts()
+					.stream()
+					.filter(a -> a.getIdentifier().equals(id))
+					.findFirst();
+			if (account.isPresent()) {
+				EnumSet<Access> r = getRights(path, account.get());
+				rights.put(account.get(), r);
+			}
+		}
+
+		return rights;
+	}
+
+	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
+		// determine the name of the .access file
+		String name = null;
+		if (path.toAbsolutePath().toFile().isDirectory()) {
+			name = path.getFileName() + File.separator + ".access";
+		} else {
+			name = "." + path.getFileName().toString() + ".access";
+		}
+		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
+		File accessFile = filePath.toFile();
+		if (!accessFile.exists()) {
 			return access;
 		}
 		try (BufferedReader br = new BufferedReader(
 				new InputStreamReader(
 						new BOMInputStream(
-								new FileInputStream(file))))) {
+								new FileInputStream(accessFile))))) {
 			String in = null;
 			while ((in = br.readLine()) != null) {
 				if (!in.startsWith("#") && in.length() > 0) {
 					String[] split = in.trim().split("\\s+");
-					if (split.length != 4)
-						throw new IOException("Invalid file format " + filePath);
 					if (ident.equals(split[0])) {
-						for (int i = 1; i < 4; i++) {
-							String a = split[i];
-							switch (a) {
-							case "+r":
-								access.add(Access.READ);
-								break;
-							case "-r":
-								access.remove(Access.READ);
-								break;
-							case "+w":
-								access.add(Access.WRITE);
-								break;
-							case "-w":
-								access.remove(Access.WRITE);
-								break;
-							case "+v":
-								access.add(Access.VIEW);
-								break;
-							case "-v":
-								access.remove(Access.VIEW);
-								break;
-							default:
-								// Anything else, for instance "- - -" for
-								// simply passing through overlying access
-								// rights will be a NOP.
-								break;
-							}
-						}
+						parseAccessString(access, split);
 					}
 				}
 			}
@@ -167,7 +195,50 @@ public class RepositoryAccessControl {
 	}
 
 	/**
-	 * This method will for each account derived from the initial go into each
+	 * Parses the access string and modifies the given set.
+	 * 
+	 * @param access
+	 * @param split
+	 */
+	private void parseAccessString(EnumSet<Access> access, String[] split) {
+		for (int i = 1; i < split.length; i++) {
+			String a = split[i];
+			switch (a) {
+			case "+r":
+				access.add(Access.READ);
+				access.remove(Access.NO_READ);
+				break;
+			case "-r":
+				access.remove(Access.READ);
+				access.add(Access.NO_READ);
+				break;
+			case "+w":
+				access.add(Access.WRITE);
+				access.remove(Access.NO_WRITE);
+				break;
+			case "-w":
+				access.remove(Access.WRITE);
+				access.add(Access.NO_WRITE);
+				break;
+			case "+v":
+				access.add(Access.VIEW);
+				access.remove(Access.NO_VIEW);
+				break;
+			case "-v":
+				access.remove(Access.VIEW);
+				access.add(Access.NO_VIEW);
+				break;
+			default:
+				// Anything else, for instance "- - -" for
+				// simply passing through overlying access
+				// rights will be a NOP.
+				break;
+			}
+		}
+	}
+
+	/**
+	 * This method will for each account derived from the initial, go into each
 	 * path and accumulate access rights. This means that each sub-folder can
 	 * modify the set of rights. Also that the immediate group or user account
 	 * may override rights of the parent group.
@@ -205,86 +276,6 @@ public class RepositoryAccessControl {
 		return access;
 	}
 
-	public void setDownloadRights(Path path, Client client) throws IOException {
-		String name = null;
-		if (path.toAbsolutePath().toFile().isDirectory()) {
-			name = path.getFileName() + File.separator + ".access";
-		} else {
-			name = "." + path.getFileName().toString() + ".access";
-		}
-		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
-		File accessFile = filePath.toFile();
-		if (accessFile.exists()) {
-			List<AccessRight> accessRights = new ArrayList<>();
-			boolean foundClient = false;
-			try (BufferedReader reader = Files.newBufferedReader(filePath)) {
-				Stream<String> lines = reader.lines();
-				Iterator<String> iterator = lines.iterator();
-				while (iterator.hasNext()) {
-					String line = iterator.next();
-					StringTokenizer tokenizer = new StringTokenizer(line);
-					String ident = "";
-					String view = "";
-					String read = "";
-					String write = "";
-					while (tokenizer.hasMoreTokens()) {
-						String token = tokenizer.nextToken();
-						if (token.contains("-r") || token.contains("+r")) {
-							read = token;
-						} else if (token.contains("-v") || token.contains("+v")) {
-							view = token;
-						} else if (token.contains("-w") || token.contains("+w")) {
-							write = token;
-						} else {
-							ident = token;
-						}
-					}
-					if (ident.contentEquals(client.getIdentifier())) {
-						foundClient = true;
-						read = "+r";
-					}
-					AccessRight aRight = new AccessRight(ident, view, read, write);
-					accessRights.add(aRight);
-				}
-			}
-
-			if (!foundClient) {
-				AccessRight newAccessRight = new AccessRight(client.getIdentifier(), "+v", "+r", "-w");
-				accessRights.add(newAccessRight);
-			}
-
-			try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-				for (AccessRight accessRight : accessRights) {
-					writer.write(accessRight.name + " " + accessRight.view + " " + accessRight.read + " "
-							+ accessRight.write);
-					writer.newLine();
-				}
-				writer.flush();
-				writer.close();
-			}
-
-		} else {
-			File newAccessFile = Files.createFile(filePath).toFile();
-			BufferedWriter writer = Files.newBufferedWriter(newAccessFile.toPath());
-			writer.write(client.getIdentifier() + " " + "+v +r -w");
-			writer.flush();
-			writer.close();
-		}
-	}
-
-	private class AccessRight {
-		private String name;
-		private String view;
-		private String read;
-		private String write;
-
-		public AccessRight(String name, String view, String read, String write) {
-			this.name = name;
-			this.view = view;
-			this.read = read;
-			this.write = write;
-		}
-	}
 
 	private Group getGroup(List<Account> accounts, String name) {
 		if (name.isEmpty()){
@@ -301,8 +292,7 @@ public class RepositoryAccessControl {
 
 	/**
 	 * Returns a list of users and groups that may log into the system. The list
-	 * is guaranteed to be up to date, the underlying data is re-read on every
-	 * call of this method.
+	 * is guaranteed to be up to date.
 	 * 
 	 * @return a list of accounts
 	 * @throws IOException
@@ -345,7 +335,7 @@ public class RepositoryAccessControl {
 						group.setName(split[3]);
 						newAccounts.add(group);
 					} else {
-						Client user = ModelshareFactory.eINSTANCE.createClient();
+						User user = ModelshareFactory.eINSTANCE.createUser();
 						user.setIdentifier(split[0]);
 						user.setEmail(split[0]);
 						user.setPassword(split[1]);
@@ -386,8 +376,8 @@ public class RepositoryAccessControl {
 		synchronized (passwordFilePath) {
 			List<Account> accounts = getAccounts();
 			for (Account account : accounts) {
-				if (account.getIdentifier().equals(id) && account instanceof Client) {
-					((Client) account).setPassword(hash);
+				if (account.getIdentifier().equals(id) && account instanceof User) {
+					((User) account).setPassword(hash);
 				}
 			}
 			try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
@@ -400,9 +390,9 @@ public class RepositoryAccessControl {
 							fw.write(":");
 						}
 						fw.write(account.getName());
-					} else if (account instanceof Client) {
+					} else if (account instanceof User) {
 						fw.write(account.getIdentifier() + ":");
-						fw.write(((Client) account).getPassword() + ":");
+						fw.write(((User) account).getPassword() + ":");
 						if (account.getGroup() != null) {
 							fw.write(account.getGroup().getIdentifier() + ":");
 						} else {
@@ -410,13 +400,13 @@ public class RepositoryAccessControl {
 						}
 						fw.write(account.getName());
 						fw.write(":");
-						if (((Client) account).getOrganisation() != null) {
-							fw.write(((Client) account).getOrganisation() + ":");
+						if (((User) account).getOrganisation() != null) {
+							fw.write(((User) account).getOrganisation() + ":");
 						} else {
 							fw.write(":");
 						}
-						if (((Client) account).getLocalUser() != null) {
-							fw.write(((Client) account).getLocalUser());
+						if (((User) account).getLocalUser() != null) {
+							fw.write(((User) account).getLocalUser());
 						}
 					}
 					fw.write(System.lineSeparator());
@@ -427,4 +417,129 @@ public class RepositoryAccessControl {
 		}
 	}
 
+	/**
+	 * Modifies the access rights an account has to a particular asset. If the
+	 * account has no explicit access defined for the asset, the <i>rights</i>
+	 * set is used as it is. However if access has been defined, the final set
+	 * is the result of a modification. For example:
+	 * <pre>
+	 *                  a-user +r +v +w
+	 * modification                  -w
+	 * becomes          a-user +r +v -w
+	 * </pre>
+	 * 
+	 * @param path
+	 *            path to the asset
+	 * @param account
+	 *            the account to modify rights for
+	 * @param rights
+	 *            the modification set
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public synchronized void setRights(Path path, Account account, EnumSet<Access> rights) throws FileNotFoundException, IOException {
+		// determine the name of the .access file
+		String name = null;
+		if (path.toAbsolutePath().toFile().isDirectory()) {
+			name = path.getFileName() + File.separator + ".access";
+		} else {
+			name = "." + path.getFileName().toString() + ".access";
+		}
+		
+		// read the old file and update the new file
+		Path accessFile = repositoryRootPath.resolve(path.getParent().resolve(name));
+		Path newAccessFile = repositoryRootPath.resolve(path.getParent().resolve(name+".new"));
+		if (accessFile.toFile().exists()){
+			try (BufferedReader br = new BufferedReader(
+					new InputStreamReader(
+							new BOMInputStream(
+									new FileInputStream(accessFile.toFile()))));
+				BufferedWriter bw = Files.newBufferedWriter(newAccessFile, StandardOpenOption.CREATE)) {
+				String in = null;
+				boolean found = false;
+				// iterate over all entries in the file
+				while ((in = br.readLine()) != null) {
+					if (in.trim().startsWith("#")) {
+						bw.write(in);
+					}
+					String[] split = in.trim().split("\\s+");
+					// modify the entry
+					if (split[0].equals(account.getIdentifier())) {
+						// get the existing rights first
+						EnumSet<Access> oldRights = EnumSet.noneOf(Access.class);
+						parseAccessString(oldRights, split);
+						// modify existing rights
+						for (Access access : rights) {
+							switch (access) {
+							case NO_READ:
+								oldRights.remove(Access.READ);
+								oldRights.add(Access.NO_READ);
+								break;
+							case NO_WRITE:
+								oldRights.remove(Access.WRITE);
+								oldRights.add(Access.NO_WRITE);
+								break;
+							case NO_VIEW:
+								oldRights.remove(Access.VIEW);
+								oldRights.add(Access.NO_VIEW);
+								break;
+							case READ:
+								oldRights.remove(Access.NO_READ);
+								oldRights.add(Access.READ);
+								break;
+							case WRITE:
+								oldRights.remove(Access.NO_WRITE);
+								oldRights.add(Access.WRITE);
+								break;
+							case VIEW:
+								oldRights.remove(Access.NO_VIEW);
+								oldRights.add(Access.VIEW);
+								break;
+							case INHERIT_READ:
+								oldRights.remove(Access.READ);
+								oldRights.remove(Access.NO_READ);
+								break;
+							case INHERIT_WRITE:
+								oldRights.remove(Access.WRITE);
+								oldRights.remove(Access.NO_WRITE);
+								break;
+							case INHERIT_VIEW:
+								oldRights.remove(Access.READ);
+								oldRights.remove(Access.NO_VIEW);
+								break;
+							default:
+								break;
+							}
+						}
+						// write the modified set
+						writeRights(account, oldRights, bw);
+						found = true;
+					} else {
+						bw.write(in);
+					}
+					bw.newLine();
+				}
+				// the account did not exist in the file, add an entry
+				if (!found) {
+					writeRights(account, rights, bw);
+					bw.newLine();
+				}
+			}
+		} else {
+			try (BufferedWriter bw = Files.newBufferedWriter(newAccessFile, StandardOpenOption.CREATE)) {
+				writeRights(account, rights, bw);				
+			}
+		}
+		
+		// replace the old access file with the new version
+		Files.move(newAccessFile, accessFile, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	private void writeRights(Account account, EnumSet<Access> rights, BufferedWriter bw) throws IOException {
+		bw.write(account.getIdentifier());
+		for (Access right : rights) {
+			bw.write('\t');
+			bw.write(right.getLiteral());
+		}
+	}
 }

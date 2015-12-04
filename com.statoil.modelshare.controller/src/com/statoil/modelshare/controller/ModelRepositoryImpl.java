@@ -12,13 +12,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -37,8 +37,9 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Asset;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
+import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
@@ -61,7 +62,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	private Path userRoot;
 	
 	/** Cached root folders */
-	private Map<Client,CachedFolder> rootCache;
+	private Map<User,CachedFolder> rootCache;
 	
 	private RepositoryAccessControl ra;
 	
@@ -139,7 +140,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void createFolder(Client user, Folder parentFolder, InputStream is, String name) throws IOException {
+	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException {
 		EnumSet<Access> rights = ra.getRights(Paths.get(parentFolder.getPath()), user);
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(parentFolder.toString());
@@ -155,8 +156,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 		rootCache.clear();
 	}
 
-	private void fillFolderContents(Folder folder, Client user) throws IOException {
-		File file = new File(folder.getPath());
+	private void fillFolderContents(Folder rootFolder, User user) throws IOException {
+		File file = new File(rootFolder.getPath());
 		if (!file.exists()) {
 			return;
 		}
@@ -175,18 +176,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 			if (hasViewAccess(user, child.toPath())) {
 				String relativePath = rootPath.relativize(child.toPath()).toString().replace('\\', '/');
 				if (child.isDirectory()) {
-					Folder newFolder = ModelshareFactory.eINSTANCE.createFolder();
-					newFolder.setName(child.getName());
-					newFolder.setPath(child.getAbsolutePath());
-					newFolder.setRelativePath(relativePath);
-					setPicturePath(newFolder, child);
-					folder.getAssets().add(newFolder);
-					fillFolderContents(newFolder, user);
+					Folder folder = ModelshareFactory.eINSTANCE.createFolder();
+					folder.setName(child.getName());
+					folder.setPath(child.getAbsolutePath());
+					folder.setRelativePath(relativePath);
+					setPicturePath(folder, child);
+					rootFolder.getAssets().add(folder);
+					fillFolderContents(folder, user);
 				} else {
-					Model newFile = getMetaInformation(user, child.toPath());
-					newFile.setRelativePath(relativePath);
-					setPicturePath(newFile, child);
-					folder.getAssets().add(newFile);
+					Model model = getModel(user, child.toPath());
+					model.setPath(child.getAbsolutePath());
+					model.setRelativePath(relativePath);
+					setPicturePath(model, child);
+					rootFolder.getAssets().add(model);
 				}
 			}
 		}
@@ -203,19 +205,50 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public List<Client> getClients() {
-		List<Client> users = new ArrayList<>();
-		List<Account> accounts = ra.getAccounts();
-		for (Account account : accounts) {
-			if (account instanceof Client) {
-				users.add((Client) account);
-			}
-		}
-		return users;
+	public List<User> getUsers() {
+		return ra.getAccounts()
+				.stream()
+				.filter(c -> c instanceof User)
+				.map(c -> (User)c)
+				.collect(Collectors.toList());
 	}
 
 	@Override
-	public InputStream downloadModel(Client user, Path path) throws IOException {
+	public List<Group> getGroups() {
+		return ra.getAccounts()
+				.stream()
+				.filter(c -> c instanceof Group)
+				.map(c -> (Group)c)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public Map<Account, EnumSet<Access>> getRights(Account user, Path path) throws AccessDeniedException, IOException{
+		EnumSet<Access> rights = ra.getRights(path, user);
+		if (rights.contains(Access.WRITE)) {
+			return ra.getRights(path);
+		} else {
+			throw new AccessDeniedException(path.toString());
+		}
+	}
+	
+	@Override
+	public void setRights(Account owner, User user, Path path, EnumSet<Access> rights) throws AccessDeniedException, IOException {
+		EnumSet<Access> access = ra.getRights(path, owner);
+		if (access.contains(Access.WRITE)) {
+			ra.setRights(path, user, rights);
+		} else {
+			throw new AccessDeniedException(path.toString());
+		}
+	}
+
+	@Override
+	public void setDownloadRights(Account owner, User user, Path path) throws AccessDeniedException, IOException {
+		setRights(owner, user, path, EnumSet.of(Access.READ));
+	}
+
+	@Override
+	public InputStream downloadModel(Account user, Path path) throws IOException {
 		File file = rootPath.resolve(path).toFile();
 		EnumSet<Access> rights = ra.getRights(path, user);
 		if (rights.contains(Access.READ)) {
@@ -227,7 +260,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public Model getMetaInformation(Client owner, Path path) throws IOException {
+	public Model getModel(User owner, Path path) throws IOException {
 		Properties resultProps = new Properties();
 		Path resolvedPath = rootPath.resolve(path);
 		String fileName = resolvedPath.getFileName().toString();
@@ -237,17 +270,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 		
 		if (metaFile.exists()){
 			try {
-				// read the old properties
+				// read the old properties if present
 				final FileInputStream in = new FileInputStream(metaFile);
 				resultProps.loadFromXML(in);
 				in.close();
 				// create a new model instance
 				Model model = ModelshareFactory.eINSTANCE.createModel();
+				String relativePath = rootPath.relativize(path).toString().replace('\\', '/');
 				model.setOwner(resultProps.getProperty("owner"));
 				model.setLastUpdated(resultProps.getProperty("lastUpdated"));
 				model.setName(resultProps.getProperty("name"));
 				model.setOrganisation(resultProps.getProperty("organisation"));
 				model.setPath(path.toString());
+				model.setRelativePath(relativePath);
 				model.setUsage(resultProps.getProperty("usage"));
 				model.setMail(resultProps.getProperty("mail"));
 				// parse the SIMA-model file
@@ -289,7 +324,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return model;
 	}
 	
-	public Folder getRoot(Client user) {
+	public Folder getRoot(User user) {
 		
 		// use the cache if it exists
 		CachedFolder c = rootCache.get(user);
@@ -318,8 +353,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public Client getUser(String id) {
-		for (Client user : getClients()) {
+	public User getUser(String id) {
+		for (User user : getUsers()) {
 			if (user.getIdentifier().equals(id)) {
 				return user;
 			}
@@ -327,12 +362,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return null;
 	}
 
-	public boolean hasDownloadAccess(Client user, Path path) throws IOException {
+	public boolean hasDownloadAccess(User user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return rights.contains(Access.READ);
 	}
 
-	public boolean hasViewAccess(Client user, Path path) throws IOException {
+	public boolean hasViewAccess(User user, Path path) throws IOException {
 		EnumSet<Access> rights = ra.getRights(path, user);
 		return rights.contains(Access.VIEW);
 	}
@@ -351,7 +386,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException {
+	public String localCopy(User user, Path path) throws AccessDeniedException, IOException {
 		String localUser = user.getLocalUser();
 		// a local user must be specified
 		if (localUser == null || localUser.isEmpty()) {
@@ -376,23 +411,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void setDownloadRights(Client owner, Client user, Path path) throws AccessDeniedException, IOException {
-		EnumSet<Access> rights = ra.getRights(path, owner);
-		if (rights.contains(Access.WRITE)) {
-			ra.setDownloadRights(path, user);
-		}
-		else {
-			throw new AccessDeniedException(path.toString());
-		}
-	}
-
-	@Override
 	public void setPassword(String name, String hash) {
 		ra.setPassword(name, hash);
 	}
 
 	@Override
-	public void uploadModel(Client user, InputStream modelStream, InputStream pictureStream, Model model)
+	public void uploadModel(User user, InputStream modelStream, InputStream pictureStream, Model model)
 			throws IOException, AccessDeniedException {
 		// assert that the user has write access
 		Path path = rootPath.resolve(model.getRelativePath());
@@ -457,7 +481,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public File getFile(Client user, Path path) throws IOException {
+	public File getFile(User user, Path path) throws IOException {
 		if (hasViewAccess(user, path)){
 			return rootPath.resolve(path).toFile();
 		} else {

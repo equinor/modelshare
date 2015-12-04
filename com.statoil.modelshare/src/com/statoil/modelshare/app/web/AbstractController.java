@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
@@ -32,7 +32,7 @@ public abstract class AbstractController {
 	@Autowired
 	private ModelRepository modelrepository;
 
-	protected List<AssetProxy> getRootItems(Client user) {
+	protected List<AssetProxy> getRootItems(User user) {
 		AssetProxy root = new AssetProxy(null, modelrepository.getRoot(user));
 		return root.getChildren();
 	}
@@ -67,7 +67,7 @@ public abstract class AbstractController {
 	 *            the relative path to the asset
 	 * @return the asset proxy
 	 */
-	protected AssetProxy getAssetAtPath(Client user, String path) {
+	protected AssetProxy getAssetAtPath(User user, String path) {
 		Path p = Paths.get(path);
 		if (p.isAbsolute()){
 			throw new IllegalArgumentException("The path is not relative: "+path);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -31,7 +31,7 @@ public class ImageController {
 	@ResponseBody
 	public ResponseEntity<FileSystemResource> picture(@RequestParam(value = "asset", required = true) String asset,
 			Principal principal) {
-		Client user = repository.getUser(principal.getName());
+		User user = repository.getUser(principal.getName());
 		try {
 			File file = repository.getFile(user, Paths.get(asset));
 			if (file.exists() && file.isFile()) {

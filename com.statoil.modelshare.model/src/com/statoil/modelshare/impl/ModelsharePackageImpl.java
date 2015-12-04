@@ -6,7 +6,7 @@ import com.statoil.modelshare.AbstractTask;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Asset;
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
@@ -35,7 +35,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass clientEClass = null;
+	private EClass userEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -166,8 +166,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getClient() {
-		return clientEClass;
+	public EClass getUser() {
+		return userEClass;
 	}
 
 	/**
@@ -175,8 +175,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getClient_Organisation() {
-		return (EAttribute)clientEClass.getEStructuralFeatures().get(0);
+	public EAttribute getUser_Organisation() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -184,8 +184,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getClient_Email() {
-		return (EAttribute)clientEClass.getEStructuralFeatures().get(1);
+	public EAttribute getUser_Email() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -193,8 +193,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getClient_Password() {
-		return (EAttribute)clientEClass.getEStructuralFeatures().get(2);
+	public EAttribute getUser_Password() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -202,8 +202,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getClient_ForceChangePassword() {
-		return (EAttribute)clientEClass.getEStructuralFeatures().get(3);
+	public EAttribute getUser_ForceChangePassword() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -211,8 +211,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getClient_LocalUser() {
-		return (EAttribute)clientEClass.getEStructuralFeatures().get(4);
+	public EAttribute getUser_LocalUser() {
+		return (EAttribute)userEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -567,12 +567,12 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		isCreated = true;
 
 		// Create classes and their features
-		clientEClass = createEClass(CLIENT);
-		createEAttribute(clientEClass, CLIENT__ORGANISATION);
-		createEAttribute(clientEClass, CLIENT__EMAIL);
-		createEAttribute(clientEClass, CLIENT__PASSWORD);
-		createEAttribute(clientEClass, CLIENT__FORCE_CHANGE_PASSWORD);
-		createEAttribute(clientEClass, CLIENT__LOCAL_USER);
+		userEClass = createEClass(USER);
+		createEAttribute(userEClass, USER__ORGANISATION);
+		createEAttribute(userEClass, USER__EMAIL);
+		createEAttribute(userEClass, USER__PASSWORD);
+		createEAttribute(userEClass, USER__FORCE_CHANGE_PASSWORD);
+		createEAttribute(userEClass, USER__LOCAL_USER);
 
 		modelEClass = createEClass(MODEL);
 		createEAttribute(modelEClass, MODEL__OWNER);
@@ -649,7 +649,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		clientEClass.getESuperTypes().add(this.getAccount());
+		userEClass.getESuperTypes().add(this.getAccount());
 		modelEClass.getESuperTypes().add(this.getAsset());
 		groupEClass.getESuperTypes().add(this.getAccount());
 		folderEClass.getESuperTypes().add(this.getAsset());
@@ -657,12 +657,12 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		taskFolderEClass.getESuperTypes().add(this.getAbstractTask());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(clientEClass, Client.class, "Client", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getClient_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getClient_Email(), ecorePackage.getEString(), "email", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getClient_Password(), ecorePackage.getEString(), "password", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getClient_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getClient_LocalUser(), ecorePackage.getEString(), "localUser", null, 0, 1, Client.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUser_Organisation(), ecorePackage.getEString(), "organisation", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_Email(), ecorePackage.getEString(), "email", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_Password(), ecorePackage.getEString(), "password", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUser_LocalUser(), ecorePackage.getEString(), "localUser", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModel_Owner(), ecorePackage.getEString(), "owner", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -690,7 +690,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEClass(assetEClass, Asset.class, "Asset", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAsset_Name(), ecorePackage.getEString(), "name", null, 1, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAsset_Folder(), this.getFolder(), this.getFolder_Assets(), "folder", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAsset_Path(), ecorePackage.getEString(), "path", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_Path(), ecorePackage.getEString(), "path", null, 0, 1, Asset.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_PicturePath(), ecorePackage.getEString(), "picturePath", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_Description(), ecorePackage.getEString(), "description", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_RelativePath(), ecorePackage.getEString(), "relativePath", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -715,6 +715,12 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		addEEnumLiteral(accessEEnum, Access.VIEW);
 		addEEnumLiteral(accessEEnum, Access.READ);
 		addEEnumLiteral(accessEEnum, Access.WRITE);
+		addEEnumLiteral(accessEEnum, Access.NO_VIEW);
+		addEEnumLiteral(accessEEnum, Access.NO_READ);
+		addEEnumLiteral(accessEEnum, Access.NO_WRITE);
+		addEEnumLiteral(accessEEnum, Access.INHERIT_VIEW);
+		addEEnumLiteral(accessEEnum, Access.INHERIT_READ);
+		addEEnumLiteral(accessEEnum, Access.INHERIT_WRITE);
 
 		// Create resource
 		createResource(eNS_URI);

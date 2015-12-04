@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modelshare" nsURI="http://www.statoil.com/modelshare" nsPrefix="com.statoil.modelshare.model">
-  <eClassifiers xsi:type="ecore:EClass" name="Client" eSuperTypes="#//Account">
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Account">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="organisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -26,9 +26,15 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="simaVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Access">
-    <eLiterals name="View" value="1"/>
-    <eLiterals name="Read" value="2"/>
-    <eLiterals name="Write" value="4"/>
+    <eLiterals name="View" value="1" literal="+v"/>
+    <eLiterals name="Read" value="2" literal="+r"/>
+    <eLiterals name="Write" value="4" literal="+w"/>
+    <eLiterals name="NoView" value="3" literal="-v"/>
+    <eLiterals name="NoRead" value="4" literal="-r"/>
+    <eLiterals name="NoWrite" value="5" literal="-w"/>
+    <eLiterals name="InheritView" value="6" literal="?v"/>
+    <eLiterals name="InheritRead" value="7" literal="?r"/>
+    <eLiterals name="InheritWrite" value="8" literal="?w"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Account"/>
   <eClassifiers xsi:type="ecore:EClass" name="Account" abstract="true">
@@ -55,9 +61,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="folder" eType="#//Folder"
         eOpposite="#//Folder/assets"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        unsettable="true">
+        transient="true" unsettable="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Absolute file system path to the resource."/>
+        <details key="documentation" value="Absolute file system path to the resource. This is represented in a platform specific format."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="picturePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
@@ -65,7 +71,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        unsettable="true"/>
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The relative path to the resource, calculated from the repository root and represented in a platform independent manner."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TaskDetails" eSuperTypes="#//AbstractTask">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

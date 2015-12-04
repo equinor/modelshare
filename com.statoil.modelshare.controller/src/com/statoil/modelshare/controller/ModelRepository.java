@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
-import com.statoil.modelshare.Client;
+import com.statoil.modelshare.Access;
+import com.statoil.modelshare.Account;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
+import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 
 /**
@@ -23,22 +28,60 @@ public interface ModelRepository {
 	
 	/**
 	 * Returns the root folder with all it's subfolders and contents filtered
-	 * for the particular user. If the user don't have view access to an item,
+	 * for the particular account. If the user don't have view access to an item,
 	 * it will not be part of the collection.
 	 * 
 	 * @param user
 	 *            the logged in user
 	 * @return the root folder
 	 */
-	public Folder getRoot(Client user);
+	public Folder getRoot(User user);
 
 	/**
 	 * Returns a list of all users that have access to the repository.
 	 * 
 	 * @return a list of users
 	 */
-	public List<Client> getClients();
+	public List<User> getUsers();
 
+	/**
+	 * Returns a list of all groups that have access to the repository.
+	 * 
+	 * @return a list of groups
+	 */
+	public List<Group> getGroups();
+	
+	/**
+	 * Returns a map of all accounts that have access to the specific resource.
+	 * 
+	 * @param owner
+	 *            the account requesting the data
+	 * @param asset
+	 *            the asset to get the access for
+	 * @return a map of accounts with access to the resource
+	 * @throws IOException
+	 * @throws AccessDeniedException
+	 *             if the <i>owner</i> don't have the required credentials
+	 */
+	public Map<Account, EnumSet<Access>> getRights(Account owner, Path asset) throws AccessDeniedException, IOException;
+
+	/**
+	 * Sets the access rights for the specified user on a particular resource.
+	 * 
+	 * @param owner
+	 *            the account requesting the data
+	 * @param user
+	 *            the user getting the rights
+	 * @param asset
+	 *            the asset to set the rights for
+	 * @param rights
+	 *            the set of access rights
+	 * @throws IOException
+	 * @throws AccessDeniedException
+	 *             if the <i>owner</i> don't have the required credentials
+	 */
+	public void setRights(Account owner, User user, Path asset, EnumSet<Access> rights) throws IOException;
+	
 	/**
 	 * Returns the user with the given identifier if found, otherwise
 	 * <code>null</code> is returned.
@@ -47,7 +90,7 @@ public interface ModelRepository {
 	 *            the identifier
 	 * @return the user or <code>null</code>
 	 */
-	public Client getUser(String id);
+	public User getUser(String id);
 
 	/**
 	 * Sets the password has for the specified user.
@@ -69,10 +112,10 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasViewAccess(Client user, Path path) throws IOException;
+	public boolean hasViewAccess(User user, Path path) throws IOException;
 
 	/**
-	 * Convenience method for determining whether the user has download access
+	 * Convenience method for determining whether the account has download access
 	 * to the given path.
 	 * 
 	 * @param user
@@ -81,13 +124,13 @@ public interface ModelRepository {
 	 *            the path to the resource
 	 * @return
 	 */
-	public boolean hasDownloadAccess(Client user, Path path) throws IOException;
+	public boolean hasDownloadAccess(User user, Path path) throws IOException;
 
 	/**
 	 * Convenience method to set download rights on a file / folder for a user
 	 * 
 	 * @param owner
-	 *            the model owner
+	 *            the account requesting the data
 	 * @param user
 	 *            the user to set access for
 	 * @param path
@@ -96,14 +139,14 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the owner does not have write access
 	 */
-	public void setDownloadRights(Client owner, Client user, Path path) throws AccessDeniedException, IOException;
+	public void setDownloadRights(Account owner, User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
 	 * Returns the {@link InputStream} for the path if the client has access to
 	 * the asset.
 	 * 
 	 * @param user
-	 *            the user that requests the asset
+	 *            the account requesting the data
 	 * @param path
 	 *            the root relative path to the asset
 	 * @throws IOException
@@ -111,13 +154,13 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have read access
 	 */
-	public InputStream downloadModel(Client user, Path path) throws AccessDeniedException, IOException;
+	public InputStream downloadModel(Account user, Path path) throws AccessDeniedException, IOException;
 
 	/**
 	 * Copies the asset to the local user directory if possible
 	 * 
 	 * @param user
-	 *            the user that requests the asset
+	 *            the account requesting the data
 	 * @param path
 	 *            the root relative path to the asset
 	 * @return a description of what actually happened
@@ -126,7 +169,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have read access
 	 */
-	public String localCopy(Client user, Path path) throws AccessDeniedException, IOException;
+	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
 	 * Uploads a new model to the repository.
@@ -142,7 +185,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have write access
 	 */
-	public void uploadModel(Client user, InputStream ms, InputStream ps, Model model) throws IOException, AccessDeniedException;
+	public void uploadModel(User user, InputStream ms, InputStream ps, Model model) throws IOException, AccessDeniedException;
 
 	/**
 	 * Creates a folder on the given parent folder.
@@ -152,7 +195,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the user does not have write access
 	 */
-	public void createFolder(Client user, Folder parentFolder, InputStream is, String name) throws IOException;
+	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
 
 	/**
 	 * Gets properties from the meta file and creates a model object to be
@@ -162,10 +205,10 @@ public interface ModelRepository {
 	 * @return model object
 	 * @throws IOException 
 	 */
-	public Model getMetaInformation(Client user, Path path) throws IOException;
+	public Model getModel(User user, Path path) throws IOException;
 	
 	
-	public File getFile(Client user, Path path) throws IOException;
+	public File getFile(User user, Path path) throws IOException;
 
 	/**
 	 * Checks an email address for validity
