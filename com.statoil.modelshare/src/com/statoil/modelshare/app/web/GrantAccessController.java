@@ -9,7 +9,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+<<<<<<< 5abfc7af8618dd7b50064e38ef76b5b762715e84
 import java.util.List;
+=======
+>>>>>>> 95: Add UI for administrating access rights to folders and models 
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -37,9 +40,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+<<<<<<< 5abfc7af8618dd7b50064e38ef76b5b762715e84
 import com.statoil.modelshare.Group;
+=======
+>>>>>>> 95: Add UI for administrating access rights to folders and models 
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
+import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
@@ -119,11 +126,30 @@ public class GrantAccessController extends AbstractController {
 	}
 	
 	@RequestMapping(value = "/manageaccess", method = RequestMethod.GET)
-	public String manageAccessView(ModelMap model,
-			@RequestParam("path") String path) {
+	public String manageAccessView(ModelMap map,
+			Principal principal,
+			@RequestParam("path") String p){
+		try {
 		
-		model.addAttribute("path", path);
-		
+			map.addAttribute("path", p);
+			
+			//topLevel needs to be added
+			
+			Path path = Paths.get(p);
+			Account owner = modelrepository.getUser(principal.getName());
+			Map<Account, EnumSet<Access>>  accessRights = modelrepository.getRights(owner, path);
+			
+			AssetProxy n = getAssetAtPath((User)owner, p);
+			map.addAttribute("topLevel", getRootNodes(n));
+			map.addAttribute("accounts", modelrepository.getUsers());
+			map.addAttribute("accessRights", accessRights);
+			
+		}catch(IOException ioe){
+			String msg = "File system error!";
+			log.log(Level.SEVERE, msg, ioe);
+			map.addAttribute("error", msg);
+			return "manageaccess";
+		}
 		return "manageaccess";
 	}
 	@RequestMapping(value = "/saveAccess", method = RequestMethod.POST)
