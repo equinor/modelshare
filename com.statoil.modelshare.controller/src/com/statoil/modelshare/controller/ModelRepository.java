@@ -129,6 +129,18 @@ public interface ModelRepository {
 	public boolean hasDownloadAccess(User user, Path path) throws IOException;
 
 	/**
+	 * Convenience method for determining whether the account has write access
+	 * to the given path.
+	 * 
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
+	 * @return
+	 */
+	public boolean hasWriteAccess(User user, Path path) throws IOException;
+
+	/**
 	 * Convenience method to set download rights on a file / folder for a user
 	 * 
 	 * @param requestor
@@ -174,7 +186,10 @@ public interface ModelRepository {
 	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
-	 * Uploads a new model to the repository.
+	 * Uploads a new model to the repository. If a model is being replaced it
+	 * will be made a copy of and the file name suffixed with today's date on
+	 * the form YYYY-MM-DD and prefixed with a "." to be hidden from the
+	 * indexer.
 	 * 
 	 * @param user
 	 *            the user performing the upload
@@ -184,10 +199,12 @@ public interface ModelRepository {
 	 *            the source stream for the model picture
 	 * @param model
 	 *            model description
+	 * @param replacedModel
+	 *            the replaced model or <code>null</code>
 	 * @throws AccessDeniedException
 	 *             if the <i>user</i> does not have write access
 	 */
-	public void uploadModel(User user, InputStream ms, InputStream ps, Model model) throws IOException, AccessDeniedException;
+	public void uploadModel(User user, InputStream ms, InputStream ps, Model model, Model replacedModel) throws IOException, AccessDeniedException;
 
 	/**
 	 * Creates a folder on the given parent folder.

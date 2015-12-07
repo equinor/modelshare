@@ -108,7 +108,7 @@ public class RequestController extends AbstractController {
 			modelMap.addAttribute("request", msg);
 			return "error";
 		}
-		return "redirect:showModel?item=" + model.getPath() + "&leaf=true";
+		return "redirect:view?item=" + model.getPath() + "&leaf=true";
 	}
 	
 	private String makeUrl(HttpServletRequest request, String asset, User user) {

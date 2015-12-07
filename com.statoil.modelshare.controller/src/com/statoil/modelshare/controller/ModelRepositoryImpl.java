@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -372,6 +373,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 		return rights.contains(Access.VIEW);
 	}
 
+	public boolean hasWriteAccess(User user, Path path) throws IOException {
+		EnumSet<Access> rights = ra.getRights(path, user);
+		return rights.contains(Access.WRITE);
+	}
+
 	// XXX: This does not belong here!
 	@Override
 	public boolean isValidEmailAddress(String email) {
@@ -416,13 +422,21 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void uploadModel(User user, InputStream modelStream, InputStream pictureStream, Model model)
+	public void uploadModel(User user, InputStream modelStream, InputStream pictureStream, Model model, Model replacedModel)
 			throws IOException, AccessDeniedException {
 		// assert that the user has write access
 		Path path = rootPath.resolve(model.getRelativePath());
 		EnumSet<Access> rights = ra.getRights(path, user);
 		if (!rights.contains(Access.WRITE)) {
 			throw new AccessDeniedException(path.toString());
+		}
+		
+		// make a backup of the old one if it exists
+		if (replacedModel!=null){
+			Path replacedModelPath = rootPath.resolve(replacedModel.getRelativePath());
+			String filename = "."+replacedModelPath.getFileName().toString()+"."+LocalDate.now().toString();
+			Path newReplacedModelPath = replacedModelPath.getParent().resolve(filename);
+			Files.move(replacedModelPath, newReplacedModelPath, StandardCopyOption.REPLACE_EXISTING);
 		}
 
 		// do the actual write in one operation

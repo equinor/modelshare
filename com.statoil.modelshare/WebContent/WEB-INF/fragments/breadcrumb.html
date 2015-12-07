@@ -10,8 +10,8 @@
   			<li th:each="crumb: ${crumbs}">
   				<a th:href="@{/archive(item=${crumb.relativePath})}" th:text="${crumb.name}">..</a>
  			</li> 			
-			<li th:if="${currentModel == null}"><a th:href="@{/folder(item=${currentFolder})}" title="Create new folder"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></a></li>
-			<li th:if="${currentModel == null}"><a th:href="@{/upload(item=${currentFolder})}" title="Upload new model"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></a></li>
+			<li th:if="${currentModel == null} and ${writeAccess}"><a th:href="@{/folder(item=${currentFolder})}" title="Create new folder"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></a></li>
+			<li th:if="${currentModel == null} and ${writeAccess}"><a th:href="@{/upload(item=${currentFolder})}" title="Upload new model"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></a></li>
 		</ul>
     </div> 
 </body>

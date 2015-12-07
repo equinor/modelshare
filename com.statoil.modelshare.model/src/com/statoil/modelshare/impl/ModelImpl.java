@@ -575,5 +575,23 @@ public class ModelImpl extends AssetImpl implements Model {
 		}
 	}
 
+	/**
+	 * Kludge to get around the fact that we have two fields that represent the
+	 * same information.
+	 * 
+	 * @generated NOT
+	 */
+	public String getDescription() {
+		return getUsage();
+	}
 
+	/**
+	 * Kludge to get around the fact that we have two fields that represent the
+	 * same information.
+	 * 
+	 * @generated NOT
+	 */
+	public void setDescription(String newDescription) {
+		setUsage(newDescription);;
+	}
 } //ModelImpl

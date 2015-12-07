@@ -12,10 +12,10 @@
 			</div>
 			<div class="panel-body">
 		
-				<a th:href="@{/showModel(item=${currentFolder},leaf=${false},showNewFolder=true)}">
+				<a th:href="@{/view(item=${currentFolder},leaf=${false},showNewFolder=true)}">
 					<button class="btn btn-primary btn-sm">New subfolder</button>
 				</a>
-				<a th:href="@{/showModel(item=${currentFolder},leaf=${false},showUploadFile=true)}">
+				<a th:href="@{/view(item=${currentFolder},leaf=${false},showUploadFile=true)}">
 					<button class="btn btn-primary btn-sm">New model</button>
 				</a><p />
 	

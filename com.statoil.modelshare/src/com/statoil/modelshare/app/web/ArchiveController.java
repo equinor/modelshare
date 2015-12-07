@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.RepositoryConfig;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
@@ -57,6 +57,7 @@ public class ArchiveController extends AbstractController {
 	
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
 
@@ -87,7 +88,7 @@ public class ArchiveController extends AbstractController {
 		return "content";
 	}
 	
-	@RequestMapping(value = { "/showModel" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/view" }, method = RequestMethod.GET)
 	public String doShow(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required=true) String asset) {
 		try {
@@ -97,6 +98,7 @@ public class ArchiveController extends AbstractController {
 
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
 			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
 
@@ -104,6 +106,7 @@ public class ArchiveController extends AbstractController {
 			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
+			map.addAttribute("currentFolder",n.getRelativePath());
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception ioe) {
@@ -121,6 +124,8 @@ public class ArchiveController extends AbstractController {
 		try {
 			User user = modelrepository.getUser(principal.getName());
 			map.addAttribute("client", user);
+			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
 			map.addAttribute("activeMenuItem", asset); //XXX: Remove
 			map.addAttribute("currentFolder", asset);
 			map.addAttribute("title", "Model archive");
@@ -155,6 +160,7 @@ public class ArchiveController extends AbstractController {
 		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
 		map.addAttribute("currentFolder", asset);
+
 		// common
 		AssetProxy n = getAssetAtPath(user, asset);
 		map.addAttribute("node", n);
@@ -179,20 +185,39 @@ public class ArchiveController extends AbstractController {
 			@RequestParam(value = "item", required = false) String asset) {		
 		User user = modelrepository.getUser(principal.getName());
 		map.addAttribute("owner", user);
-		map.addAttribute("currentFolder", asset);
+
 		// common
 		AssetProxy n = getAssetAtPath(user, asset);
-		map.addAttribute("node", n);
+		if (n.isLeaf()){
+			Model model = n.getAsset();
+			map.addAttribute("currentModel", model);
+			map.addAttribute("modelName",model.getName());
+			map.addAttribute("modelDescription",model.getDescription());			
+			map.addAttribute("currentFolder",n.getParent().getRelativePath());			
+		} else {
+			map.addAttribute("currentFolder",n.getRelativePath());			
+		}
 		map.addAttribute("crumbs", getBreadCrumb(n));
 		map.addAttribute("topLevel", getRootNodes(n));
 		return "upload";
 	}
-
+	/**
+	 * Receives the "upload" form.
+	 * 
+	 * @param map
+	 * @param principal
+	 * @param modelFile the model file being uploaded
+	 * @param pictureFile the model picture being uploaded
+	 * @param asset the path to the destination folder/path to existing model
+	 * @param usage a description of the folder
+	 * @param name
+	 * @return
+	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public String uploadModel(ModelMap map, Principal principal,
-			@RequestParam(value = "model", required = true) MultipartFile file,
-			@RequestParam(value = "picture") MultipartFile picture,
-			@RequestParam(value = "path", required = true) String path, 
+			@RequestParam(value = "modelFile", required = true) MultipartFile file,
+			@RequestParam(value = "pictureFile") MultipartFile picture,
+			@RequestParam(value = "asset", required = true) String asset, 
 			@RequestParam(value = "usage") String usage,
 			@RequestParam(value = "name", required = true) String name) {
 		
@@ -200,22 +225,39 @@ public class ArchiveController extends AbstractController {
 				BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())) {
 			User user = modelrepository.getUser(principal.getName());
 			map.addAttribute("owner", user);
-			map.addAttribute("currentFolder", path);
-			map.addAttribute("topLevel", getRootItems(user));
+			String path;
+			// common
+			AssetProxy n = getAssetAtPath(user, asset);
+			Model replacedModel = null;
+			if (n.isLeaf()){
+				replacedModel = n.getAsset();
+				map.addAttribute("currentModel", replacedModel);
+				map.addAttribute("modelName",replacedModel.getName());
+				map.addAttribute("modelDescription",replacedModel.getDescription());
+				path = n.getParent().getRelativePath();
+				map.addAttribute("currentFolder",n.getParent().getRelativePath());			
+			} else {
+				path = n.getRelativePath();
+				map.addAttribute("currentFolder",n.getRelativePath());			
+			}
+			map.addAttribute("crumbs", getBreadCrumb(n));
+			map.addAttribute("topLevel", getRootNodes(n));
+
 			if (file.isEmpty()){
 				map.addAttribute("error", "A model file must be specified!");
 				return "upload";	
 			}
+			// Create a new model and keep the old one?
 			Model model = ModelshareFactory.eINSTANCE.createModel();
-			model.setRelativePath(Paths.get(URLDecoder.decode(path, "UTF-8"), file.getOriginalFilename()).toString());
+			model.setRelativePath(Paths.get(path, file.getOriginalFilename()).toString());
 			model.setName(name.isEmpty() ? file.getOriginalFilename(): name);
 			model.setOwner(user.getName());
 			model.setMail(user.getEmail());
 			// organization cannot be blank
 			model.setOrganisation(user.getOrganisation() == null ? "" : user.getOrganisation());
 			model.setUsage(usage == null ? "" : usage);
-			modelrepository.uploadModel(user, ms, ps, model);
-			return "redirect:showModel?item=" + model.getRelativePath().replace('\\', '/');
+			modelrepository.uploadModel(user, ms, ps, model, replacedModel);
+			return "redirect:view?item=" + model.getRelativePath().replace('\\', '/');
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to upload a new model!";
 			log.log(Level.SEVERE, msg, ioe);
@@ -270,14 +312,17 @@ public class ArchiveController extends AbstractController {
 			return "folder";
 		}
 	}
+	
+	public boolean hasWriteAccess(User user, Path path) throws IOException {
+		return modelrepository.hasWriteAccess(user, path);
+	}
 
 	private boolean hasViewOnlyAccess(String item, User client) {
 		boolean hasReadAccess;
 		try {
 			hasReadAccess = modelrepository.hasDownloadAccess(client, Paths.get(item));
 			boolean hasDisplayAccess = modelrepository.hasViewAccess(client, Paths.get(item));
-			boolean viewOnly = (!hasReadAccess) && (hasDisplayAccess);
-			return viewOnly;
+			return (!hasReadAccess) && (hasDisplayAccess);
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "Could not determine access rights", e);
 			e.printStackTrace();

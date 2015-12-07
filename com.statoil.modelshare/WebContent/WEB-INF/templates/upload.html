@@ -12,20 +12,32 @@
 				<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-orange" id="wizard">
 						<div class="wizard-header">
-							<h3>
-								Upload new <b>model</b>
+							<h3 th:if="not ${currentModel}">
+								Upload <b>new model</b>
 								<br /> <small>Please fill in details for uploading a
 									new model to "<span th:text="${currentFolder}"></span>".</small>
+							</h3>
+							<h3 th:if="${currentModel}">
+								Upload <b>new model version</b>
+								<br /> <small>Please fill in details for uploading a
+									new version of "<span th:text="${modelName}"></span>".</small>
 							</h3>
 						</div>
 						<hr />
 						<form action="archive.html" th:action="upload" method="post"
 							enctype="multipart/form-data" accept-charset="UTF-8">
-							<input class="form-control" type="text" id="name" name="name" placeholder="Model name" autofocus="autofocus"/>
-							<textarea class="form-control" id="usage" name="usage" placeholder="Description"></textarea>
-							<input type="hidden" name="path" th:value="${currentFolder}" />
-							<span class="btn-file form-control" id="model">Model file<input type="file" data-form="model" name="model" /></span>
-							<span class="btn-file form-control" id="picture">Picture file<input type="file" data-form="picture" name="picture" accept="image/jpeg" /></span>
+							<!-- hidden inputs, asset can be model or folder -->
+							<input th:if="${currentModel}" type="hidden" name="asset" th:value="${currentModel.relativePath}" />
+							<input th:if="not ${currentModel}" type="hidden" name="asset" th:value="${currentFolder}" />
+							<!-- user input -->
+							<input class="form-control" type="text" id="name" name="name" 
+								placeholder="Model name" 
+								autofocus="autofocus" th:value="*{modelName}?: ''"/>
+							<textarea class="form-control" id="usage" name="usage" 
+								placeholder="Description"
+								th:text="*{modelDescription}?: ''"></textarea>
+							<span class="btn-file form-control" id="model">Model file<input type="file" data-form="model" name="modelFile" /></span>
+							<span class="btn-file form-control" id="picture">Picture file<input type="file" data-form="picture" name="pictureFile" accept="image/jpeg" /></span>
 							<input class="btn btn-primary btn-block" type="submit"
 								value="Upload" />
 						</form>

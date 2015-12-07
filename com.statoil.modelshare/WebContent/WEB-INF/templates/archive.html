@@ -25,7 +25,7 @@
 						</div>
 						<!-- model -->
 						<div th:if="${child.leaf == true}" class="asset child">
-							<a th:href="@{/showModel(item=${child.relativePath})}"
+							<a th:href="@{/view(item=${child.relativePath})}"
 								th:rel="${child.picturePath == null} ? '': 'popover'" 
 								th:attr="data-img=@{/pictures(asset=${child.picturePath})}"
 								th:text="${child.name}"></a>
@@ -70,7 +70,7 @@
 							</div>
 							<div class="panel-body">
 								<div th:each="model: ${node.children.?[leaf==true]}">
-									<a th:href="@{/showModel(item=${model.relativePath})}"
+									<a th:href="@{/view(item=${model.relativePath})}"
 									th:rel="${model.picturePath == null} ? '': 'popover'" 
 									th:attr="data-img=@{/pictures(asset=${model.picturePath})}"
 									th:text="${model.name}"></a>
