@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.statoil.modelshare.Asset#getPicturePath <em>Picture Path</em>}</li>
  *   <li>{@link com.statoil.modelshare.Asset#getDescription <em>Description</em>}</li>
  *   <li>{@link com.statoil.modelshare.Asset#getRelativePath <em>Relative Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.Asset#getFormattedDescription <em>Formatted Description</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getAsset()
@@ -325,6 +326,21 @@ public interface Asset extends EObject {
 	 * @generated
 	 */
 	boolean isSetRelativePath();
+
+	/**
+	 * Returns the value of the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Formatted Description</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Formatted Description</em>' attribute.
+	 * @see com.statoil.modelshare.ModelsharePackage#getAsset_FormattedDescription()
+	 * @model transient="true" changeable="false" volatile="true" derived="true"
+	 * @generated
+	 */
+	String getFormattedDescription();
 
 	/**
 	 * <!-- begin-user-doc -->

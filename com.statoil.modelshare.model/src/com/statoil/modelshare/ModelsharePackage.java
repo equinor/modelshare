@@ -296,13 +296,22 @@ public interface ModelsharePackage extends EPackage {
 	int ASSET__RELATIVE_PATH = 5;
 
 	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSET__FORMATTED_DESCRIPTION = 6;
+
+	/**
 	 * The number of structural features of the '<em>Asset</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSET_FEATURE_COUNT = 6;
+	int ASSET_FEATURE_COUNT = 7;
 
 	/**
 	 * The operation id for the '<em>Get Access</em>' operation.
@@ -385,6 +394,15 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int MODEL__RELATIVE_PATH = ASSET__RELATIVE_PATH;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL__FORMATTED_DESCRIPTION = ASSET__FORMATTED_DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Owner</b></em>' attribute.
@@ -621,6 +639,15 @@ public interface ModelsharePackage extends EPackage {
 	 * @ordered
 	 */
 	int FOLDER__RELATIVE_PATH = ASSET__RELATIVE_PATH;
+
+	/**
+	 * The feature id for the '<em><b>Formatted Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__FORMATTED_DESCRIPTION = ASSET__FORMATTED_DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Assets</b></em>' reference list.
@@ -1214,6 +1241,17 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getAsset_RelativePath();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Asset#getFormattedDescription <em>Formatted Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Formatted Description</em>'.
+	 * @see com.statoil.modelshare.Asset#getFormattedDescription()
+	 * @see #getAsset()
+	 * @generated
+	 */
+	EAttribute getAsset_FormattedDescription();
+
+	/**
 	 * Returns the meta object for the '{@link com.statoil.modelshare.Asset#getAccess(com.statoil.modelshare.Account) <em>Get Access</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1611,6 +1649,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ASSET__RELATIVE_PATH = eINSTANCE.getAsset_RelativePath();
+
+		/**
+		 * The meta object literal for the '<em><b>Formatted Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSET__FORMATTED_DESCRIPTION = eINSTANCE.getAsset_FormattedDescription();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Access</b></em>' operation.

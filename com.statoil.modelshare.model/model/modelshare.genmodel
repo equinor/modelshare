@@ -55,6 +55,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/picturePath"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/relativePath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Asset/formattedDescription"/>
       <genOperations ecoreOperation="modelshare.ecore#//Asset/getAccess">
         <genParameters ecoreParameter="modelshare.ecore#//Asset/getAccess/account"/>
       </genOperations>

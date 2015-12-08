@@ -7,6 +7,9 @@ import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.ModelsharePackage;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -20,6 +23,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
+import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
+import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +41,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getPicturePath <em>Picture Path</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getRelativePath <em>Relative Path</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.AssetImpl#getFormattedDescription <em>Formatted Description</em>}</li>
  * </ul>
  *
  * @generated
@@ -184,6 +191,16 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected boolean relativePathESet;
+
+	/**
+	 * The default value of the '{@link #getFormattedDescription() <em>Formatted Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFormattedDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String FORMATTED_DESCRIPTION_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -497,6 +514,26 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getFormattedDescription() {
+		StringWriter sw = new StringWriter();
+		MarkupParser parser = new MarkupParser();
+		parser.setMarkupLanguage(new MarkdownLanguage());
+		HtmlDocumentBuilder builder = new HtmlDocumentBuilder(sw);
+		builder.setEmitAsDocument(false);
+		parser.setBuilder(builder);
+		try {
+			parser.parse(new StringReader(getDescription()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sw.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EEnum getAccess(Account account) {
@@ -556,6 +593,8 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return getDescription();
 			case ModelsharePackage.ASSET__RELATIVE_PATH:
 				return getRelativePath();
+			case ModelsharePackage.ASSET__FORMATTED_DESCRIPTION:
+				return getFormattedDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -640,6 +679,8 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 				return isSetDescription();
 			case ModelsharePackage.ASSET__RELATIVE_PATH:
 				return isSetRelativePath();
+			case ModelsharePackage.ASSET__FORMATTED_DESCRIPTION:
+				return FORMATTED_DESCRIPTION_EDEFAULT == null ? getFormattedDescription() != null : !FORMATTED_DESCRIPTION_EDEFAULT.equals(getFormattedDescription());
 		}
 		return super.eIsSet(featureID);
 	}

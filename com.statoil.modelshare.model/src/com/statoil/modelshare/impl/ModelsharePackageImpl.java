@@ -445,6 +445,15 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAsset_FormattedDescription() {
+		return (EAttribute)assetEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getAsset__GetAccess__Account() {
 		return assetEClass.getEOperations().get(0);
 	}
@@ -603,6 +612,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(assetEClass, ASSET__PICTURE_PATH);
 		createEAttribute(assetEClass, ASSET__DESCRIPTION);
 		createEAttribute(assetEClass, ASSET__RELATIVE_PATH);
+		createEAttribute(assetEClass, ASSET__FORMATTED_DESCRIPTION);
 		createEOperation(assetEClass, ASSET___GET_ACCESS__ACCOUNT);
 
 		taskDetailsEClass = createEClass(TASK_DETAILS);
@@ -694,6 +704,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getAsset_PicturePath(), ecorePackage.getEString(), "picturePath", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_Description(), ecorePackage.getEString(), "description", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAsset_RelativePath(), ecorePackage.getEString(), "relativePath", null, 0, 1, Asset.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAsset_FormattedDescription(), ecorePackage.getEString(), "formattedDescription", null, 0, 1, Asset.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getAsset__GetAccess__Account(), ecorePackage.getEEnum(), "getAccess", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAccount(), "account", 1, 1, IS_UNIQUE, IS_ORDERED);

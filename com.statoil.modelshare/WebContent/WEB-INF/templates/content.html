@@ -54,8 +54,7 @@
 				</div>
 				
 				<h3>Description</h3>
-				<p th:text="${currentModel.usage}"></p>
-
+				<div th:utext="${currentModel.formattedDescription}" ></div>
 				<p>
 					<a role="button" th:if="${viewOnly}" th:href="@{/request(asset=${currentModel.relativePath})}">
 						<button class="btn btn-info">Request access</button>
