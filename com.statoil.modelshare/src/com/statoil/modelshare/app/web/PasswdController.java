@@ -21,9 +21,6 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 public class PasswdController extends AbstractController {
 	
-	@Autowired
-	private ModelRepository modelrepository;
-	
     @Autowired
     private ModelRepository repository;
 
@@ -62,8 +59,8 @@ public class PasswdController extends AbstractController {
 
 	@RequestMapping(value = "/passwd", method = RequestMethod.GET)
 	public String showPasswordView(ModelMap map, Principal principal) {
-		User user = modelrepository.getUser(principal.getName());
-		map.addAttribute("topLevel", modelrepository.getRoot(user).getAssets());
+		User user = repository.getUser(principal.getName());
+		map.addAttribute("topLevel", repository.getRoot(user).getAssets());
 		return "passwd";
 	}
 }
