@@ -99,6 +99,11 @@ hr {
     background-image: linear-gradient(to bottom,#eeeeee 0,#999999 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#999999', GradientType=0);
 }
-.access-table input[type="checkbox"]{
+#accessTable input[type="checkbox"]{
 	cursor: pointer;
+}
+#accessTable .remove {
+	font-size: 16px;
+	color: #a94442;
+	line-height:inherit;
 }

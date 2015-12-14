@@ -113,9 +113,10 @@ public class RepositoryAccessControl {
 		
 	/**
 	 * For all accounts listed for the specific asset a set is returned
-	 * containing the inherited rights. This method is different from
-	 * {@link #getRights(Path)} in that it includes all users with explicit
-	 * access and also the complex set of access control flags. For example:
+	 * containing explicitly declared rights. This method is different from
+	 * {@link #getRights(Path,Account)} in that it only includes all users with
+	 * explicit access and also the complex set of access control flags. For
+	 * example:
 	 * 
 	 * <pre>
 	 * anon@ymous +r ?v -w
@@ -133,17 +134,21 @@ public class RepositoryAccessControl {
 	 */
 	public synchronized Map<Account, EnumSet<Access>> getRights(Path path) throws FileNotFoundException, IOException {
 		// determine the name to the .access file
+		Path assetPath = repositoryRootPath.resolve(path);
 		String name = null;
-		if (path.toAbsolutePath().toFile().isDirectory()) {
-			name = path.getFileName() + File.separator + ".access";
+		if (assetPath.toFile().isDirectory()) {
+			name = assetPath.getFileName() + File.separator + ".access";
 		} else {
-			name = "." + path.getFileName().toString() + ".access";
+			name = "." + assetPath.getFileName().toString() + ".access";
 		}
-		Path filePath = repositoryRootPath.resolve(path.getParent().resolve(name));
-		File file = filePath.toFile();
+		Path accessFilePath = repositoryRootPath.resolve(assetPath.getParent().resolve(name));
+		File file = accessFilePath.toFile();
 		if (!file.exists()) {
 			return new HashMap<>();
 		}
+
+		// collect rights for all accounts listed
+		Map<Account, EnumSet<Access>> access = new HashMap<>();
 
 		// read the list of accounts in the file
 		List<String> identifiers = new ArrayList<>();
@@ -154,24 +159,19 @@ public class RepositoryAccessControl {
 				if (!in.startsWith("#") && in.length() > 0) {
 					String[] split = in.trim().split("\\s+");
 					identifiers.add(split[0]);
+					Optional<Account> account = getAccounts()
+						.stream()
+						.filter(a -> a.getIdentifier().equals(split[0]))
+						.findFirst();
+					if (account.isPresent()) {
+						EnumSet<Access> rights = EnumSet.of(Access.INHERIT_VIEW, Access.INHERIT_READ, Access.INHERIT_WRITE);
+						parseAccessString(rights, split);
+						access.put(account.get(), rights);
+					}
 				}	
 			}
 		}
-
-		// collect rights for all accounts listed
-		Map<Account, EnumSet<Access>> rights = new HashMap<>();
-		for (String id : identifiers) {
-			Optional<Account> account = getAccounts()
-					.stream()
-					.filter(a -> a.getIdentifier().equals(id))
-					.findFirst();
-			if (account.isPresent()) {
-				EnumSet<Access> r = getRights(path, account.get());
-				rights.put(account.get(), r);
-			}
-		}
-
-		return rights;
+		return access;
 	}
 
 	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
@@ -217,26 +217,32 @@ public class RepositoryAccessControl {
 			case "+r":
 				access.add(Access.READ);
 				access.remove(Access.NO_READ);
+				access.remove(Access.INHERIT_READ);
 				break;
 			case "-r":
 				access.remove(Access.READ);
 				access.add(Access.NO_READ);
+				access.remove(Access.INHERIT_READ);
 				break;
 			case "+w":
 				access.add(Access.WRITE);
 				access.remove(Access.NO_WRITE);
+				access.remove(Access.INHERIT_WRITE);
 				break;
 			case "-w":
 				access.remove(Access.WRITE);
 				access.add(Access.NO_WRITE);
+				access.remove(Access.INHERIT_WRITE);
 				break;
 			case "+v":
 				access.add(Access.VIEW);
 				access.remove(Access.NO_VIEW);
+				access.remove(Access.INHERIT_VIEW);
 				break;
 			case "-v":
 				access.remove(Access.VIEW);
 				access.add(Access.NO_VIEW);
+				access.remove(Access.INHERIT_VIEW);
 				break;
 			default:
 				// Anything else, for instance "- - -" for
@@ -442,114 +448,123 @@ public class RepositoryAccessControl {
 	 *            path to the asset
 	 * @param account
 	 *            the account to modify rights for
-	 * @param rights
+	 * @param modification
 	 *            the modification set
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public synchronized void modifyRights(Path path, Account account, EnumSet<Access> rights) throws FileNotFoundException, IOException {
-		// determine the name of the .access file
+	public synchronized void modifyRights(Path path, Account account, EnumSet<Access> modification) throws FileNotFoundException, IOException {
+		// determine the name to the .access file
+		Path assetPath = repositoryRootPath.resolve(path);
 		String name = null;
-		if (path.toAbsolutePath().toFile().isDirectory()) {
-			name = path.getFileName() + File.separator + ".access";
+		if (assetPath.toFile().isDirectory()) {
+			name = assetPath.getFileName() + File.separator + ".access";
 		} else {
-			name = "." + path.getFileName().toString() + ".access";
+			name = "." + assetPath.getFileName().toString() + ".access";
 		}
-		
 		// read the old file and update the new file
-		Path accessFile = repositoryRootPath.resolve(path.getParent().resolve(name));
-		Path newAccessFile = repositoryRootPath.resolve(path.getParent().resolve(name+".new"));
-		if (accessFile.toFile().exists()){
+		Path accessFilePath = repositoryRootPath.resolve(assetPath.getParent().resolve(name));
+		Path newAccessFilePath = repositoryRootPath.resolve(assetPath.getParent().resolve(name+".new"));
+		if (accessFilePath.toFile().exists()){
 			try (BufferedReader br = new BufferedReader(
 					new InputStreamReader(
 							new BOMInputStream(
-									new FileInputStream(accessFile.toFile()))));
-				BufferedWriter bw = Files.newBufferedWriter(newAccessFile, StandardOpenOption.CREATE)) {
+									new FileInputStream(accessFilePath.toFile()))));
+				BufferedWriter bw = Files.newBufferedWriter(newAccessFilePath, StandardOpenOption.CREATE)) {
 				String in = null;
 				boolean found = false;
 				// iterate over all entries in the file
 				while ((in = br.readLine()) != null) {
 					if (in.trim().startsWith("#")) {
 						bw.write(in);
+						bw.newLine();
 					}
 					String[] split = in.trim().split("\\s+");
-					// modify the entry
+					// modify the existing entry
 					if (split[0].equals(account.getIdentifier())) {
-						// get the existing rights first
-						EnumSet<Access> oldRights = EnumSet.noneOf(Access.class);
-						parseAccessString(oldRights, split);
+						EnumSet<Access> rights = EnumSet.noneOf(Access.class);
+						// parse the existing specification
+						parseAccessString(rights, split);
 						// modify existing rights
-						for (Access access : rights) {
-							switch (access) {
-							case NO_READ:
-								oldRights.remove(Access.READ);
-								oldRights.add(Access.NO_READ);
-								break;
-							case NO_WRITE:
-								oldRights.remove(Access.WRITE);
-								oldRights.add(Access.NO_WRITE);
-								break;
-							case NO_VIEW:
-								oldRights.remove(Access.VIEW);
-								oldRights.add(Access.NO_VIEW);
-								break;
-							case READ:
-								oldRights.remove(Access.NO_READ);
-								oldRights.add(Access.READ);
-								break;
-							case WRITE:
-								oldRights.remove(Access.NO_WRITE);
-								oldRights.add(Access.WRITE);
-								break;
-							case VIEW:
-								oldRights.remove(Access.NO_VIEW);
-								oldRights.add(Access.VIEW);
-								break;
-							case INHERIT_READ:
-								oldRights.remove(Access.READ);
-								oldRights.remove(Access.NO_READ);
-								break;
-							case INHERIT_WRITE:
-								oldRights.remove(Access.WRITE);
-								oldRights.remove(Access.NO_WRITE);
-								break;
-							case INHERIT_VIEW:
-								oldRights.remove(Access.READ);
-								oldRights.remove(Access.NO_VIEW);
-								break;
-							default:
-								break;
-							}
-						}
+						modify(modification, rights);
 						// write the modified set
-						writeRights(account, oldRights, bw);
+						writeRights(account, rights, bw);
 						found = true;
 					} else {
 						bw.write(in);
+						bw.newLine();
 					}
-					bw.newLine();
 				}
 				// the account did not exist in the file, add an entry
 				if (!found) {
-					writeRights(account, rights, bw);
-					bw.newLine();
+					writeRights(account, modification, bw);
 				}
 			}
 		} else {
-			try (BufferedWriter bw = Files.newBufferedWriter(newAccessFile, StandardOpenOption.CREATE)) {
-				writeRights(account, rights, bw);				
+			try (BufferedWriter bw = Files.newBufferedWriter(newAccessFilePath, StandardOpenOption.CREATE)) {
+				writeRights(account, modification, bw);				
 			}
 		}
 		
 		// replace the old access file with the new version
-		Files.move(newAccessFile, accessFile, StandardCopyOption.REPLACE_EXISTING);
+		Files.move(newAccessFilePath, accessFilePath, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	private void modify(EnumSet<Access> modification, EnumSet<Access> rights) {
+		for (Access access : modification) {
+			switch (access) {
+			case NO_READ:
+				rights.remove(Access.READ);
+				rights.add(Access.NO_READ);
+				break;
+			case NO_WRITE:
+				rights.remove(Access.WRITE);
+				rights.add(Access.NO_WRITE);
+				break;
+			case NO_VIEW:
+				rights.remove(Access.VIEW);
+				rights.add(Access.NO_VIEW);
+				break;
+			case READ:
+				rights.remove(Access.NO_READ);
+				rights.add(Access.READ);
+				break;
+			case WRITE:
+				rights.remove(Access.NO_WRITE);
+				rights.add(Access.WRITE);
+				break;
+			case VIEW:
+				rights.remove(Access.NO_VIEW);
+				rights.add(Access.VIEW);
+				break;
+			case INHERIT_READ:
+				rights.remove(Access.READ);
+				rights.remove(Access.NO_READ);
+				break;
+			case INHERIT_WRITE:
+				rights.remove(Access.WRITE);
+				rights.remove(Access.NO_WRITE);
+				break;
+			case INHERIT_VIEW:
+				rights.remove(Access.VIEW);
+				rights.remove(Access.NO_VIEW);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	private void writeRights(Account account, EnumSet<Access> rights, BufferedWriter bw) throws IOException {
+		// empty rights set should not be written, it practically means inherit everything
+		if (rights.isEmpty()) {
+			return;
+		}
 		bw.write(account.getIdentifier());
 		for (Access right : rights) {
 			bw.write('\t');
 			bw.write(right.getLiteral());
 		}
+		bw.newLine();
 	}
 }

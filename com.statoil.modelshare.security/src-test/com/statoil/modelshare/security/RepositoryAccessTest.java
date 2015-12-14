@@ -112,5 +112,10 @@ public class RepositoryAccessTest {
 
 	}
 	
+	@Test
+	public void testGetRights(){
+		
+	}
+	
 	
 }

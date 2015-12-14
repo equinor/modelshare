@@ -82,7 +82,7 @@ public interface ModelRepository {
 	 * @param requestor
 	 *            the user requesting the data
 	 * @param user
-	 *            the user for which to modify the rights
+	 *            the account for which to modify the rights
 	 * @param asset
 	 *            the asset to set the rights for
 	 * @param rights
@@ -91,7 +91,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the <i>requestor</i> don't have the required credentials
 	 */
-	public void modifyRights(User requestor, User user, Path asset, EnumSet<Access> rights) throws IOException;
+	public void modifyRights(User requestor, Account account, Path asset, EnumSet<Access> rights) throws IOException;
 	
 	/**
 	 * Returns the user with the given identifier if found, otherwise
@@ -102,7 +102,17 @@ public interface ModelRepository {
 	 * @return the user or <code>null</code>
 	 */
 	public User getUser(String id);
-
+	
+	/**
+	 * Returns the group with the given identifier if found, otherwise
+	 * <code>null</code> is returned.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @return the group or <code>null</code>
+	 */
+	public Group getGroup(String id);
+	
 	/**
 	 * Sets the password has for the specified user.
 	 * 

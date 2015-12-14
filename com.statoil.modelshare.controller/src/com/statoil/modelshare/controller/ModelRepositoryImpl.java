@@ -240,10 +240,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 	
 	@Override
-	public void modifyRights(User requestor, User user, Path path, EnumSet<Access> rights) throws AccessDeniedException, IOException {
+	public void modifyRights(User requestor, Account account, Path path, EnumSet<Access> rights) throws AccessDeniedException, IOException {
 		EnumSet<Access> access = ra.getRights(path, requestor);
 		if (access.contains(Access.WRITE)) {
-			ra.modifyRights(path, user, rights);
+			ra.modifyRights(path, account, rights);
 		} else {
 			throw new AccessDeniedException(path.toString());
 		}
@@ -364,6 +364,16 @@ public class ModelRepositoryImpl implements ModelRepository {
 		for (User user : getUsers()) {
 			if (user.getIdentifier().equals(id)) {
 				return user;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Group getGroup(String id) {
+		for (Group group : getGroups()) {
+			if (group.getIdentifier().equals(id)) {
+				return group;
 			}
 		}
 		return null;

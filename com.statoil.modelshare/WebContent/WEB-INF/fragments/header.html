@@ -19,6 +19,8 @@
     <link rel="stylesheet" type="text/css" media="screen" href="//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.css" />
 	<!-- Bootstrap Editable -->
     <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap-editable.css" th:href="@{/css/bootstrap-editable.css}" />
+	<!-- Bootstrap CheckBox X -->
+	<link media="all" rel="stylesheet" type="text/css" href="../../css/checkbox-x.min.css" th:href="@{/css/checkbox-x.min.css}"/>
     <!-- Local CSS -->
 	<link rel="stylesheet" type="text/css" media="all" href="../../css/main.css" th:href="@{/css/main.css}" />
 	<link rel="stylesheet" type="text/css" media="all" href="../../css/gsdk-base.css" th:href="@{/css/gsdk-base.css}" />
@@ -30,48 +32,6 @@
 		        numFiles = input.get(0).files ? input.get(0).files.length : 1,
 		        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
 		    input.trigger('fileselect', [label]);
-		});
-		
-		$(document).ready( function() {
-			$('.btn-file :file').on('fileselect', function(event, label) {
-		    	var css =  {};
-		    	css.color = label ? '#515151' : '#999999';
-		    	$(event.target).parent().css(css);
-		    });
-		    
-		    //confirm download dialog fragment
-		    function activateConfirmBtn(e){
-		    	$('#confirm-dialog #confirm-ok .btn').prop('disabled', !e.currentTarget.checked);
-		    	if(e.currentTarget.checked)
-		    		$('#confirm-dialog #confirm-ok').unbind('click', disableDownloadLink);
-		    	else
-		    		$('#confirm-dialog #confirm-ok').bind('click', disableDownloadLink);
-		    }
-		    function hideDialog(e){
-		    	$('#confirm-dialog').modal('hide');
-		    }
-		    function disableDownloadLink(e){
-		    	//ie fix
-		    	e.preventDefault();
-		    }
-		  	//on show - bind event handlers
-		    $('#confirm-dialog').bind('show.bs.modal', function(e) {	    	
-		    	$(this).find('#confirm-check').bind('change', activateConfirmBtn);
-			    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
-			    $(this).find('#confirm-ok').bind('click', disableDownloadLink);
-			    $(this).find('#confirm-ok .btn').bind('click', hideDialog);
-			});
-		    
-		    //on hide - unbind event handlers - reset checkbox and button state.
- 		    $('#confirm-dialog').bind('hide.bs.modal', function(e) {
- 		    	var confirmCheck = $(this).find('#confirm-check');
- 		    	confirmCheck.prop('checked', false);
- 		    	confirmCheck.unbind('change', activateConfirmBtn);
- 		    	
- 		    	var confirmBtn = $(this).find('#confirm-ok .btn'); 		    	
- 		    	confirmBtn.prop('disabled', true);
-		    	confirmBtn.unbind('click', hideDialog);		    	
-			});
 		});
 	</script>
 	
