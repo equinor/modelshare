@@ -33,6 +33,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.statoil.modelshare.Access;
@@ -157,8 +158,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 		rootCache.clear();
 	}
 
-	private void fillFolderContents(Folder rootFolder, User user) throws IOException {
-		File file = new File(rootFolder.getPath());
+	private void fillFolderContents(Folder parent, User user) throws IOException {
+		File file = new File(parent.getPath());
 		if (!file.exists()) {
 			return;
 		}
@@ -182,14 +183,14 @@ public class ModelRepositoryImpl implements ModelRepository {
 					folder.setPath(child.getAbsolutePath());
 					folder.setRelativePath(relativePath);
 					setPicturePath(folder, child);
-					rootFolder.getAssets().add(folder);
+					parent.getAssets().add(folder);
 					fillFolderContents(folder, user);
 				} else {
 					Model model = getModel(user, child.toPath());
 					model.setPath(child.getAbsolutePath());
 					model.setRelativePath(relativePath);
 					setPicturePath(model, child);
-					rootFolder.getAssets().add(model);
+					parent.getAssets().add(model);
 				}
 			}
 		}
@@ -501,6 +502,13 @@ public class ModelRepositoryImpl implements ModelRepository {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void updateModel(Model model) throws IOException, AccessDeniedException {
+		Path path = rootPath.resolve(model.getRelativePath());
+		// use a self-contained copy to avoid serialization issues
+		saveModelData(EcoreUtil.copy(model), path);		
 	}
 
 }

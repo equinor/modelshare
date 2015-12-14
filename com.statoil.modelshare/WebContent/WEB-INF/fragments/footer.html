@@ -10,13 +10,12 @@
 		<!-- Bootstrap core JavaScript
     ================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<!-- Bootstrap Markdown -->
-		<script th:src="@{js/bootstrap-markdown.js}"></script>
-		<script th:src="@{js/markdown.js}"></script>
-		<script th:src="@{js/to-markdown.js}"></script>
-		<script th:src="@{js/main.js}"></script>
+		<script th:src="@{js/bootstrap-markdown.js}" type="text/javascript"></script>
+		<script th:src="@{js/markdown.js}" type="text/javascript"></script>
+		<script th:src="@{js/to-markdown.js}" type="text/javascript"></script>
+		<script th:src="@{js/main.js}" type="text/javascript"></script>
 		<script>
 		$('a[rel=popover]').popover({
 			html : true,
@@ -34,6 +33,50 @@
 		    var span = document.getElementById(form).firstChild;
 		    span.textContent = label;		
 		});
+		</script>
+			
+		<!-- Model and folder data editing -->
+		<script th:src="@{/js/bootstrap-editable.min.js}"></script>
+		<script type="text/javascript" th:if="${writeAccess}">
+		    $.fn.editable.defaults.mode = 'popup';
+		    
+			$(document).ready(function() {		
+
+				// enable / disable editing
+			    $('#toggleEditEnable').click(function() {
+			        $('.editable').editable('toggleDisabled');
+			        $('#descriptionEditor').markdown({
+			        	savable: true,
+						onSave: function(e) {
+						    $.post( "edit", { name: "assetDescription", value: e.getContent(), pk: $(e.$element).data("path") } );
+						},
+			        	function(e) {
+			        		e.showEditor();
+			        	}
+			        });
+			    });
+
+				// handle save on the editor
+				/*
+				$("#descriptionEditor").markdown({
+				})				
+				*/
+			    
+			    $('#assetName').editable({
+			    	disabled: true,
+				    type: 'text',
+				    url: 'edit',
+				    title: 'Enter model name'
+				});
+			    		    
+			    $('#assetOwner').editable({
+			    	disabled: true,
+			        type: 'select',
+			        url: 'edit',
+			        source: 'users',
+			        title: 'Select model owner'
+			    });			    
+			});
 		</script>
 	</div>
 </body>

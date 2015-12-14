@@ -205,6 +205,8 @@ public interface ModelRepository {
 	 *             if the <i>user</i> does not have write access
 	 */
 	public void uploadModel(User user, InputStream ms, InputStream ps, Model model, Model replacedModel) throws IOException, AccessDeniedException;
+	
+	public void updateModel(Model model) throws IOException, AccessDeniedException;
 
 	/**
 	 * Creates a folder on the given parent folder.
