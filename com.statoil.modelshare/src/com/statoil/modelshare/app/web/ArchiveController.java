@@ -99,7 +99,6 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
-			map.addAttribute("activeMenuItem", asset);
 			map.addAttribute("title", "Model archive");
 
 			// common
@@ -126,12 +125,11 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
-			map.addAttribute("activeMenuItem", asset); //XXX: Remove
-			map.addAttribute("currentFolder", asset);
-			map.addAttribute("title", "Model archive");
+			
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
 			map.addAttribute("node", n);
+			map.addAttribute("currentFolder", asset);
 			map.addAttribute("crumbs", getBreadCrumb(n));
 			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception e) {

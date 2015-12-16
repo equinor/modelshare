@@ -13,6 +13,50 @@
 
 		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
 
+		<script>			
+			$(document).ready( function() {
+				$('.btn-file :file').on('fileselect', function(event, label) {
+			    	var css =  {};
+			    	css.color = label ? '#515151' : '#999999';
+			    	$(event.target).parent().css(css);
+			    });
+			    
+			    //confirm download dialog fragment
+			    function activateConfirmBtn(e){
+			    	$('#confirm-dialog #confirm-ok .btn').prop('disabled', !e.currentTarget.checked);
+			    	if(e.currentTarget.checked)
+			    		$('#confirm-dialog #confirm-ok').unbind('click', disableDownloadLink);
+			    	else
+			    		$('#confirm-dialog #confirm-ok').bind('click', disableDownloadLink);
+			    }
+			    function hideDialog(e){
+			    	$('#confirm-dialog').modal('hide');
+			    }
+			    function disableDownloadLink(e){
+			    	//ie fix
+			    	e.preventDefault();
+			    }
+			  	//on show - bind event handlers
+			    $('#confirm-dialog').bind('show.bs.modal', function(e) {	    	
+			    	$(this).find('#confirm-check').bind('change', activateConfirmBtn);
+				    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
+				    $(this).find('#confirm-ok').bind('click', disableDownloadLink);
+				    $(this).find('#confirm-ok .btn').bind('click', hideDialog);
+				});
+			    
+			    //on hide - unbind event handlers - reset checkbox and button state.
+	 		    $('#confirm-dialog').bind('hide.bs.modal', function(e) {
+	 		    	var confirmCheck = $(this).find('#confirm-check');
+	 		    	confirmCheck.prop('checked', false);
+	 		    	confirmCheck.unbind('change', activateConfirmBtn);
+	 		    	
+	 		    	var confirmBtn = $(this).find('#confirm-ok .btn'); 		    	
+	 		    	confirmBtn.prop('disabled', true);
+			    	confirmBtn.unbind('click', hideDialog);		    	
+				});
+			});
+		</script>
+	
 		<div th:if="${currentModel}" class="panel panel-primary">
 			<div class="panel-body">
 
@@ -149,5 +193,42 @@
 			th:replace="../fragments/confirm :: confirm('Terms of use &amp; Disclaimer', ${downloadTerms})">...</div>
 	</div>
 	<div th:replace="../fragments/footer :: footer">...</div>
+	<!-- Model and folder data editing -->
+	<script th:src="@{/js/bootstrap-editable.min.js}"></script>
+	<script type="text/javascript" th:if="${writeAccess}">
+	    $.fn.editable.defaults.mode = 'popup';
+	    
+		$(document).ready(function() {		
+
+			// enable / disable editing
+		    $('#toggleEditEnable').click(function() {
+		        $('.editable').editable('toggleDisabled');
+		        $('#descriptionEditor').markdown({
+		        	savable: true,
+					onSave: function(e) {
+					    $.post( "edit", { name: "assetDescription", value: e.getContent(), pk: $(e.$element).data("path") } );
+					},
+		        	function(e) {
+		        		e.showEditor();
+		        	}
+		        });
+		    });
+		    
+		    $('#assetName').editable({
+		    	disabled: true,
+			    type: 'text',
+			    url: 'edit',
+			    title: 'Enter model name'
+			});
+		    		    
+		    $('#assetOwner').editable({
+		    	disabled: true,
+		        type: 'select',
+		        url: 'edit',
+		        source: 'users',
+		        title: 'Select model owner'
+		    });			    
+		});
+	</script>
 </body>
 </html>

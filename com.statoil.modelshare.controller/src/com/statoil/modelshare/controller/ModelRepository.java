@@ -12,6 +12,7 @@ import java.util.Map;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.User;
+import com.statoil.modelshare.security.RepositoryAccessControl;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
@@ -36,16 +37,23 @@ public interface ModelRepository {
 	 * @return the root folder
 	 */
 	public Folder getRoot(User user);
-
+	
 	/**
-	 * Returns a list of all users that have access to the repository.
+	 * Returns a list of all accounts.
+	 * 
+	 * @return a list of all accounts
+	 */
+	public List<Account> getAccounts();
+	
+	/**
+	 * Returns a list of all users.
 	 * 
 	 * @return a list of users
 	 */
 	public List<User> getUsers();
 
 	/**
-	 * Returns a list of all groups that have access to the repository.
+	 * Returns a list of all groups.
 	 * 
 	 * @return a list of groups
 	 */
@@ -54,13 +62,14 @@ public interface ModelRepository {
 	/**
 	 * Returns a map of all accounts that have explicit access to the specific
 	 * resource. This does not include accounts that have inherited access to
-	 * the resource.
+	 * the resource, but inherited access will be included in the data.
 	 * 
 	 * @param requestor
 	 *            the user requesting the data
 	 * @param asset
 	 *            the asset to get the access for
 	 * @return a map of accounts with access to the resource
+	 * @see RepositoryAccessControl#getRights(Path) RepositoryAccessControl#getRights(Path) for details
 	 * @throws IOException
 	 * @throws AccessDeniedException
 	 *             if the <i>requestor</i> don't have the required credentials
@@ -73,7 +82,7 @@ public interface ModelRepository {
 	 * @param requestor
 	 *            the user requesting the data
 	 * @param user
-	 *            the user for which to modify the rights
+	 *            the account for which to modify the rights
 	 * @param asset
 	 *            the asset to set the rights for
 	 * @param rights
@@ -82,7 +91,7 @@ public interface ModelRepository {
 	 * @throws AccessDeniedException
 	 *             if the <i>requestor</i> don't have the required credentials
 	 */
-	public void modifyRights(User requestor, User user, Path asset, EnumSet<Access> rights) throws IOException;
+	public void modifyRights(User requestor, Account account, Path asset, EnumSet<Access> rights) throws IOException;
 	
 	/**
 	 * Returns the user with the given identifier if found, otherwise
@@ -93,7 +102,17 @@ public interface ModelRepository {
 	 * @return the user or <code>null</code>
 	 */
 	public User getUser(String id);
-
+	
+	/**
+	 * Returns the group with the given identifier if found, otherwise
+	 * <code>null</code> is returned.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @return the group or <code>null</code>
+	 */
+	public Group getGroup(String id);
+	
 	/**
 	 * Sets the password has for the specified user.
 	 * 

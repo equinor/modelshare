@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+	
+	<div th:fragment="listItem(account, index)"  th:remove="tag">
+		<a th:if="${account}" href="#" 
+	   			th:onclick="'ManageAccess.AddAccount(\'' + 
+	   			${account.key.name} + '\',\'' + 
+	   			${account.key.identifier} +	'\',' + 
+	   			${index} + ',\'' + 
+	   			${account.value} + '\');'" 
+	   			th:utext="${account.key.name + ' (' + account.key.identifier + ')'}">
+ 		</a>
+	</div>
+
+	<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+	<div class="container" role="main">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="wizard-container">
+					<div class="card wizard-card ct-wizard-orange" id="wizard">
+						<div class="wizard-header">
+							<h3>Set access rights for:</h3>							
+							<h5 class="text-center">
+								'<span th:text="${path}"></span>'
+							</h5>
+						</div>
+						<hr />
+						<form action="saveAccess" method="post">
+							<div class="dropdown">	
+							 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add user/group <span class="caret"></span></button>
+						        <ul id="accessList" class="dropdown-menu">
+					          		<li th:id="|li_${iterStat.index}|" th:each="account, iterStat :${accounts}">
+						          		<a th:replace=":: listItem(${account}, ${iterStat.index})"></a>
+					          		</li>
+					          		<li th:id="|li_${#maps.size(accounts) + iterStat.index}|" th:each="account, iterStat :${groups}" style="display:none;">
+						          		<a th:replace=":: listItem(${account}, ${#maps.size(accounts) + iterStat.index})"></a>						          		
+					          		</li>
+					          		<li th:id="|li_${#maps.size(accounts) + #maps.size(groups) + iterStat.index}|" th:each="account, iterStat :${users}" style="display:none;">
+						          		<a th:replace=":: listItem(${account}, ${#maps.size(accounts) + #maps.size(groups) + iterStat.index})"></a>		
+					          		</li>
+						        </ul>
+					       	</div>
+					       	<br/>
+							<table class="table table-striped" id="accessTable">
+								<thead>
+									<tr>
+										<th style="min-width:150px;">User/Group</th>
+										<th class="text-center">View</th>
+										<th class="text-center">Read</th>
+										<th class="text-center">Write</th>
+										<th class="text-center">&nbsp;</th>
+									</tr>
+								</thead>
+								<tr th:each="account, iterStat: ${groups}">
+									<td th:text="${#strings.toUpperCase(account.key.name)}"></td>
+									<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.view}" />
+								 	</td>
+								 	<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.read}" />
+									</td>
+								 	<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.write}" />
+									</td>
+									<td class="text-center">
+										<a href="#" th:onclick="|ManageAccess.RemoveAccount(this, ${#maps.size(accounts) + iterStat.index});|" title="Remove group">
+											<span class="glyphicon glyphicon-remove-circle remove"> </span>
+										</a>
+										<input style="display:none;" checked="checked" type="checkbox" name="accounts" th:value="${account.key.identifier}" />
+									</td>
+								</tr>
+								<tr th:each="account, iterStat: ${users}">
+									<td th:text="${#strings.toUpperCase(account.key.name)}"></td>								
+									<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.view}" />
+								 	</td>
+								 	<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.read}" />
+									</td>
+								 	<td class="text-center">
+										<input type="text" name="access" th:value="${account.value.write}" />
+									</td>
+									<td class="text-center">
+										<a href="#" th:onclick="|ManageAccess.RemoveAccount(this, ${#maps.size(accounts) + #maps.size(groups) + iterStat.index});|"  title="Remove user">
+											<span class="glyphicon glyphicon-remove-circle remove"> </span>
+										</a>
+										<input style="display:none;" checked="checked" type="checkbox" name="accounts" th:value="${account.key.identifier}" />
+									</td>
+								</tr>
+							</table>
+							<input type="hidden" name="path" th:value="${path}" />
+							<br/>
+							<input class="btn btn-primary btn-block" type="submit" value="Save changes" />
+						</form>				
+						<!-- 
+							1. Need write access rights to folder or model. Show key in breadcrumb					
+							5. Should not be able to remove YOUR access :) -> Read Only					
+						 -->
+						<div class="wizard-footer">
+							<div th:replace="../fragments/alert :: alert(${error},${info})">...</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+	<script>
+	// <![CDATA[
+        "use strict"
+		var ManageAccess =  (function() {
+				function createCheckBox(id, value, index, right){
+					return 	'<td class="text-center">' +
+						 	'<input type="text" id="cb'+ index + '_'+right+'"' + 
+							' name="access" value="' + value + '" /></td>';
+				}
+				//api
+				return {
+					AddAccount : function(name, identifier, index, rights){
+						
+		   				var aRights = rights
+		   								.replace('[', '')
+		   								.replace(']','')
+		   								.replace(' ','')
+		   								.split(',');
+		   				
+		   				//Add row
+		   				$('#accessTable').append(
+		   						'<tr>' +
+		   						'<td>' + name + '</td>' + 
+		   						createCheckBox(identifier, '1', index, 'v') + 
+		   						createCheckBox(identifier, '', index, 'r') + 
+		   						createCheckBox(identifier, '', index, 'w') + 
+		   						'<td class="text-center">' +
+								'<a href="#" onClick="ManageAccess.RemoveAccount(this,' + index + ');" >' +
+								'<span class="glyphicon glyphicon-remove-circle remove"> </span>' +
+								'</a>' +
+								'<input style="display:none;" checked="checked" type="checkbox" name="accounts" value="' + identifier + '" />' + 
+								'</td>' +
+		   						'</tr>');
+		   				// custom value sets (through valueChecked, valueUnchecked & valueNumm) is not working 
+		   				$('#cb'+ index +'_v').checkboxX({threeState: true});
+		   				$('#cb'+ index +'_r').checkboxX({threeState: true});
+		   				$('#cb'+ index +'_w').checkboxX({threeState: true});
+		   				//Hide from list
+		   				$('#li_' + index).hide();
+		 			}, 
+		 			RemoveAccount : function(el, index){
+		 				$(el).parent().parent().remove();
+		 				//Show in list
+		 				$('#li_' + index).show();
+		 			}
+				}	
+ 		})();
+	
+	// ]]>
+	</script>
+	<script>
+		// <![CDATA[
+		$(document).on("ready", function() {
+	    	// initialize with defaults
+	    	$("input[name='access']").checkboxX();
+		});
+		// ]]>
+	</script>
+</body>
+</html>
