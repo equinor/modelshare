@@ -10,7 +10,7 @@ The [design document](https://docs.google.com/a/itema.no/document/d/1Q-6XYVCCoVE
 
 This files lists the users and their credentials. It is on the form:
 
-    <e-mail-address>:<password hash>:<parent group idenfier>:<full name>
+    <e-mail-address>:<password hash>:<parent group idenfier>:<full name>:<organization>:<local user>:<password reset token>
     <group identifier>:x:<parent group identifier>:<full name>:
 
 If the user password field is empty, the user may log in without specifying a password. Placing an "x" in the password field indicates that this is a group and not a user that may log in. For testing purposes one may add a user by setting the ".passwd" file contents to `test:::Test User`. The following example file show a user "test" that does not need a password and a user "admin" with the password "admin".
@@ -31,11 +31,3 @@ Tomcat 8 is installed as servlet-container. To administrate Tomcat go to the fol
 
 * user: admin
 * password: Kokke Limonke 123
-
-If you need to test the mail functionality you can do the following: Install Docker (or Kitematic if you are on mac). Download Mailhog/Mailhog from docker hub. Start Mailhog and check the ports assigned to the SMTP server and the web interface to read the mails you send. If necessary - change the modelshare.properties file on your local machine (/modelshare/modelshare.repository) to reflect the ports mailhog uses.
-
-
-The following document was agreed upon as the first delivery:
-https://docs.google.com/document/d/1Q-6XYVCCoVEz7N6S7dGUnP9NCEu3OxQoUsgpqvg4yVY/edit#heading=h.s1zs8p6fault
-
-Bengt has sent a document to Statoil where we have proposed further work.
