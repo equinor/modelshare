@@ -26,6 +26,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/password"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/forceChangePassword"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//User/localUser"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//User/resettoken"/>
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//Model">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Model/owner"/>
@@ -71,6 +72,11 @@
     </genClasses>
     <genClasses ecoreClass="modelshare.ecore#//TaskFolder">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelshare.ecore#//TaskFolder/taskDetails"/>
+    </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//Token">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Token/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Token/created"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Token/user"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

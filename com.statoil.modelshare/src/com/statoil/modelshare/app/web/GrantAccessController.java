@@ -7,26 +7,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +29,6 @@ import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.User;
-import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
@@ -50,10 +39,7 @@ public class GrantAccessController extends AbstractController {
 	
 	@Autowired
 	private ModelRepository modelrepository;
-	
-	@Autowired
-	private SMTPConfiguration smtpConfig;
-	
+		
 	@RequestMapping(value = "/grantaccess", method = RequestMethod.GET)
 	public String prepareAccesPage(ModelMap model,
 			@RequestParam("asset") String asset,
@@ -89,7 +75,7 @@ public class GrantAccessController extends AbstractController {
 			User requestUser = modelrepository.getUser(principal.getName());
 			if (modelrepository.isValidEmailAddress(requestUser.getEmail())) {
 				try {
-					sendEmail("You are now granted access to download model " + asset, requestUser.getEmail(), requestUser);
+					sendEmail("Access granted", "You are now granted access to download model " + asset, requestUser.getEmail(), requestUser.getEmail());
 				} catch (MessagingException e) {
 					String msg = "Error sending mail. Contact system responsible.";
 					log.log(Level.SEVERE, msg, e);
@@ -216,30 +202,6 @@ public class GrantAccessController extends AbstractController {
 		if(account==null)
 			account = modelrepository.getGroup(id);
 		return account;
-	}
-	
-	private void sendEmail(String message, String mailTo, User user) throws MessagingException {
-		Properties properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", smtpConfig.getHost());
-		properties.setProperty("mail.smtp.port", String.valueOf(smtpConfig.getPort()));
-		Session session = Session.getDefaultInstance(properties);
-
-		MimeMessage mimeMessage = new MimeMessage(session);
-		mimeMessage.setFrom(new InternetAddress(user.getEmail()));
-		mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
-		mimeMessage.setSubject("Access granted");
-		mimeMessage.setSentDate(new Date());
-		
-		Multipart multipart = new MimeMultipart();
-		
-		MimeBodyPart htmlPart = new MimeBodyPart();
-		String htmlContent = "<html><body><h3>"+message+"</h3></body></html>";
-		htmlPart.setContent(htmlContent, "text/html; charset=UTF-8");
-		multipart.addBodyPart(htmlPart);
-		
-		mimeMessage.setContent(multipart);
-		
-		Transport.send(mimeMessage);
 	}
 	
 	/**

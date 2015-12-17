@@ -3,12 +3,15 @@
 package com.statoil.modelshare.impl;
 
 import com.statoil.modelshare.ModelsharePackage;
+import com.statoil.modelshare.Token;
 import com.statoil.modelshare.User;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -24,6 +27,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.statoil.modelshare.impl.UserImpl#getPassword <em>Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.UserImpl#isForceChangePassword <em>Force Change Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.impl.UserImpl#getLocalUser <em>Local User</em>}</li>
+ *   <li>{@link com.statoil.modelshare.impl.UserImpl#getResettoken <em>Resettoken</em>}</li>
  * </ul>
  *
  * @generated
@@ -128,6 +132,16 @@ public class UserImpl extends AccountImpl implements User {
 	 * @ordered
 	 */
 	protected String localUser = LOCAL_USER_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getResettoken() <em>Resettoken</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResettoken()
+	 * @generated
+	 * @ordered
+	 */
+	protected Token resettoken;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -258,6 +272,96 @@ public class UserImpl extends AccountImpl implements User {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Token getResettoken() {
+		if (resettoken != null && resettoken.eIsProxy()) {
+			InternalEObject oldResettoken = (InternalEObject)resettoken;
+			resettoken = (Token)eResolveProxy(oldResettoken);
+			if (resettoken != oldResettoken) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ModelsharePackage.USER__RESETTOKEN, oldResettoken, resettoken));
+			}
+		}
+		return resettoken;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Token basicGetResettoken() {
+		return resettoken;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetResettoken(Token newResettoken, NotificationChain msgs) {
+		Token oldResettoken = resettoken;
+		resettoken = newResettoken;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__RESETTOKEN, oldResettoken, newResettoken);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setResettoken(Token newResettoken) {
+		if (newResettoken != resettoken) {
+			NotificationChain msgs = null;
+			if (resettoken != null)
+				msgs = ((InternalEObject)resettoken).eInverseRemove(this, ModelsharePackage.TOKEN__USER, Token.class, msgs);
+			if (newResettoken != null)
+				msgs = ((InternalEObject)newResettoken).eInverseAdd(this, ModelsharePackage.TOKEN__USER, Token.class, msgs);
+			msgs = basicSetResettoken(newResettoken, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.USER__RESETTOKEN, newResettoken, newResettoken));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ModelsharePackage.USER__RESETTOKEN:
+				if (resettoken != null)
+					msgs = ((InternalEObject)resettoken).eInverseRemove(this, ModelsharePackage.TOKEN__USER, Token.class, msgs);
+				return basicSetResettoken((Token)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ModelsharePackage.USER__RESETTOKEN:
+				return basicSetResettoken(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -271,6 +375,9 @@ public class UserImpl extends AccountImpl implements User {
 				return isForceChangePassword();
 			case ModelsharePackage.USER__LOCAL_USER:
 				return getLocalUser();
+			case ModelsharePackage.USER__RESETTOKEN:
+				if (resolve) return getResettoken();
+				return basicGetResettoken();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -297,6 +404,9 @@ public class UserImpl extends AccountImpl implements User {
 				return;
 			case ModelsharePackage.USER__LOCAL_USER:
 				setLocalUser((String)newValue);
+				return;
+			case ModelsharePackage.USER__RESETTOKEN:
+				setResettoken((Token)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -325,6 +435,9 @@ public class UserImpl extends AccountImpl implements User {
 			case ModelsharePackage.USER__LOCAL_USER:
 				setLocalUser(LOCAL_USER_EDEFAULT);
 				return;
+			case ModelsharePackage.USER__RESETTOKEN:
+				setResettoken((Token)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -347,6 +460,8 @@ public class UserImpl extends AccountImpl implements User {
 				return forceChangePassword != FORCE_CHANGE_PASSWORD_EDEFAULT;
 			case ModelsharePackage.USER__LOCAL_USER:
 				return LOCAL_USER_EDEFAULT == null ? localUser != null : !LOCAL_USER_EDEFAULT.equals(localUser);
+			case ModelsharePackage.USER__RESETTOKEN:
+				return resettoken != null;
 		}
 		return super.eIsSet(featureID);
 	}
