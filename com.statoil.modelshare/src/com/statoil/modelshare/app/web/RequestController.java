@@ -48,20 +48,20 @@ public class RequestController extends AbstractController {
 	private SMTPConfiguration smtpConfig;
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public String showRequestForm(ModelMap model, 
+	public String showRequestForm(ModelMap map, 
 			@RequestParam(value = "asset", required = true) String asset,
 			Principal principal) {
 		try {
 			User user = modelrepository.getUser(principal.getName());
-			Model currentModel = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
-			model.put("from", user.getName());
-			model.put("mailfrom", user.getEmail());
-			model.put("to", currentModel.getMail());
-			model.put("asset", asset);
+			Model model = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
+			map.put("from", user.getName());
+			map.put("mailfrom", user.getEmail());
+			map.put("to", model.getMail());
+			map.put("asset", asset);
 		} catch (Exception e) {
 			String msg = "Error getting model from repository";
 			log.fatal(msg, e);
-			model.addAttribute("error", msg);
+			map.addAttribute("error", msg);
 			return "request";
 		}
 		return "request";

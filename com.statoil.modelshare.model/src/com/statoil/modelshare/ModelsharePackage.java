@@ -205,13 +205,22 @@ public interface ModelsharePackage extends EPackage {
 	int USER__LOCAL_USER = ACCOUNT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Resettoken</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER__RESETTOKEN = ACCOUNT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>User</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 5;
+	int USER_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get All Roles</em>' operation.
@@ -896,6 +905,61 @@ public interface ModelsharePackage extends EPackage {
 	int TASK_FOLDER_OPERATION_COUNT = ABSTRACT_TASK_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.statoil.modelshare.impl.TokenImpl <em>Token</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.statoil.modelshare.impl.TokenImpl
+	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getToken()
+	 * @generated
+	 */
+	int TOKEN = 9;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Timeout</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN__TIMEOUT = 1;
+
+	/**
+	 * The feature id for the '<em><b>User</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN__USER = 2;
+
+	/**
+	 * The number of structural features of the '<em>Token</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Token</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.statoil.modelshare.Access <em>Access</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -903,7 +967,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getAccess()
 	 * @generated
 	 */
-	int ACCESS = 9;
+	int ACCESS = 10;
 
 
 	/**
@@ -970,6 +1034,17 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUser_LocalUser();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.statoil.modelshare.User#getResettoken <em>Resettoken</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Resettoken</em>'.
+	 * @see com.statoil.modelshare.User#getResettoken()
+	 * @see #getUser()
+	 * @generated
+	 */
+	EReference getUser_Resettoken();
 
 	/**
 	 * Returns the meta object for class '{@link com.statoil.modelshare.Model <em>Model</em>}'.
@@ -1358,6 +1433,49 @@ public interface ModelsharePackage extends EPackage {
 	EReference getTaskFolder_TaskDetails();
 
 	/**
+	 * Returns the meta object for class '{@link com.statoil.modelshare.Token <em>Token</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Token</em>'.
+	 * @see com.statoil.modelshare.Token
+	 * @generated
+	 */
+	EClass getToken();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Token#getKey <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see com.statoil.modelshare.Token#getKey()
+	 * @see #getToken()
+	 * @generated
+	 */
+	EAttribute getToken_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.statoil.modelshare.Token#getTimeout <em>Timeout</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Timeout</em>'.
+	 * @see com.statoil.modelshare.Token#getTimeout()
+	 * @see #getToken()
+	 * @generated
+	 */
+	EAttribute getToken_Timeout();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.statoil.modelshare.Token#getUser <em>User</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>User</em>'.
+	 * @see com.statoil.modelshare.Token#getUser()
+	 * @see #getToken()
+	 * @generated
+	 */
+	EReference getToken_User();
+
+	/**
 	 * Returns the meta object for enum '{@link com.statoil.modelshare.Access <em>Access</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1439,6 +1557,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER__LOCAL_USER = eINSTANCE.getUser_LocalUser();
+
+		/**
+		 * The meta object literal for the '<em><b>Resettoken</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference USER__RESETTOKEN = eINSTANCE.getUser_Resettoken();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.impl.ModelImpl <em>Model</em>}' class.
@@ -1743,6 +1869,40 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EReference TASK_FOLDER__TASK_DETAILS = eINSTANCE.getTaskFolder_TaskDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.statoil.modelshare.impl.TokenImpl <em>Token</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.statoil.modelshare.impl.TokenImpl
+		 * @see com.statoil.modelshare.impl.ModelsharePackageImpl#getToken()
+		 * @generated
+		 */
+		EClass TOKEN = eINSTANCE.getToken();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOKEN__KEY = eINSTANCE.getToken_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Timeout</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOKEN__TIMEOUT = eINSTANCE.getToken_Timeout();
+
+		/**
+		 * The meta object literal for the '<em><b>User</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TOKEN__USER = eINSTANCE.getToken_User();
 
 		/**
 		 * The meta object literal for the '{@link com.statoil.modelshare.Access <em>Access</em>}' enum.

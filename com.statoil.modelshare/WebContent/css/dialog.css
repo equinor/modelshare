@@ -122,3 +122,7 @@ form #folder-name {
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 }
+
+.form-signin #email {
+	margin-bottom: 10px;
+}

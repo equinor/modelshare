@@ -33,6 +33,7 @@ import com.statoil.modelshare.Account;
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.ModelshareFactory;
+import com.statoil.modelshare.Token;
 
 /**
  * 
@@ -328,6 +329,10 @@ public class RepositoryAccessControl {
 		
 		List<Account> newAccounts = new ArrayList<>();
 
+		/*
+		 * The password file format
+		 * <identifier>:<password>:[<group>]:[<organization>]:[<local user>] 
+		 */
 		synchronized (passwordFilePath) {
 			String in = null;
 			passwordFileModified = passwordFilePath.toFile().lastModified();			
@@ -355,6 +360,10 @@ public class RepositoryAccessControl {
 						user.setIdentifier(split[0]);
 						user.setEmail(split[0]);
 						user.setPassword(split[1]);
+						// if the password is "changeme" the user must be forced to change it
+						if (split[1].equals("changeme")){
+							user.setForceChangePassword(true);
+						}
 						if (!groupName.isEmpty()){
 							user.setGroup(getGroup(newAccounts, groupName));
 						}
@@ -365,6 +374,13 @@ public class RepositoryAccessControl {
 						}
 						if (split.length > 5) {
 							user.setLocalUser(split[5]);
+						}
+						if (split.length > 6) {
+							String[] resetToken = split[6].split("/");
+							Token token = ModelshareFactory.eINSTANCE.createToken();
+							token.setKey(resetToken[0]);
+							token.setTimeout(Long.parseLong(resetToken[1]));
+							user.setResettoken(token);
 						}
 						newAccounts.add(user);
 						if (split[1].length() == 0) {
@@ -388,7 +404,7 @@ public class RepositoryAccessControl {
 	 * @param hash
 	 *            the password hash
 	 */
-	public synchronized void setPassword(String id, String hash) {
+	public void setPassword(String id, String hash) {
 		synchronized (passwordFilePath) {
 			List<Account> accounts = getAccounts();
 			for (Account account : accounts) {
@@ -396,40 +412,57 @@ public class RepositoryAccessControl {
 					((User) account).setPassword(hash);
 				}
 			}
-			try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
-				for (Account account : accounts) {
-					if (account instanceof Group) {
-						fw.write(account.getIdentifier() + ":x:");
-						if (account.getGroup() != null) {
-							fw.write(account.getGroup().getIdentifier() + ":");
-						} else {
-							fw.write(":");
-						}
-						fw.write(account.getName());
-					} else if (account instanceof User) {
-						fw.write(account.getIdentifier() + ":");
-						fw.write(((User) account).getPassword() + ":");
-						if (account.getGroup() != null) {
-							fw.write(account.getGroup().getIdentifier() + ":");
-						} else {
-							fw.write(":");
-						}
-						fw.write(account.getName());
+			writeAccounts(accounts);
+		}
+	}
+	
+	public void updateAccountsFile(){
+		synchronized (passwordFilePath) {
+			List<Account> accounts = getAccounts();
+			writeAccounts(accounts);
+		}		
+	}
+
+	private void writeAccounts(List<Account> accounts) {
+		try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
+			for (Account account : accounts) {
+				if (account instanceof Group) {
+					fw.write(account.getIdentifier() + ":x:");
+					if (account.getGroup() != null) {
+						fw.write(account.getGroup().getIdentifier() + ":");
+					} else {
 						fw.write(":");
-						if (((User) account).getOrganisation() != null) {
-							fw.write(((User) account).getOrganisation() + ":");
-						} else {
-							fw.write(":");
-						}
-						if (((User) account).getLocalUser() != null) {
-							fw.write(((User) account).getLocalUser());
-						}
 					}
-					fw.write(System.lineSeparator());
+					fw.write(account.getName());
+				} else if (account instanceof User) {
+					fw.write(account.getIdentifier() + ":");
+					fw.write(((User) account).getPassword() + ":");
+					if (account.getGroup() != null) {
+						fw.write(account.getGroup().getIdentifier() + ":");
+					} else {
+						fw.write(":");
+					}
+					fw.write(account.getName());
+					fw.write(":");
+					if (((User) account).getOrganisation() != null) {
+						fw.write(((User) account).getOrganisation() + ":");
+					} else {
+						fw.write(":");
+					}
+					if (((User) account).getLocalUser() != null) {
+						fw.write(((User) account).getLocalUser()+ ":");
+					} else {
+						fw.write(":");
+					}
+					Token resettoken = ((User) account).getResettoken();
+					if (resettoken != null) {
+						fw.write(resettoken.getKey()+"/"+resettoken.getTimeout());
+					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
+				fw.write(System.lineSeparator());
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
