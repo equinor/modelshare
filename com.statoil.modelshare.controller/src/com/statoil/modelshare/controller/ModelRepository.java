@@ -273,4 +273,6 @@ public interface ModelRepository {
 	 */
 	public boolean isValidEmailAddress(String email);
 
+	public void updateAccountsOnFile();
+
 }

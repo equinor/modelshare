@@ -17,6 +17,7 @@ package com.statoil.modelshare;
  *   <li>{@link com.statoil.modelshare.User#getPassword <em>Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.User#isForceChangePassword <em>Force Change Password</em>}</li>
  *   <li>{@link com.statoil.modelshare.User#getLocalUser <em>Local User</em>}</li>
+ *   <li>{@link com.statoil.modelshare.User#getResettoken <em>Resettoken</em>}</li>
  * </ul>
  *
  * @see com.statoil.modelshare.ModelsharePackage#getUser()
@@ -153,5 +154,33 @@ public interface User extends Account {
 	 * @generated
 	 */
 	void setLocalUser(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Resettoken</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.statoil.modelshare.Token#getUser <em>User</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Resettoken</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Resettoken</em>' reference.
+	 * @see #setResettoken(Token)
+	 * @see com.statoil.modelshare.ModelsharePackage#getUser_Resettoken()
+	 * @see com.statoil.modelshare.Token#getUser
+	 * @model opposite="user"
+	 * @generated
+	 */
+	Token getResettoken();
+
+	/**
+	 * Sets the value of the '{@link com.statoil.modelshare.User#getResettoken <em>Resettoken</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Resettoken</em>' reference.
+	 * @see #getResettoken()
+	 * @generated
+	 */
+	void setResettoken(Token value);
 
 } // Client

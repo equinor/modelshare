@@ -13,22 +13,25 @@
 					<div class="card wizard-card ct-wizard-orange" id="wizard">
 						<div class="wizard-header">
 							<h3>
-								<b>CHANGE</b> PASSWORD <br /> <small>Please type in your old and new password.</small>
+								<span th:if="${token} == null"><b>CHANGE</b> PASSWORD <br /> <small>Please type in your old and new password.</small></span>
+								<span th:if="${token} != null"><b>RESET</b> PASSWORD <br /> <small>Please type in new password.</small></span>
 							</h3>
 						</div>
 						<hr />
-						<form class="form-signin" th:action="@{/passwd}" method="post" accept-charset="UTF-8">
+						<form class="form-signin" th:action="@{/change-password}" method="post" accept-charset="UTF-8">
 							<fieldset>
-								<label for="old-password" class="sr-only">Old password</label> <input
-									type="password" name="old-password" id="old-password"
+								<input type="text" th:value="${email}" name="email" id="email" hidden="true"/>
+								<input type="text" th:value="${token}" name="token" id="token" hidden="true"/>
+								<label for="old-password" class="sr-only">Old password</label>
+								<input th:if="${token} == null" type="password" 
+									name="old-password" id="old-password"
 									class="form-control" placeholder="Old password"
-									autofocus="autofocus" /> <label for="new-password"
-									class="sr-only">New password</label> <input type="password"
-									name="new-password" id="new-password" class="form-control"
-									placeholder="New password" required="required" /> <label
-									for="confirm-password" class="sr-only">Confirm password</label>
-								<input type="password" name="confirm-password"
-									id="confirm-password" class="form-control"
+									autofocus="autofocus"/>
+								<label for="new-password" class="sr-only">New password</label>
+								<input type="password" name="new-password" id="new-password" class="form-control"
+									placeholder="New password" required="required" />
+								<label for="confirm-password" class="sr-only">Confirm password</label>
+								<input type="password" name="confirm-password" id="confirm-password" class="form-control"
 									placeholder="Confirm password" required="required" />
 								<button class="btn btn-primary btn-block" type="submit">Change</button>
 							</fieldset>

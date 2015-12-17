@@ -526,4 +526,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 		saveModelData(EcoreUtil.copy(model), path);		
 	}
 
+	@Override
+	public void updateAccountsOnFile() {
+		ra.updateAccountsFile();
+	}
+
 }

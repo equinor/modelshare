@@ -14,6 +14,7 @@ import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
 import com.statoil.modelshare.TaskDetails;
 import com.statoil.modelshare.TaskFolder;
+import com.statoil.modelshare.Token;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -92,6 +93,13 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * @generated
 	 */
 	private EClass taskFolderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass tokenEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -213,6 +221,15 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 */
 	public EAttribute getUser_LocalUser() {
 		return (EAttribute)userEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getUser_Resettoken() {
+		return (EReference)userEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -544,6 +561,42 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getToken() {
+		return tokenEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getToken_Key() {
+		return (EAttribute)tokenEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getToken_Timeout() {
+		return (EAttribute)tokenEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getToken_User() {
+		return (EReference)tokenEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAccess() {
 		return accessEEnum;
 	}
@@ -582,6 +635,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(userEClass, USER__PASSWORD);
 		createEAttribute(userEClass, USER__FORCE_CHANGE_PASSWORD);
 		createEAttribute(userEClass, USER__LOCAL_USER);
+		createEReference(userEClass, USER__RESETTOKEN);
 
 		modelEClass = createEClass(MODEL);
 		createEAttribute(modelEClass, MODEL__OWNER);
@@ -626,6 +680,11 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 		taskFolderEClass = createEClass(TASK_FOLDER);
 		createEReference(taskFolderEClass, TASK_FOLDER__TASK_DETAILS);
+
+		tokenEClass = createEClass(TOKEN);
+		createEAttribute(tokenEClass, TOKEN__KEY);
+		createEAttribute(tokenEClass, TOKEN__TIMEOUT);
+		createEReference(tokenEClass, TOKEN__USER);
 
 		// Create enums
 		accessEEnum = createEEnum(ACCESS);
@@ -673,6 +732,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getUser_Password(), ecorePackage.getEString(), "password", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_ForceChangePassword(), ecorePackage.getEBoolean(), "forceChangePassword", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUser_LocalUser(), ecorePackage.getEString(), "localUser", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUser_Resettoken(), this.getToken(), this.getToken_User(), "resettoken", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModel_Owner(), ecorePackage.getEString(), "owner", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -720,6 +780,11 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 		initEClass(taskFolderEClass, TaskFolder.class, "TaskFolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTaskFolder_TaskDetails(), this.getTaskDetails(), null, "taskDetails", null, 0, -1, TaskFolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(tokenEClass, Token.class, "Token", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getToken_Key(), ecorePackage.getEString(), "key", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getToken_Timeout(), ecorePackage.getELong(), "timeout", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getToken_User(), this.getUser(), this.getUser_Resettoken(), "user", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessEEnum, Access.class, "Access");
