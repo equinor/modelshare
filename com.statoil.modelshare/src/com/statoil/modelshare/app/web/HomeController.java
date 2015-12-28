@@ -24,18 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.app.config.RepositoryConfig;
-import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
 public class HomeController extends AbstractController {
 
 	@Autowired
 	private RepositoryConfig repositoryConfig;
-
-	@Autowired
-	private ModelRepository repository;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String printWelcome(ModelMap map, Principal principal) {
@@ -45,8 +40,7 @@ public class HomeController extends AbstractController {
 	@RequestMapping(value = {"/pages/*.md", "/pages/help/*.md"}, method = RequestMethod.GET)
 	public String markdown(HttpServletRequest request, ModelMap map, Principal principal) {
 
-		User user = repository.getUser(principal.getName());
-		map.addAttribute("topLevel", repository.getRoot(user).getAssets());
+		addCommonItems(map, principal);
 
 		String resource = ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).substring(1);
 		Path root = repositoryConfig.getRootFolder();

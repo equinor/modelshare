@@ -5,9 +5,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,12 +20,16 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.logging.Log;
@@ -30,10 +37,10 @@ import org.apache.commons.logging.LogFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.Token;
+import com.statoil.modelshare.User;
 
 /**
  * 
@@ -44,6 +51,8 @@ public class RepositoryAccessControl {
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
 	protected long passwordFileModified;
+	
+	public static final Group SUPERVISOR = ModelshareFactory.eINSTANCE.createGroup(); 
 
 	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
 	
@@ -62,6 +71,8 @@ public class RepositoryAccessControl {
 	 */
 	public RepositoryAccessControl(Path root) {
 		// Just making sure - we must have an absolute path.
+		SUPERVISOR.setIdentifier("supervisor");
+		SUPERVISOR.setName("Supervisor");
 		repositoryRootPath = root.toAbsolutePath();
 		passwordFilePath = repositoryRootPath.resolve(".passwd");
 		log.debug("Creating new repository access control");
@@ -176,6 +187,10 @@ public class RepositoryAccessControl {
 	}
 
 	EnumSet<Access> getAccess(EnumSet<Access> access, Path path, String ident) throws IOException {
+		if (ident.equals(SUPERVISOR.getIdentifier())){
+			// no need to check this further
+			return EnumSet.of(Access.READ, Access.VIEW, Access.WRITE);
+		}
 		// determine the name of the .access file
 		String name = null;
 		if (path.toAbsolutePath().toFile().isDirectory()) {
@@ -208,8 +223,8 @@ public class RepositoryAccessControl {
 	/**
 	 * Parses the access string and modifies the given set.
 	 * 
-	 * @param access
-	 * @param split
+	 * @param access the enumeration set to modify
+	 * @param split the string to parse
 	 */
 	private void parseAccessString(EnumSet<Access> access, String[] split) {
 		for (int i = 1; i < split.length; i++) {
@@ -321,17 +336,92 @@ public class RepositoryAccessControl {
 		}
 		return accounts;
 	}
+	
+	/**
+	 * Creates a new user account and adds it to the database. The database will
+	 * be updated immediately. If the password has not been specified (set to
+	 * <code>null</code>), a reset token will be created. The new user must then
+	 * use the appropriate UI to reset his or her password.
+	 * 
+	 * @param identifier
+	 *            the user identifier
+	 * @param name
+	 *            the user's full name
+	 * @param email
+	 *            the users's e-mail address
+	 * @param organisation
+	 *            the users's organisation
+	 * @param password
+	 *            the user's password hash
+	 * @return the newly created user account
+	 */
+	public User createUser(String identifier, String name, String email, String organisation, String group, String password){
+		synchronized (passwordFilePath) {
+			User newUser = ModelshareFactory.eINSTANCE.createUser();
+			newUser.setIdentifier(identifier);
+			newUser.setName(name);
+			newUser.setEmail(email);
+			newUser.setOrganisation(organisation);
+			newUser.setGroup(getGroup(group));
+			if (password==null){
+				SecureRandom random = new SecureRandom();
+				String key = new BigInteger(130, random).toString(32);
+				
+				Token token = ModelshareFactory.eINSTANCE.createToken();
+				token.setKey(key);
+				LocalDateTime plusHours = LocalDateTime.now().plusDays(1);
+				token.setTimeout(plusHours.atZone(ZoneId.systemDefault()).toEpochSecond());
+				newUser.setResettoken(token);				
+			} else {
+				newUser.setPassword(password);
+			}
+			getAccounts().add(newUser);
+			writeAccountsFile();			
+			return newUser;
+		}
+	}
+
+	private List<Group> getGroups() {
+		return getAccounts()
+				.stream()
+				.filter(c -> c instanceof Group)
+				.map(c -> (Group)c)
+				.collect(Collectors.toList());
+	}
+	
+	private Group getGroup(String id) {
+		Optional<Group> o = getGroups()
+				.stream()
+				.filter(g -> g.getIdentifier().equals(id))
+				.findFirst();
+		return o.get();
+	}
+
+	private Account getAccount(String id) {
+		Optional<Account> o = getAccounts()
+				.stream()
+				.filter(g -> g.getIdentifier().equals(id))
+				.findFirst();
+		return o.get();
+	}
 
 	/**
 	 * Reads all the user accounts and updates the shared list.
+	 * <pre>
+	 * identifier:password>:[group]:[organization]:[local user]:[password reset token]:
+	 * identifier:x:[group]:
+	 * </pre>
 	 */
 	private void readAccounts() {
 		
 		List<Account> newAccounts = new ArrayList<>();
+		// make sure the supervisor account is always present;
+		newAccounts.add(SUPERVISOR);
 
 		/*
 		 * The password file format
-		 * <identifier>:<password>:[<group>]:[<organization>]:[<local user>] 
+		 * <identifier>:<password>:[<group>]:[<organization>]:[<local user>]:[<password reset token>]:
+		 * <identifier>:x:[<group>]:
 		 */
 		synchronized (passwordFilePath) {
 			String in = null;
@@ -342,7 +432,9 @@ public class RepositoryAccessControl {
 									new FileInputStream(passwordFilePath.toFile()))))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
-					if (split.length < 4) {
+					// continue if we lack the required fields or someone has
+					// added an extra supervisor account
+					if (split.length < 4 || split[0].equals(SUPERVISOR.getIdentifier())) {
 						continue;
 					}
 					String groupName = split[2];
@@ -416,7 +508,10 @@ public class RepositoryAccessControl {
 		}
 	}
 	
-	public void updateAccountsFile(){
+	/**
+	 * Writes the accounts file.
+	 */
+	public void writeAccountsFile(){
 		synchronized (passwordFilePath) {
 			List<Account> accounts = getAccounts();
 			writeAccounts(accounts);
@@ -424,9 +519,13 @@ public class RepositoryAccessControl {
 	}
 
 	private void writeAccounts(List<Account> accounts) {
-		try (FileWriter fw = new FileWriter(passwordFilePath.toFile())) {
+		try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(passwordFilePath.toFile()),Charset.forName("UTF-8"))) {
 			for (Account account : accounts) {
 				if (account instanceof Group) {
+					// just in case - an extra supervisor account can be injected
+					if (account.equals(SUPERVISOR) || account.getIdentifier().equals(SUPERVISOR.getIdentifier())){
+						continue;
+					}
 					fw.write(account.getIdentifier() + ":x:");
 					if (account.getGroup() != null) {
 						fw.write(account.getGroup().getIdentifier() + ":");
@@ -436,7 +535,11 @@ public class RepositoryAccessControl {
 					fw.write(account.getName());
 				} else if (account instanceof User) {
 					fw.write(account.getIdentifier() + ":");
-					fw.write(((User) account).getPassword() + ":");
+//					if (((User) account).isForceChangePassword()){
+//						fw.write("changeme:");
+//					} else {
+						fw.write(((User) account).getPassword() + ":");
+//					}
 					if (account.getGroup() != null) {
 						fw.write(account.getGroup().getIdentifier() + ":");
 					} else {
@@ -599,5 +702,13 @@ public class RepositoryAccessControl {
 			bw.write(right.getLiteral());
 		}
 		bw.newLine();
+	}
+
+	public void deleteUser(String identifier) {
+		Account a = getAccount(identifier);
+		synchronized (passwordFilePath) {
+			getAccounts().remove(a);
+			writeAccountsFile();			
+		}
 	}
 }

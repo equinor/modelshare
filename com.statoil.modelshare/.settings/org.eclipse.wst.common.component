@@ -3,13 +3,10 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="com.statoil.modelshare.model-0.6.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.statoil.modelshare.model/com.statoil.modelshare.model">
+        <dependent-module archiveName="com.statoil.modelshare.controller-0.8.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.statoil.modelshare.controller/com.statoil.modelshare.controller">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="com.statoil.modelshare.controller-0.6.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.statoil.modelshare.controller/com.statoil.modelshare.controller">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="com.statoil.modelshare.security-0.6.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.statoil.modelshare.security/com.statoil.modelshare.security">
+        <dependent-module archiveName="com.statoil.modelshare.security-0.8.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/com.statoil.modelshare.security/com.statoil.modelshare.security">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/com.statoil.modelshare"/>

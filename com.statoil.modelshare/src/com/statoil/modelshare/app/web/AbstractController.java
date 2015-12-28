@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.web;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.ModelMap;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 
@@ -64,14 +66,6 @@ public abstract class AbstractController {
 		}
 		return crumbs;
 	}
-	
-	protected List<AssetProxy> getRootNodes(AssetProxy asset){
-		while(asset.getParent()!=null){
-			asset = asset.getParent();
-		}
-		return asset.getChildren();
-	}
-
 	/**
 	 * Returns an asset for the given path and user. If the user does not have
 	 * access to the asset or the asset does not exist; and
@@ -123,6 +117,13 @@ public abstract class AbstractController {
 		mimeMessage.setContent(multipart);
 		
 		Transport.send(mimeMessage);
+	}
+
+	protected User addCommonItems(ModelMap map, Principal principal) {
+		User user = modelrepository.getUser(principal.getName());
+		map.addAttribute("authenticated", user);
+		map.addAttribute("topLevel", getRootItems(user));
+		return user;
 	}
 
 }

@@ -39,12 +39,12 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Asset;
-import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.ModelsharePackage;
+import com.statoil.modelshare.User;
 import com.statoil.modelshare.security.RepositoryAccessControl;
 import com.statoil.modelshare.util.ParseUtility;
 
@@ -528,7 +528,25 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 	@Override
 	public void updateAccountsOnFile() {
-		ra.updateAccountsFile();
+		ra.writeAccountsFile();
+	}
+
+	@Override
+	public User createUser(User user, String identifier, String name, String organisation, String group, String password) throws AccessDeniedException {
+		if (user.getGroup()!=null && user.getGroup().equals(RepositoryAccessControl.SUPERVISOR)){
+			return ra.createUser(identifier,name,identifier,organisation,group, password);
+		} else {
+			throw new AccessDeniedException(null,null,"You don't have access to creating users.");
+		}
+	}
+
+	@Override
+	public void deleteUser(User user, String identifier) throws AccessDeniedException {
+		if (user.getGroup()!=null && user.getGroup().equals(RepositoryAccessControl.SUPERVISOR)){
+			ra.deleteUser(identifier);
+		} else {
+			throw new AccessDeniedException(null,null,"You don't have access to creating users.");
+		}
 	}
 
 }

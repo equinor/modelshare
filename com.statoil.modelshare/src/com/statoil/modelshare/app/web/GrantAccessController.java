@@ -17,8 +17,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,6 @@ import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.User;
-import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
@@ -41,11 +42,13 @@ public class GrantAccessController extends AbstractController {
 	private ModelRepository modelrepository;
 		
 	@RequestMapping(value = "/grantaccess", method = RequestMethod.GET)
-	public String prepareAccesPage(ModelMap model,
+	public String prepareAccesPage(ModelMap map, Principal principal,
 			@RequestParam("asset") String asset,
 			@RequestParam("user") String userId) {
-		model.addAttribute("asset", asset);
-		model.addAttribute("user", userId);
+
+		addCommonItems(map, principal);
+		map.addAttribute("asset", asset);
+		map.addAttribute("user", userId);
 		return "grantaccess";
 	}
 	
@@ -54,10 +57,10 @@ public class GrantAccessController extends AbstractController {
 			@RequestParam("asset") String asset,
 			@RequestParam("user") String userId) {
 		
+		User owner = addCommonItems(map, principal);
 		map.addAttribute("asset", asset);
 		map.addAttribute("user", userId);
 
-		User owner = modelrepository.getUser(principal.getName());
 		User user = modelrepository.getUser(userId);
 		try {
 			Path path = Paths.get(URLDecoder.decode(asset, "UTF-8"));
@@ -114,14 +117,12 @@ public class GrantAccessController extends AbstractController {
 			map.addAttribute("path", p);
 						
 			Path path = Paths.get(URLDecoder.decode(p, "UTF-8"));
-			Account owner = modelrepository.getUser(principal.getName());
+			User owner = addCommonItems(map, principal);
 						
-			AssetProxy n = getAssetAtPath((User)owner, p);
 			Map<Account, Rights> accounts = getAccountsWithoutAccess((User)owner, path);
 			Map<Account, Rights> groups = getGroupsWithExplicitAccess((User)owner, path);
 			Map<Account, Rights> users = getUsersWithExplicitAccess((User)owner, path);
 					
-			map.addAttribute("topLevel", getRootNodes(n));
 			map.addAttribute("accounts", accounts);
 			map.addAttribute("groups", groups);
 			map.addAttribute("users", users);
@@ -149,7 +150,7 @@ public class GrantAccessController extends AbstractController {
 			
 		try {
 			Path path = Paths.get(URLDecoder.decode(p, "UTF-8"));
-			User user =  modelrepository.getUser(principal.getName());
+			User user = addCommonItems(map, principal);
 			
 			// get all users with access
 			Map<Account, EnumSet<Access>> existingRights = modelrepository.getRights(user, path);
@@ -313,4 +314,131 @@ public class GrantAccessController extends AbstractController {
 				.filter(u -> !explicitAccounts.contains(u))
 				.collect(Collectors.toMap(u -> u, u -> new Rights(EnumSet.of(Access.VIEW))));		
 	}
+	
+	// -----------------------------------------------------------------------
+	// User control
+	// Manage user identifiers, organisations, local user etc.
+	// -----------------------------------------------------------------------
+	
+	@RequestMapping(value = "/manage-users", method = RequestMethod.GET)
+	public String manageUsers(ModelMap map, Principal principal,
+			@RequestParam(value = "delete", required = false) String identifier){
+						
+		User user = addCommonItems(map, principal);
+		if (identifier!=null){
+			try {
+				modelrepository.deleteUser(user, identifier);
+			} catch (AccessDeniedException e) {
+				String msg = "You don't have access to this view!";
+				log.log(Level.SEVERE, msg,e);
+				map.addAttribute("error", msg);
+				return "manage-users";
+			}
+		}
+		map.addAttribute("users", modelrepository.getUsers());
+		
+		return "manage-users";
+	}
+	
+	@RequestMapping(value = "/add-user", method = RequestMethod.GET)
+	public String addUserDialog(ModelMap map, Principal principal){
+						
+		User user = addCommonItems(map, principal);
+		map.addAttribute("groups",modelrepository.getGroups());
+		if (!user.getGroup().getIdentifier().equals("supervisor")){
+			String msg = "You don't have access to this view!";
+			log.log(Level.SEVERE, msg);
+			map.addAttribute("error", msg);
+			return "add-user";
+		}		
+		return "add-user";
+	}
+	
+	@RequestMapping(value = "/add-user", method = RequestMethod.POST)
+	public String addUser(ModelMap map, Principal principal, HttpServletRequest request,
+		@RequestParam(value = "identifier", required = true) String identifier,
+		@RequestParam(value = "name", required = true) String name,
+		@RequestParam(value = "group", required = true) String group,
+		@RequestParam(value = "password", required = false) String password,
+		@RequestParam(value = "organisation", required = true) String organisation) {
+						
+		User user = addCommonItems(map, principal);
+		
+		if (modelrepository.getUser(identifier)!=null){
+			map.addAttribute("error", String.format("A user account with the specified identifier (%1$s) already exists.",identifier));
+			return "add-user";
+		}
+		// create the new user and display the result
+		try {
+			if (password != null) {
+				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+				String passwordHash = passwordEncoder.encode(password);
+				modelrepository.createUser(user, identifier, name, organisation, group, passwordHash);
+			} else {
+				User newUser = modelrepository.createUser(user, identifier, name, organisation, group, null);
+				String key = newUser.getResettoken().getKey();
+				String url = request.getRequestURL().toString();
+				url = url.substring(0, url.lastIndexOf("/")) + "/change-password?token=" + key + "&email=" + identifier;
+				try {
+					String msg = String.format("<p>A Modelshare account has been created for you. Please follow this "
+							+ "<a href=\"%1$s\">link</a> within 24 hours in order to set a password.</p>", url);
+					sendEmail("Modelshare account created", msg, identifier, identifier);
+					map.addAttribute("info",
+							String.format(
+									"Account created. An e-mail has been sent to <a href=\"mailto:%1$s\">%1$s</a> with instructions on how to set a password. This must be done within 24 hours.",
+									identifier));
+				} catch (MessagingException e) {
+					map.addAttribute("error",
+							"An e-mail with reset instructions could not be sent. Please contact the system administrator.");
+					return "add-user";
+				}
+			}
+		} catch (AccessDeniedException e) {
+			String msg = "You don't have access to this view!";
+			log.log(Level.SEVERE, msg,e);
+			map.addAttribute("error", msg);
+			return "add-user";
+		}
+		map.addAttribute("users", modelrepository.getUsers());
+		return "manage-users";
+	}
+
+	@RequestMapping(value = "/manage-users", method = RequestMethod.POST, produces = "application/json")
+	public String editUser(ModelMap map, Principal principal,
+			@RequestParam(value = "pk", required = true) String pk,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "value", required = true) String value) {
+		User user = modelrepository.getUser(principal.getName());
+		String[] split = name.split("_");
+		String field = split[1];
+		User editedUser = modelrepository.getUser(pk);
+		// If the user group is not supervisor we fail silently
+		if (!user.getGroup().getIdentifier().equals("supervisor")){
+			return "manage-users";
+		}
+		switch (field) {
+		case "identifier":
+			editedUser.setEmail(value);
+			editedUser.setIdentifier(value);
+			break;
+		case "name":
+			editedUser.setName(value);
+			break;
+		case "group":
+			Group group = modelrepository.getGroup(value);
+			editedUser.setGroup(group);
+			break;
+		case "organisation":
+			editedUser.setOrganisation(value);
+			break;
+		case "localuser":
+			editedUser.setLocalUser(value);
+			break;
+		default:
+			break;
+		}
+		modelrepository.updateAccountsOnFile();
+		return "manage-users";
+	}
+	
 }
