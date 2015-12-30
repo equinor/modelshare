@@ -46,8 +46,16 @@
 		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
 		
 		<div class="panel panel-primary" th:if="${node!=null}">
+
 			<div class="panel-body" th:if="${not #lists.isEmpty(node.children)}"
 				th:with="maxIndex=${#lists.size(node.children.?[leaf==false])-1}">
+				<!-- description -->
+				<div th:if="${writeAccess}" id="descriptionEditor" data-provide="markdown"
+					th:attr="data-path=${node.relativePath}"
+					th:utext="${node.formattedDescription}">
+				</div>
+				<div th:if="!${writeAccess}" 
+					th:utext="${node.formattedDescription}"></div>
 				<!-- show child folders of the current folder -->
 				<div class="row" th:each="index: ${#numbers.sequence(0, maxIndex, 3)}" th:if="${not #lists.isEmpty(node.children.?[leaf==false])}">
 					<div class="col-md-4">
@@ -84,6 +92,25 @@
 	</div>
 
 	<div th:replace="../fragments/footer :: footer">...</div>
+	<!-- Folder description editing -->
+	<script th:src="@{/js/bootstrap-editable.min.js}"></script>
+	<script type="text/javascript" th:if="${writeAccess}">
+		$(document).ready(function() {		
+			// enable / disable editing
+		    $('#toggleEditEnable').click(function() {
+		        $('#descriptionEditor').markdown({
+		        	savable: true,
+					onSave: function(e) {
+					    $.post( "edit", { name: "assetDescription", value: e.getContent(), pk: $(e.$element).data("path") } );
+					    location.reload();
+					},
+		        	function(e) {
+		        		e.showEditor();
+		        	}
+		        });
+		    });
+		});
+	</script>
 
 </body>
 </html>

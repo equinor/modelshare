@@ -100,6 +100,7 @@ public class ArchiveController extends AbstractController {
 
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
+			System.out.println(n.getFormattedDescription());
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("currentFolder",n.getRelativePath());
@@ -183,7 +184,7 @@ public class ArchiveController extends AbstractController {
 		// common
 		AssetProxy n = getAssetAtPath(user, asset);
 		if (n.isLeaf()){
-			Model model = n.getAsset();
+			Model model = (Model)n.getAsset();
 			map.addAttribute("currentModel", model);
 			map.addAttribute("modelName",model.getName());
 			map.addAttribute("modelDescription",model.getDescription());			
@@ -223,7 +224,7 @@ public class ArchiveController extends AbstractController {
 			AssetProxy n = getAssetAtPath(user, asset);
 			Model replacedModel = null;
 			if (n.isLeaf()){
-				replacedModel = n.getAsset();
+				replacedModel = (Model)n.getAsset();
 				map.addAttribute("currentModel", replacedModel);
 				map.addAttribute("modelName",replacedModel.getName());
 				map.addAttribute("modelDescription",replacedModel.getDescription());

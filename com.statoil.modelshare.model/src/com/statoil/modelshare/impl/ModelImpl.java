@@ -592,6 +592,7 @@ public class ModelImpl extends AssetImpl implements Model {
 	 * @generated NOT
 	 */
 	public void setDescription(String newDescription) {
+		super.setDescription(newDescription);
 		setUsage(newDescription);;
 	}
 } //ModelImpl
