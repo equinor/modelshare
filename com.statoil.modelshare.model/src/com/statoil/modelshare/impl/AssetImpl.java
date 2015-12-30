@@ -517,18 +517,20 @@ public abstract class AssetImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated NOT
 	 */
 	public String getFormattedDescription() {
-		StringWriter sw = new StringWriter();
-		MarkupParser parser = new MarkupParser();
-		parser.setMarkupLanguage(new MarkdownLanguage());
-		HtmlDocumentBuilder builder = new HtmlDocumentBuilder(sw);
-		builder.setEmitAsDocument(false);
-		parser.setBuilder(builder);
-		try {
-			parser.parse(new StringReader(getDescription()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sw.toString();
+		if (getDescription()!=null){
+			StringWriter sw = new StringWriter();
+			MarkupParser parser = new MarkupParser();
+			parser.setMarkupLanguage(new MarkdownLanguage());
+			HtmlDocumentBuilder builder = new HtmlDocumentBuilder(sw);
+			builder.setEmitAsDocument(false);
+			parser.setBuilder(builder);
+			try {
+				parser.parse(new StringReader(getDescription()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return sw.toString();
+		} else return "";
 	}
 
 	/**

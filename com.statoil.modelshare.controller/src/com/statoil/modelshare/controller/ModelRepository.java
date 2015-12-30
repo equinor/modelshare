@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
+import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.security.RepositoryAccessControl;
 import com.statoil.modelshare.Folder;
@@ -261,7 +262,7 @@ public interface ModelRepository {
 
 	public void updateAccountsOnFile();
 
-	public void updateModel(Model model) throws IOException, AccessDeniedException;
+	public void updateAsset(Asset model) throws IOException, AccessDeniedException;
 
 	/**
 	 * Uploads a new model to the repository. If a model is being replaced it

@@ -97,7 +97,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	    Map<String, Object> m = reg.getExtensionToFactoryMap();
 	    m.put("modeldata", new XMIResourceFactoryImpl());
 	    rootCache = Collections.synchronizedMap(new HashMap<>());
-	    
+
+	    // listen to changes in the root path and all files below
 	    FileAlterationObserver fao = new FileAlterationObserver(rootPath.toFile());
 	    fao.addListener(new FileAlterationListenerAdaptor(){
 
@@ -179,6 +180,18 @@ public class ModelRepositoryImpl implements ModelRepository {
 				String relativePath = rootPath.relativize(child.toPath()).toString().replace('\\', '/');
 				if (child.isDirectory()) {
 					Folder folder = ModelshareFactory.eINSTANCE.createFolder();
+					// we're basically only interested in the description for
+					// now, but any field will be read in.
+					File dataFile = new File(child+".modeldata");
+					if (dataFile.exists()){
+						// required to initialize the package URI
+						@SuppressWarnings("unused")
+						ModelsharePackage mf = ModelsharePackage.eINSTANCE;
+						ResourceSet rs = new ResourceSetImpl();
+						Resource resource = rs.getResource(URI.createFileURI(dataFile.getAbsolutePath()), true);
+						resource.load(null);
+					    folder = (Folder)resource.getContents().get(0);						
+					}					
 					folder.setName(child.getName());
 					folder.setPath(child.getAbsolutePath());
 					folder.setRelativePath(relativePath);
@@ -312,7 +325,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 			ResourceSet rs = new ResourceSetImpl();
 			Resource resource = rs.getResource(URI.createFileURI(dataFile.getAbsolutePath()), true);
 			resource.load(null);
-		    return (Model)resource.getContents().get(0);
+		    Model model = (Model)resource.getContents().get(0);
+			return model;
 			
 		}
 		// the file may not exist due to parsing errors when uploading the file
@@ -483,7 +497,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	 *            path to the model file
 	 * @throws IOException
 	 */
-	private void saveModelData(Model model, Path path) throws IOException {
+	private void saveModelData(Asset model, Path path) throws IOException {
 			    
 		// register the XMI resource factory for the .modeldata extension
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap()
@@ -503,8 +517,9 @@ public class ModelRepositoryImpl implements ModelRepository {
 			throw new RuntimeException("Could not create ECore resource for "+uri);
 		}
 		resource.getContents().add(model);
-		
-		model.setLastUpdated(LocalDateTime.now().toString());
+		if (model instanceof Model){
+			((Model) model).setLastUpdated(LocalDateTime.now().toString());
+		}
 
 		// now save the content.
 		resource.save(Collections.EMPTY_MAP);
@@ -520,10 +535,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public void updateModel(Model model) throws IOException, AccessDeniedException {
+	public void updateAsset(Asset model) throws IOException, AccessDeniedException {
 		Path path = rootPath.resolve(model.getRelativePath());
 		// use a self-contained copy to avoid serialization issues
 		saveModelData(EcoreUtil.copy(model), path);		
+		// clear the cache for all users
+		rootCache.clear();
 	}
 
 	@Override

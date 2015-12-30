@@ -60,6 +60,10 @@ public class AssetProxy {
 		return asset.getPicturePath();
 	}
 	
+	public String getFormattedDescription(){
+		return asset.getFormattedDescription();
+	}
+	
 	public String getName(){
 		return asset.getName();
 	}
@@ -72,8 +76,8 @@ public class AssetProxy {
 		return ((Model)asset).getTaskFolders();
 	}
 
-	public Model getAsset() {
-		return (Model) asset;
+	public Asset getAsset() {
+		return asset;
 	}
 	
 	public String toString(){

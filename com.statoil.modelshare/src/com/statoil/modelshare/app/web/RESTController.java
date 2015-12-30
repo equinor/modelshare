@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.statoil.modelshare.Asset;
 import com.statoil.modelshare.Group;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.User;
@@ -57,27 +58,29 @@ public class RESTController extends AbstractController {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, produces = "application/json")
 	public String edit(ModelMap map, Principal principal,
-			@RequestParam(value = "pk", required = true) String asset,
+			@RequestParam(value = "pk", required = true) String pk,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "value", required = true) String value) {
 		try {
 			User user = modelrepository.getUser(principal.getName());
-			AssetProxy n = getAssetAtPath(user, asset);
-			Model model = n.getAsset();
+			AssetProxy n = getAssetAtPath(user, pk);
+			Asset asset = n.getAsset();
 			switch (name) {
 			case "assetOwner":
-				User owner = modelrepository.getUser(value);
-				model.setOwner(owner.getName());
-				model.setMail(owner.getIdentifier());
-				modelrepository.updateModel(model);
+				if (asset instanceof Model){
+					User owner = modelrepository.getUser(value);
+					((Model) asset).setOwner(owner.getName());
+					((Model) asset).setMail(owner.getIdentifier());
+					modelrepository.updateAsset(asset);
+				}
 				break;
 			case "assetName":
-				model.setName(value);
-				modelrepository.updateModel(model);
+				asset.setName(value);
+				modelrepository.updateAsset(asset);
 				break;
 			case "assetDescription":
-				model.setDescription(value);
-				modelrepository.updateModel(model);
+				asset.setDescription(value);
+				modelrepository.updateAsset(asset);
 				break;
 			default:
 				break;

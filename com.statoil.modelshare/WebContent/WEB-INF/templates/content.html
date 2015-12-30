@@ -200,6 +200,7 @@
 		        	savable: true,
 					onSave: function(e) {
 					    $.post( "edit", { name: "assetDescription", value: e.getContent(), pk: $(e.$element).data("path") } );
+					    location.reload();
 					},
 		        	function(e) {
 		        		e.showEditor();
