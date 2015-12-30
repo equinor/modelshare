@@ -125,13 +125,12 @@ public class PasswdController extends AbstractController {
 	public String resetPassword(ModelMap map, HttpServletRequest request,
 			@RequestParam(value = "email", required = true) String email) {
 
-		// TODO: Verify that the e-mail address exists
 		SecureRandom random = new SecureRandom();
 		String key = new BigInteger(130, random).toString(32);
 		
 		Token token = ModelshareFactory.eINSTANCE.createToken();
 		token.setKey(key);
-		LocalDateTime plusHours = LocalDateTime.now().plusMinutes(1);
+		LocalDateTime plusHours = LocalDateTime.now().plusHours(1);
 		token.setTimeout(plusHours.atZone(ZoneId.systemDefault()).toEpochSecond());
 		
 		User user = getUser(email);
@@ -142,7 +141,7 @@ public class PasswdController extends AbstractController {
 			
 			try {
 					String msg = "<p>Someone recently requested a password change for your Modelshare account. " +
-							"If this was you, you can set a new password <a href=\""+url+"\">here</a> within one hour</p>." +						
+							"If this was you, you can set a new password <a href=\""+url+"\">here</a> within one hour.</p>" +						
 							"<p>If you don't want to change your password or didn't request this, just ignore and delete this message.</p>";					
 				sendEmail("Modelshare password reset", msg, email, email);
 				repository.updateAccountsOnFile();
@@ -162,8 +161,7 @@ public class PasswdController extends AbstractController {
 			@RequestParam(value = "email", required = false) String email) {
 		// this view may be accessed without being logged in
 		if (principal!=null){
-			User user = repository.getUser(principal.getName());
-			map.addAttribute("topLevel", repository.getRoot(user).getAssets());
+			addCommonItems(map, principal);
 		}
 		map.addAttribute("token", token);
 		map.addAttribute("email", email);

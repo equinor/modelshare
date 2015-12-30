@@ -102,7 +102,7 @@ hr {
 #accessTable input[type="checkbox"]{
 	cursor: pointer;
 }
-#accessTable .remove {
+.remove {
 	font-size: 16px;
 	color: #a94442;
 	line-height:inherit;

@@ -28,15 +28,40 @@ import com.statoil.modelshare.Model;
 public interface ModelRepository {
 	
 	/**
-	 * Returns the root folder with all it's subfolders and contents filtered
-	 * for the particular account. If the user don't have view access to an item,
-	 * it will not be part of the collection.
+	 * Creates a new user and adds it to the list of available users.
+	 * @return the new user
+	 * 
+	 * @throws AccessDeniedException
+	 *             if the <i>user</i> does not have write access
+	 */
+	public User createUser(User user, String identifier, String name, String organisation, String group, String password) throws AccessDeniedException;
+	
+	/**
+	 * Creates a folder on the given parent folder.
 	 * 
 	 * @param user
-	 *            the logged in user
-	 * @return the root folder
+	 *            the user creating the folder
+	 * @throws IOException
+	 *             if the folder could not be created
+	 * @throws AccessDeniedException
+	 *             if the <i>user</i> does not have write access
 	 */
-	public Folder getRoot(User user);
+	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
+	
+	/**
+	 * Returns the {@link InputStream} for the path if the client has access to
+	 * the asset.
+	 * 
+	 * @param user
+	 *            the account requesting the data
+	 * @param path
+	 *            the root relative path to the asset
+	 * @throws IOException
+	 *             if the file could not be read
+	 * @throws AccessDeniedException
+	 *             if the <i>user</i> does not have write access
+	 */
+	public InputStream downloadModel(User user, Path path) throws AccessDeniedException, IOException;
 	
 	/**
 	 * Returns a list of all accounts.
@@ -44,13 +69,29 @@ public interface ModelRepository {
 	 * @return a list of all accounts
 	 */
 	public List<Account> getAccounts();
+
+	/**
+	 * Returns a {@link File} instance for the asset in the specified path. This
+	 * would typically be a picture of a model residing in the same folder.
+	 * 
+	 * @param user
+	 *            the user requesting the asset
+	 * @param path
+	 *            path to the asset
+	 * @return
+	 * @throws IOException
+	 */
+	public File getFile(User user, Path path) throws IOException;
 	
 	/**
-	 * Returns a list of all users.
+	 * Returns the group with the given identifier if found, otherwise
+	 * <code>null</code> is returned.
 	 * 
-	 * @return a list of users
+	 * @param id
+	 *            the identifier
+	 * @return the group or <code>null</code>
 	 */
-	public List<User> getUsers();
+	public Group getGroup(String id);
 
 	/**
 	 * Returns a list of all groups.
@@ -58,6 +99,19 @@ public interface ModelRepository {
 	 * @return a list of groups
 	 */
 	public List<Group> getGroups();
+	
+	/**
+	 * Gets properties from the meta file and creates a model object to be
+	 * returned
+	 * 
+	 * @param user
+	 *            the user requesting the model
+	 * @param path
+	 *            path to the asset
+	 * @return model object
+	 * @throws IOException
+	 */
+	public Model getModel(User user, Path path) throws IOException;
 	
 	/**
 	 * Returns a map of all accounts that have explicit access to the specific
@@ -75,7 +129,94 @@ public interface ModelRepository {
 	 *             if the <i>requestor</i> don't have the required credentials
 	 */
 	public Map<Account, EnumSet<Access>> getRights(User requestor, Path asset) throws AccessDeniedException, IOException;
+	
+	/**
+	 * Returns the root folder with all it's subfolders and contents filtered
+	 * for the particular account. If the user don't have view access to an item,
+	 * it will not be part of the collection.
+	 * 
+	 * @param user
+	 *            the logged in user
+	 * @return the root folder
+	 */
+	public Folder getRoot(User user);
 
+	/**
+	 * Returns the user with the given identifier if found, otherwise
+	 * <code>null</code> is returned.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @return the user or <code>null</code>
+	 */
+	public User getUser(String id);
+
+	/**
+	 * Returns a list of all users.
+	 * 
+	 * @return a list of users
+	 */
+	public List<User> getUsers();
+
+	/**
+	 * Convenience method for determining whether the account has download access
+	 * to the given path.
+	 * 
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
+	 * @return
+	 */
+	public boolean hasDownloadAccess(User user, Path path) throws IOException;
+
+	/**
+	 * Convenience method for determining whether the user has view access to
+	 * the given path.
+	 * 
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
+	 * @return
+	 */
+	public boolean hasViewAccess(User user, Path path) throws IOException;
+
+	/**
+	 * Convenience method for determining whether the account has write access
+	 * to the given path.
+	 * 
+	 * @param user
+	 *            the user to test for
+	 * @param path
+	 *            the path to the resource
+	 * @return
+	 */
+	public boolean hasWriteAccess(User user, Path path) throws IOException;
+
+	/**
+	 * Checks an email address for validity
+	 * 
+	 * @param email
+	 * @return false if the email address does not meet the RFC822 standard
+	 */
+	public boolean isValidEmailAddress(String email);
+
+	/**
+	 * Copies the asset to the local user directory if possible
+	 * 
+	 * @param user
+	 *            the user requesting a local copy
+	 * @param path
+	 *            the root relative path to the asset
+	 * @return a description of what actually happened
+	 * @throws IOException
+	 *             if the file could not be read
+	 * @throws AccessDeniedException
+	 *             if the <i>user</i> does not have write access
+	 */
+	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
+	
 	/**
 	 * Sets the access rights for the specified user on a particular resource.
 	 * 
@@ -92,72 +233,6 @@ public interface ModelRepository {
 	 *             if the <i>requestor</i> don't have the required credentials
 	 */
 	public void modifyRights(User requestor, Account account, Path asset, EnumSet<Access> rights) throws IOException;
-	
-	/**
-	 * Returns the user with the given identifier if found, otherwise
-	 * <code>null</code> is returned.
-	 * 
-	 * @param id
-	 *            the identifier
-	 * @return the user or <code>null</code>
-	 */
-	public User getUser(String id);
-	
-	/**
-	 * Returns the group with the given identifier if found, otherwise
-	 * <code>null</code> is returned.
-	 * 
-	 * @param id
-	 *            the identifier
-	 * @return the group or <code>null</code>
-	 */
-	public Group getGroup(String id);
-	
-	/**
-	 * Sets the password has for the specified user.
-	 * 
-	 * @param id
-	 *            user identifier
-	 * @param hash
-	 *            password hash
-	 */
-	public void setPassword(String id, String hash);
-
-	/**
-	 * Convenience method for determining whether the user has view access to
-	 * the given path.
-	 * 
-	 * @param user
-	 *            the user to test for
-	 * @param path
-	 *            the path to the resource
-	 * @return
-	 */
-	public boolean hasViewAccess(User user, Path path) throws IOException;
-
-	/**
-	 * Convenience method for determining whether the account has download access
-	 * to the given path.
-	 * 
-	 * @param user
-	 *            the user to test for
-	 * @param path
-	 *            the path to the resource
-	 * @return
-	 */
-	public boolean hasDownloadAccess(User user, Path path) throws IOException;
-
-	/**
-	 * Convenience method for determining whether the account has write access
-	 * to the given path.
-	 * 
-	 * @param user
-	 *            the user to test for
-	 * @param path
-	 *            the path to the resource
-	 * @return
-	 */
-	public boolean hasWriteAccess(User user, Path path) throws IOException;
 
 	/**
 	 * Convenience method to set download rights on a file / folder for a user
@@ -175,34 +250,18 @@ public interface ModelRepository {
 	public void setDownloadRights(User requestor, User user, Path path) throws AccessDeniedException, IOException;
 
 	/**
-	 * Returns the {@link InputStream} for the path if the client has access to
-	 * the asset.
+	 * Sets the password has for the specified user.
 	 * 
-	 * @param user
-	 *            the account requesting the data
-	 * @param path
-	 *            the root relative path to the asset
-	 * @throws IOException
-	 *             if the file could not be read
-	 * @throws AccessDeniedException
-	 *             if the <i>user</i> does not have write access
+	 * @param id
+	 *            user identifier
+	 * @param hash
+	 *            password hash
 	 */
-	public InputStream downloadModel(User user, Path path) throws AccessDeniedException, IOException;
+	public void setPassword(String id, String hash);
 
-	/**
-	 * Copies the asset to the local user directory if possible
-	 * 
-	 * @param user
-	 *            the user requesting a local copy
-	 * @param path
-	 *            the root relative path to the asset
-	 * @return a description of what actually happened
-	 * @throws IOException
-	 *             if the file could not be read
-	 * @throws AccessDeniedException
-	 *             if the <i>user</i> does not have write access
-	 */
-	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
+	public void updateAccountsOnFile();
+
+	public void updateModel(Model model) throws IOException, AccessDeniedException;
 
 	/**
 	 * Uploads a new model to the repository. If a model is being replaced it
@@ -224,55 +283,7 @@ public interface ModelRepository {
 	 *             if the <i>user</i> does not have write access
 	 */
 	public void uploadModel(User user, InputStream ms, InputStream ps, Model model, Model replacedModel) throws IOException, AccessDeniedException;
-	
-	public void updateModel(Model model) throws IOException, AccessDeniedException;
 
-	/**
-	 * Creates a folder on the given parent folder.
-	 * 
-	 * @param user
-	 *            the user creating the folder
-	 * @throws IOException
-	 *             if the folder could not be created
-	 * @throws AccessDeniedException
-	 *             if the <i>user</i> does not have write access
-	 */
-	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
-
-	/**
-	 * Gets properties from the meta file and creates a model object to be
-	 * returned
-	 * 
-	 * @param user
-	 *            the user requesting the model
-	 * @param path
-	 *            path to the asset
-	 * @return model object
-	 * @throws IOException
-	 */
-	public Model getModel(User user, Path path) throws IOException;
-
-	/**
-	 * Returns a {@link File} instance for the asset in the specified path. This
-	 * would typically be a picture of a model residing in the same folder.
-	 * 
-	 * @param user
-	 *            the user requesting the asset
-	 * @param path
-	 *            path to the asset
-	 * @return
-	 * @throws IOException
-	 */
-	public File getFile(User user, Path path) throws IOException;
-
-	/**
-	 * Checks an email address for validity
-	 * 
-	 * @param email
-	 * @return false if the email address does not meet the RFC822 standard
-	 */
-	public boolean isValidEmailAddress(String email);
-
-	public void updateAccountsOnFile();
+	public void deleteUser(User user, String identifier) throws AccessDeniedException;
 
 }

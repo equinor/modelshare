@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+
+	<div th:replace="../fragments/navbar :: navbar(signin, ${topLevel})">...</div>
+
+	<div class="container" role="main">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="wizard-container">
+					<div class="card wizard-card ct-wizard-orange" id="wizard">
+						<div class="wizard-header">
+							<h3>
+								<b>ADD</b> USER <br /> <small>Please specify details for the new user.</small>
+							</h3>
+						</div>
+						<hr />
+						<form class="form-signin" th:action="@{/add-user}" method="post" accept-charset="UTF-8">
+							<fieldset>
+								<!-- name -->
+								<label for="name" class="sr-only">Name</label>
+								<input type="text" name="name" id="name" class="form-control"
+									placeholder="Name" required="required" />
+								<!-- organisation -->
+								<label for="organisation" class="sr-only">Organisation</label>
+								<input type="text" name="organisation" id="organisation" class="form-control"
+									placeholder="Organisation" required="required" />
+								<!-- group -->
+								<label for="group" class="sr-only">Group</label>
+								<select name="group" id="group" class="form-control" required="required" >
+									<option th:each="group: ${groups}"  th:value="${group.identifier}" th:text="${group.name}"></option>
+								</select>
+								<!-- identifier -->									
+								<label for="identifier" class="sr-only">E-mail/Identifier</label>
+								<input type="email" name="identifier" id="identifier" class="form-control"
+									placeholder="E-mail/identifier" required="required" />									
+								<button class="btn btn-primary btn-block" type="submit">Add user</button>
+							</fieldset>
+						</form>
+						<div class="wizard-footer">
+							<div th:replace="../fragments/alert :: alert(${error},${info})">...</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+
+</body>
+</html>

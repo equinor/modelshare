@@ -31,13 +31,11 @@ import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
-@RequestMapping("/")
 public class ArchiveController extends AbstractController {
 
 	static Logger log = Logger.getLogger(ArchiveController.class.getName());
 
-	@Autowired
-	private ModelRepository modelrepository;
+	@Autowired ModelRepository modelrepository;
 
 	@Autowired
 	private RepositoryConfig repositoryConfig;
@@ -48,10 +46,9 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = "/copy", method = RequestMethod.GET)
 	public String getFile(ModelMap map, @RequestParam(value = "asset", required = true) String asset,
 			HttpServletResponse response, Principal principal) {
-
 		
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = addCommonItems(map, principal);
 	
 			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 	
@@ -66,7 +63,6 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel", getRootNodes(n));
 	
 			// do the actual copy
 			Path rootPath = Paths.get(modelrepository.getRoot(user).getPath());
@@ -91,8 +87,9 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = { "/view" }, method = RequestMethod.GET)
 	public String doShow(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required=true) String asset) {
+
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = addCommonItems(map, principal);
 
 			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
 
@@ -107,7 +104,6 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("currentFolder",n.getRelativePath());
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception ioe) {
 			String msg = "Cannot show item "+asset;
 			log.log(Level.SEVERE, msg, ioe);
@@ -120,8 +116,10 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = { "/archive" }, method = RequestMethod.GET)
 	public String viewArchive(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {
+
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = addCommonItems(map, principal);
+
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
@@ -131,7 +129,6 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("node", n);
 			map.addAttribute("currentFolder", asset);
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel", getRootNodes(n));
 		} catch (Exception e) {
 			String msg = "Could not load asset: "+e.getMessage();
 			log.log(Level.SEVERE, msg, e);
@@ -155,15 +152,14 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = "/folder", method = RequestMethod.GET)
 	public String folder(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
-		User user = modelrepository.getUser(principal.getName());
-		map.addAttribute("owner", user);
+
+		User user = addCommonItems(map, principal);
 		map.addAttribute("currentFolder", asset);
 
 		// common
 		AssetProxy n = getAssetAtPath(user, asset);
 		map.addAttribute("node", n);
 		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel", getRootNodes(n));
 		return "folder";
 	}
 
@@ -181,8 +177,8 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public String upload(ModelMap map,Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
-		User user = modelrepository.getUser(principal.getName());
-		map.addAttribute("owner", user);
+
+		User user = addCommonItems(map, principal);
 
 		// common
 		AssetProxy n = getAssetAtPath(user, asset);
@@ -196,7 +192,6 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("currentFolder",n.getRelativePath());			
 		}
 		map.addAttribute("crumbs", getBreadCrumb(n));
-		map.addAttribute("topLevel", getRootNodes(n));
 		return "upload";
 	}
 	/**
@@ -221,8 +216,8 @@ public class ArchiveController extends AbstractController {
 		
 		try ( 	BufferedInputStream ms = new BufferedInputStream(file.getInputStream());
 				BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())) {
-			User user = modelrepository.getUser(principal.getName());
-			map.addAttribute("owner", user);
+			User user = addCommonItems(map, principal);
+
 			String path;
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
@@ -239,7 +234,6 @@ public class ArchiveController extends AbstractController {
 				map.addAttribute("currentFolder",n.getRelativePath());			
 			}
 			map.addAttribute("crumbs", getBreadCrumb(n));
-			map.addAttribute("topLevel", getRootNodes(n));
 
 			if (file.isEmpty()){
 				map.addAttribute("error", "A model file must be specified!");
@@ -276,10 +270,9 @@ public class ArchiveController extends AbstractController {
 			@RequestParam("picture") MultipartFile picture)
 			throws UnsupportedEncodingException {
 
-		User user = modelrepository.getUser(principal.getName());
-		map.addAttribute("owner", user);
+		User user = addCommonItems(map, principal);
+
 		map.addAttribute("currentFolder", path);
-		map.addAttribute("topLevel", getRootItems(user));
 		
 		if (name.isEmpty()){
 			map.addAttribute("error", "A folder name must be specified");

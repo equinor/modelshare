@@ -1,0 +1,2 @@
+supervisor			-r -v -w
+supervisors			-r -v -w

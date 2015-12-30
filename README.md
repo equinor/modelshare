@@ -6,7 +6,11 @@ Web application to handle storage and sharing of model files used by Statoil and
 
 The [design document](https://docs.google.com/a/itema.no/document/d/1Q-6XYVCCoVEz7N6S7dGUnP9NCEu3OxQoUsgpqvg4yVY/edit?usp=sharing) describes how this will be implemented.
 
-## The ".passwd" file
+## Users and groups
+
+Users can be managed through the **Administration > Manage users** interface. However that requires that the logged in user belongs to the built in "supervisor" group. This can be set by initially adding this user to the .passwd-file.
+
+### The ".passwd" file
 
 This files lists the users and their credentials. It is on the form:
 
@@ -21,6 +25,12 @@ If the user password field is empty, the user may log in without specifying a pa
 	user::users:User
 
 The default location of the file is at `${user.home}/modelshare/repository/`.
+
+### The "supervisor" group
+
+This group is automatically created by the system and will have full access to everything. In order to place a user in the supervisor group it is sufficient to declare the user as member of that group. It is also possible to create a group that is member of the supervisor group.
+
+## Server installation
 
 Modelshare is installed on http://84.16.202.251:8080/modelshare/. The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. To log in to the server via remote desktop use the following:
 

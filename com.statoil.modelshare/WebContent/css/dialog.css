@@ -4,7 +4,8 @@ form {
 	margin: 0 auto;
 }
 
-.form-control {
+/* Looks better when we don't override this
+form .form-control {
 	position: relative;
 	max-width: 100%;
 	height: auto;
@@ -13,6 +14,7 @@ form {
 	box-sizing: border-box;
 	padding: 10px;
 }
+*/
 
 /* 
 	upload model: name
@@ -97,13 +99,13 @@ form #folder-name {
 	border-bottom-left-radius: 0;
 }
 
-.form-signin #password {
+.form-signin #password, .form-signin #identifier {
 	margin-bottom: 10px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
 
-.form-signin #new-password {
+.form-signin #new-password, .form-signin #organisation, .form.signin #group {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;

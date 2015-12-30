@@ -37,12 +37,12 @@ public class PasswordFileTest {
 
 	@Test
 	public final void testReadPasswordFile(){
-		Assert.assertEquals(6, ra.getAccounts().size());
+		Assert.assertEquals(8, ra.getAccounts().size());
 	}
 	
 	@Test
 	public final void testReadGroup(){
-		Account account = ra.getAccounts().get(0);
+		Account account = ra.getAccounts().get(1);
 		Assert.assertTrue(account instanceof Group);
 		Assert.assertEquals("users", account.getIdentifier());
 		Assert.assertEquals("Users", account.getName());
@@ -51,7 +51,7 @@ public class PasswordFileTest {
 
 	@Test
 	public final void testReadInheritedGroup(){
-		Account account = ra.getAccounts().get(1);
+		Account account = ra.getAccounts().get(2);
 		Assert.assertTrue(account instanceof Group);
 		Assert.assertEquals("sub", account.getIdentifier());
 		Assert.assertEquals("Sub", account.getName());
@@ -60,7 +60,7 @@ public class PasswordFileTest {
 	
 	@Test
 	public final void testBasicUser(){
-		Account account = ra.getAccounts().get(2);
+		Account account = ra.getAccounts().get(3);
 		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("a@company-a", account.getIdentifier());
 		Assert.assertEquals("User A", account.getName());
@@ -72,7 +72,7 @@ public class PasswordFileTest {
 
 	@Test
 	public final void testUserWithOrganization(){
-		Account account = ra.getAccounts().get(3);
+		Account account = ra.getAccounts().get(4);
 		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("b@company-b", account.getIdentifier());
 		Assert.assertEquals("User B", account.getName());
@@ -84,7 +84,7 @@ public class PasswordFileTest {
 
 	@Test
 	public final void testUserWithLocalUser(){
-		Account account = ra.getAccounts().get(4);
+		Account account = ra.getAccounts().get(5);
 		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("c@company-c", account.getIdentifier());
 		Assert.assertEquals("User C", account.getName());
@@ -96,7 +96,7 @@ public class PasswordFileTest {
 	
 	@Test
 	public final void testUserWithLocalUserAndOrganization(){
-		Account account = ra.getAccounts().get(5);
+		Account account = ra.getAccounts().get(6);
 		Assert.assertTrue(account instanceof User);
 		Assert.assertEquals("d@company-d", account.getIdentifier());
 		Assert.assertEquals("User D", account.getName());
@@ -113,6 +113,6 @@ public class PasswordFileTest {
 		Account account = ra2.getAccounts().get(5);
 		ra2.setPassword(account.getIdentifier(), "xxxxx");
 		// the manually added account should not have disappeared
-		Assert.assertEquals(7, ra2.getAccounts().size());
+		Assert.assertEquals(9, ra2.getAccounts().size());
 	}
 }
