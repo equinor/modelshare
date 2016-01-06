@@ -104,33 +104,51 @@
 				
 				<p />
 
-				<p>
 					<a role="button" th:if="${viewOnly}"
 						th:href="@{/request(asset=${currentModel.relativePath})}">
 						<button class="btn btn-info">Request access</button>
-					</a> <a role="button" th:if="${!viewOnly}"
+					</a>
+					<!-- download for logged in users -->
+					<a role="button" th:if="${!viewOnly} and ${link} == null"
 						th:attr="data-href=@{/download(asset=${currentModel.relativePath})}"
 						data-toggle="modal" data-target="#confirm-dialog">
 						<button class="btn btn-success">
 							<span class="glyphicon glyphicon-cloud-download"
-								aria-hidden="true"></span>&nbsp;Download this model
-						</button>
-					</a> <a role="button" th:if="${client.localUser} and ${!viewOnly}"
-						th:attr="data-href=@{/copy(asset=${currentModel.relativePath})}"
-						data-toggle="modal" data-target="#confirm-dialog">
-						<button class="btn btn-primary">
-							<span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Copy
-							to work area
-						</button>
-					</a> <a role="button" th:if="${writeAccess}"
-						th:href="@{/upload(item=${currentModel.relativePath})}">
-						<button class="btn btn-info">
-							<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;Upload
-							new
+								aria-hidden="true"></span>&nbsp;Download
 						</button>
 					</a>
-				</p>
-
+					<!-- download for users with an allotment -->
+					<a role="button" th:if="${link} !=null"
+						th:attr="data-href=@{/allotment(id=${link},download=true)}"
+						data-toggle="modal" data-target="#confirm-dialog">
+						<button class="btn btn-success">
+							<span class="glyphicon glyphicon-cloud-download"
+								aria-hidden="true"></span>&nbsp;Download
+						</button>
+					</a>
+					<!-- must be logged in to see the following -->
+					<span th:if="${client !=null}"> 
+						<a role="button" th:if="${client.localUser} != null and ${!viewOnly}"
+							th:attr="data-href=@{/copy(asset=${currentModel.relativePath})}"
+							data-toggle="modal" data-target="#confirm-dialog">
+							<button class="btn btn-primary">
+								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Copy
+								to work area
+							</button>
+						</a> 
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/upload(item=${currentModel.relativePath})}">
+							<button class="btn btn-info">
+								<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;New version
+							</button>
+						</a>
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/share(item=${currentModel.relativePath})}">
+							<button class="btn btn-info">
+								<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;Share
+							</button>
+						</a>
+					</span>
 				<h3>Contents</h3>
 				<!-- Model "task" folders -->
 				<div th:each="folder : ${node.folders}" class="panel-group">

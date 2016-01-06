@@ -74,15 +74,12 @@ public interface ModelRepository {
 	/**
 	 * Returns a {@link File} instance for the asset in the specified path. This
 	 * would typically be a picture of a model residing in the same folder.
-	 * 
-	 * @param user
-	 *            the user requesting the asset
 	 * @param path
 	 *            path to the asset
 	 * @return
 	 * @throws IOException
 	 */
-	public File getFile(User user, Path path) throws IOException;
+	public File getPictureFile(Path path) throws IOException;
 	
 	/**
 	 * Returns the group with the given identifier if found, otherwise

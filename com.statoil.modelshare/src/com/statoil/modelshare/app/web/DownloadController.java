@@ -37,6 +37,9 @@ public class DownloadController extends AbstractController {
 	@Autowired
 	private ModelRepository modelrepository;
 
+	/**
+	 * Download for users with an account
+	 */
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public String getFile(@RequestParam(value = "asset", required = true) String asset, HttpServletResponse response,
 			Principal principal) {
