@@ -31,7 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .ignoring().antMatchers("/js/**").and()
             .ignoring().antMatchers("/img/**").and()
             .ignoring().antMatchers("/change-password").and()
-            .ignoring().antMatchers("/reset-password");
+            .ignoring().antMatchers("/reset-password").and()
+            // special case for models shared with unauthenticated users 
+            .ignoring().antMatchers("/pictures").and()
+            .ignoring().antMatchers("/allotment");
     }
 	
     @Override

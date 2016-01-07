@@ -47,6 +47,9 @@ public class RequestController extends AbstractController {
 	@Autowired
 	private SMTPConfiguration smtpConfig;
 
+	/**
+	 * Show form for requesting access to a model.
+	 */
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public String showRequestForm(ModelMap map, 
 			@RequestParam(value = "asset", required = true) String asset,

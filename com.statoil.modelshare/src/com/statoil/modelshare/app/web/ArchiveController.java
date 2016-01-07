@@ -2,6 +2,7 @@ package com.statoil.modelshare.app.web;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -9,11 +10,24 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.mail.MessagingException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,18 +47,23 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 public class ArchiveController extends AbstractController {
 
-	static Logger log = Logger.getLogger(ArchiveController.class.getName());
+	static Log log = LogFactory.getLog(AbstractController.class);
 
 	@Autowired ModelRepository modelrepository;
 
 	@Autowired
 	private RepositoryConfig repositoryConfig;
+	
+	private static Log downloadLog = LogFactory.getLog("downloadLogger");
+
+	/** Encryption key for the download URL's */
+	private static final String KEY = "L+QeFnncyzU+aIfJJLOgfw==";
 		
 	/**
 	 * Use to copy the model to a local directory. 
 	 */
 	@RequestMapping(value = "/copy", method = RequestMethod.GET)
-	public String getFile(ModelMap map, @RequestParam(value = "asset", required = true) String asset,
+	public String copyModel(ModelMap map, @RequestParam(value = "asset", required = true) String asset,
 			HttpServletResponse response, Principal principal) {
 		
 		try {
@@ -72,27 +91,70 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("success", localCopy);
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to copying a model!";
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";		
 		} catch (IOException ioe) {
 			String msg = "File system error!";
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";
 		}		
 		return "content";
 	}
 	
-	@RequestMapping(value = { "/view" }, method = RequestMethod.GET)
-	public String doShow(ModelMap map, Principal principal,
-			@RequestParam(value = "item", required=true) String asset) {
+	public static String encrypt(String plainText, SecretKey secretKey)
+			throws Exception {
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		byte[] plainTextByte = plainText.getBytes();
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey,new IvParameterSpec(new byte[16]));
+		byte[] encryptedByte = cipher.doFinal(plainTextByte);
+		Base64.Encoder encoder = Base64.getEncoder();
+		String encryptedText = encoder.encodeToString(encryptedByte);
+		return encryptedText;
+	}
+
+	public static String decrypt(String encryptedText, SecretKey secretKey)
+			throws Exception {
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		Base64.Decoder decoder = Base64.getDecoder();
+		byte[] encryptedTextByte = decoder.decode(encryptedText);
+		cipher.init(Cipher.DECRYPT_MODE, secretKey,new IvParameterSpec(new byte[16]));
+		byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
+		String decryptedText = new String(decryptedByte);
+		return decryptedText;
+	}
+
+	@RequestMapping(value = "/share", method = RequestMethod.GET)
+	public String showRequestForm(ModelMap map, 
+			@RequestParam(value = "item", required = true) String asset,
+			Principal principal) {
+		try {
+			User user = modelrepository.getUser(principal.getName());
+			map.put("from", user.getName());
+			map.put("mailfrom", user.getEmail());
+			map.put("asset", asset);
+		} catch (Exception e) {
+			String msg = "Error getting model from repository";
+			log.fatal(msg, e);
+			map.addAttribute("error", msg);
+			return "share";
+		}
+		return "share";
+	}
+
+	/**
+	 * Allot a model share to a user that does not have an account.
+	 */
+	@RequestMapping(value = { "/allot" }, method = RequestMethod.POST)
+	public String shareModel(ModelMap map, Principal principal, HttpServletRequest request,
+			@RequestParam(value = "asset", required=true) String asset,
+			@RequestParam(value = "to", required=true) String email,
+			@RequestParam(value = "message", required=true) String message) {
 
 		try {
 			User user = addCommonItems(map, principal);
-
-			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
-
+			
 			map.addAttribute("client", user);
 			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
 			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
@@ -100,22 +162,150 @@ public class ArchiveController extends AbstractController {
 
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);
-			System.out.println(n.getFormattedDescription());
 			map.addAttribute("node", n);
 			map.addAttribute("currentModel", n.getAsset());
 			map.addAttribute("currentFolder",n.getRelativePath());
 			map.addAttribute("crumbs", getBreadCrumb(n));
+			
+			StringBuilder sb = new StringBuilder();
+			// from
+			sb.append(user.getEmail());
+			sb.append(',');
+			// to
+			sb.append(email);
+			sb.append(',');
+			// asset
+			sb.append(asset);
+			sb.append(',');
+			// expiration
+			sb.append(LocalDateTime.now().plusHours(24).atZone(ZoneId.systemDefault()).toEpochSecond());
+
+			Base64.Decoder encoder = Base64.getDecoder();
+			byte[] decodedKey = encoder.decode(KEY);
+			SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"); 
+			String encrypt = encrypt(sb.toString(), key);
+			
+		    String url = request.getRequestURL().toString();
+		    url = url.substring(0, url.lastIndexOf("/")) + "/allotment";
+			url = url + "?id=" +URLEncoder.encode(encrypt,"UTF-8");
+			
+			try {
+			sendEmail("Access granted to Modelshare asset", 
+					"<p>You have been granted temporary access to download <a href=\""+url+"\">"+n.getName()+"</a>. The download link will be automatically invalidated after 24 hours.</p><p>"+message+"</p>", email, user.getIdentifier());
+			} catch (MessagingException e){
+				map.addAttribute("error","Could not send e-mail. "+e.getMessage());
+				return "share";
+			}
+			map.addAttribute("info", "E-mail sent to <a href=\"mailto:"+email+"\">"+email+"</a> with download instructions.");
+
+		} catch (Exception e){}
+		return "content";
+	}
+
+	/**
+	 * View a model as a logged in user.
+	 */
+	@RequestMapping(value = { "/view" }, method = RequestMethod.GET)
+	public String viewModel(ModelMap map, Principal principal,
+			@RequestParam(value = "item", required=true) String asset) {
+
+		try {
+			User user = addCommonItems(map, principal);
+				
+			map.addAttribute("client", user);
+			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
+			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
+			map.addAttribute("title", "Model archive");
+
+			// common
+			map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
+			AssetProxy n = getAssetAtPath(user, asset);
+			map.addAttribute("node", n);
+			map.addAttribute("currentModel", n.getAsset());
+			map.addAttribute("currentFolder",n.getRelativePath());
+			map.addAttribute("crumbs", getBreadCrumb(n));				
 		} catch (Exception ioe) {
 			String msg = "Cannot show item "+asset;
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "content";
 		}		
 		return "content";
 	}
 	
+	/**
+	 * View a model as a user with a download link and no account.
+	 */
+	@RequestMapping(value = { "/allotment" }, method = RequestMethod.GET)
+	public String viewAllotment(ModelMap map, Principal principal, HttpServletResponse response,
+			@RequestParam(value = "id", required=true) String id,
+			@RequestParam(value = "download", required=false) boolean download) {
+
+		try {
+			Base64.Decoder encoder = Base64.getDecoder();
+			byte[] decodedKey = encoder.decode(KEY);
+			SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+			String[] decrypted = decrypt(id, key).split(",");
+			
+			String from = decrypted[0];
+			String to = decrypted[1];
+			String asset = decrypted[2];
+			String expiration = decrypted[3];
+						
+			// make sure the key has not timed out
+			ZonedDateTime now = ZonedDateTime.now();
+			Instant epoch = Instant.ofEpochSecond(Long.parseLong(expiration));		
+			System.out.println(epoch);
+			ZonedDateTime t = epoch.atZone(ZoneId.systemDefault());
+			if (now.isAfter(t)){
+				map.addAttribute("error", "Cannot show allotment. The download token has expired.");
+				return "content";												
+			}
+
+			if (!download) {
+				map.addAttribute("viewOnly", false);
+				map.addAttribute("writeAccess", false);
+				map.addAttribute("link",id);
+				map.addAttribute("title", "Model archive");
+				User user = modelrepository.getUser(from);
+				map.addAttribute("downloadTerms", repositoryConfig.getDownloadTerms());
+				AssetProxy n = getAssetAtPath(user, asset);
+				map.addAttribute("node", n);
+				map.addAttribute("currentModel", n.getAsset());
+				map.addAttribute("currentFolder", n.getRelativePath());
+				map.addAttribute("crumbs", getBreadCrumb(n));
+			} else {
+				User user = modelrepository.getUser(from);
+				Path path = Paths.get(asset);
+				String name = path.getFileName().toString();
+				// use the sharing user's credentials
+				try (ServletOutputStream outputStream = response.getOutputStream();
+						InputStream is = modelrepository.downloadModel(user, path)) {
+					response.setContentType("application/octet-stream");
+					response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
+					org.apache.commons.io.IOUtils.copy(is, outputStream);
+					response.flushBuffer();
+					Object[] messageArgs = { asset, to, from };
+					downloadLog.info(MessageFormat.format("Model {0} was downloaded by {1} as shared by {2} ", messageArgs));
+					return null;
+				} catch (AccessDeniedException e) {
+					log.fatal(MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset),
+							e);
+					return "content";
+				}
+
+			}
+		} catch (Exception ioe) {
+			String msg = "Cannot show item.";
+			log.fatal(msg, ioe);
+			map.addAttribute("error", msg);
+			return "content";
+		}		
+		return "content";
+	}	
+	
 	@RequestMapping(value = { "/archive" }, method = RequestMethod.GET)
-	public String viewArchive(ModelMap map, Principal principal,
+	public String viewFolder(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {
 
 		try {
@@ -132,7 +322,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("crumbs", getBreadCrumb(n));
 		} catch (Exception e) {
 			String msg = "Could not load asset: "+e.getMessage();
-			log.log(Level.SEVERE, msg, e);
+			log.fatal(msg, e);
 			map.addAttribute("error", msg);
 			return "archive";
 		}
@@ -151,7 +341,7 @@ public class ArchiveController extends AbstractController {
 	 * @return the template to render
 	 */
 	@RequestMapping(value = "/folder", method = RequestMethod.GET)
-	public String folder(ModelMap map, Principal principal,
+	public String createFolderForm(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
 
 		User user = addCommonItems(map, principal);
@@ -167,6 +357,7 @@ public class ArchiveController extends AbstractController {
 	/**
 	 * Shows the "upload" form.
 	 * 
+	 * 
 	 * @param map
 	 *            attributes for the page
 	 * @param asset
@@ -176,7 +367,7 @@ public class ArchiveController extends AbstractController {
 	 * @return the template to render
 	 */
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	public String upload(ModelMap map,Principal principal,
+	public String uploadModelForm(ModelMap map,Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {		
 
 		User user = addCommonItems(map, principal);
@@ -253,12 +444,12 @@ public class ArchiveController extends AbstractController {
 			return "redirect:view?item=" + model.getRelativePath().replace('\\', '/');
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to upload a new model!";
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "upload";		
 		} catch (Exception ioe) {
 			String msg = "Could not upload model: "+ioe.getMessage();
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "upload";		
 		}
@@ -294,12 +485,12 @@ public class ArchiveController extends AbstractController {
 			return "redirect:archive.html?item=" + URLEncoder.encode(path + '/' + name, "UTF-8");
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";		
 		} catch (Exception ioe) {
 			String msg = "Could not create folder: "+ioe.getMessage();
-			log.log(Level.SEVERE, msg, ioe);
+			log.fatal(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";
 		}
@@ -316,7 +507,7 @@ public class ArchiveController extends AbstractController {
 			boolean hasDisplayAccess = modelrepository.hasViewAccess(client, Paths.get(item));
 			return (!hasReadAccess) && (hasDisplayAccess);
 		} catch (IOException e) {
-			log.log(Level.SEVERE, "Could not determine access rights", e);
+			log.fatal("Could not determine access rights", e);
 			e.printStackTrace();
 			return true;
 		}

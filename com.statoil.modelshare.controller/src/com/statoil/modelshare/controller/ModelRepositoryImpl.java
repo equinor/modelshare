@@ -526,12 +526,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	@Override
-	public File getFile(User user, Path path) throws IOException {
-		if (hasViewAccess(user, path)){
-			return rootPath.resolve(path).toFile();
-		} else {
-			return null;
-		}
+	public File getPictureFile(Path path) throws IOException {
+		return rootPath.resolve(path).toFile();
 	}
 
 	@Override
