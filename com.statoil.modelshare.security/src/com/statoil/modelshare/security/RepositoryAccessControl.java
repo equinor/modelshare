@@ -48,6 +48,9 @@ import com.statoil.modelshare.User;
  */
 public class RepositoryAccessControl {
 
+	/** Character set to use for all file operations */
+	private static final Charset UTF8 = Charset.forName("UTF-8");
+	
 	protected Path repositoryRootPath;
 	protected Path passwordFilePath;
 	protected long passwordFileModified;
@@ -165,7 +168,7 @@ public class RepositoryAccessControl {
 		// read the list of accounts in the file
 		List<String> identifiers = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(new BOMInputStream(new FileInputStream(file))))) {
+				new InputStreamReader(new BOMInputStream(new FileInputStream(file)), UTF8))) {
 			String in = null;
 			while ((in = br.readLine()) != null) {
 				if (!in.startsWith("#") && in.length() > 0) {
@@ -206,7 +209,7 @@ public class RepositoryAccessControl {
 		try (BufferedReader br = new BufferedReader(
 				new InputStreamReader(
 						new BOMInputStream(
-								new FileInputStream(accessFile))))) {
+								new FileInputStream(accessFile)), UTF8))) {
 			String in = null;
 			while ((in = br.readLine()) != null) {
 				if (!in.startsWith("#") && in.length() > 0) {
@@ -429,7 +432,7 @@ public class RepositoryAccessControl {
 			try (BufferedReader br = new BufferedReader(
 					new InputStreamReader(
 							new BOMInputStream(
-									new FileInputStream(passwordFilePath.toFile()))))) {
+									new FileInputStream(passwordFilePath.toFile())), UTF8))) {
 				while ((in = br.readLine()) != null) {
 					String[] split = in.split(":");
 					// continue if we lack the required fields or someone has
@@ -519,7 +522,7 @@ public class RepositoryAccessControl {
 	}
 
 	private void writeAccounts(List<Account> accounts) {
-		try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(passwordFilePath.toFile()),Charset.forName("UTF-8"))) {
+		try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(passwordFilePath.toFile()), UTF8)) {
 			for (Account account : accounts) {
 				if (account instanceof Group) {
 					// just in case - an extra supervisor account can be injected
@@ -605,7 +608,7 @@ public class RepositoryAccessControl {
 			try (BufferedReader br = new BufferedReader(
 					new InputStreamReader(
 							new BOMInputStream(
-									new FileInputStream(accessFilePath.toFile()))));
+									new FileInputStream(accessFilePath.toFile())), UTF8));
 				BufferedWriter bw = Files.newBufferedWriter(newAccessFilePath, StandardOpenOption.CREATE)) {
 				String in = null;
 				boolean found = false;
