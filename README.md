@@ -30,14 +30,3 @@ The default location of the file is at `${user.home}/modelshare/repository/`.
 
 This group is automatically created by the system and will have full access to everything. In order to place a user in the supervisor group it is sufficient to declare the user as member of that group. It is also possible to create a group that is member of the supervisor group.
 
-## Server installation
-
-Modelshare is installed on http://84.16.202.251:8080/modelshare/. The server is physically placed in the DORA building, but is eventually intended to be moved to Statoil. To log in to the server via remote desktop use the following:
-
-* user: itema
-* password: 1tema1sKing
-
-Tomcat 8 is installed as servlet-container. To administrate Tomcat go to the following site: http://84.16.202.251:8080/manager/. Click the Manage button and log in using the following:
-
-* user: admin
-* password: Kokke Limonke 123
