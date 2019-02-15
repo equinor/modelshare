@@ -32,8 +32,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.input.BOMInputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -57,7 +57,7 @@ public class RepositoryAccessControl {
 	
 	public static final Group SUPERVISOR = ModelshareFactory.eINSTANCE.createGroup(); 
 
-	static Log log = LogFactory.getLog(RepositoryAccessControl.class.getName());
+	static Logger log = LoggerFactory.getLogger(RepositoryAccessControl.class.getName());
 	
 	private List<Account> accounts = new ArrayList<>();
 
@@ -78,6 +78,9 @@ public class RepositoryAccessControl {
 		SUPERVISOR.setName("Supervisor");
 		repositoryRootPath = root.toAbsolutePath();
 		passwordFilePath = repositoryRootPath.resolve(".passwd");
+		if (!passwordFilePath.toFile().exists()) {
+			log.error("Hashed password data file does could not be found at " + passwordFilePath);
+		}
 		log.debug("Creating new repository access control");
 		watch();
 	}
@@ -118,7 +121,7 @@ public class RepositoryAccessControl {
 					}
 				}
 			} catch (IOException e) {
-				log.fatal(e.getMessage());
+				log.error(e.getMessage());
 			}
 		};
 		Thread thread = new Thread(run);
@@ -321,7 +324,7 @@ public class RepositoryAccessControl {
 				return (Group) account;
 			}
 		}
-		log.fatal("Group \"" + name + "\" not found.");
+		log.error("Group \"" + name + "\" not found.");
 		return null;
 	}
 

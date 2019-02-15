@@ -1,4 +1,4 @@
-package com.statoil.modelshare.app.config;
+package com.statoil.modelshare.app;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +23,7 @@ import com.statoil.modelshare.controller.ModelRepositoryImpl;
 		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true),
 		@PropertySource (value = "file:///D:/modelshare/modelshare.properties", ignoreResourceNotFound=true)
 		})
-public class RepositoryConfig {
+public class RepositoryConfiguration {
 
 	@Autowired
 	@Value("${repository.root}")

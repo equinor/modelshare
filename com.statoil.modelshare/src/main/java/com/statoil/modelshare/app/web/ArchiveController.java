@@ -26,8 +26,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,21 +40,21 @@ import com.statoil.modelshare.Folder;
 import com.statoil.modelshare.Model;
 import com.statoil.modelshare.ModelshareFactory;
 import com.statoil.modelshare.User;
-import com.statoil.modelshare.app.config.RepositoryConfig;
+import com.statoil.modelshare.app.RepositoryConfiguration;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 
 @Controller
 public class ArchiveController extends AbstractController {
 
-	static Log log = LogFactory.getLog(AbstractController.class);
+	static Logger log = LoggerFactory.getLogger(AbstractController.class);
 
 	@Autowired ModelRepository modelrepository;
 
 	@Autowired
-	private RepositoryConfig repositoryConfig;
+	private RepositoryConfiguration repositoryConfig;
 	
-	private static Log downloadLog = LogFactory.getLog("downloadLogger");
+	private static Logger downloadLog = LoggerFactory.getLogger("downloadLogger");
 
 	/** Encryption key for the download URL's */
 	private static final String KEY = "L+QeFnncyzU+aIfJJLOgfw==";
@@ -91,12 +91,12 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("success", localCopy);
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to copying a model!";
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";		
 		} catch (IOException ioe) {
 			String msg = "File system error!";
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";
 		}		
@@ -136,7 +136,7 @@ public class ArchiveController extends AbstractController {
 			map.put("asset", asset);
 		} catch (Exception e) {
 			String msg = "Error getting model from repository";
-			log.fatal(msg, e);
+			log.error(msg, e);
 			map.addAttribute("error", msg);
 			return "share";
 		}
@@ -226,7 +226,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("crumbs", getBreadCrumb(n));				
 		} catch (Exception ioe) {
 			String msg = "Cannot show item "+asset;
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "content";
 		}		
@@ -289,7 +289,7 @@ public class ArchiveController extends AbstractController {
 					downloadLog.info(MessageFormat.format("Model {0} was downloaded by {1} as shared by {2} ", messageArgs));
 					return null;
 				} catch (AccessDeniedException e) {
-					log.fatal(MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset),
+					log.error(MessageFormat.format("You do not have access to this file. Filename was '{0}'", asset),
 							e);
 					return "content";
 				}
@@ -297,7 +297,7 @@ public class ArchiveController extends AbstractController {
 			}
 		} catch (Exception ioe) {
 			String msg = "Cannot show item.";
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "content";
 		}		
@@ -322,7 +322,7 @@ public class ArchiveController extends AbstractController {
 			map.addAttribute("crumbs", getBreadCrumb(n));
 		} catch (Exception e) {
 			String msg = "Could not load asset: "+e.getMessage();
-			log.fatal(msg, e);
+			log.error(msg, e);
 			map.addAttribute("error", msg);
 			return "archive";
 		}
@@ -444,12 +444,12 @@ public class ArchiveController extends AbstractController {
 			return "redirect:view?item=" + model.getRelativePath().replace('\\', '/');
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to upload a new model!";
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "upload";		
 		} catch (Exception ioe) {
 			String msg = "Could not upload model: "+ioe.getMessage();
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "upload";		
 		}
@@ -485,12 +485,12 @@ public class ArchiveController extends AbstractController {
 			return "redirect:archive.html?item=" + URLEncoder.encode(path + '/' + name, "UTF-8");
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";		
 		} catch (Exception ioe) {
 			String msg = "Could not create folder: "+ioe.getMessage();
-			log.fatal(msg, ioe);
+			log.error(msg, ioe);
 			map.addAttribute("error", msg);
 			return "folder";
 		}
@@ -507,7 +507,7 @@ public class ArchiveController extends AbstractController {
 			boolean hasDisplayAccess = modelrepository.hasViewAccess(client, Paths.get(item));
 			return (!hasReadAccess) && (hasDisplayAccess);
 		} catch (IOException e) {
-			log.fatal("Could not determine access rights", e);
+			log.error("Could not determine access rights", e);
 			e.printStackTrace();
 			return true;
 		}

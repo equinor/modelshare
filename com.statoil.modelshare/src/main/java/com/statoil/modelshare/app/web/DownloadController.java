@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +30,7 @@ public class DownloadController extends AbstractController {
 
 	static Logger log = Logger.getLogger(DownloadController.class.getName());
 	
-	static Log downloadLog = LogFactory.getLog("downloadLogger");
+	static Logger downloadLog = Logger.getLogger("downloadLogger");
 	
 	@Autowired
 	private ModelRepository modelrepository;

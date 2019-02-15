@@ -24,13 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.statoil.modelshare.app.config.RepositoryConfig;
+import com.statoil.modelshare.app.RepositoryConfiguration;
 
 @Controller
 public class HomeController extends AbstractController {
 
 	@Autowired
-	private RepositoryConfig repositoryConfig;
+	private RepositoryConfiguration repositoryConfig;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String printWelcome(ModelMap map, Principal principal) {
