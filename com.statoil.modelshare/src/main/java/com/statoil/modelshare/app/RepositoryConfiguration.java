@@ -3,7 +3,7 @@ package com.statoil.modelshare.app;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
