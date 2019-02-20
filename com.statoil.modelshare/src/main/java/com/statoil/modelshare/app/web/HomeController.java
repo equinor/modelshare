@@ -10,9 +10,9 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
-import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
-import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage;
+import org.eclipse.mylyn.wikitext.parser.MarkupParser;
+import org.eclipse.mylyn.wikitext.parser.builder.HtmlDocumentBuilder;
+import org.eclipse.mylyn.wikitext.markdown.MarkdownLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
