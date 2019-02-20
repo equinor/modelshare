@@ -5,12 +5,16 @@
 <body role="document">
 	
 	<div th:fragment="listItem(account, index)"  th:remove="tag">
-		<a th:if="${account}" href="#" 
-	   			th:onclick="'ManageAccess.AddAccount(\'' + 
-	   			${account.key.name} + '\',\'' + 
-	   			${account.key.identifier} +	'\',' + 
-	   			${index} + ',\'' + 
-	   			${account.value} + '\');'" 
+		<a th:if="${account}" href="#"
+				th:data_name="${account.key.name}"
+				th:data_identifier="${account.key.identifier}"
+				th:data_index="${index}"
+				th:data_value="${account.value}"				
+	   			onclick="ManageAccess.AddAccount(
+	   				this.getAttribute('data_name'),
+	   				this.getAttribute('data_identifier'), 
+	   				this.getAttribute('data_index'),
+	   				this.getAttribute('data_value'));"
 	   			th:utext="${account.key.name + ' (' + account.key.identifier + ')'}">
  		</a>
 	</div>
