@@ -1,7 +1,7 @@
-package com.statoil.modelshare.app.config;
+package com.statoil.modelshare.app;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +20,14 @@ import com.statoil.modelshare.app.service.FilebasedAuthenticationProvider;
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	static Log log = LogFactory.getLog(SecurityConfig.class.getName());
+	static Logger log = LoggerFactory.getLogger(SecurityConfiguration.class.getName());
 	
+	/**
+	 * Disregard certain resources for authentication purposes as these should
+	 * be available for all users.
+	 */
 	@Override
     public void configure(WebSecurity web) throws Exception {
         web

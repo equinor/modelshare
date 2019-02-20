@@ -1,4 +1,4 @@
-package com.statoil.modelshare.app.config;
+package com.statoil.modelshare.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySources;
 		@PropertySource (value = "file:///${user.home}/modelshare/modelshare.properties", ignoreResourceNotFound=true),
 		@PropertySource (value = "file:///D:/modelshare/modelshare.properties", ignoreResourceNotFound=true)
 		})
-public class MailConfig {
+public class MailConfiguration {
 
 	@Autowired
 	@Value("${smtp.host}")
@@ -27,9 +27,7 @@ public class MailConfig {
 	@Value("${access.request.mail.template}")
 	private final String accessRequestMailTemplate = null;
 	
-	@Autowired
 	private SMTPConfiguration smtpConfiguration = new SMTPConfiguration();
-
 	
 	@Bean
 	public SMTPConfiguration getSMTPConfiguration() {

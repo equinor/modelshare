@@ -29,7 +29,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import com.statoil.modelshare.User;
 import com.statoil.modelshare.Folder;
-import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
+import com.statoil.modelshare.app.MailConfiguration.SMTPConfiguration;
 import com.statoil.modelshare.app.service.AssetProxy;
 import com.statoil.modelshare.controller.ModelRepository;
 

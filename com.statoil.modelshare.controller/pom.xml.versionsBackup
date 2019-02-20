@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.statoil.modelshare</groupId>
 		<artifactId>com.statoil.modelshare-parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.8.0-SNAPSHOT</version>
 	</parent>
 
 	<build>
@@ -63,12 +63,12 @@
 		<dependency>
 			<groupId>com.statoil.modelshare</groupId>
 			<artifactId>com.statoil.modelshare.model</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>0.8.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.statoil.modelshare</groupId>
 			<artifactId>com.statoil.modelshare.security</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>0.8.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
@@ -100,11 +100,6 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.25</version>
 		</dependency>
 	</dependencies>
 </project>

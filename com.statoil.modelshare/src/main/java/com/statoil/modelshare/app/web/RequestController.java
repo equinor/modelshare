@@ -19,8 +19,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.statoil.modelshare.User;
+import com.statoil.modelshare.app.MailConfiguration.SMTPConfiguration;
 import com.statoil.modelshare.Model;
-import com.statoil.modelshare.app.config.MailConfig.SMTPConfiguration;
 import com.statoil.modelshare.controller.ModelRepository;
 
 /**
@@ -39,7 +39,7 @@ import com.statoil.modelshare.controller.ModelRepository;
 @Controller
 public class RequestController extends AbstractController {
 
-	static Log log = LogFactory.getLog(RequestController.class);
+	static Logger log = LoggerFactory.getLogger(RequestController.class);
 
 	@Autowired
 	private ModelRepository modelrepository;
@@ -63,7 +63,7 @@ public class RequestController extends AbstractController {
 			map.put("asset", asset);
 		} catch (Exception e) {
 			String msg = "Error getting model from repository";
-			log.fatal(msg, e);
+			log.error(msg, e);
 			map.addAttribute("error", msg);
 			return "request";
 		}
@@ -85,19 +85,19 @@ public class RequestController extends AbstractController {
 				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {
 				String msg = "Error sending mail. Contact system responsible.";
-				log.fatal(msg, e);
+				log.error(msg, e);
 				modelMap.addAttribute("error", msg);
 				return "request";
 			} catch (UnsupportedEncodingException ue) {
 				String msg = "Error creating new URL when sending mail. Contact system responsible.";
-				log.fatal(msg, ue);
+				log.error(msg, ue);
 				modelMap.addAttribute("error", msg);
 				return "request";
 			}
 			
 		} else {
 			String msg = "Missing well formed e-mail address";
-			log.fatal(msg);
+			log.error(msg);
 			modelMap.addAttribute("error", msg);
 			return "request";
 		}
@@ -107,7 +107,7 @@ public class RequestController extends AbstractController {
 			model = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 		} catch (Exception e) {
 			String msg = "Error getting model information..";
-			log.fatal(msg, e);
+			log.error(msg, e);
 			modelMap.addAttribute("request", msg);
 			return "error";
 		}

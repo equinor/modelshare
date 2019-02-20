@@ -27,14 +27,14 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.statoil.modelshare.Access;
 import com.statoil.modelshare.Account;
@@ -53,9 +53,9 @@ import com.statoil.modelshare.util.ParseUtility;
  */
 public class ModelRepositoryImpl implements ModelRepository {
 
-	static Log log = LogFactory.getLog(ModelRepository.class.getName());
+	static Logger log = LoggerFactory.getLogger(ModelRepository.class.getName());
 	
-	static Log downloadLog = LogFactory.getLog("downloadLogger");
+	static Logger downloadLog = LoggerFactory.getLogger("downloadLogger");
 
 	/** Root for storing repository files */
 	private Path rootPath;
@@ -92,6 +92,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 		rootPath = path.toAbsolutePath();
 		ra = new RepositoryAccessControl(rootPath);
 		this.userRoot = userRoot;		
+		
+		log.info("Starting model repository:");
+		log.info(" - Repository root: " + path);
+		log.info(" - User root: " + userRoot);
+		
 		// register the extension
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 	    Map<String, Object> m = reg.getExtensionToFactoryMap();
