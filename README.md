@@ -46,16 +46,3 @@ that is member of the supervisor group.
 A preconfigured launch configuration has been made. Open the **Debug** or 
 **Run** menu and select **Launch ModelShare...**. This will start the 
 application at port 8080. 
-
-## Running in a Docker container
-
-While developing it's useful to be able to test the service in a Docker 
-container. This can be achieved by issuing the command:
-
-	docker run -d -p 80:8080 -v $PWD/com.statoil.modelshare/repository:/home/jetty/modelshare/repository \
-		-v $PWD/com.statoil.modelshare/target/modelshare:/var/lib/jetty/webapps/ROOT jetty	
-	
-See https://github.com/docker-library/docs/tree/master/jetty
-
-	
-
