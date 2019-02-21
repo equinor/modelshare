@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.equinor.modelshare</groupId>
 		<artifactId>com.equinor.modelshare-parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<build>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.equinor.modelshare</groupId>
 			<artifactId>com.equinor.modelshare.model</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
