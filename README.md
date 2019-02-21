@@ -18,8 +18,8 @@ can be easily built by executing `mvn clean verify` from the root folder.
 Once the build has completed you can start an instance on port 8080 from the 
 command line by executing:
 
-	java -jar -Drepository.root=./com.statoil.modelshare/repository/ \
-		./com.statoil.modelshare/target/modelshare.jar
+	java -jar -Drepository.root=./com.equinor.modelshare/repository/ \
+		./com.equinor.modelshare/target/modelshare.jar
 	
 Note that the _repository.root_ parameter points to a repository that has been
 created for test and demo purposes. It has a _.passwd_ file with a list of users
@@ -57,7 +57,7 @@ This service uses a very simple approach to storing it's data. Everything
 related to the model database are kept as raw files and stored under one 
 location.
 
-The [pages](https://github.com/equinor/modelshare/tree/master/com.statoil.modelshare/repository/pages)
+The [pages](https://github.com/equinor/modelshare/tree/master/com.equinor.modelshare/repository/pages)
 folder contains MarkDown formatted files that are automatically converted to 
 HTML. The file _index.md_ is used to render the front page of the application.
 There is also the _terms.md_ file which is expected to be present.
