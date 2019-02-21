@@ -12,13 +12,6 @@
 	</parent>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src-test</testSourceDirectory>
-		<testResources>
-			<testResource>
-				<directory>${project.basedir}/test-resources</directory>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

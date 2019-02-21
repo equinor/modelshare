@@ -19,7 +19,7 @@ import com.equinor.modelshare.User;
 import com.equinor.modelshare.Group;
 
 public class PasswordFileTest {
-	private static final Path root = Paths.get("test-resources/users").toAbsolutePath();
+	private static final Path root = Paths.get("src/test/resources/users").toAbsolutePath();
 	
 	@ClassRule
 	public static TemporaryFolder folder= new TemporaryFolder();

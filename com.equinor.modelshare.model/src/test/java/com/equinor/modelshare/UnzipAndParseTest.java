@@ -15,7 +15,7 @@ public class UnzipAndParseTest {
 	@Test
 	public void testFolderFormat() throws IOException{
 		Model model = ModelshareFactory.eINSTANCE.createModel();
-		Path task = Paths.get("test-resources/folders.stask").toAbsolutePath();
+		Path task = Paths.get("src/test/resources/folders.stask").toAbsolutePath();
 		ParseUtility.parseSimaModel(task, model);
 		assertEquals(5, model.getTaskFolders().size());
 		assertEquals(3, model.getTaskFolders().get(0).getTaskDetails().size());

@@ -26,7 +26,7 @@ public class RepositoryAccessTest {
 	private static Group userGroup2;
 	private static Group supervisors;
 	EnumSet<Access> access = EnumSet.noneOf(Access.class);
-	private static final Path rootFolder = Paths.get("test-resources/models/").toAbsolutePath();
+	private static final Path rootFolder = Paths.get("src/test/resources/models/").toAbsolutePath();
 	private static RepositoryAccessControl ra;
 
 	@BeforeClass
@@ -131,7 +131,7 @@ public class RepositoryAccessTest {
 
 	@Test
 	public void testBug_132() throws IOException {
-		Path root = Paths.get("test-resources/bug_132/").toAbsolutePath();
+		Path root = Paths.get("src/test/resources/bug_132/").toAbsolutePath();
 		RepositoryAccessControl rac = new RepositoryAccessControl(root);
 
 		// a@user
