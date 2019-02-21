@@ -8,7 +8,7 @@ Set-Alias sz "$env:ProgramFiles\7-Zip\7z.exe"
 $userPath = "C:\Users\morte_o3ehocu";
 
 #set source and destination folders
-$sourceFolder = "$userPath\Temp\Statoil (1)";
+$sourceFolder = "$userPath\Temp\Equinor (1)";
 $destinationFolder = "$userPath\Desktop\Modelshare\Repository";
 $modelAccessFile = "$userPath\Desktop\rights.access";
 $modelDestinationSubFolder = "output\x3d";
@@ -80,7 +80,7 @@ ForEach($folder in $rootLevelFolders) {
 Write-Host;
 
 #get source folders
-$sourceFolders = Get-ChildItem $sourceFolder -Directory -Filter statoil*;
+$sourceFolders = Get-ChildItem $sourceFolder -Directory -Filter equinor*;
 
 ForEach($folder in $sourceFolders) {
     #get installation name
