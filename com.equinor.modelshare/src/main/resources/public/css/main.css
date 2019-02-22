@@ -1,7 +1,73 @@
 @CHARSET "UTF-8";
 
-html { 
-	background: #7db9e8;
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-Regular.woff2) format('woff2'),
+		url(../fonts/Equinor-Regular.woff) format('woff'),
+		url(../fonts/Equinor-Regular.ttf) format('truetype')
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-Italic.woff2) format('woff2'),
+		url(../fonts/Equinor-Italic.woff) format('woff'),
+		url(../fonts/Equinor-Italic.ttf) format('truetype');
+	font-style: italic
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-Light.woff2) format('woff2'),
+		url(../fonts/Equinor-Light.woff) format('woff'),
+		url(../fonts/Equinor-Light.ttf) format('truetype');
+	font-weight: 300
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-LightItalic.woff2) format('woff2'),
+		url(../fonts/Equinor-LightItalic.woff) format('woff'),
+		url(../fonts/Equinor-LightItalic.ttf) format('truetype');
+	font-weight: 300;
+	font-style: italic
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-Medium.woff2) format('woff2'),
+		url(../fonts/Equinor-Medium.woff) format('woff'),
+		url(../fonts/Equinor-Medium.ttf) format('truetype');
+	font-weight: 500
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-MediumItalic.woff2) format('woff2'),
+		url(../fonts/Equinor-MediumItalic.woff) format('woff'),
+		url(../fonts/Equinor-MediumItalic.ttf) format('truetype');
+	font-weight: 500;
+	font-style: italic
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-Bold.woff2) format('woff2'),
+		url(../fonts/Equinor-Bold.woff) format('woff'),
+		url(../fonts/Equinor-Bold.ttf) format('truetype');
+	font-weight: 700
+}
+
+@font-face {
+	font-family: Equinor;
+	src: url(../fonts/Equinor-BoldItalic.woff2) format('woff2'),
+		url(../fonts/Equinor-BoldItalic.woff) format('woff'),
+		url(../fonts/Equinor-BoldItalic.ttf) format('truetype');
+	font-weight: 700;
+	font-style: italic
+}
+
+html {
+	background: rgb(234, 244, 249);
 }
 
 body {
@@ -11,7 +77,7 @@ body {
 	box-sizing: border-box;
 	color: rgb(51, 51, 51);
 	display: block;
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Equinor, Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	line-height: 20px;
 	margin-bottom: 0px;
@@ -19,13 +85,7 @@ body {
 	margin-right: 0px;
 	margin-top: 0px;
 	overflow-x: hidden;
-	background: -moz-linear-gradient(top,  #1e5799 0%, #207cca 30%, #2989d8 50%, #7db9e8 100%); /* FF3.6+ */
-  	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(30%,#207cca), color-stop(50%,#2989d8), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
-  	background: -webkit-linear-gradient(top,  #1e5799 0%,#207cca 30%,#2989d8 50%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
-  	background: -o-linear-gradient(top,  #1e5799 0%,#207cca 30%,#2989d8 50%,#7db9e8 100%); /* Opera 11.10+ */
-  	background: -ms-linear-gradient(top,  #1e5799 0%,#207cca 30%,#2989d8 50%,#7db9e8 100%); /* IE10+ */
-  	background: linear-gradient(to bottom,  #1e5799 0%,#207cca 30%,#2989d8 50%,#7db9e8 100%); /* W3C */
-  	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+	background-color: rgb(234, 244, 249);
 	height: 100vh;
 	min-height: 100vh;
 }
@@ -36,8 +96,9 @@ body {
 
 hr {
 	height: 2px;
-	background: #D97BB2;
+	background: rgb(235, 52, 70);
 }
+
 .modal-body p {
 	font-size: 14px;
 }
@@ -88,22 +149,87 @@ hr {
 	padding-left: 10px;
 	margin-left: 0px;
 }
-.task-details h5{
-	font-weight:bold;
+
+.task-details h5 {
+	font-weight: bold;
 }
-.panel-default{
-	border-color: #999999;
+
+.panel-default {
+	border-color: rgb(200, 200, 200);
 }
-.panel-default>.panel-heading{
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#eeeeee),to(#999999));
-    background-image: linear-gradient(to bottom,#eeeeee 0,#999999 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#999999', GradientType=0);
+
+/* The top navigation bar */
+#navbar {
+	background: rgb(234, 244, 249);
 }
-#accessTable input[type="checkbox"]{
+
+#navbar a {
+	color: rgb(0, 0, 0);
+	font-size: 16px;
+	font-stretch: normal;
+	font-style: normal;
+	font-variant-caps: normal;
+	font-weight: normal;
+}
+#navbar a:hover {
+	background-color: rgb(255,255,255);
+}
+
+/* Breadcrumb and toolbar */
+.breadcrumb, #breadcrumb {
+	background-color: rgb(255,255,255);	
+}
+
+/* Folder titles */
+.panel-default>.panel-heading {
+	background-color: rgb(46, 110, 119);
+	background-image: none;
+}
+
+.panel-default>.panel-heading>.panel-title {
+	color: rgb(255, 255, 255);
+	font-size: 20px;
+	font-family: Equinor, Helvetica, Arial, sans-serif;
+	font-weight: normal;
+}
+
+.panel-default>.panel-heading>.panel-title>a {
+	color: rgb(255, 255, 255);
+}
+
+/* The "Modelshare" title */
+.navbar-brand {
+	color: rgb(235, 52, 70);
+	font-family: Equinor, Helvetica, Arial, sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+/* Make all links the Equinor red */
+a {
+	color: rgb(235, 52, 70);
+}
+
+a:active {
+	color: rgb(235, 52, 70);
+	text-decoration: underline;
+}
+
+a:visited {
+	color: rgb(235, 52, 70);
+	text-decoration: underline;
+}
+
+.panel-primary {
+	border-color: rgb(200, 200, 200);
+}
+
+#accessTable input[type="checkbox"] {
 	cursor: pointer;
 }
+
 .remove {
 	font-size: 16px;
 	color: #a94442;
-	line-height:inherit;
+	line-height: inherit;
 }

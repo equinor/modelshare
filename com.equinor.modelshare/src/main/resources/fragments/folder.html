@@ -19,7 +19,7 @@
 					<button class="btn btn-primary btn-sm">New model</button>
 				</a><p />
 	
-	<!--  If new folder -->			
+				<!--  If new folder -->			
 				<div th:if="${showNewFolder}" th:inline="text" class="">
 					<b>Create new subfolder</b><p/>
 					<form action="archive.html" th:action="@{/createFolder}" method="post" enctype="multipart/form-data"><p />
@@ -29,7 +29,7 @@
 				    </form>
 			    </div>
 	
-	<!--  If upload model -->		    
+				<!--  If upload model -->		    
 				<div th:if="${showUploadFile}">
 					<b>Upload new model</b><p/>
 					<form action="archive.html" th:action="@{/fileUpload}" method="post" enctype="multipart/form-data"><p />
