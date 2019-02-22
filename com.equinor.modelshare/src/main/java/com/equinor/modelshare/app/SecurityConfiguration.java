@@ -31,9 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
     public void configure(WebSecurity web) throws Exception {
         web
+        	.ignoring().antMatchers("/webjars/**").and()
             .ignoring().antMatchers("/css/**").and()
             .ignoring().antMatchers("/js/**").and()
             .ignoring().antMatchers("/img/**").and()
+            .ignoring().antMatchers("/fonts/**").and()
             .ignoring().antMatchers("/change-password").and()
             .ignoring().antMatchers("/reset-password").and()
             // special case for models shared with unauthenticated users 
