@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.equinor.modelshare.User;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 /**
  * @author Torkild U. Resheim, Itema AS

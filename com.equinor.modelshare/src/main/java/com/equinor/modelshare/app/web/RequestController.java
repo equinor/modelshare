@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.equinor.modelshare.User;
 import com.equinor.modelshare.app.MailConfiguration.SMTPConfiguration;
+import com.equinor.modelshare.repository.ModelRepository;
 import com.equinor.modelshare.Model;
-import com.equinor.modelshare.controller.ModelRepository;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -84,12 +84,12 @@ public class RequestController extends AbstractController {
 				String url = makeUrl(request, asset, user);
 				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {
-				String msg = "Error sending mail. Contact system responsible.";
+				String msg = "Error sending mail. Contact system administrator.";
 				log.error(msg, e);
 				modelMap.addAttribute("error", msg);
 				return "request";
 			} catch (UnsupportedEncodingException ue) {
-				String msg = "Error creating new URL when sending mail. Contact system responsible.";
+				String msg = "Error creating new URL when sending mail. Contact system administrator.";
 				log.error(msg, ue);
 				modelMap.addAttribute("error", msg);
 				return "request";

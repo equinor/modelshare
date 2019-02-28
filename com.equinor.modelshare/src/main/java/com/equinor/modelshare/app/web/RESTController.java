@@ -20,7 +20,7 @@ import com.equinor.modelshare.Group;
 import com.equinor.modelshare.Model;
 import com.equinor.modelshare.User;
 import com.equinor.modelshare.app.service.AssetProxy;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 @RestController
 public class RESTController extends AbstractController {
@@ -104,7 +104,7 @@ public class RESTController extends AbstractController {
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
 	public List<?> getUsers(ModelMap map, Principal principal) {
 		List<KV> values = new ArrayList<>();
-		List<User> users = modelrepository.getUsers();
+		List<User> users = modelrepository.getAuthorizedUsers();
 		for (User user : users) {
 			KV kv = new KV(user.getIdentifier(), user.getName());
 			values.add(kv);

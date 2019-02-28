@@ -26,7 +26,7 @@ import com.equinor.modelshare.Account;
 import com.equinor.modelshare.ModelshareFactory;
 import com.equinor.modelshare.Token;
 import com.equinor.modelshare.User;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -104,7 +104,7 @@ public class PasswdController extends AbstractController {
 
 	private User getUser(String email) {
 		User user = null;
-		List<Account> accounts = repository.getAccounts();
+		List<Account> accounts = repository.getAuthorizedAccounts();
 		for (Account account : accounts) {
 			if (account instanceof User){
 				if (((User) account).getEmail().equals(email)){

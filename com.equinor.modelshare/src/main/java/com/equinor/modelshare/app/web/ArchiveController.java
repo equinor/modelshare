@@ -42,7 +42,7 @@ import com.equinor.modelshare.ModelshareFactory;
 import com.equinor.modelshare.User;
 import com.equinor.modelshare.app.RepositoryConfiguration;
 import com.equinor.modelshare.app.service.AssetProxy;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 @Controller
 public class ArchiveController extends AbstractController {
@@ -307,7 +307,6 @@ public class ArchiveController extends AbstractController {
 	@RequestMapping(value = { "/archive" }, method = RequestMethod.GET)
 	public String viewFolder(ModelMap map, Principal principal,
 			@RequestParam(value = "item", required = false) String asset) {
-
 		try {
 			User user = addCommonItems(map, principal);
 

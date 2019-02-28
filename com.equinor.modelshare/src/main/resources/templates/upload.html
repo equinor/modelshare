@@ -28,6 +28,7 @@
 						<hr />
 						<form action="archive.html" th:action="upload" method="post"
 							enctype="multipart/form-data" accept-charset="UTF-8">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 							<!-- hidden inputs, asset can be model or folder -->
 							<input th:if="${currentModel}" type="hidden" name="asset"
 								th:value="${currentModel.relativePath}" /> <input

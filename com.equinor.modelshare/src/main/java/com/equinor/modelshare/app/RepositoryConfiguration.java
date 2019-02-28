@@ -12,8 +12,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-import com.equinor.modelshare.controller.ModelRepository;
-import com.equinor.modelshare.controller.ModelRepositoryImpl;
+import com.equinor.modelshare.repository.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepositoryImpl;
 /**
  * @author Torkild U. Resheim, Itema AS
  */
@@ -61,7 +61,12 @@ public class RepositoryConfiguration {
 		} else if (SystemUtils.IS_OS_LINUX){
 			path = "/home/";
 		}
-		return new ModelRepositoryImpl(Paths.get(repositoryRoot), Paths.get(path));
+		
+		Path root = Paths.get(repositoryRoot);		
+		if (!root.isAbsolute()) {
+			root = Paths.get(SystemUtils.USER_DIR, repositoryRoot).normalize();
+		}
+		return new ModelRepositoryImpl(root, Paths.get(path));
 	}
 	
 	@Bean

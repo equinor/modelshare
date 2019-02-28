@@ -31,7 +31,7 @@ import com.equinor.modelshare.Access;
 import com.equinor.modelshare.Account;
 import com.equinor.modelshare.Group;
 import com.equinor.modelshare.User;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 @Controller
 public class GrantAccessController extends AbstractController {
@@ -141,12 +141,13 @@ public class GrantAccessController extends AbstractController {
 		}
 		return "manageaccess";
 	}
-	@RequestMapping(value = "/saveAccess", method = RequestMethod.POST)
-	public String saveAccess(ModelMap map,
+	
+	@RequestMapping(value = "/saveaccess", method = RequestMethod.POST)
+	public String saveaccess(ModelMap map,
+			Principal principal,
 			@RequestParam("path") String p,
 			@RequestParam(value = "access", required = false) String[] access,
-			@RequestParam(value = "accounts", required = false) String[] accounts,
-			Principal principal) {
+			@RequestParam(value = "accounts", required = false) String[] accounts) {
 			
 		try {
 			Path path = Paths.get(URLDecoder.decode(p, "UTF-8"));
@@ -309,7 +310,7 @@ public class GrantAccessController extends AbstractController {
 	 */
 	private Map<Account, Rights> getAccountsWithoutAccess(User user, Path path) throws AccessDeniedException, IOException{
 		Set<Account> explicitAccounts = modelrepository.getRights(user, path).keySet();
-		return modelrepository.getAccounts()
+		return modelrepository.getAuthorizedAccounts()
 				.stream()
 				.filter(u -> !explicitAccounts.contains(u))
 				.collect(Collectors.toMap(u -> u, u -> new Rights(EnumSet.of(Access.VIEW))));		
@@ -325,7 +326,7 @@ public class GrantAccessController extends AbstractController {
 			@RequestParam(value = "delete", required = false) String identifier){
 						
 		User user = addCommonItems(map, principal);
-		if (identifier!=null){
+		if (identifier != null) {
 			try {
 				modelrepository.deleteUser(user, identifier);
 			} catch (AccessDeniedException e) {
@@ -335,7 +336,7 @@ public class GrantAccessController extends AbstractController {
 				return "manage-users";
 			}
 		}
-		map.addAttribute("users", modelrepository.getUsers());
+		map.addAttribute("users", modelrepository.getAuthorizedUsers());
 		
 		return "manage-users";
 	}
@@ -399,7 +400,7 @@ public class GrantAccessController extends AbstractController {
 			map.addAttribute("error", msg);
 			return "add-user";
 		}
-		map.addAttribute("users", modelrepository.getUsers());
+		map.addAttribute("users", modelrepository.getAuthorizedUsers());
 		return "manage-users";
 	}
 

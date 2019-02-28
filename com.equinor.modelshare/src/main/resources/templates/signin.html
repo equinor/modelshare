@@ -24,6 +24,7 @@
 						</div>
 						<hr />
 						<form class="form-signin" th:action="@{/signin}" method="post" accept-charset="UTF-8">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 							<fieldset>
 								<label for="username" class="sr-only">Email address</label>
 								<input type="text" name="username" id="username" class="form-control" placeholder="User name" autofocus="autofocus" required="required" />

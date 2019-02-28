@@ -559,13 +559,22 @@ public interface ModelsharePackage extends EPackage {
 	int GROUP__GROUP = ACCOUNT__GROUP;
 
 	/**
+	 * The feature id for the '<em><b>External Identifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP__EXTERNAL_IDENTIFIER = ACCOUNT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 0;
+	int GROUP_FEATURE_COUNT = ACCOUNT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get All Roles</em>' operation.
@@ -924,13 +933,13 @@ public interface ModelsharePackage extends EPackage {
 	int TOKEN__KEY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Timeout</b></em>' attribute.
+	 * The feature id for the '<em><b>Created</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TOKEN__TIMEOUT = 1;
+	int TOKEN__CREATED = 1;
 
 	/**
 	 * The feature id for the '<em><b>User</b></em>' reference.
@@ -942,13 +951,22 @@ public interface ModelsharePackage extends EPackage {
 	int TOKEN__USER = 2;
 
 	/**
+	 * The feature id for the '<em><b>Timeout</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TOKEN__TIMEOUT = 3;
+
+	/**
 	 * The number of structural features of the '<em>Token</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TOKEN_FEATURE_COUNT = 3;
+	int TOKEN_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Token</em>' class.
@@ -1164,6 +1182,17 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getGroup();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Group#getExternalIdentifier <em>External Identifier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>External Identifier</em>'.
+	 * @see com.equinor.modelshare.Group#getExternalIdentifier()
+	 * @see #getGroup()
+	 * @generated
+	 */
+	EAttribute getGroup_ExternalIdentifier();
 
 	/**
 	 * Returns the meta object for class '{@link com.equinor.modelshare.Account <em>Account</em>}'.
@@ -1454,15 +1483,15 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getToken_Key();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}'.
+	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Token#getCreated <em>Created</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Timeout</em>'.
-	 * @see com.equinor.modelshare.Token#getTimeout()
+	 * @return the meta object for the attribute '<em>Created</em>'.
+	 * @see com.equinor.modelshare.Token#getCreated()
 	 * @see #getToken()
 	 * @generated
 	 */
-	EAttribute getToken_Timeout();
+	EAttribute getToken_Created();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.equinor.modelshare.Token#getUser <em>User</em>}'.
@@ -1474,6 +1503,17 @@ public interface ModelsharePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getToken_User();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Timeout</em>'.
+	 * @see com.equinor.modelshare.Token#getTimeout()
+	 * @see #getToken()
+	 * @generated
+	 */
+	EAttribute getToken_Timeout();
 
 	/**
 	 * Returns the meta object for enum '{@link com.equinor.modelshare.Access <em>Access</em>}'.
@@ -1657,6 +1697,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EClass GROUP = eINSTANCE.getGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>External Identifier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP__EXTERNAL_IDENTIFIER = eINSTANCE.getGroup_ExternalIdentifier();
 
 		/**
 		 * The meta object literal for the '{@link com.equinor.modelshare.impl.AccountImpl <em>Account</em>}' class.
@@ -1889,12 +1937,12 @@ public interface ModelsharePackage extends EPackage {
 		EAttribute TOKEN__KEY = eINSTANCE.getToken_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Timeout</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Created</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TOKEN__TIMEOUT = eINSTANCE.getToken_Timeout();
+		EAttribute TOKEN__CREATED = eINSTANCE.getToken_Created();
 
 		/**
 		 * The meta object literal for the '<em><b>User</b></em>' reference feature.
@@ -1903,6 +1951,14 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EReference TOKEN__USER = eINSTANCE.getToken_User();
+
+		/**
+		 * The meta object literal for the '<em><b>Timeout</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TOKEN__TIMEOUT = eINSTANCE.getToken_Timeout();
 
 		/**
 		 * The meta object literal for the '{@link com.equinor.modelshare.Access <em>Access</em>}' enum.

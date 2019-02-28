@@ -550,7 +550,7 @@ public class ModelImpl extends AssetImpl implements Model {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (owner: ");
 		result.append(owner);
 		result.append(", organisation: ");

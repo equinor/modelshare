@@ -20,6 +20,7 @@
 						<hr/>
 						<form class="form-signin" th:action="@{/grantaccess}"
 							method="post" accept-charset="UTF-8">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 							<fieldset>
 								<label for="filenametext">Model: </label>
 								<div class="form-group" id="filenametext" th:text="${asset}"></div>

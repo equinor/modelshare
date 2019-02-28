@@ -20,18 +20,19 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.ModelMap;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-
-import com.equinor.modelshare.User;
 import com.equinor.modelshare.Folder;
+import com.equinor.modelshare.User;
 import com.equinor.modelshare.app.MailConfiguration.SMTPConfiguration;
 import com.equinor.modelshare.app.service.AssetProxy;
-import com.equinor.modelshare.controller.ModelRepository;
+import com.equinor.modelshare.repository.ModelRepository;
 
 /**
  * @author Torkild U. Resheim, Itema AS
@@ -120,7 +121,14 @@ public abstract class AbstractController {
 	}
 
 	protected User addCommonItems(ModelMap map, Principal principal) {
-		User user = modelrepository.getUser(principal.getName());
+		String id = principal.getName(); 
+		// principal.getName() returns the full name of the user when using 
+		// Azure AD, so we need to get the unique name from somewhere else
+		if (principal instanceof OAuth2AuthenticationToken) {
+			DefaultOidcUser u = (DefaultOidcUser) ((OAuth2AuthenticationToken)principal).getPrincipal();
+			id = (String) u.getAttributes().get("unique_name");
+		}
+		User user = modelrepository.getUser(id);
 		map.addAttribute("authenticated", user);
 		map.addAttribute("topLevel", getRootItems(user));
 		return user;

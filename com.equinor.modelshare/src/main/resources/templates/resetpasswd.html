@@ -18,6 +18,7 @@
 						</div>
 						<hr />
 						<form class="form-signin" th:action="@{/reset-password}" method="post" accept-charset="UTF-8">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 							<fieldset>
 								<input type="email" name="email" id="email" 
 									class="form-control" placeholder="E-mail address" autofocus="autofocus" 

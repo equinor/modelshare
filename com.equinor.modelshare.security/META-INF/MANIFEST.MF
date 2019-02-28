@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Modelshare Security
-Bundle-SymbolicName: com.equinor.modelshare.security
-Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: Equinor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: com.equinor.modelshare.model;bundle-version="0.1.0",
- org.apache.commons.logging;bundle-version="1.1.1"

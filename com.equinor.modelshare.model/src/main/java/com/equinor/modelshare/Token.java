@@ -14,8 +14,9 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.equinor.modelshare.Token#getKey <em>Key</em>}</li>
- *   <li>{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}</li>
+ *   <li>{@link com.equinor.modelshare.Token#getCreated <em>Created</em>}</li>
  *   <li>{@link com.equinor.modelshare.Token#getUser <em>User</em>}</li>
+ *   <li>{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}</li>
  * </ul>
  *
  * @see com.equinor.modelshare.ModelsharePackage#getToken()
@@ -50,30 +51,30 @@ public interface Token extends EObject {
 	void setKey(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Timeout</b></em>' attribute.
+	 * Returns the value of the '<em><b>Created</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Timeout</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Created</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Timeout</em>' attribute.
-	 * @see #setTimeout(long)
-	 * @see com.equinor.modelshare.ModelsharePackage#getToken_Timeout()
+	 * @return the value of the '<em>Created</em>' attribute.
+	 * @see #setCreated(long)
+	 * @see com.equinor.modelshare.ModelsharePackage#getToken_Created()
 	 * @model
 	 * @generated
 	 */
-	long getTimeout();
+	long getCreated();
 
 	/**
-	 * Sets the value of the '{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}' attribute.
+	 * Sets the value of the '{@link com.equinor.modelshare.Token#getCreated <em>Created</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Timeout</em>' attribute.
-	 * @see #getTimeout()
+	 * @param value the new value of the '<em>Created</em>' attribute.
+	 * @see #getCreated()
 	 * @generated
 	 */
-	void setTimeout(long value);
+	void setCreated(long value);
 
 	/**
 	 * Returns the value of the '<em><b>User</b></em>' reference.
@@ -102,5 +103,31 @@ public interface Token extends EObject {
 	 * @generated
 	 */
 	void setUser(User value);
+
+	/**
+	 * Returns the value of the '<em><b>Timeout</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Timeout</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Timeout</em>' attribute.
+	 * @see #setTimeout(long)
+	 * @see com.equinor.modelshare.ModelsharePackage#getToken_Timeout()
+	 * @model
+	 * @generated
+	 */
+	long getTimeout();
+
+	/**
+	 * Sets the value of the '{@link com.equinor.modelshare.Token#getTimeout <em>Timeout</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Timeout</em>' attribute.
+	 * @see #getTimeout()
+	 * @generated
+	 */
+	void setTimeout(long value);
 
 } // Token

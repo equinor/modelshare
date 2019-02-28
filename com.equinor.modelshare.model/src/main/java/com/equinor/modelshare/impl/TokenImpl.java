@@ -24,8 +24,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link com.equinor.modelshare.impl.TokenImpl#getKey <em>Key</em>}</li>
- *   <li>{@link com.equinor.modelshare.impl.TokenImpl#getTimeout <em>Timeout</em>}</li>
+ *   <li>{@link com.equinor.modelshare.impl.TokenImpl#getCreated <em>Created</em>}</li>
  *   <li>{@link com.equinor.modelshare.impl.TokenImpl#getUser <em>User</em>}</li>
+ *   <li>{@link com.equinor.modelshare.impl.TokenImpl#getTimeout <em>Timeout</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +53,36 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	protected String key = KEY_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getCreated() <em>Created</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCreated()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long CREATED_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getCreated() <em>Created</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCreated()
+	 * @generated
+	 * @ordered
+	 */
+	protected long created = CREATED_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getUser() <em>User</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUser()
+	 * @generated
+	 * @ordered
+	 */
+	protected User user;
+
+	/**
 	 * The default value of the '{@link #getTimeout() <em>Timeout</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -70,16 +101,6 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	 * @ordered
 	 */
 	protected long timeout = TIMEOUT_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getUser() <em>User</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUser()
-	 * @generated
-	 * @ordered
-	 */
-	protected User user;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,8 +147,8 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public long getTimeout() {
-		return timeout;
+	public long getCreated() {
+		return created;
 	}
 
 	/**
@@ -135,11 +156,11 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTimeout(long newTimeout) {
-		long oldTimeout = timeout;
-		timeout = newTimeout;
+	public void setCreated(long newCreated) {
+		long oldCreated = created;
+		created = newCreated;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.TOKEN__TIMEOUT, oldTimeout, timeout));
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.TOKEN__CREATED, oldCreated, created));
 	}
 
 	/**
@@ -207,6 +228,27 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTimeout(long newTimeout) {
+		long oldTimeout = timeout;
+		timeout = newTimeout;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ModelsharePackage.TOKEN__TIMEOUT, oldTimeout, timeout));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -242,11 +284,13 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 		switch (featureID) {
 			case ModelsharePackage.TOKEN__KEY:
 				return getKey();
-			case ModelsharePackage.TOKEN__TIMEOUT:
-				return getTimeout();
+			case ModelsharePackage.TOKEN__CREATED:
+				return getCreated();
 			case ModelsharePackage.TOKEN__USER:
 				if (resolve) return getUser();
 				return basicGetUser();
+			case ModelsharePackage.TOKEN__TIMEOUT:
+				return getTimeout();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -262,11 +306,14 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 			case ModelsharePackage.TOKEN__KEY:
 				setKey((String)newValue);
 				return;
-			case ModelsharePackage.TOKEN__TIMEOUT:
-				setTimeout((Long)newValue);
+			case ModelsharePackage.TOKEN__CREATED:
+				setCreated((Long)newValue);
 				return;
 			case ModelsharePackage.TOKEN__USER:
 				setUser((User)newValue);
+				return;
+			case ModelsharePackage.TOKEN__TIMEOUT:
+				setTimeout((Long)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -283,11 +330,14 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 			case ModelsharePackage.TOKEN__KEY:
 				setKey(KEY_EDEFAULT);
 				return;
-			case ModelsharePackage.TOKEN__TIMEOUT:
-				setTimeout(TIMEOUT_EDEFAULT);
+			case ModelsharePackage.TOKEN__CREATED:
+				setCreated(CREATED_EDEFAULT);
 				return;
 			case ModelsharePackage.TOKEN__USER:
 				setUser((User)null);
+				return;
+			case ModelsharePackage.TOKEN__TIMEOUT:
+				setTimeout(TIMEOUT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -303,10 +353,12 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 		switch (featureID) {
 			case ModelsharePackage.TOKEN__KEY:
 				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case ModelsharePackage.TOKEN__TIMEOUT:
-				return timeout != TIMEOUT_EDEFAULT;
+			case ModelsharePackage.TOKEN__CREATED:
+				return created != CREATED_EDEFAULT;
 			case ModelsharePackage.TOKEN__USER:
 				return user != null;
+			case ModelsharePackage.TOKEN__TIMEOUT:
+				return timeout != TIMEOUT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -319,10 +371,15 @@ public class TokenImpl extends MinimalEObjectImpl.Container implements Token {
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
-		StringBuffer result = new StringBuffer(super.toString());
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (key: ");
 		result.append(key);
-		result.append("/");
+		result.append(", created: ");
+		result.append(created);
+		result.append(", timeout: ");
 		result.append(timeout);
+		result.append(')');
 		return result.toString();
 	}
 

@@ -136,7 +136,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ModelsharePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -150,7 +150,8 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		if (isInited) return (ModelsharePackage)EPackage.Registry.INSTANCE.getEPackage(ModelsharePackage.eNS_URI);
 
 		// Obtain or create and register package
-		ModelsharePackageImpl theModelsharePackage = (ModelsharePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ModelsharePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ModelsharePackageImpl());
+		Object registeredModelsharePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ModelsharePackageImpl theModelsharePackage = registeredModelsharePackage instanceof ModelsharePackageImpl ? (ModelsharePackageImpl)registeredModelsharePackage : new ModelsharePackageImpl();
 
 		isInited = true;
 
@@ -163,7 +164,6 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		// Mark meta-data to indicate it can't be changed
 		theModelsharePackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ModelsharePackage.eNS_URI, theModelsharePackage);
 		return theModelsharePackage;
@@ -329,6 +329,15 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 */
 	public EClass getGroup() {
 		return groupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroup_ExternalIdentifier() {
+		return (EAttribute)groupEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -579,7 +588,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getToken_Timeout() {
+	public EAttribute getToken_Created() {
 		return (EAttribute)tokenEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -590,6 +599,15 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 */
 	public EReference getToken_User() {
 		return (EReference)tokenEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getToken_Timeout() {
+		return (EAttribute)tokenEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -649,6 +667,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(modelEClass, MODEL__SIMA_VERSION);
 
 		groupEClass = createEClass(GROUP);
+		createEAttribute(groupEClass, GROUP__EXTERNAL_IDENTIFIER);
 
 		accountEClass = createEClass(ACCOUNT);
 		createEAttribute(accountEClass, ACCOUNT__IDENTIFIER);
@@ -683,8 +702,9 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 		tokenEClass = createEClass(TOKEN);
 		createEAttribute(tokenEClass, TOKEN__KEY);
-		createEAttribute(tokenEClass, TOKEN__TIMEOUT);
+		createEAttribute(tokenEClass, TOKEN__CREATED);
 		createEReference(tokenEClass, TOKEN__USER);
+		createEAttribute(tokenEClass, TOKEN__TIMEOUT);
 
 		// Create enums
 		accessEEnum = createEEnum(ACCESS);
@@ -746,6 +766,7 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getModel_SimaVersion(), ecorePackage.getEString(), "simaVersion", null, 0, 1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGroup_ExternalIdentifier(), ecorePackage.getEString(), "externalIdentifier", null, 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(accountEClass, Account.class, "Account", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAccount_Identifier(), ecorePackage.getEString(), "identifier", null, 1, 1, Account.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -783,8 +804,9 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 
 		initEClass(tokenEClass, Token.class, "Token", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getToken_Key(), ecorePackage.getEString(), "key", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getToken_Timeout(), ecorePackage.getELong(), "timeout", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getToken_Created(), ecorePackage.getELong(), "created", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getToken_User(), this.getUser(), this.getUser_Resettoken(), "user", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getToken_Timeout(), ecorePackage.getELong(), "timeout", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessEEnum, Access.class, "Access");
@@ -813,12 +835,12 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * @generated
 	 */
 	protected void createExtendedMetaDataAnnotations() {
-		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 		addAnnotation
-		  (modelEClass, 
-		   source, 
+		  (modelEClass,
+		   source,
 		   new String[] {
-			 "name", "Model"
+			   "name", "Model"
 		   });
 	}
 
