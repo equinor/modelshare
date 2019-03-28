@@ -8,7 +8,7 @@
 
 	<div class="container" role="main">
 		<div class="row">
-			<div class="col-sm-8 col-sm-offset-2">
+			<div class="col-md-10 col-md-offset-1">
 				<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-orange" id="wizard">
 						<div class="wizard-header">
@@ -39,15 +39,16 @@
 								placeholder="Model name" autofocus="autofocus"
 								th:value="*{modelName}?: ''" />
 							<textarea class="form-control" id="usage" name="usage"
-								data-iconlibrary="fa"
 								data-provide="markdown" placeholder="Description"
 								th:text="*{modelDescription}?: ''"></textarea>
+							<div id="asset-actions">
 							<span class="btn-file form-control" id="model">Model file<input
 								type="file" data-form="model" name="modelFile" /></span> <span
 								class="btn-file form-control" id="picture">Picture file<input
 								type="file" data-form="picture" name="pictureFile"
 								accept="image/jpeg" /></span> <input class="btn btn-primary btn-block"
 								type="submit" value="Upload" />
+							</div>
 						</form>
 						<div class="wizard-footer">
 							<div th:replace="../fragments/alert :: alert(${error},${info})">...</div>

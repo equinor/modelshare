@@ -67,7 +67,7 @@
 }
 
 html {
-	background: rgb(234, 244, 249);
+	background: rgb(255, 255, 255);
 }
 
 body {
@@ -85,7 +85,7 @@ body {
 	margin-right: 0px;
 	margin-top: 0px;
 	overflow-x: hidden;
-	background-color: rgb(234, 244, 249);
+	background-color: rgb(255, 255, 255);
 	height: 100vh;
 	min-height: 100vh;
 }
@@ -95,8 +95,8 @@ body {
 }
 
 hr {
-	height: 2px;
-	background: rgb(235, 52, 70);
+	height: 3px;
+	background: rgb(0, 112, 121);
 }
 
 .modal-body p {
@@ -154,13 +154,14 @@ hr {
 	font-weight: bold;
 }
 
-.panel-default {
-	border-color: rgb(200, 200, 200);
-}
-
 /* The top navigation bar */
 #navbar {
-	background: rgb(234, 244, 249);
+	background: rgb(255, 255, 255);
+}
+
+#navbar li {
+	padding-left: 12px;
+	padding-right: 12px;
 }
 
 #navbar a {
@@ -169,32 +170,67 @@ hr {
 	font-stretch: normal;
 	font-style: normal;
 	font-variant-caps: normal;
-	font-weight: normal;
-}
-#navbar a:hover {
+	font-weight: 500;
+	padding-bottom: 10px;
+	padding-left: 0px;
+	padding-right: 0px;
 	background-color: rgb(255,255,255);
 }
 
+#navbar .dropdown-toggle:hover {
+	width: 100%;
+	color: #666666;
+	border-bottom: 2px solid #ff1243;
+}
+#navbar .open {
+	color: rgb(0,0,0);
+}
+
+/* Links in navigator submenus */
+#navbar ul > li > ul > li a {
+	border-bottom: none;
+}
+#navbar ul > li > ul > li > a:hover {
+	border-bottom: none;
+	color: rgb(235, 52, 70);
+}
+
+
 /* Breadcrumb and toolbar */
 .breadcrumb, #breadcrumb {
-	background-color: rgb(255,255,255);	
+	background-color: rgb(230,250,236);
+	margin-bottom: 0px;	
+}
+
+.panel {
+	box-shadow: none;
 }
 
 /* Folder titles */
-.panel-default>.panel-heading {
-	background-color: rgb(46, 110, 119);
+.panel > .panel-heading {
+	background-color: rgb(36,55,70); /* slate blue */
 	background-image: none;
 }
 
-.panel-default>.panel-heading>.panel-title {
-	color: rgb(255, 255, 255);
-	font-size: 20px;
-	font-family: Equinor, Helvetica, Arial, sans-serif;
-	font-weight: normal;
+.panel > .current-folder {
+	background-color: rgba(0,112,121);
 }
 
-.panel-default>.panel-heading>.panel-title>a {
+.panel > .panel-heading > .panel-title {
+	color: rgb(255,255,255);
+	font-size: 1.1em;
+	font-family: Equinor, Helvetica, Arial, sans-serif;
+	font-weight: 800;
+}
+
+.panel > .panel-heading > .panel-title> a {
 	color: rgb(255, 255, 255);
+}
+
+.asset, .folder {
+	font-family: Equinor, Helvetica, Arial, sans-serif;
+	font-size: 1.0em;
+	color: rgb(36,55,70);
 }
 
 /* The "Modelshare" title */
@@ -221,7 +257,7 @@ a:visited {
 }
 
 .panel-primary {
-	border-color: rgb(200, 200, 200);
+	border: 1px rgba(0,0,0,0) solid; 
 }
 
 #accessTable input[type="checkbox"] {
@@ -232,4 +268,43 @@ a:visited {
 	font-size: 16px;
 	color: #a94442;
 	line-height: inherit;
+}
+
+/* Buttons override */
+
+#asset-actions button > span {
+	float: left;
+}
+#asset-actions .btn-primary {
+	padding-left: 12px;
+	padding-right: 12px;
+	background-color: rgb(255, 18, 67);
+	border: 2px rgba(255,18,67,255) solid;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-weight: 500;
+	width: 160px;
+}
+#asset-actions .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+	background-color: rgb(220, 0, 46) !important;
+	border: 2px rgba(220,0,46,255) solid;
+}
+
+#asset-actions .btn-default {
+	padding-left: 12px;
+	padding-right: 12px;
+	background-color: rgb(255, 255, 255);
+	border: 2px rgba(36,55,70,255) solid; /* slate blue */
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-weight: 500;
+	width: 160px;
+}
+#asset-actions .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+	background-color: rgb(227, 228, 226);
+	border: 2px rgba(36,55,70,255) solid; /* slate blue */
 }

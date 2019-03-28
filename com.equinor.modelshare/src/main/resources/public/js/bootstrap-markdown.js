@@ -347,7 +347,7 @@
           handler.push(saveHandler);
           callback.push(options.onSave);
 
-          editorFooter.append('<button class="btn btn-success" data-provider="'
+          editorFooter.append('<button class="btn btn-primary" data-provider="'
                               + ns
                               + '" data-handler="'
                               + saveHandler

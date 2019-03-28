@@ -5,7 +5,7 @@
 
 	<div th:fragment="modelList(modelNode)" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" th:remove="tag">
 		<!-- shows a node with children -->
-		<div th:if="${modelNode}" class="panel panel-default">
+		<div th:if="${modelNode}" class="panel">
 			<!-- folder header-->			
 			<div th:if="${modelNode.leaf == false}" class="panel-heading" role="tab" th:id="'h_'+${modelNode.name}">
 				<h4 class="panel-title">
@@ -18,6 +18,7 @@
 					<div th:each="child: ${modelNode.children}">
 						<!-- folder -->
 						<div th:if="${child.leaf == false}" class="folder child">
+							<span class="glyphicon glyphicon-folder-open">&nbsp;</span>							
 							<a th:href="@{/archive(item=${child.relativePath})}"
 								th:rel="${child.picturePath == null} ? '': 'popover'"
 								th:attr="data-img=@{/pictures(asset=${child.picturePath})}" 
@@ -25,6 +26,7 @@
 						</div>
 						<!-- model -->
 						<div th:if="${child.leaf == true}" class="asset child">
+							<span class="glyphicon glyphicon-file">&nbsp;</span>							
 							<a th:href="@{/view(item=${child.relativePath})}"
 								th:rel="${child.picturePath == null} ? '': 'popover'" 
 								th:attr="data-img=@{/pictures(asset=${child.picturePath})}"
@@ -71,13 +73,14 @@
 				<!-- show models in the current folder -->
 				<div class="row" th:if="${not #lists.isEmpty(node.children.?[leaf==true])}">				
 					<div class="col-md-12">
-						<div class="panel panel-default">
+						<div class="panel">
 							<!-- folder header-->			
-							<div class="panel-heading" role="tab">
-								<h4 class="panel-title"><span th:text="${node.name}"></span> models</h4>
+							<div class="panel-heading current-folder" role="tab">
+								<h4 class="panel-title"><span th:text="${node.name}"></span></h4>
 							</div>
 							<div class="panel-body">
-								<div th:each="model: ${node.children.?[leaf==true]}">
+								<div th:each="model: ${node.children.?[leaf==true]}" class="asset">
+								<span class="glyphicon glyphicon-file">&nbsp;</span>							
 									<a th:href="@{/view(item=${model.relativePath})}"
 									th:rel="${model.picturePath == null} ? '': 'popover'" 
 									th:attr="data-img=@{/pictures(asset=${model.picturePath})}"

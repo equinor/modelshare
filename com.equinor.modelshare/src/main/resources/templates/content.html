@@ -103,16 +103,17 @@
 					th:utext="${currentModel.formattedDescription}"></div>
 				
 				<p />
+				<div id="asset-actions">
 
 					<a role="button" th:if="${viewOnly}"
 						th:href="@{/request(asset=${currentModel.relativePath})}">
-						<button class="btn btn-info">Request access</button>
+						<button class="btn btn-primary">Request access</button>
 					</a>
 					<!-- download for logged in users -->
 					<a role="button" th:if="${!viewOnly} and ${link} == null"
 						th:attr="data-href=@{/download(asset=${currentModel.relativePath})}"
 						data-toggle="modal" data-target="#confirm-dialog">
-						<button class="btn btn-success">
+						<button class="btn btn-primary">
 							<span class="glyphicon glyphicon-cloud-download"
 								aria-hidden="true"></span>&nbsp;Download
 						</button>
@@ -121,7 +122,7 @@
 					<a role="button" th:if="${link} !=null"
 						th:attr="data-href=@{/allotment(id=${link},download=true)}"
 						data-toggle="modal" data-target="#confirm-dialog">
-						<button class="btn btn-success">
+						<button class="btn btn-default">
 							<span class="glyphicon glyphicon-cloud-download"
 								aria-hidden="true"></span>&nbsp;Download
 						</button>
@@ -131,28 +132,29 @@
 						<a role="button" th:if="${client.localUser} != null and ${!viewOnly}"
 							th:attr="data-href=@{/copy(asset=${currentModel.relativePath})}"
 							data-toggle="modal" data-target="#confirm-dialog">
-							<button class="btn btn-primary">
+							<button class="btn btn-default">
 								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Copy
 								to work area
 							</button>
 						</a> 
 						<a role="button" th:if="${writeAccess}"
 							th:href="@{/upload(item=${currentModel.relativePath})}">
-							<button class="btn btn-info">
+							<button class="btn btn-default">
 								<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;New version
 							</button>
 						</a>
 						<a role="button" th:if="${writeAccess}"
 							th:href="@{/share(item=${currentModel.relativePath})}">
-							<button class="btn btn-info">
+							<button class="btn btn-default">
 								<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;Share
 							</button>
 						</a>
 					</span>
-				<h3>Contents</h3>
+				</div>
+				<h3 th:if="${not #lists.isEmpty(node.tasks)}">Model Contents</h3>
 				<!-- Model "task" folders -->
 				<div th:each="folder : ${node.folders}" class="panel-group">
-					<div class="panel panel-default">
+					<div class="panel">
 						<div class="panel-heading" role="tab">
 							<h4 class="panel-title">
 								<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
