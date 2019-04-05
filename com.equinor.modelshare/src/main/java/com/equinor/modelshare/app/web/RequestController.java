@@ -55,7 +55,7 @@ public class RequestController extends AbstractController {
 			@RequestParam(value = "asset", required = true) String asset,
 			Principal principal) {
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = getUser(principal);
 			Model model = modelrepository.getModel(user,Paths.get(URLDecoder.decode(asset, "UTF-8")));
 			map.put("from", user.getName());
 			map.put("mailfrom", user.getEmail());
@@ -80,7 +80,7 @@ public class RequestController extends AbstractController {
 
 		if (modelrepository.isValidEmailAddress(mailTo)) {
 			try {
-				User user = modelrepository.getUser(principal.getName());
+				User user = getUser(principal);
 				String url = makeUrl(request, asset, user);
 				sendEmail(message, mailTo, user, asset, url);
 			} catch (MessagingException e) {

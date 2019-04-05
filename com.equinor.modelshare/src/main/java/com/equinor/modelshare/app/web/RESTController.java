@@ -62,7 +62,7 @@ public class RESTController extends AbstractController {
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "value", required = true) String value) {
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = getUser(principal);
 			AssetProxy n = getAssetAtPath(user, pk);
 			Asset asset = n.getAsset();
 			switch (name) {
@@ -126,4 +126,5 @@ public class RESTController extends AbstractController {
 		}
 		return values;
 	}
+
 }

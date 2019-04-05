@@ -61,7 +61,8 @@ public class GrantAccessController extends AbstractController {
 		map.addAttribute("asset", asset);
 		map.addAttribute("user", userId);
 
-		User user = modelrepository.getUser(userId);
+		User user = getUser(principal);
+
 		try {
 			Path path = Paths.get(URLDecoder.decode(asset, "UTF-8"));
 			if (!modelrepository.hasDownloadAccess(user, path)) {
@@ -318,7 +319,7 @@ public class GrantAccessController extends AbstractController {
 	
 	// -----------------------------------------------------------------------
 	// User control
-	// Manage user identifiers, organisations, local user etc.
+	// Manage user identifiers, organizations, local user etc.
 	// -----------------------------------------------------------------------
 	
 	@RequestMapping(value = "/manage-users", method = RequestMethod.GET)
@@ -409,7 +410,9 @@ public class GrantAccessController extends AbstractController {
 			@RequestParam(value = "pk", required = true) String pk,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "value", required = true) String value) {
-		User user = modelrepository.getUser(principal.getName());
+		
+		User user = getUser(principal);
+
 		String[] split = name.split("_");
 		String field = split[1];
 		User editedUser = modelrepository.getUser(pk);

@@ -13,6 +13,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,9 +30,12 @@ import com.equinor.modelshare.User;
 import com.equinor.modelshare.repository.ModelRepository;
 
 /**
+ * Controller for requesting a password reset along with changing the password. 
+ * 
  * @author Torkild U. Resheim, Itema AS
  */
 @Controller
+@Profile(value = { "!Azure" })
 public class PasswdController extends AbstractController {
 	
     @Autowired
@@ -55,7 +59,7 @@ public class PasswdController extends AbstractController {
 		
 		User user = null;
 		// normal change of password with signed in user
-		if (principal!=null) {
+		if (principal != null) {
 			user = repository.getUser(principal.getName());
 			String userPassword = repository.getUser(principal.getName()).getPassword();
 			if (!userPassword.isEmpty() && !passwordEncoder.matches(password, userPassword)) {

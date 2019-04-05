@@ -130,7 +130,7 @@ public class ArchiveController extends AbstractController {
 			@RequestParam(value = "item", required = true) String asset,
 			Principal principal) {
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = getUser(principal);
 			map.put("from", user.getName());
 			map.put("mailfrom", user.getEmail());
 			map.put("asset", asset);
@@ -255,7 +255,6 @@ public class ArchiveController extends AbstractController {
 			// make sure the key has not timed out
 			ZonedDateTime now = ZonedDateTime.now();
 			Instant epoch = Instant.ofEpochSecond(Long.parseLong(expiration));		
-			System.out.println(epoch);
 			ZonedDateTime t = epoch.atZone(ZoneId.systemDefault());
 			if (now.isAfter(t)){
 				map.addAttribute("error", "Cannot show allotment. The download token has expired.");
@@ -407,6 +406,7 @@ public class ArchiveController extends AbstractController {
 		
 		try ( 	BufferedInputStream ms = new BufferedInputStream(file.getInputStream());
 				BufferedInputStream ps = picture.isEmpty() ? null: new BufferedInputStream(picture.getInputStream())) {
+
 			User user = addCommonItems(map, principal);
 
 			String path;

@@ -42,7 +42,7 @@ public class DownloadController extends AbstractController {
 	public String getFile(@RequestParam(value = "asset", required = true) String asset, HttpServletResponse response,
 			Principal principal) {
 		try {
-			User user = modelrepository.getUser(principal.getName());
+			User user = getUser(principal);
 			Path path = Paths.get(asset);
 			String name = path.getFileName().toString();
 

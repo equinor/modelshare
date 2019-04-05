@@ -208,18 +208,21 @@
 	<div th:replace="../fragments/footer :: footer">...</div>
 	<!-- Model and folder data editing -->
 	<script th:src="@{/js/bootstrap-editable.min.js}"></script>
-	<script type="text/javascript" th:if="${writeAccess}">
-	    $.fn.editable.defaults.mode = 'popup';
-	    
+	<script type="text/javascript" th:if="${writeAccess}" th:inline="javascript">
+		/*<![CDATA[*/
+	    $.fn.editable.defaults.mode = 'popup';	    
 		$(document).ready(function() {		
-
 			// enable / disable editing
 		    $('#toggleEditEnable').click(function() {
 		        $('.editable').editable('toggleDisabled');
 		        $('#descriptionEditor').markdown({
 		        	savable: true,
 					onSave: function(e) {
-					    $.post( "edit", { name: "assetDescription", value: e.getContent(), pk: $(e.$element).data("path") } );
+					    $.post( "edit", { 
+						_csrf: /*[[${_csrf.token}]]*/ 'null',
+						name: "assetDescription", 
+						value: e.getContent(), 
+						pk: $(e.$element).data("path") } );
 					    location.reload();
 					},
 		        	function(e) {
@@ -243,6 +246,7 @@
 		        title: 'Select model owner'
 		    });			    
 		});
+		/*]]>*/
 	</script>
 </body>
 </html>
