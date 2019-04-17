@@ -167,6 +167,8 @@ public class ModelRepositoryImpl implements ModelRepository {
 			Path path = dir.getParentFile().toPath().resolve(name+".jpg");
 			Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
 		}
+		// clear the cache immediately
+		rootCache.clear();
 	}
 
 	/**
@@ -610,7 +612,6 @@ public class ModelRepositoryImpl implements ModelRepository {
 		
 		// clear the cache immediately
 		rootCache.clear();
-
 	}
 
 }

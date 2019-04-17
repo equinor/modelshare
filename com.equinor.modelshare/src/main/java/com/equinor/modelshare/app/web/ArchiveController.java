@@ -511,7 +511,10 @@ public class ArchiveController extends AbstractController {
 			parentFolder.setPath(parentPath.toString());
 			modelrepository.createFolder(user, parentFolder, ps, name);
 			// upon success
-			return "redirect:archive.html?item=" + URLEncoder.encode(path + '/' + name, "UTF-8");
+			// archive?item=SIMA%20Models/Rattata&leaf=false
+			String url = "redirect:archive?item=" + URLEncoder.encode(path, "UTF-8") + "/"
+					+ URLEncoder.encode(name, "UTF-8");
+			return url;
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to creating a new folder!";
 			log.error(msg, ioe);
