@@ -143,6 +143,36 @@ public class ArchiveController extends AbstractController {
 		return "share";
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String deleteAsset(ModelMap map, 
+			@RequestParam(value = "item", required = true) String asset,
+			Principal principal) {
+		try {
+			User user = addCommonItems(map, principal);
+			AssetProxy toDelete = getAssetAtPath(user, asset);
+			String folder = toDelete.getParent().getRelativePath();
+			modelrepository.deleteAsset(toDelete.getAsset());
+			map.addAttribute("success", String.format("The model '%1$s' at '%2$s' has been deleted.", toDelete.getName(), toDelete.getRelativePath()));
+
+			map.addAttribute("client", user);
+			map.addAttribute("viewOnly",hasViewOnlyAccess(folder, user));
+			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(folder)));
+			
+			// common
+			AssetProxy n = getAssetAtPath(user, folder);
+			map.addAttribute("node", n);
+			map.addAttribute("currentFolder", asset);
+			map.addAttribute("crumbs", getBreadCrumb(n));
+		} catch (Exception e) {
+			String msg = "Could not delete asset: "+e.getMessage();
+			log.error(msg, e);
+			map.addAttribute("error", msg);
+			return "archive";
+		}
+		return "archive";
+
+	}
+
 	/**
 	 * Allot a model share to a user that does not have an account.
 	 */

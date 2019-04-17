@@ -118,7 +118,7 @@
 								aria-hidden="true"></span>&nbsp;Download
 						</button>
 					</a>
-					<!-- download for users with an allotment -->
+					<!-- download for users with an access token -->
 					<a role="button" th:if="${link} !=null"
 						th:attr="data-href=@{/allotment(id=${link},download=true)}"
 						data-toggle="modal" data-target="#confirm-dialog">
@@ -147,6 +147,12 @@
 							th:href="@{/share(item=${currentModel.relativePath})}">
 							<button class="btn btn-default">
 								<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;Share
+							</button>
+						</a>
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/delete(item=${currentModel.relativePath})}">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;Delete
 							</button>
 						</a>
 					</span>

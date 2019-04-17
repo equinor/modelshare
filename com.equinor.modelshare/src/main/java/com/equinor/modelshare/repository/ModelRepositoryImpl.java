@@ -65,7 +65,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	/** Root for user home folders */
 	private Path userRoot;
 	
-	/** Cached root folders */
+	/** Cached root folders, one for each user */
 	private Map<User,CachedFolder> rootCache;
 	
 	@Autowired
@@ -85,11 +85,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 	}
 
 	/**
-	 * Creates a new model repository. Files are retrieved and stored at the
-	 * given location.
+	 * Creates a new model repository. Files are retrieved and stored at the given
+	 * location.
 	 * 
-	 * @param rootPath
-	 *            path to the repository root.
+	 * @param rootPath path to the repository root.
+	 * @param userRoot the user home directory root (e.g. <code>/home</code>)
 	 */
 	public ModelRepositoryImpl(Path rootPath, Path userRoot) {
 		this.rootPath = rootPath;
@@ -111,31 +111,37 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 			@Override
 			public void onDirectoryCreate(File directory) {
+				log.info(String.format("Directory '%1$s' has been created, clearing cache", directory));
 				rootCache.clear();
 			}
 
 			@Override
 			public void onDirectoryChange(File directory) {
+				log.info(String.format("Directory '%1$s' has changed, clearing cache", directory));
 				rootCache.clear();
 			}
 
 			@Override
 			public void onDirectoryDelete(File directory) {
+				log.info(String.format("Directory '%1$s' has been deleted, clearing cache", directory));
 				rootCache.clear();
 			}
 
 			@Override
 			public void onFileCreate(File file) {
+				log.info(String.format("File '%1$s' has been created, clearing cache", file));
 				rootCache.clear();
 			}
 
 			@Override
 			public void onFileChange(File file) {
+				log.info(String.format("File '%1$s' has changed, clearing cache", file));
 				rootCache.clear();
 			}
 
 			@Override
 			public void onFileDelete(File file) {
+				log.info(String.format("File '%1$s' has been deleted, clearing cache", file));
 				rootCache.clear();
 			}
 	    	
@@ -145,7 +151,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	    try {
 			fam.start();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Could not start watching repository for changes", e);
 		}
 	}
 
@@ -161,11 +167,18 @@ public class ModelRepositoryImpl implements ModelRepository {
 			Path path = dir.getParentFile().toPath().resolve(name+".jpg");
 			Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
 		}
-
-		// clear the cache for all users
-		rootCache.clear();
 	}
 
+	/**
+	 * This method goes into the specified folder and recursively adds content
+	 * depending on what access the user has. Files that starts with a dot (
+	 * <code>.</code> or ends with <code>.jpg</code> or <code>.modeldata</code> are
+	 * ignored.
+	 * 
+	 * @param parent the root or parent folder
+	 * @param user   the user to calculate the view for
+	 * @throws IOException
+	 */
 	private void fillFolderContents(Folder parent, User user) throws IOException {
 		File file = new File(parent.getPath());
 		if (!file.exists()) {
@@ -180,7 +193,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 					&& !name.equals("pages"));
 		});
 
-		// recurse into subfolders and add files
+		// recurse into sub folders and add files
 		for (File child : listFiles) {
 			// ignore those where the user have no access
 			if (hasViewAccess(user, child.toPath())) {
@@ -189,7 +202,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 					Folder folder = ModelshareFactory.eINSTANCE.createFolder();
 					// we're basically only interested in the description for
 					// now, but any field will be read in.
-					File dataFile = new File(child+".modeldata");
+					File dataFile = new File(child + ".modeldata");
 					if (dataFile.exists()){
 						// required to initialize the package URI
 						@SuppressWarnings("unused")
@@ -293,7 +306,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		String fileName = resolvedPath.getFileName().toString();
 		
 		File metaFile = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
-		File dataFile = new File(resolvedPath.toFile()+".modeldata");
+		File dataFile = new File(resolvedPath.toFile() + ".modeldata");
 		
 		if (metaFile.exists()){
 			try {
@@ -578,6 +591,26 @@ public class ModelRepositoryImpl implements ModelRepository {
 	
 	void setRepositoryAccessControl(RepositoryAccessControl ra) {
 		this.ra = ra;
+	}
+
+	@Override
+	public void deleteAsset(Asset asset) throws IOException, AccessDeniedException {
+		// delete the picture first
+		if (asset.getPicturePath() != null) {
+			Path imagePath = Paths.get(asset.getPicturePath());
+			Files.deleteIfExists(imagePath);
+		}
+		// then delete the actual asset
+		Path assetPath = Paths.get(asset.getPath());
+		Files.delete(assetPath);
+		
+		// and finally delete the metadata
+		Path dataPath = Paths.get(asset.getPath() + ".modeldata");
+		Files.delete(dataPath);		
+		
+		// clear the cache immediately
+		rootCache.clear();
+
 	}
 
 }

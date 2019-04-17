@@ -29,6 +29,18 @@ import com.equinor.modelshare.Model;
 public interface ModelRepository {
 	
 	/**
+	 * Creates a folder on the given parent folder.
+	 * 
+	 * @param user
+	 *            the user creating the folder
+	 * @throws IOException
+	 *             if the folder could not be created
+	 * @throws AccessDeniedException
+	 *             if the <i>user</i> does not have write access
+	 */
+	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
+	
+	/**
 	 * Creates a new user and adds it to the list of available users.
 	 * 
 	 * @param user         the account that is creating the user, must be a
@@ -45,17 +57,8 @@ public interface ModelRepository {
 	// TODO: Move to {@link RepositoryAccessControl}
 	public User createUser(User user, String identifier, String name, String organisation, String group, String password) throws AccessDeniedException;
 	
-	/**
-	 * Creates a folder on the given parent folder.
-	 * 
-	 * @param user
-	 *            the user creating the folder
-	 * @throws IOException
-	 *             if the folder could not be created
-	 * @throws AccessDeniedException
-	 *             if the <i>user</i> does not have write access
-	 */
-	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException;
+	// TODO: Move to {@link RepositoryAccessControl}
+	public void deleteUser(User user, String identifier) throws AccessDeniedException;
 	
 	/**
 	 * Returns the {@link InputStream} for the path if the client has access to
@@ -71,7 +74,7 @@ public interface ModelRepository {
 	 *             if the <i>user</i> does not have write access
 	 */
 	public InputStream downloadModel(User user, Path path) throws AccessDeniedException, IOException;
-	
+
 	/**
 	 * Returns a list of all accounts that have been authorized to use the 
 	 * system. This list includes both users and groups.
@@ -79,17 +82,15 @@ public interface ModelRepository {
 	 * @return a list of all accounts
 	 */
 	public List<Account> getAuthorizedAccounts();
-
-	/**
-	 * Returns a {@link File} instance for the asset in the specified path. This
-	 * would typically be a picture of a model residing in the same folder.
-	 * @param path
-	 *            path to the asset
-	 * @return
-	 * @throws IOException
-	 */
-	public File getPictureFile(Path path) throws IOException;
 	
+	/**
+	 * Returns a list of the users that are authorized to use this system.
+	 * 
+	 * @return a list of users
+	 */
+	// TODO: Move to {@link RepositoryAccessControl}
+	public List<User> getAuthorizedUsers();
+
 	/**
 	 * Returns the group with the given identifier if found, otherwise
 	 * <code>null</code> is returned.
@@ -100,7 +101,7 @@ public interface ModelRepository {
 	 */
 	// TODO: Move to {@link RepositoryAccessControl}
 	public Group getGroup(String id);
-
+	
 	/**
 	 * Returns a list of all groups.
 	 * 
@@ -123,6 +124,16 @@ public interface ModelRepository {
 	public Model getModel(User user, Path path) throws IOException;
 	
 	/**
+	 * Returns a {@link File} instance for the asset in the specified path. This
+	 * would typically be a picture of a model residing in the same folder.
+	 * @param path
+	 *            path to the asset
+	 * @return
+	 * @throws IOException
+	 */
+	public File getPictureFile(Path path) throws IOException;
+	
+	/**
 	 * Returns a map of all accounts that have explicit access to the specific
 	 * resource. This does not include accounts that have inherited access to
 	 * the resource, but inherited access will be included in the data.
@@ -138,7 +149,7 @@ public interface ModelRepository {
 	 *             if the <i>requestor</i> don't have the required credentials
 	 */
 	public Map<Account, EnumSet<Access>> getRights(User requestor, Path asset) throws AccessDeniedException, IOException;
-	
+
 	/**
 	 * Returns the root folder with all it's sub-folders and contents filtered
 	 * for the particular user. If the user don't have view access to an item,
@@ -149,7 +160,7 @@ public interface ModelRepository {
 	 * @return the root folder
 	 */
 	public Folder getRoot(User user);
-	
+
 	/**
 	 * Returns the path to the root
 	 * 
@@ -167,14 +178,6 @@ public interface ModelRepository {
 	 */
 	// TODO: Move to {@link RepositoryAccessControl}
 	public User getUser(String id);
-
-	/**
-	 * Returns a list of the users that are authorized to use this system.
-	 * 
-	 * @return a list of users
-	 */
-	// TODO: Move to {@link RepositoryAccessControl}
-	public List<User> getAuthorizedUsers();
 
 	/**
 	 * Convenience method for determining whether the account has download access
@@ -219,7 +222,7 @@ public interface ModelRepository {
 	 * @return false if the email address does not meet the RFC822 standard
 	 */
 	public boolean isValidEmailAddress(String email);
-
+	
 	/**
 	 * Copies the asset to the local user directory if possible
 	 * 
@@ -234,7 +237,7 @@ public interface ModelRepository {
 	 *             if the <i>user</i> does not have write access
 	 */
 	public String localCopy(User user, Path path) throws AccessDeniedException, IOException;
-	
+
 	/**
 	 * Sets the access rights for the specified user on a particular resource.
 	 * 
@@ -281,7 +284,25 @@ public interface ModelRepository {
 	// TODO: Move to {@link RepositoryAccessControl}
 	public void updateAccountsOnFile();
 
-	public void updateAsset(Asset model) throws IOException, AccessDeniedException;
+	/**
+	 * The asset instance passed has been changed and must be persisted.
+	 * 
+	 * @param asset the asset instance to store changes for
+	 * @throws IOException
+	 * @throws AccessDeniedException if the user does not have access to perform
+	 *                               this operation
+	 */
+	public void updateAsset(Asset asset) throws IOException, AccessDeniedException;
+	
+	/**
+	 * The asset instance must be deleted.
+	 * 
+	 * @param asset the asset to delete
+	 * 
+	 * @throws IOException
+	 * @throws AccessDeniedException
+	 */
+	public void deleteAsset(Asset asset) throws IOException, AccessDeniedException;
 
 	/**
 	 * Uploads a new model to the repository. If a model is being replaced it
@@ -303,8 +324,5 @@ public interface ModelRepository {
 	 *             if the <i>user</i> does not have write access
 	 */
 	public void uploadModel(User user, InputStream ms, InputStream ps, Model model, Model replacedModel) throws IOException, AccessDeniedException;
-
-	// TODO: Move to {@link RepositoryAccessControl}
-	public void deleteUser(User user, String identifier) throws AccessDeniedException;
 
 }
