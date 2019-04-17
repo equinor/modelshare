@@ -49,8 +49,7 @@
 		
 		<div class="panel panel-primary" th:if="${node!=null}">
 
-			<div class="panel-body" th:if="${not #lists.isEmpty(node.children)}"
-				th:with="maxIndex=${#lists.size(node.children.?[leaf==false])-1}">
+			<div class="panel-body" th:with="maxIndex=${#lists.size(node.children.?[leaf==false])-1}">
 				<!-- description -->
 				<div th:if="${writeAccess}" id="descriptionEditor" data-provide="markdown"
 					th:attr="data-path=${node.relativePath}"
@@ -103,6 +102,9 @@
 			// enable / disable editing
 		    $('#toggleEditEnable').click(function() {
 		        $('#descriptionEditor').markdown({
+		        	function(e) {
+		        		e.showEditor();
+		        	},
 		        	savable: true,
 					onSave: function(e) {
 					    $.post( "edit", {
@@ -111,10 +113,7 @@
 							value: e.getContent(), 
 							pk: $(e.$element).data("path") } );
 					    location.reload();
-					},
-		        	function(e) {
-		        		e.showEditor();
-		        	}
+					}
 		        });
 		    });
 		});

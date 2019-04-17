@@ -511,7 +511,6 @@ public class ArchiveController extends AbstractController {
 			parentFolder.setPath(parentPath.toString());
 			modelrepository.createFolder(user, parentFolder, ps, name);
 			// upon success
-			// archive?item=SIMA%20Models/Rattata&leaf=false
 			String url = "redirect:archive?item=" + URLEncoder.encode(path, "UTF-8") + "/"
 					+ URLEncoder.encode(name, "UTF-8");
 			return url;
