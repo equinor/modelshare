@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+	<title>Modelshare</title>
+    
+	<!-- JQuery 2.1.4 -->
+	<script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}" type="text/javascript"></script>	
+	<!-- Bootstrap -->
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}"/>
+	<!-- Bootstrap MarkDown -->
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/bootstrap-markdown.css" th:href="@{/css/bootstrap-markdown.css}" />
+	<!-- Bootstrap Editable -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap-editable.css" th:href="@{/css/bootstrap-editable.css}" />
+	<!-- Bootstrap CheckBox X -->
+	<link media="all" rel="stylesheet" type="text/css" href="../../css/checkbox-x.min.css" th:href="@{/css/checkbox-x.min.css}"/>
+    <!-- Local CSS -->
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/gsdk-base.css" th:href="@{/css/gsdk-base.css}" />
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/dialog.css" th:href="@{/css/dialog.css}" />
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/main.css" th:href="@{/css/main.css}" />
+	<!-- Favicon -->
+	<link rel="shortcut icon" type="image/png" th:href="@{/img/Equinor_Symbol_Favicon_RED_64x64px.png}" />
+	
+	<script>
+		$(document).on('change', '.btn-file :file', function() {
+		    var input = $(this),
+		        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+		        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		    input.trigger('fileselect', [label]);
+		});
+	</script>
+	
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:tiles="http://www.thymeleaf.org">
+<!-- Header -->
+<head >
+	<object th:include="../fragments/header :: header"></object>
+	<link rel="stylesheet" type="text/css" media="all" href="../../css/dialog.css" th:href="@{/css/dialog.css}" />
+</head>
+
+<body role="document">
+
+	<div th:replace="../fragments/navbar :: navbar(signin, ${topLevel})">...</div>
+
+	<div class="container" role="main">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="wizard-container">
+					<div class="card wizard-card ct-wizard-orange" id="wizard">
+						<div class="wizard-header">
+							<h3>
+								SIGN IN <br /> <small>Please enter your user name and
+									password to sign in.</small>
+							</h3>
+						</div>
+						<hr />
+						<form class="form-signin" th:action="@{/signin}" method="post" accept-charset="UTF-8">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+							<fieldset>
+								<label for="username" class="sr-only">Email address</label>
+								<input type="text" name="username" id="username" class="form-control" placeholder="User name" autofocus="autofocus" required="required" />
+								<label for="password" class="sr-only">Password</label>
+								<input type="password" name="password" id="password" class="form-control" placeholder="Password" />
+								<button class="btn btn-primary btn-block" type="submit">Sign in</button>
+							</fieldset>
+							<a th:href="@{/reset-password}">Reset password</a>
+						</form>
+						<div class="wizard-footer">
+							<div th:if="${param.error}" class="alert alert-danger"
+								role="alert">Invalid user name or password.</div>
+							<div th:if="${param.logout}" class="alert alert-success"
+								role="alert">You have been signed out.</div>
+							<div th:if="${message}" class="alert alert-success" role="alert"
+								th:text="${message}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+
+</body>
+</html>

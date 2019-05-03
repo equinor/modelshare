@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body role="document">
+
+	<div th:replace="../fragments/navbar :: navbar(signin, ${topLevel})">...</div>
+
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h3>Really delete user account?</h3>
+	            </div>
+	            <div class="modal-body">
+	                The user will no longer be able to log in. However download records and access matrices will not be affected.
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	                <a class="btn btn-default btn-ok">Delete</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="container" role="main">
+		<div class="wizard-container">
+			<div class="card wizard-card ct-wizard-orange" id="wizard"
+				style="width: 100%;">
+				<div class="wizard-header">
+					<h3>
+						MANAGE <b>USER ACCOUNTS</b> <br /> <small>Change and delete user accounts.</small>
+					</h3>
+				</div>
+				<hr />
+				<div>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Handle</th>
+								<th>Name</th>
+								<th>Organization</th>
+								<th>Local</th>
+								<th>Group</th>
+								<th class="text-center">&nbsp;</th>
+							</tr>
+						</thead>
+						<tr th:each="user, userStat: ${users}">
+							<td th:attr="data-pk=${user.identifier}"
+								th:id="'edit_identifier_'+${userStat.count}" 
+								th:text="${user.identifier}"></td>
+							<td th:attr="data-pk=${user.identifier}" 
+								th:id="'edit_name_'+${userStat.count}"
+								th:text="${user.name}"></td>
+							<td th:attr="data-pk=${user.identifier}" 
+								th:id="'edit_organisation_'+${userStat.count}"
+								th:text="${user.organisation}"></td>
+							<td th:attr="data-pk=${user.identifier}" 
+								th:id="'edit_localuser_'+${userStat.count}"
+								th:text="${user.localUser}"></td>
+							<td th:attr="data-pk=${user.identifier}, data-value=${user.group.identifier}"
+								th:id="'select_group_'+${userStat.count}"
+								th:text="${user.group != null} ? ${user.group.name}:''"></td>
+							
+							<td class="text-center">
+								<a href="#" title="Delete account" th:attr="data-href='manage-users?delete='+${user.identifier}" data-toggle="modal" data-target="#confirm-delete">
+									<span class="glyphicon glyphicon-remove-circle remove"> </span>
+								</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="wizard-footer">
+					<div th:replace="../fragments/alert :: alert(${error},${info})">...</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="../fragments/footer :: footer">...</div>
+	<!-- Model and folder data editing -->
+	<script th:src="@{/js/bootstrap-editable.min.js}"></script>
+	<script type="text/javascript">
+	    $.fn.editable.defaults.mode = 'popup';
+	    
+		$(document).ready(function() {		
+		    $("[id^='edit_']").editable({
+			    type: 'text',
+			    url: 'manage-users'
+			});		    		    
+		    $("[id^='select_group']").editable({
+		        type: 'select',
+		        url: 'manage-users',
+		        source: 'groups'
+		    });			    
+		    $('#confirm-delete').on('show.bs.modal', function(e) {
+		        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+		    });
+		});
+	</script>
+
+</body>
+</html>

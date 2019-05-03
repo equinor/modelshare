@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Footer</title>
+</head>
+<body>
+	<div th:fragment="footer">
+		<footer></footer>
+		<!-- Bootstrap core JavaScript -->
+		<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
+		<!-- Bootstrap Checkbox X -->
+		<script th:src="@{js/checkbox-x.min.js}" type="text/javascript"></script>
+		<!-- Bootstrap Markdown -->
+		<script th:src="@{js/bootstrap-markdown.js}" type="text/javascript"></script>
+		<script th:src="@{js/markdown.js}" type="text/javascript"></script>
+		<script th:src="@{js/to-markdown.js}" type="text/javascript"></script>
+		<script>
+			$('a[rel=popover]').popover({
+				html : true,
+				trigger : 'hover',
+				placement: 'right', /* right has a bug in Bootstrap V3*/
+				content : function() {
+					return '<img src="' + $(this).data('img') + '" width="240px"/>';
+				}
+			});
+			$(document).on('change', '.btn-file :file', function() {
+			    var input = $(this),
+			        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+			        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+			    var form = input.data('form');
+			    var span = document.getElementById(form).firstChild;
+			    span.textContent = label;		
+			});
+		</script>			
+	</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Alert</title>
+</head>
+	<body>
+		<div th:fragment="alert(error,info)">
+		    <div th:if="${error}" class="alert alert-danger alert-dismissible" style="margin-top: 1em;" role="alert">
+		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		    <strong>Error: </strong><span th:utext="${error}"></span></div>
+		    <div th:if="${info}" class="alert alert-info alert-dismissible" style="margin-top: 1em;" role="alert">
+		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		    <strong>OK: </strong><span th:utext="${info}"></span></div>
+		    <div th:if="${success}" class="alert alert-success alert-dismissible" style="margin-top: 1em;" role="alert">
+		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		    <strong>Success: </strong><span th:utext="${success}"></span></div>
+		</div>
+	</body>
+</html>    

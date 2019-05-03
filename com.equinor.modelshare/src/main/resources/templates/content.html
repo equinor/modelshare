@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../fragments/header :: header"></head>
+
+<body>
+
+	<div class="container-fluid" role="main">
+
+		<div th:replace="../fragments/navbar :: navbar(archive, ${topLevel})"></div>
+
+		<div th:replace="../fragments/breadcrumb :: breadcrumb(${crumbs},${currentFolder})"></div>
+
+		<div th:replace="../fragments/alert :: alert(${error},${info})"></div>
+
+		<script>			
+			$(document).ready( function() {
+				$('.btn-file :file').on('fileselect', function(event, label) {
+			    	var css =  {};
+			    	css.color = label ? '#515151' : '#999999';
+			    	$(event.target).parent().css(css);
+			    });
+			    
+			    //confirm download dialog fragment
+			    function activateConfirmBtn(e){
+			    	$('#confirm-dialog #confirm-ok .btn').prop('disabled', !e.currentTarget.checked);
+			    	if(e.currentTarget.checked)
+			    		$('#confirm-dialog #confirm-ok').unbind('click', disableDownloadLink);
+			    	else
+			    		$('#confirm-dialog #confirm-ok').bind('click', disableDownloadLink);
+			    }
+			    function hideDialog(e){
+			    	$('#confirm-dialog').modal('hide');
+			    }
+			    function disableDownloadLink(e){
+			    	//ie fix
+			    	e.preventDefault();
+			    }
+			  	//on show - bind event handlers
+			    $('#confirm-dialog').bind('show.bs.modal', function(e) {	    	
+			    	$(this).find('#confirm-check').bind('change', activateConfirmBtn);
+				    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
+				    $(this).find('#confirm-ok').bind('click', disableDownloadLink);
+				    $(this).find('#confirm-ok .btn').bind('click', hideDialog);
+				});
+			    
+			    //on hide - unbind event handlers - reset checkbox and button state.
+	 		    $('#confirm-dialog').bind('hide.bs.modal', function(e) {
+	 		    	var confirmCheck = $(this).find('#confirm-check');
+	 		    	confirmCheck.prop('checked', false);
+	 		    	confirmCheck.unbind('change', activateConfirmBtn);
+	 		    	
+	 		    	var confirmBtn = $(this).find('#confirm-ok .btn'); 		    	
+	 		    	confirmBtn.prop('disabled', true);
+			    	confirmBtn.unbind('click', hideDialog);		    	
+				});
+			});
+		</script>
+	
+		<div th:if="${currentModel}" class="panel panel-primary">
+			<div class="panel-body">
+
+				<div class="media">
+					<div class="media-body">
+						<h2 th:attr="data-pk=${currentModel.relativePath}" id="assetName"
+							th:text="${currentModel.name}">...</h2>
+						<table>
+							<tr>
+								<td width="50%"><label class="form-label" for="owner">Owned
+										by:</label></td>
+								<td><a th:attr="data-pk=${currentModel.relativePath}, data-value=${currentModel.mail}"
+									id="assetOwner" 
+									th:href="'mailto:'+${currentModel.mail}"
+									th:text="${currentModel.owner}">
+								</a></td>
+							</tr>
+							<tr>
+								<td><label class="form-label" for="lastUpdated">Last
+										updated: </label></td>
+								<td><span class="form-field" id="lastUpdated"
+									th:text="${currentModel.lastUpdated}"></span></td>
+							</tr>
+							<tr th:if="${currentModel.simaVersion}">
+								<td><label class="form-label" for="type">SIMA
+										version: </label></td>
+								<td><span class="form-field" id="type"
+									th:text="${currentModel.simaVersion}"></span></td>
+							</tr>
+						</table>
+					</div>
+					<div class="media-right media-top"
+						th:if="${currentModel.picturePath}">
+						<img class="media-object" width="320px"
+							th:src="@{/pictures(asset=${currentModel.picturePath})}"></img>
+					</div>
+				</div>
+
+				<h3>Description</h3>
+				<div th:if="${writeAccess}" id="descriptionEditor" data-provide="markdown"
+					th:attr="data-path=${currentModel.relativePath}"
+					th:utext="${currentModel.formattedDescription}"></div>
+				<div th:if="!${writeAccess}" 
+					th:utext="${currentModel.formattedDescription}"></div>
+				
+				<p />
+				<div id="asset-actions">
+
+					<a role="button" th:if="${viewOnly}"
+						th:href="@{/request(asset=${currentModel.relativePath})}">
+						<button class="btn btn-primary">Request access</button>
+					</a>
+					<!-- download for logged in users -->
+					<a role="button" th:if="${!viewOnly} and ${link} == null"
+						th:attr="data-href=@{/download(asset=${currentModel.relativePath})}"
+						data-toggle="modal" data-target="#confirm-dialog">
+						<button class="btn btn-primary">
+							<span class="glyphicon glyphicon-cloud-download"
+								aria-hidden="true"></span>&nbsp;Download
+						</button>
+					</a>
+					<!-- download for users with an access token -->
+					<a role="button" th:if="${link} !=null"
+						th:attr="data-href=@{/allotment(id=${link},download=true)}"
+						data-toggle="modal" data-target="#confirm-dialog">
+						<button class="btn btn-default">
+							<span class="glyphicon glyphicon-cloud-download"
+								aria-hidden="true"></span>&nbsp;Download
+						</button>
+					</a>
+					<!-- must be logged in to see the following -->
+					<span th:if="${client !=null}"> 
+						<a role="button" th:if="${client.localUser} != null and ${!viewOnly}"
+							th:attr="data-href=@{/copy(asset=${currentModel.relativePath})}"
+							data-toggle="modal" data-target="#confirm-dialog">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp;Copy
+								to work area
+							</button>
+						</a> 
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/upload(item=${currentModel.relativePath})}">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;New version
+							</button>
+						</a>
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/share(item=${currentModel.relativePath})}">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;Share
+							</button>
+						</a>
+						<a role="button" th:if="${writeAccess}"
+							th:href="@{/delete(item=${currentModel.relativePath})}">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;Delete
+							</button>
+						</a>
+					</span>
+				</div>
+				<h3 th:if="${not #lists.isEmpty(node.tasks)}">Model Contents</h3>
+				<!-- Model "task" folders -->
+				<div th:each="folder : ${node.folders}" class="panel-group">
+					<div class="panel">
+						<div class="panel-heading" role="tab">
+							<h4 class="panel-title">
+								<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+								&nbsp;<span th:text="${folder.formattedName}"></span>
+							</h4>
+						</div>
+						<div class="panel-body">
+							<div th:utext="${folder.formattedDescription}"></div>
+							<!-- tasks within the folder -->
+							<a class="btn pull-right" role="button" data-toggle="collapse"
+								th:href="'#cd_'+${#strings.replace(folder.name,' ','_')}"
+								aria-expanded="false"
+								th:attr="aria-controls='cd_'+${#strings.replace(folder.name,' ','_')}">Details</a>
+							<div class="collapse"
+								th:id="'cd_'+${#strings.replace(folder.name,' ','_')}">
+								<div class="well task-details">
+									<div th:each="task : ${folder.taskDetails}">
+										<h5 th:text="${task.formattedName}"></h5>
+										<p th:utext="${task.formattedDescription}"></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Model "task" descriptions -->
+				<div th:each="task : ${node.tasks}" class="panel-group"
+					id="accordion" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" th:id="'h_'+${task.name}">
+							<h4 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#accordion"
+									th:href="'#c_'+${task.name}" aria-expanded="true"
+									th:aria-controls="'c_'+${task.name}"> <span
+									th:text="${task.formattedName}"></span>
+								</a>
+							</h4>
+						</div>
+						<div th:id="'c_'+${task.name}" class="panel-collapse collapse in"
+							role="tabpanel" th:aria-labelledby="'h_'+${task.name}">
+							<div class="panel-body" th:utext="${task.formattedDescription}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:if="${!viewOnly}"
+			th:replace="../fragments/confirm :: confirm('Terms of use &amp; Disclaimer', ${downloadTerms})">...</div>
+	</div>
+	<div th:replace="../fragments/footer :: footer">...</div>
+	<!-- Model and folder data editing -->
+	<script th:src="@{/js/bootstrap-editable.min.js}"></script>
+	<script type="text/javascript" th:if="${writeAccess}" th:inline="javascript">
+		/*<![CDATA[*/
+	    $.fn.editable.defaults.mode = 'popup';	    
+		$(document).ready(function() {		
+			// enable / disable editing
+		    $('#toggleEditEnable').click(function() {
+		        $('.editable').editable('toggleDisabled');
+		        $('#descriptionEditor').markdown({
+		        	savable: true,
+					onSave: function(e) {
+					    $.post( "edit", { 
+						_csrf: /*[[${_csrf.token}]]*/ 'null',
+						name: "assetDescription", 
+						value: e.getContent(), 
+						pk: $(e.$element).data("path") } );
+					    location.reload();
+					},
+		        	function(e) {
+		        		e.showEditor();
+		        	}
+		        });
+		    });
+		    
+		    $('#assetName').editable({
+		    	disabled: true,
+			    type: 'text',
+			    url: 'edit',
+			    title: 'Enter model name'
+			});
+		    		    
+		    $('#assetOwner').editable({
+		    	disabled: true,
+		        type: 'select',
+		        url: 'edit',
+		        source: 'users',
+		        title: 'Select model owner'
+		    });			    
+		});
+		/*]]>*/
+	</script>
+</body>
+</html>
