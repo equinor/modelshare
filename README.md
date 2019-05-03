@@ -81,7 +81,20 @@ There are two means of authentication in this application. One is using Active
 Directory via OAuth2 and the other is using the local user system. The latter
 is the default, as the Active Directory method requires configuration with
 secret parameter values and thus badly serves for demonstration purposes. 
+However, an instance has been set up and should be up and running. One should
+be able to log in using one of the two accounts:
 
+* admin@modelsharedirectory.onmicrosoft.com
+* user@modelsharedirectory.onmicrosoft.com
+* All passwords are "ModelShare2019"
+
+If Azure AD authentication does not work, you may switch to the default 
+authentication by clearing the list of active profiles:
+
+	spring.profiles.active=
+	
+The configuration file can be found in `com.equinor.modelshare/src/main/resources/application.properties`.
+	
 ### Active directory authentication
 
 For this mechanism to work, the application must be registered in the Azure AD
