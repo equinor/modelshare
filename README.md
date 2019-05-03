@@ -1,4 +1,4 @@
-# Modelshare
+# Modelshare [![Build Status](https://travis-ci.com/equinor/modelshare.svg?token=z54pKaonrDrNopwngA3z&branch=master)](https://travis-ci.com/equinor/modelshare)
 
 _Modelshare_ is a software service that supports storage and sharing of 
 simulation model files.
