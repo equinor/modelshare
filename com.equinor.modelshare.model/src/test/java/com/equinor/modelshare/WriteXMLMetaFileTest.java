@@ -9,9 +9,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class WriteXMLMetaFileTest {
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
 	@Test
 	public void writeAndReadXMLProperties() throws IOException {
@@ -19,23 +24,21 @@ public class WriteXMLMetaFileTest {
 		p.setProperty("owner", "lars");
 		p.setProperty("organisation", "Equinor");
 		
-		String tempDir = System.getProperty("java.io.tmpdir");
-		
-		String metaPathAndName = tempDir+"test.meta";
-		FileOutputStream fos = new FileOutputStream(metaPathAndName);
-        p.storeToXML(fos, "Meta is cool", "UTF-8");
-        fos.close();
-        
-        File metaFile = new File(metaPathAndName);
-        assertTrue(metaFile.exists());
-        assertTrue(metaFile.canRead());
-        
-        Properties resultProps = new Properties();
-        final FileInputStream in = new FileInputStream(metaPathAndName);
-        resultProps.loadFromXML(in);
-        in.close();
-        
-        assertEquals("Equinor", resultProps.get("organisation"));
-        assertEquals("lars", resultProps.get("owner"));
+
+		File metafile = folder.newFile("test.meta");
+		FileOutputStream fos = new FileOutputStream(metafile);
+		p.storeToXML(fos, "Meta is cool", "UTF-8");
+		fos.close();
+
+		assertTrue(metafile.exists());
+		assertTrue(metafile.canRead());
+
+		Properties resultProps = new Properties();
+		final FileInputStream in = new FileInputStream(metafile);
+		resultProps.loadFromXML(in);
+		in.close();
+
+		assertEquals("Equinor", resultProps.get("organisation"));
+		assertEquals("lars", resultProps.get("owner"));
 	}
 }
