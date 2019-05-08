@@ -2,7 +2,18 @@ language: java
 sudo: false
 script: mvn clean verify
 jdk:
-  - openjdk11
+- openjdk11
 cache:
   directories:
-    - $HOME/.m2
+  - "$HOME/.m2"
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file_glob: true
+  api_key:
+    secure: nj+5gdNMRWnTFw7n74GRkblYpSJEOq3jaKbxdLNzvCHGrJrxG+skur4pnJwq/dBhPNctHp1pCwFou4XYMsWJ8bgVggdSNswF3nl6DNeEyTAeYawMX5U9IgConiGYYwzd8sIX5dbf6r8YXBKavRJhh4QDqd4Q5+V+jChwDDh3hkJMLCOvO8YDcpboe/lTDojjTXKAYbqniw29AmYGdhXhA2dVfqb2rcfU2QkkgFpT1X3LIkFHcnrhLD4RgwOUVFS9Q6K0sDEaBiGiQ9e/1irDFBHB47tSmvagYC4L1gR6rF3A5ZD8HFA5FJAcDSCcibw6yi4TaEN4Lz1H7RR8u11OIgOv3Od4MuBe/sgqSE9V0JA3vFe+g/l4OjTvw6SZU4obefczI4mRfbHOcR1BEJpQGgxOsxjj8s+xJWXqA55HpB298kyD6L88hSqHeP9wdwM4t1nvptDEvhkhmOa8oGNpW0wtA5u1DuLTfKCFzr0npyfObDJ/yS2woZoygufTZ2NFTqOecRcusc74+RfLuiATMG2/36asxY/cg0zfiYbgO4iJLDLcnAxL1OGiiZK8TLW1rtmt7mhXOxw467giH6J6qs/3qk3gijoH/m2FhvPIKKzTCsTVKzF69Eo8BRyZqjx3RyX4gfnF6XQKJx3gq3HEdO2MlhZf+NXEMr1LfNTyfiA=
+  file: "${HOME}/build/${TRAVIS_REPO_SLUG}/com.equinor.modelshare/target/modelshare.jar"
+  on:
+    repo: equinor/modelshare
+    tags: true
+    all_branches: true
