@@ -24,7 +24,7 @@ command line by executing:
 Note that the _repository.root_ parameter points to a repository that has been
 created for test and demo purposes. It has a _.passwd_ file with a list of users
 that have access. You can edit the file and it will reload automatically while
-the application is running. Try logging in as _admin@equinor.com_.
+the application is running if this method of authentication is used.
 
 Note that when testing e-mail features, the e-mail address should be a working 
 one, unless you have set up i.e. MailHog.
