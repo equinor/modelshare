@@ -14,6 +14,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import com.equinor.modelshare.repository.ModelRepository;
 import com.equinor.modelshare.repository.ModelRepositoryImpl;
+
 /**
  * @author Torkild U. Resheim, Itema AS
  */

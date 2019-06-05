@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 /**
+ * Security configuration to use when Azure AD authentication is enabled.
+ * 
  * @author Torkild U. Resheim, Itema AS
  */
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)

@@ -1,0 +1,136 @@
+@startuml "components"
+
+actor actor
+
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.0.0
+!includeurl ICONURL/common.puml
+!includeurl ICONURL/font-awesome-5/database.puml
+!includeurl ICONURL/font-awesome-5/docker.puml
+!includeurl ICONURL/font-awesome-5/key.puml
+!includeurl ICONURL/font-awesome-5/server.puml
+!includeurl ICONURL/material/web.puml
+
+sprite $omnia [64x64/8] {
+0000000000000000000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000157FF75100000000000
+00000000000000000000000000000000000000000001N-uWGGWuzN1000000000
+0000000000000000000000000000000000000000000dy00000000yl000000000
+0000000000000000000000000000000000000000000_S00000000R_000000000
+0000000000000000000000000000000000000000000gt40000003to000000000
+00000000000000000000000000000000000000000000X_lF77Flxe0000000000
+00000000000000000000000000000000000000000004tw0GWWG0000000000000
+000000000000000000000000000000000000000000N-W0000000000000000000
+00000000000000000000000000000000000000002lx800000000000000000000
+0000000000000000000000026FVdkrrslVF63005_n0000000000000000000000
+0004Vzxyd600000000003FtwmO80000000Omv-d-O00000000000000000000000
+002_X000O_J00000004dye0000000000000000Wxl50000000000000000000000
+008-V202E_l740000N-W00000000000000AllkllOzV000000000000000000000
+0000mwxwu88evylFVz8000000NNNNN2000I_90R_00yd00000000000000000000
+000000000000000Z_G0000000_Z8H_L444L_90R_008_T0000000000000000000
+000000000000000kr00044444_R09__wuw__90R_000it0000000000000000000
+000000000000000sj000_yuw__R09__I0I__90R_000a_0000000000000000000
+000000000000000it000_a0I__R09__I0I__90R_000kr0000000000000000000
+000000000000000G_L00_dFN__dFN__VNd__VNd_00C_O0000000000000000000
+0000000000000000O_E0KMMMMUMMMUMEEEMMEEEE04_h00000000000000000000
+00000000000000000GydReeeeeeeeeeeeeeeeeeYNzuwsV730000015777410000
+0000000000000000000f_d6100000000000015Vzm0000GmvzV74VzuWOeu-N000
+000000000000000001F_vOuxlN76544567NlyuO00000000008e_p0000000zc00
+000000015FVddVF6F_v8000008WemuumeWG0000000000000008_K0000000c-00
+000000F_vO0000Ov_M000000000000000000000000000000000f_610002N-O00
+00000Uz8000000008-U0000000000000000000000000000000008uxrrywm0000
+00000_R0000000000Z_000000000000000000000000000000000000000000000
+00000zd0000000000ly000000000000000000000000000000000000000000000
+000008xl50000005lx8000000000000000000000000000000000000000000000
+0000000OuykddkyuO00000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+}
+
+component omnia [
+    <$omnia>
+    Gateway UI UI
+    <<web application>>
+]
+
+component eventhandler [
+    <$docker>
+    Event Handler
+    <<service>>
+]
+note right of [eventhandler]
+    The event handler reacts on data changes
+    and triggers actions such as scheduling
+    a workflow to be executed on a compute
+    cluster.
+end note
+
+component modelshare #lightgreen [
+    <$docker>
+    Model Sharing Service
+    <<service>>    
+]
+[modelshare] -0)- omnia
+[modelshare] .(0). [eventhandler] : Model changes
+
+component registry [
+    <$docker>
+    Compute Service Registry
+    <<data store>>
+]
+[registry] -0)- omnia
+[eventhandler] -(0)- registry
+note left of [registry]
+    The compute service registry keeps
+    track of all available compute service
+    instances.
+end note    
+
+component computeservice [
+    <$server>
+    Compute Service
+    <<compute cluster>>
+]
+[computeservice] -0)- omnia
+[modelshare] -0)- computeservice
+[computeservice] .0). eventhandler
+[computeservice] -(0)- registry
+note top of [computeservice]
+    There can be a number of compute service
+    instances running on different infrastructure.
+    These integrate with a cluster resource manager.
+end note    
+
+component metocean [
+    <$docker>
+    Metocean Service
+    <<data store>>    
+]
+[metocean] -0)- omnia
+[metocean] -0)- computeservice
+[metocean] .(0). [eventhandler] : Data changes
+note top of [metocean]
+    The metocean service offers
+    weather data on demand. 
+end note
+
+
+component datastore [
+    <$omnia>
+    Omnia Data Store
+    <<data store>>
+]
+modelshare -(0- datastore
+
+component security [
+    <$omnia>
+    Azure Active Directory
+    <<service>>
+]
+security -0)- computeservice
+security -0)- modelshare
+security -0)- registry
+
+actor ..> [omnia] : use over HTTP
+actor ..> [computeservice] : use over HTTP
+actor ..> [modelshare] :use over HTTP
+
+@enduml

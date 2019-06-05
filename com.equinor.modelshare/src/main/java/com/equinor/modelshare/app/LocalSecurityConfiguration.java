@@ -17,9 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.equinor.modelshare.security.LocalAuthenticationProvider;
 
 /**
- * Security configuration to use when using the built it mechanism. This 
- * utilizes the <i>.passwd</i> file residing in the root folder of the model
- * repository.
+ * Security configuration to use when the built in authentication mechanism is
+ * enabled. This utilizes the <i>.passwd</i> file residing in the root folder of
+ * the model repository.
  * 
  * @author Torkild U. Resheim, Itema AS
  */
