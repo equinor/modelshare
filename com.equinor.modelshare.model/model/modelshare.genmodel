@@ -81,5 +81,9 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelshare.ecore#//Token/user"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Token/timeout"/>
     </genClasses>
+    <genClasses ecoreClass="modelshare.ecore#//Page">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Page/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelshare.ecore#//Page/title"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -98,6 +98,10 @@ public class ModelRepositoryImpl implements ModelRepository {
 		log.info("Starting model repository:");
 		log.info(" - Repository root: " + rootPath);
 		log.info(" - User root: " + userRoot);
+	
+		if (!rootPath.toFile().exists()) {
+			createRepository();
+		}
 		
 		// register the extension
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
@@ -154,6 +158,25 @@ public class ModelRepositoryImpl implements ModelRepository {
 			log.error("Could not start watching repository for changes", e);
 		}
 	}
+	
+	private void createRepository() {
+		try {
+			Files.createDirectories(rootPath.resolve("pages"));
+			Files.createDirectories(rootPath.resolve("models"));
+			createFromResources("pages/index.md");
+			createFromResources("pages/terms.md");
+			createFromResources("models/.access");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void createFromResources(String location) throws IOException {
+		Path path = rootPath.resolve(location);
+		InputStream stream = getClass().getClassLoader().getResourceAsStream("repository/"+location);
+		Files.copy(stream, path);
+	}
+	
 
 	@Override
 	public void createFolder(User user, Folder parentFolder, InputStream is, String name) throws IOException {
@@ -371,6 +394,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		
 		// use the cache if it exists
 		CachedFolder c = rootCache.get(user);
+		// if the cache is no older than five minutes
 		if (c!=null && LocalDateTime.now().isBefore(c.timestamp.plusMinutes(5))){
 			return c.folder;
 		}

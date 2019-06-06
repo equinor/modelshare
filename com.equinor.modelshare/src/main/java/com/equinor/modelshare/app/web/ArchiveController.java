@@ -340,8 +340,8 @@ public class ArchiveController extends AbstractController {
 			User user = addCommonItems(map, principal);
 
 			map.addAttribute("client", user);
-			map.addAttribute("viewOnly",hasViewOnlyAccess(asset, user));
-			map.addAttribute("writeAccess",hasWriteAccess(user, Paths.get(asset)));
+			map.addAttribute("viewOnly", hasViewOnlyAccess(asset, user));
+			map.addAttribute("writeAccess", hasWriteAccess(user, Paths.get(asset)));
 			
 			// common
 			AssetProxy n = getAssetAtPath(user, asset);

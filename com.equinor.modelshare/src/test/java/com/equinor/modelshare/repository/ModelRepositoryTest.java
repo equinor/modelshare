@@ -26,7 +26,7 @@ public class ModelRepositoryTest {
 	
 	@BeforeClass
 	public static void setUp(){
-		Path rootPath = Paths.get("src/test/resources/repository/models/").toAbsolutePath();
+		Path rootPath = Paths.get("src/test/resources/repository/").toAbsolutePath();
 		repo = new ModelRepositoryImpl(rootPath, null);
 		((ModelRepositoryImpl)repo).setRepositoryAccessControl(new LocalRepositoryAccessControl(rootPath));
 	}

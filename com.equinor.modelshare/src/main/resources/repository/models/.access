@@ -1,0 +1,3 @@
+admins	+r +v +w
+users	+r +v -w
+guests  -r +v -w

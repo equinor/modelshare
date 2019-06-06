@@ -63,7 +63,7 @@ public class RepositoryConfiguration {
 			path = "/home/";
 		}
 		
-		Path root = Paths.get(repositoryRoot);		
+		Path root = Paths.get(repositoryRoot == null ? System.getProperty("user.dir") : repositoryRoot);
 		if (!root.isAbsolute()) {
 			root = Paths.get(SystemUtils.USER_DIR, repositoryRoot).normalize();
 		}

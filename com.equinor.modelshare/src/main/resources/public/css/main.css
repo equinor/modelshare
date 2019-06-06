@@ -308,3 +308,38 @@ a:visited {
 	background-color: rgb(227, 228, 226);
 	border: 2px rgba(36,55,70,255) solid; /* slate blue */
 }
+.button:hover {
+	text-decoration: none;
+}
+
+.button {
+	background-image: none;
+	background-color: #ff1243;
+	border-radius: 5px;
+	height: 50px;
+	border: 0px solid transparent;
+	min-width: 215px;
+	color: #ffffff !important;
+	font-family: Equinor;
+	font-size: 18px;
+	font-weight: 500;
+	font-style: normal;
+	line-height: 50px;
+	box-shadow: none;
+	cursor: pointer;
+	position: relative;
+	transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+	display: inline-block;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: middle;
+	padding: 0 18px;
+	margin: 0 5px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-size: 200% 200%;
+	background-position: 50% 50%;
+	box-sizing: border-box;
+	text-decoration: none;
+}
