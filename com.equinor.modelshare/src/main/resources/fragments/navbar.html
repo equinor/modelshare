@@ -24,7 +24,7 @@
 	          <ul class="nav navbar-nav" th:if="${#httpServletRequest.remoteUser != null}">
 	            <li th:class="${activeTab == 'home'}? 'active' : null"><a th:href="@{/pages/index.md}">Home</a></li>
 	            <li class="dropdown">
-	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Model archive <span class="caret"></span></a>
+	                <a th:href="@{/archive(item='/')}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Model archive <span class="caret"></span></a>
 	                <ul class="dropdown-menu" th:if="${not #lists.isEmpty(topLevel)}">
                  		<li th:each="node : ${topLevel}">
 	                  		<a th:text="${node.name}" th:href="@{/archive(item=${node.relativePath},leaf=false)}">...</a>
@@ -33,9 +33,10 @@
 				</li>      
 				<li class="dropdown">
 	                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help<span class="caret"></span></a>
-	                <ul class="dropdown-menu">
-	                  <li><a th:href="@{/pages/terms.md}">Terms of use &amp; Disclaimer</a></li>
-	                  <li><a th:href="@{/pages/sima-models.md}">SIMA Models</a></li>
+	                <ul class="dropdown-menu">	                
+	                  <li th:each="page : ${pages}">
+	                  	<a th:href="@{'/'+${page.location}}" th:text="${page.title}"></a>
+	                  </li>
 	                </ul>
 				</li>            
 				<li class="dropdown" th:if="${authenticated != null and authenticated.group != null and authenticated.group.identifier == 'supervisor' and !#arrays.contains(@environment.getActiveProfiles(),'Azure')}">

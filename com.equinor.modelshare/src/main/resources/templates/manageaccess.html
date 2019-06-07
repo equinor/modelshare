@@ -32,8 +32,7 @@
 							</h5>
 						</div>
 						<hr />
-						<form action="saveaccess" method="post">
-							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> 
+						<form action="saveaccess" method="post" accept-charset="UTF-8">
 							<div class="dropdown">	
 							 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add user/group <span class="caret"></span></button>
 						        <ul id="accessList" class="dropdown-menu">

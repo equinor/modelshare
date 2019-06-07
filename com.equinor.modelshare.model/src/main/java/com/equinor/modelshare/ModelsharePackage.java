@@ -978,6 +978,52 @@ public interface ModelsharePackage extends EPackage {
 	int TOKEN_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.equinor.modelshare.impl.PageImpl <em>Page</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.equinor.modelshare.impl.PageImpl
+	 * @see com.equinor.modelshare.impl.ModelsharePackageImpl#getPage()
+	 * @generated
+	 */
+	int PAGE = 10;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__LOCATION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__TITLE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Page</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Page</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.equinor.modelshare.Access <em>Access</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -985,7 +1031,7 @@ public interface ModelsharePackage extends EPackage {
 	 * @see com.equinor.modelshare.impl.ModelsharePackageImpl#getAccess()
 	 * @generated
 	 */
-	int ACCESS = 10;
+	int ACCESS = 11;
 
 
 	/**
@@ -1516,6 +1562,38 @@ public interface ModelsharePackage extends EPackage {
 	EAttribute getToken_Timeout();
 
 	/**
+	 * Returns the meta object for class '{@link com.equinor.modelshare.Page <em>Page</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Page</em>'.
+	 * @see com.equinor.modelshare.Page
+	 * @generated
+	 */
+	EClass getPage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Page#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see com.equinor.modelshare.Page#getLocation()
+	 * @see #getPage()
+	 * @generated
+	 */
+	EAttribute getPage_Location();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.equinor.modelshare.Page#getTitle <em>Title</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Title</em>'.
+	 * @see com.equinor.modelshare.Page#getTitle()
+	 * @see #getPage()
+	 * @generated
+	 */
+	EAttribute getPage_Title();
+
+	/**
 	 * Returns the meta object for enum '{@link com.equinor.modelshare.Access <em>Access</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1959,6 +2037,32 @@ public interface ModelsharePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TOKEN__TIMEOUT = eINSTANCE.getToken_Timeout();
+
+		/**
+		 * The meta object literal for the '{@link com.equinor.modelshare.impl.PageImpl <em>Page</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.equinor.modelshare.impl.PageImpl
+		 * @see com.equinor.modelshare.impl.ModelsharePackageImpl#getPage()
+		 * @generated
+		 */
+		EClass PAGE = eINSTANCE.getPage();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAGE__LOCATION = eINSTANCE.getPage_Location();
+
+		/**
+		 * The meta object literal for the '<em><b>Title</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAGE__TITLE = eINSTANCE.getPage_Title();
 
 		/**
 		 * The meta object literal for the '{@link com.equinor.modelshare.Access <em>Access</em>}' enum.

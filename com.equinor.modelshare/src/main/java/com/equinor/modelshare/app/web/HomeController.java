@@ -46,12 +46,12 @@ public class HomeController extends AbstractController {
 		Path root = repositoryConfig.getRootFolder();
 		Path path = root.resolve(resource);
 		
-		map.addAttribute("text", parse(path));
+		map.addAttribute("text", convertMarkdownToHtml(path));
 		
 		return "page";
 	}
 
-	private String parse(Path markdownFilePath) {
+	private String convertMarkdownToHtml(Path markdownFilePath) {
 		StringWriter sw = new StringWriter();
 		MarkupParser parser = new MarkupParser();
 		parser.setMarkupLanguage(new MarkdownLanguage());

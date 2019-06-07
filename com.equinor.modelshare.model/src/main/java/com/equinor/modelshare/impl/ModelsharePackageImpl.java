@@ -12,6 +12,7 @@ import com.equinor.modelshare.Group;
 import com.equinor.modelshare.Model;
 import com.equinor.modelshare.ModelshareFactory;
 import com.equinor.modelshare.ModelsharePackage;
+import com.equinor.modelshare.Page;
 import com.equinor.modelshare.TaskDetails;
 import com.equinor.modelshare.TaskFolder;
 import com.equinor.modelshare.Token;
@@ -100,6 +101,13 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * @generated
 	 */
 	private EClass tokenEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass pageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -615,6 +623,33 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPage() {
+		return pageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPage_Location() {
+		return (EAttribute)pageEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPage_Title() {
+		return (EAttribute)pageEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getAccess() {
 		return accessEEnum;
 	}
@@ -705,6 +740,10 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		createEAttribute(tokenEClass, TOKEN__CREATED);
 		createEReference(tokenEClass, TOKEN__USER);
 		createEAttribute(tokenEClass, TOKEN__TIMEOUT);
+
+		pageEClass = createEClass(PAGE);
+		createEAttribute(pageEClass, PAGE__LOCATION);
+		createEAttribute(pageEClass, PAGE__TITLE);
 
 		// Create enums
 		accessEEnum = createEEnum(ACCESS);
@@ -807,6 +846,10 @@ public class ModelsharePackageImpl extends EPackageImpl implements ModelsharePac
 		initEAttribute(getToken_Created(), ecorePackage.getELong(), "created", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getToken_User(), this.getUser(), this.getUser_Resettoken(), "user", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getToken_Timeout(), ecorePackage.getELong(), "timeout", null, 0, 1, Token.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(pageEClass, Page.class, "Page", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPage_Location(), ecorePackage.getEString(), "location", null, 0, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPage_Title(), ecorePackage.getEString(), "title", null, 0, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessEEnum, Access.class, "Access");

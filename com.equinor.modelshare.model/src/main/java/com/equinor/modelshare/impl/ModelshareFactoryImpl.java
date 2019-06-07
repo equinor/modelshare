@@ -64,6 +64,7 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 			case ModelsharePackage.TASK_DETAILS: return createTaskDetails();
 			case ModelsharePackage.TASK_FOLDER: return createTaskFolder();
 			case ModelsharePackage.TOKEN: return createToken();
+			case ModelsharePackage.PAGE: return createPage();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -167,6 +168,16 @@ public class ModelshareFactoryImpl extends EFactoryImpl implements ModelshareFac
 	public Token createToken() {
 		TokenImpl token = new TokenImpl();
 		return token;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Page createPage() {
+		PageImpl page = new PageImpl();
+		return page;
 	}
 
 	/**

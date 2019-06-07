@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+/**
+ * @author Torkild U. Resheim, Itema AS
+ */
 @Configuration
 @PropertySources( value = { 
 		@PropertySource (value = "classpath:modelshare.properties"),

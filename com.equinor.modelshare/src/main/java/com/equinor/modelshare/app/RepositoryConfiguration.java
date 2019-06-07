@@ -14,6 +14,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import com.equinor.modelshare.repository.ModelRepository;
 import com.equinor.modelshare.repository.ModelRepositoryImpl;
+
 /**
  * @author Torkild U. Resheim, Itema AS
  */
@@ -62,7 +63,7 @@ public class RepositoryConfiguration {
 			path = "/home/";
 		}
 		
-		Path root = Paths.get(repositoryRoot);		
+		Path root = Paths.get(repositoryRoot == null ? System.getProperty("user.dir") : repositoryRoot);
 		if (!root.isAbsolute()) {
 			root = Paths.get(SystemUtils.USER_DIR, repositoryRoot).normalize();
 		}

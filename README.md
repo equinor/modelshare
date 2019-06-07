@@ -7,6 +7,11 @@ The [design document](https://docs.google.com/a/itema.no/document/d/1Q-6XYVCCoVE
 describes the design up to the first release (0.8.0). Development has 
 recommenced and new features will be added.
 
+The below figure illustrates how a new version of Modelshare is intended to
+take part in continous integration of simulation models.
+
+![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true "Component Diagram")
+
 ## Building and running
 
 Building and running the project requires that you have **Java 11** on your 
@@ -64,7 +69,7 @@ There is also the _terms.md_ file which is expected to be present.
 
 ### The repository data model
 
-![The Modelshare data model](https://github.com/equinor/modelshare/blob/master/modelshare.png?raw=true "Modelshare data model")
+![The Modelshare data model](https://github.com/equinor/modelshare/blob/master/images/modelshare.png?raw=true "Modelshare data model")
 
 For each folder in the repository there is a _*.modeldata_ file that is 
 basically a serialization of a _Folder_ entity. Likewise there is a 
