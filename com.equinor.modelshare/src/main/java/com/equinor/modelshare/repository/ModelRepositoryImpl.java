@@ -162,10 +162,13 @@ public class ModelRepositoryImpl implements ModelRepository {
 	private void createRepository() {
 		try {
 			Files.createDirectories(rootPath.resolve("pages"));
-			Files.createDirectories(rootPath.resolve("models"));
+			Files.createDirectories(rootPath.resolve("Models"));
+			Files.createDirectories(rootPath.resolve("Models/DPN - Operations North"));
+			Files.createDirectories(rootPath.resolve("Models/DPN - Operations South"));
+			Files.createDirectories(rootPath.resolve("Models/DPN - Operations West"));
 			createFromResources("pages/index.md");
 			createFromResources("pages/terms.md");
-			createFromResources("models/.access");
+			createFromResources("Models/.access");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -173,7 +176,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 	
 	private void createFromResources(String location) throws IOException {
 		Path path = rootPath.resolve(location);
-		InputStream stream = getClass().getClassLoader().getResourceAsStream("repository/"+location);
+		InputStream stream = getClass().getClassLoader().getResourceAsStream("repository/" + location);
 		Files.copy(stream, path);
 	}
 	
