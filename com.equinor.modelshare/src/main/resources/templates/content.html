@@ -241,15 +241,23 @@
 		    	disabled: true,
 			    type: 'text',
 			    url: 'edit',
-			    title: 'Enter model name'
-			});
+			    title: 'Enter model name',
+		    	params: function(params) {
+		            params._csrf = /*[[${_csrf.token}]]*/ ' null';
+		            return params;
+		        }
+		    });
 		    		    
 		    $('#assetOwner').editable({
 		    	disabled: true,
 		        type: 'select',
 		        url: 'edit',
 		        source: 'users',
-		        title: 'Select model owner'
+		        title: 'Select model owner',
+		    	params: function(params) {
+		            params._csrf = /*[[${_csrf.token}]]*/ ' null';
+		            return params;
+		        }
 		    });			    
 		});
 		/*]]>*/
