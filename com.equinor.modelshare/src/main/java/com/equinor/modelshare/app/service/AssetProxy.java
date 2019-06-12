@@ -2,6 +2,7 @@ package com.equinor.modelshare.app.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -47,6 +48,20 @@ public class AssetProxy {
 			for (Asset a : ((Folder)asset).getAssets()) {
 				list.add(new AssetProxy(this,a));
 			}
+			list.sort(new Comparator<AssetProxy>() {
+
+				@Override
+				public int compare(AssetProxy o1, AssetProxy o2) {
+					if (o1.isLeaf() && !o2.isLeaf()) {
+						return 1;
+					}
+					if (!o1.isLeaf() && o2.isLeaf()) {
+						return -1;			
+					}
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
+			
 			return list;
 		}
 		return Collections.emptyList();
@@ -83,4 +98,5 @@ public class AssetProxy {
 	public String toString(){
 		return asset.getRelativePath();
 	}
+	
 }

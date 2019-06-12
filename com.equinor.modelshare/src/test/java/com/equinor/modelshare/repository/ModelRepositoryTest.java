@@ -1,10 +1,7 @@
 package com.equinor.modelshare.repository;
 
-import static org.junit.Assert.assertEquals;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.BeforeClass;
@@ -44,23 +41,6 @@ public class ModelRepositoryTest {
 				System.out.println("      "+((Model) eObject).getName());			
 			}			
 		}
-	}
-	
-	@Test
-	public void testLastUpdatedFeature() {
-		// Representing date in .meta file
-		LocalDateTime now = LocalDateTime.now();
-		String storedDate = now.toString();
-		
-		// Setting date string in model to be delivered to the view
-		Model model = ModelshareFactory.eINSTANCE.createModel();
-		model.setLastUpdated(storedDate);
-
-		// Converting to date
-		String lastUpdated = model.getLastUpdated();
-		LocalDateTime ldt = LocalDateTime.parse(lastUpdated);
-		
-		assertEquals(now, ldt);
 	}
 	
 }

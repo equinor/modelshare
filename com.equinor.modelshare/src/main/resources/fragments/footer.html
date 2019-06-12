@@ -6,7 +6,9 @@
 </head>
 <body>
 	<div th:fragment="footer">
-		<footer></footer>
+		<footer class="page-footer">
+			<small style="padding-left: 16px"><a href="https://github.com/equinor/modelshare">Modelshare</a> version <span th:text="${applicationVersion}"></span></small>
+		</footer>
 		<!-- Bootstrap core JavaScript -->
 		<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
 		<!-- Bootstrap Checkbox X -->

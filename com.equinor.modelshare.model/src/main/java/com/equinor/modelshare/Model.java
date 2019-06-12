@@ -2,6 +2,7 @@
  */
 package com.equinor.modelshare;
 
+import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -117,12 +118,12 @@ public interface Model extends Asset {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Last Updated</em>' attribute.
-	 * @see #setLastUpdated(String)
+	 * @see #setLastUpdated(Date)
 	 * @see com.equinor.modelshare.ModelsharePackage#getModel_LastUpdated()
 	 * @model
 	 * @generated
 	 */
-	String getLastUpdated();
+	Date getLastUpdated();
 
 	/**
 	 * Sets the value of the '{@link com.equinor.modelshare.Model#getLastUpdated <em>Last Updated</em>}' attribute.
@@ -132,7 +133,7 @@ public interface Model extends Asset {
 	 * @see #getLastUpdated()
 	 * @generated
 	 */
-	void setLastUpdated(String value);
+	void setLastUpdated(Date value);
 
 	/**
 	 * Returns the value of the '<em><b>Stask</b></em>' attribute.

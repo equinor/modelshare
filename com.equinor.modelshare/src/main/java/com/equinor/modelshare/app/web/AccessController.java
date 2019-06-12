@@ -34,9 +34,9 @@ import com.equinor.modelshare.User;
 import com.equinor.modelshare.repository.ModelRepository;
 
 @Controller
-public class GrantAccessController extends AbstractController {
+public class AccessController extends AbstractController {
 	
-	static Logger log = Logger.getLogger(GrantAccessController.class.getName());
+	static Logger log = Logger.getLogger(AccessController.class.getName());
 	
 	@Autowired
 	private ModelRepository modelrepository;
@@ -109,7 +109,7 @@ public class GrantAccessController extends AbstractController {
 		return "grantaccess";
 	}
 	
-	@RequestMapping(value = "/manageaccess", method = RequestMethod.GET)
+	@RequestMapping(value = "/access", method = RequestMethod.GET)
 	public String manageAccessView(ModelMap map,
 			Principal principal,
 			@RequestParam("path") String p){
@@ -120,27 +120,25 @@ public class GrantAccessController extends AbstractController {
 			Path path = Paths.get(URLDecoder.decode(p, "UTF-8"));
 			User owner = addCommonItems(map, principal);
 						
-			Map<Account, Rights> accounts = getAccountsWithoutAccess((User)owner, path);
+			Map<Account, Rights> accounts = getGroupsWithoutAccess((User)owner, path);
 			Map<Account, Rights> groups = getGroupsWithExplicitAccess((User)owner, path);
-			Map<Account, Rights> users = getUsersWithExplicitAccess((User)owner, path);
 					
 			map.addAttribute("accounts", accounts);
 			map.addAttribute("groups", groups);
-			map.addAttribute("users", users);
 			
 		} catch (AccessDeniedException ioe) {
 			String msg = "You don't have access to this model!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";	
+			return "access";	
 			
 		}catch(IOException ioe){
 			String msg = "File system error!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";
+			return "access";
 		}
-		return "manageaccess";
+		return "access";
 	}
 	
 	@RequestMapping(value = "/saveaccess", method = RequestMethod.POST)
@@ -188,16 +186,16 @@ public class GrantAccessController extends AbstractController {
 			String msg = "You don't have access to this model!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";	
+			return "access";	
 			
 		}catch(IOException ioe){
 			String msg = "File system error!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";
+			return "access";
 		}				
 		
-		return "redirect:/manageaccess?path=" + p;
+		return "redirect:/access?path=" + p;
 	}
 	
 	private Account getAccount(String id){
@@ -296,23 +294,13 @@ public class GrantAccessController extends AbstractController {
 	}
 
 	/**
-	 * Returns a map of all users with explicit access to the asset at the given path. 
+	 * Returns a list of all groups with no explicit access to the asset at the given path. 
 	 */
-	private Map<Account, Rights> getUsersWithExplicitAccess(User user, Path path) throws AccessDeniedException, IOException{
-		return modelrepository
-				.getRights(user, path).entrySet()
-				.stream()
-				.filter(entry -> entry.getKey() instanceof User)
-				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> new Rights(entry.getValue())));
-	}
- 	
-	/**
-	 * Returns a list of all accounts with no explicit access to the asset at the given path. 
-	 */
-	private Map<Account, Rights> getAccountsWithoutAccess(User user, Path path) throws AccessDeniedException, IOException{
+	private Map<Account, Rights> getGroupsWithoutAccess(User user, Path path) throws AccessDeniedException, IOException{
 		Set<Account> explicitAccounts = modelrepository.getRights(user, path).keySet();
 		return modelrepository.getAuthorizedAccounts()
 				.stream()
+				.filter(u -> u instanceof Group)
 				.filter(u -> !explicitAccounts.contains(u))
 				.collect(Collectors.toMap(u -> u, u -> new Rights(EnumSet.of(Access.VIEW))));		
 	}

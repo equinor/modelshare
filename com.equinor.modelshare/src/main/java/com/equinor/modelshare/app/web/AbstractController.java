@@ -95,7 +95,9 @@ public abstract class AbstractController {
 		}
 		Folder root = modelrepository.getRoot(user);
 		AssetProxy rootProxy = new AssetProxy(null, root);
-		List<AssetProxy> list = rootProxy.stream().filter(m -> path.equals(m.getRelativePath()))
+		List<AssetProxy> list = rootProxy
+				.stream()
+				.filter(m -> path.equals(m.getRelativePath()))
 				.collect(Collectors.toList());
 		if (list.isEmpty()) {
 			throw new ResourceNotFoundException("The asset \"" + path + "\" is not available.");
@@ -103,7 +105,7 @@ public abstract class AbstractController {
 			return list.get(0);
 		}
 	}
-
+	
 	protected void sendEmail(String subject, String message, String mailTo, String mailFrom) throws MessagingException {
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", smtpConfig.getHost());

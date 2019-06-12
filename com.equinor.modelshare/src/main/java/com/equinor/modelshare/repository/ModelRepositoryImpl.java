@@ -11,9 +11,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -346,7 +349,13 @@ public class ModelRepositoryImpl implements ModelRepository {
 				Model model = ModelshareFactory.eINSTANCE.createModel();
 				String relativePath = rootPath.relativize(path).toString().replace('\\', '/');
 				model.setOwner(resultProps.getProperty("owner"));
-				model.setLastUpdated(resultProps.getProperty("lastUpdated"));
+				Date parsed;
+				try {
+					parsed = SimpleDateFormat.getDateInstance().parse(resultProps.getProperty("lastUpdated"));
+					model.setLastUpdated(parsed);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 				model.setName(resultProps.getProperty("name"));
 				model.setOrganisation(resultProps.getProperty("organisation"));
 				model.setPath(path.toString());
@@ -384,7 +393,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		model.setOwner("Unkown");
 		model.setMail("Unknown");
 		model.setOrganisation("");
-		model.setLastUpdated(LocalDateTime.now().toString());
+		model.setLastUpdated(new Date());
 		model.setPath(path.toString());
 		model.setUsage("Metadata is not on record for this model. Content has been generated on the fly and is not persisted.");
 		if (fileName.endsWith(".stask")){
@@ -569,7 +578,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 		resource.getContents().add(model);
 		if (model instanceof Model){
-			((Model) model).setLastUpdated(LocalDateTime.now().toString());
+			((Model) model).setLastUpdated(new Date());
 		}
 
 		// now save the content.

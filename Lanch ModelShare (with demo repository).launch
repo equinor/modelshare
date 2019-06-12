@@ -17,7 +17,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.equinor.modelshare.app.Application"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.equinor.modelshare"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.springframework.ide.eclipse.boot.launch.BootMavenSourcePathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.egd=file:/dev/./urandom&#10;-Drepository.root=${project_loc:/com.equinor.modelshare}/repository"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.egd=file:/dev/./urandom&#10;-Dsrepository.root=${project_loc:/com.equinor.modelshare}/repository2"/>
 <stringAttribute key="process_factory_id" value="org.springframework.ide.eclipse.boot.launch.process.BootProcessFactory"/>
 <stringAttribute key="spring.boot.app.properties" value=""/>
 <booleanAttribute key="spring.boot.dash.hidden" value="false"/>
