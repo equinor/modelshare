@@ -34,9 +34,9 @@ import com.equinor.modelshare.User;
 import com.equinor.modelshare.repository.ModelRepository;
 
 @Controller
-public class GrantAccessController extends AbstractController {
+public class AccessController extends AbstractController {
 	
-	static Logger log = Logger.getLogger(GrantAccessController.class.getName());
+	static Logger log = Logger.getLogger(AccessController.class.getName());
 	
 	@Autowired
 	private ModelRepository modelrepository;
@@ -109,7 +109,7 @@ public class GrantAccessController extends AbstractController {
 		return "grantaccess";
 	}
 	
-	@RequestMapping(value = "/manageaccess", method = RequestMethod.GET)
+	@RequestMapping(value = "/access", method = RequestMethod.GET)
 	public String manageAccessView(ModelMap map,
 			Principal principal,
 			@RequestParam("path") String p){
@@ -132,15 +132,15 @@ public class GrantAccessController extends AbstractController {
 			String msg = "You don't have access to this model!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";	
+			return "access";	
 			
 		}catch(IOException ioe){
 			String msg = "File system error!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";
+			return "access";
 		}
-		return "manageaccess";
+		return "access";
 	}
 	
 	@RequestMapping(value = "/saveaccess", method = RequestMethod.POST)
@@ -188,16 +188,16 @@ public class GrantAccessController extends AbstractController {
 			String msg = "You don't have access to this model!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";	
+			return "access";	
 			
 		}catch(IOException ioe){
 			String msg = "File system error!";
 			log.log(Level.SEVERE, msg, ioe);
 			map.addAttribute("error", msg);
-			return "manageaccess";
+			return "access";
 		}				
 		
-		return "redirect:/manageaccess?path=" + p;
+		return "redirect:/access?path=" + p;
 	}
 	
 	private Account getAccount(String id){
