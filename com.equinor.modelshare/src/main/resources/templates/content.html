@@ -78,7 +78,7 @@
 								<td><label class="form-label" for="lastUpdated">Last
 										updated: </label></td>
 								<td><span class="form-field" id="lastUpdated"
-									th:text="${currentModel.lastUpdated}"></span></td>
+									th:text="${#dates.format(currentModel.lastUpdated, 'yyy-MM-dd HH:mm:ss')}"></span></td>
 							</tr>
 							<tr th:if="${currentModel.simaVersion}">
 								<td><label class="form-label" for="type">SIMA
