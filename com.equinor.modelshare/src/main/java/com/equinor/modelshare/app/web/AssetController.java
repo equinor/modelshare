@@ -44,8 +44,13 @@ import com.equinor.modelshare.app.RepositoryConfiguration;
 import com.equinor.modelshare.app.service.AssetProxy;
 import com.equinor.modelshare.repository.ModelRepository;
 
+/**
+ * Handles operations on both folders and models.
+ * 
+ * @author Torkild Ulvøy Resheim, Itema AS
+ */
 @Controller
-public class ArchiveController extends AbstractController {
+public class AssetController extends AbstractController {
 
 	static Logger log = LoggerFactory.getLogger(AbstractController.class);
 
