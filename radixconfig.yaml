@@ -11,7 +11,7 @@ spec:
   components:
     - name: application
       src: "./application"
-      publicPort: http
+      public: true
       ports:
        - name: http
          port: 80
