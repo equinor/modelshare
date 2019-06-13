@@ -9,4 +9,7 @@ services:
       context: ../
       dockerfile: docker/Dockerfile
     ports:
-      - "8080:8080"
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: host
