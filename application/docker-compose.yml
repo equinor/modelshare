@@ -6,10 +6,10 @@ services:
     image: modelshare
     container_name: modelshare
     build:
-      context: ../
-      dockerfile: docker/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - target: 80
-        published: 8080
+      - target: 443
+        published: 443
         protocol: tcp
         mode: host

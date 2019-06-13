@@ -12,6 +12,11 @@ take part in continous integration of simulation models.
 
 ![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true "Component Diagram")
 
+## Testing
+
+There is a development instance installed at [https://modelshare.app.playground.radix.equinor.com/](https://modelshare.app.playground.radix.equinor.com/) which will be automatically updated
+on each build using Omnia Radix.
+
 ## Building and running
 
 ### Building without Java
