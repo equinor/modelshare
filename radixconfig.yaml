@@ -3,6 +3,9 @@ kind: RadixApplication
 metadata:
   name: modelshare
 spec:
+  dnsAppAlias:
+    environment: dev
+    component: application
   environments:
     - name: dev
       build:
