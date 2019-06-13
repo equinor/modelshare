@@ -1,6 +1,6 @@
 language: java
 sudo: false
-script: mvn clean verify
+script: cd application && mvn clean verify
 jdk:
 - openjdk11
 cache:

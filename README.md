@@ -17,8 +17,8 @@ take part in continous integration of simulation models.
 ### Building without Java
 
 If Java is not installed on your system, the Modelshare service can run using 
-Docker only. See the [README](docker/README.md) in the **docker** folder. You
-obviously have to have Docker installed.
+Docker only. See the [README](application/README.md) in the **docker** folder.
+You obviously have to have Docker installed.
 
 ### Bulding with Java
 
@@ -26,7 +26,8 @@ Building and running the project requires that you have **Java 11** on your
 path. In addition you must have a recent version of Apache Maven.
 
 There are no profiles or special settings that must be enabled, so the project
-can be easily built by executing `mvn clean verify` from the root folder.
+can be easily built by executing `mvn clean verify` from the **application**
+folder.
 
 Once the build has completed you can start an instance on port 8080 from the 
 command line by executing:
