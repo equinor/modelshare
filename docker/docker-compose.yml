@@ -1,0 +1,15 @@
+
+version: '3.7'
+
+services:
+  modelshare:
+    image: modelshare
+    container_name: modelshare
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: host

@@ -1,0 +1,17 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: Modelshare
+spec:
+  environments:
+    - name: dev
+      build:
+        from: master
+    - name: prod
+  components:
+    - name: docker
+      src: "."
+      publicPort: http
+      ports:
+       - name: http
+         port: 80

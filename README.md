@@ -14,6 +14,14 @@ take part in continous integration of simulation models.
 
 ## Building and running
 
+### Building without Java
+
+If Java is not installed on your system, the Modelshare service can run using 
+Docker only. See the [README](docker/README.md) in the **docker** folder. You
+obviously have to have Docker installed.
+
+### Bulding with Java
+
 Building and running the project requires that you have **Java 11** on your 
 path. In addition you must have a recent version of Apache Maven.
 
@@ -23,16 +31,7 @@ can be easily built by executing `mvn clean verify` from the root folder.
 Once the build has completed you can start an instance on port 8080 from the 
 command line by executing:
 
-	java -jar -Drepository.root=./com.equinor.modelshare/repository/ \
-		./com.equinor.modelshare/target/modelshare.jar
-	
-Note that the _repository.root_ parameter points to a repository that has been
-created for test and demo purposes. It has a _.passwd_ file with a list of users
-that have access. You can edit the file and it will reload automatically while
-the application is running if this method of authentication is used.
-
-Note that when testing e-mail features, the e-mail address should be a working 
-one, unless you have set up i.e. MailHog.
+	java -jar ./com.equinor.modelshare/target/modelshare.jar
 
 ### Testing mail sending
 
