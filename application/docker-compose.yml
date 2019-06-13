@@ -1,4 +1,3 @@
-
 version: '3.7'
 
 services:
@@ -9,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - target: 443
-        published: 443
+      - target: 80
+        published: 80
         protocol: tcp
         mode: host

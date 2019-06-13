@@ -23,4 +23,4 @@ COPY --from=build /app/app.jar /app/app.jar
 
 # Ports and entry point
 EXPOSE 80  
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/app.jar","--server.port=443"] 
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/app.jar","--server.port=80"] 

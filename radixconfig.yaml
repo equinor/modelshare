@@ -11,10 +11,15 @@ spec:
       build:
         from: master
     - name: prod
+  
   components:
     - name: application
       src: "./application"
       public: true
       ports:
-       - name: https
-         port: 443
+       - name: http
+         port: 80
+      environmentConfig:
+        - environment: dev
+          variables:
+            REDIRECT_URI: https://modelshare.app.playground.radix.equinor.com         
