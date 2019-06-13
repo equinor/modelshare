@@ -3,7 +3,7 @@ FROM maven:3-jdk-11-slim AS build
 
 # Create working directory and create files
 WORKDIR /app
-COPY . .
+COPY ../ .
 
 # Run Maven and copy target file
 RUN mvn clean package

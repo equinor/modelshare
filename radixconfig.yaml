@@ -10,7 +10,7 @@ spec:
     - name: prod
   components:
     - name: application
-      src: "./docker"
+      src: "./radix"
       publicPort: http
       ports:
        - name: http
