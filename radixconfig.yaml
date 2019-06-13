@@ -9,8 +9,8 @@ spec:
         from: master
     - name: prod
   components:
-    - name: docker
-      src: "."
+    - name: application
+      src: "./docker"
       publicPort: http
       ports:
        - name: http
