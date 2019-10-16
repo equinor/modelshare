@@ -339,7 +339,7 @@ public class ModelRepositoryImpl implements ModelRepository {
 		File metaFile = new File(resolvedPath.toFile().getParent() + File.separator + "." + fileName + ".meta");
 		File dataFile = new File(resolvedPath.toFile() + ".modeldata");
 		
-		if (metaFile.exists()){
+		if (metaFile.exists()) {
 			try {
 				// read the old properties if present
 				final FileInputStream in = new FileInputStream(metaFile);
@@ -366,7 +366,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 				if (fileName.endsWith(".stask")){
 					model.getTaskDetails().clear();
 					model.getTaskFolders().clear();
-					ParseUtility.parseSimaModel(resolvedPath, model);
+					try {
+						ParseUtility.parseSimaModel(resolvedPath, model);
+					} catch (IOException e) {
+						model.setSimaVersion("The SIMA model could not be parsed");
+					}
 				}
 				saveModelData(model, resolvedPath);
 				metaFile.delete();
@@ -540,7 +544,11 @@ public class ModelRepositoryImpl implements ModelRepository {
 
 		// obtain SIMA information if any
 		if (path.getFileName().toString().endsWith(".stask")) {
-			ParseUtility.parseSimaModel(path, model);
+			try {
+				ParseUtility.parseSimaModel(path, model);
+			} catch (IOException e) {
+				model.setSimaVersion("The SIMA model could not be parsed");
+			}
 		}
 
 		saveModelData(model, path);
