@@ -10,12 +10,13 @@ recommenced and new features will be added.
 The below figure illustrates how a new version of Modelshare may
 take part in continous integration of simulation models.
 
-![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true "Component Diagram")
+![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true 
+"Component Diagram"
 
 ## Testing
 
 There is a development instance installed at [https://modelshare.app.playground.radix.equinor.com/](https://modelshare.app.playground.radix.equinor.com/) which will be automatically updated
-on each build using Omnia Radix.
+on each build using Omnia Radix. You can log in to this using your Equinor account.
 
 ## Building and running
 
@@ -88,23 +89,8 @@ is only kept in memory.
 ## Authentication
 
 There are two means of authentication in this application. One is using Active
-Directory via OAuth2 and the other is using the local user system. The latter
-is the default, as the Active Directory method requires configuration with
-secret parameter values and thus badly serves for demonstration purposes. 
-However, an instance has been set up and should be up and running. One should
-be able to log in using one of the two accounts:
-
-* admin@modelsharedirectory.onmicrosoft.com
-* user@modelsharedirectory.onmicrosoft.com
-* All passwords are "ModelShare2019"
-
-If Azure AD authentication does not work, you may switch to the default 
-authentication by clearing the list of active profiles:
-
-	spring.profiles.active=
-	
-The configuration file can be found in `com.equinor.modelshare/src/main/resources/application.properties`.
-	
+Directory via OAuth2 and the other is using the local user system.
+		
 ### Active directory authentication
 
 For this mechanism to work, the application must be registered in the Azure AD
