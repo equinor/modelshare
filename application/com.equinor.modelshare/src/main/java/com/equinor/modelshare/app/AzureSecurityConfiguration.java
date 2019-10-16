@@ -3,7 +3,9 @@ package com.equinor.modelshare.app;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,13 +20,14 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
  * @author Torkild U. Resheim, Itema AS
  */
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
 @Profile(value = { "Azure" })
 public class AzureSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	static Logger log = LoggerFactory.getLogger(AzureSecurityConfiguration.class.getName());
 	
 	@Autowired
-    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
+    private OAuth2UserService<OidcUserRequest, OidcUser> workingOidcUserService;
 	
 	/**
 	 * Disregard certain resources for authentication purposes as these should
@@ -60,8 +63,10 @@ public class AzureSecurityConfiguration extends WebSecurityConfigurerAdapter {
     				.permitAll()
 			.and()
 				.oauth2Login()
+				.tokenEndpoint()
+			.and()
 				.userInfoEndpoint()
-				.oidcUserService(oidcUserService);				
+				.oidcUserService(workingOidcUserService);				
     }    
-       
+    
 }

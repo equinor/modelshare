@@ -93,7 +93,7 @@ public class AzureRepositoryAccessControl extends RepositoryAccessControl {
 			g.setName(split[1]);
 			g.setExternalIdentifier(split[2]);
 			getAuthorizedAccounts().add(g);
-			log.info(String.format("Created group %1$s", g.getIdentifier()));
+			log.info(String.format("Created local group %1$s", g.getIdentifier()));
 		}
 	}
 		
@@ -118,6 +118,7 @@ public class AzureRepositoryAccessControl extends RepositoryAccessControl {
 	}
 	
 	public void setPassword(String id, String hash) {
+		// users cannot change password here when using Azure AD
 	}
 	
 	/**
@@ -128,6 +129,7 @@ public class AzureRepositoryAccessControl extends RepositoryAccessControl {
 	}
 
 	public void deleteUser(String identifier) {
+		// users cannot be deleted where when using Azure AD
 	}
 
 	@Override
