@@ -9,8 +9,19 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./online_app:/app
+      - repository:
+          external: true
+          target: /repository
+          driver: local
+          driver_opts:
+            type: cifs
+            device: modelsharedev.file.core.windows.net/repository 
+            o: "username=Azure\\modelsharedev,password=${STORAGE_PASSWORD}"
     ports:
       - target: 80
         published: 80
         protocol: tcp
         mode: host
+        
+        
+        
