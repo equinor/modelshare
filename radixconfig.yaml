@@ -17,6 +17,7 @@ spec:
          port: 80
       secrets:
         - CLIENT_SECRET
+        - STORAGE_PASSWORD
       environmentConfig:
         - environment: dev
           variables:
