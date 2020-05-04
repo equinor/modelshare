@@ -1,3 +1,5 @@
+# This configuration is only applicable when deploying the application on the 
+# Equinor Radix infrastructure. 
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
@@ -6,8 +8,10 @@ spec:
   environments:
     - name: dev
       build:
-        from: master
+        from: develop
     - name: prod  
+      build:
+        from: master
   components:
     - name: application
       src: "./application"
@@ -17,18 +21,22 @@ spec:
          port: 80
       secrets:
         - CLIENT_SECRET
+        - CLIENT_ID
+        - TENANT_ID
+        - REDIRECT_URI
+        - AZURE_AD_GROUPS
         - STORAGE_PASSWORD
       environmentConfig:
         - environment: dev
-          variables:
-            CLIENT_ID: ff451ea2-7e82-4203-8516-586370df8f78
-            TENANT_ID: 3aa4a235-b6e2-48d5-9195-7fcf05b459b0
-            REDIRECT_URI: https://modelshare.app.playground.radix.equinor.com
-            # - Marine Analysis Platform - Core Framework Team -> Supervisor
-            # - Marine Analysis Platform - Core Framework Team -> Administator
-            # - Equinor All -> Users 
-            AZURE_AD_GROUPS: supervisor:Supervisor:b1254732-ba8d-40a3-aea2-1653da33627a,admins:Administrator:b1254732-ba8d-40a3-aea2-1653da33627a,users:Users:a636269f-a967-45b2-bb4e-3e02dbb624a2          
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+        - environment: prod
+          resources:
+            requests:
+              memory: "4Gi"
+              cpu: "1000m"
   dnsAppAlias:
     environment: dev
     component: application
-            
