@@ -10,7 +10,7 @@ recommenced and new features will be added.
 The below figure illustrates how a new version of Modelshare may
 take part in continous integration of simulation models.
 
-![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true "Component Diagram")
+![Component Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/equinor/modelshare/master/images/components.plantuml?token=AACSMLSZQUEOFURUV2QVDY25UWFJO)
 
 ## Testing
 
