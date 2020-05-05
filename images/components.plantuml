@@ -1,6 +1,7 @@
 @startuml "components"
 
-actor actor
+actor scientist as "Scientist"
+actor dmt as "Modeling tool"
 
 !define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.0.0
 !includeurl ICONURL/common.puml
@@ -45,18 +46,12 @@ sprite $omnia [64x64/8] {
 0000000000000000000000000000000000000000000000000000000000000000
 }
 
-component omnia [
-    <$omnia>
-    Gateway UI UI
-    <<web application>>
-]
-
 component eventhandler [
     <$docker>
-    Event Handler
-    <<service>>
+    MQTT Service
+    <<Event Queue>>
 ]
-note right of [eventhandler]
+note top of [eventhandler]
     The event handler reacts on data changes
     and triggers actions such as scheduling
     a workflow to be executed on a compute
@@ -66,71 +61,54 @@ end note
 component modelshare #lightgreen [
     <$docker>
     Model Sharing Service
-    <<service>>    
+    <<Data Store>>    
 ]
-[modelshare] -0)- omnia
-[modelshare] .(0). [eventhandler] : Model changes
+[modelshare] -(0- [eventhandler]
 
-component registry [
+' SIMA applications in a container
+component runtimeapp [
     <$docker>
-    Compute Service Registry
-    <<data store>>
+    SIMA Runtime Application
+    <<Workflow Execution Service>>
 ]
-[registry] -0)- omnia
-[eventhandler] -(0)- registry
-note left of [registry]
-    The compute service registry keeps
-    track of all available compute service
-    instances.
+[modelshare] -0)- runtimeapp
+[eventhandler] .0). runtimeapp
+note right of [runtimeapp]
+    Runtime applications using a compute service
+    for calculations can run on low powered
+    infrastructure, such as a Kubernetes cluster.
 end note    
 
 component computeservice [
     <$server>
     Compute Service
-    <<compute cluster>>
+    <<High Performance Computer>>
 ]
-[computeservice] -0)- omnia
-[modelshare] -0)- computeservice
-[computeservice] .0). eventhandler
-[computeservice] -(0)- registry
+[computeservice] -0)- runtimeapp
 note top of [computeservice]
     There can be a number of compute service
     instances running on different infrastructure.
-    These integrate with a cluster resource manager.
+    For example on premise HPC or Azure Cycle Cloud.
 end note    
-
-component metocean [
-    <$docker>
-    Metocean Service
-    <<data store>>    
-]
-[metocean] -0)- omnia
-[metocean] -0)- computeservice
-[metocean] .(0). [eventhandler] : Data changes
-note top of [metocean]
-    The metocean service offers
-    weather data on demand. 
-end note
 
 
 component datastore [
     <$omnia>
-    Omnia Data Store
-    <<data store>>
+    Azure Storage Blob
+    <<Persistent Data Store>>
 ]
 modelshare -(0- datastore
 
 component security [
     <$omnia>
     Azure Active Directory
-    <<service>>
+    <<Authentication Service>>
 ]
-security -0)- computeservice
-security -0)- modelshare
-security -0)- registry
+security -0)- modelshare : OIDC
+security -0)- runtimeapp : OIDC
 
-actor ..> [omnia] : use over HTTP
-actor ..> [computeservice] : use over HTTP
-actor ..> [modelshare] :use over HTTP
+scientist ..> [runtimeapp] : operate
+scientist ..> [modelshare] : operate
+dmt -(0- modelshare : upload
 
 @enduml
