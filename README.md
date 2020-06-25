@@ -1,4 +1,4 @@
-# Modelshare [![Build Status]
+# Modelshare
 
 _Modelshare_ is a software service that supports storage and sharing of 
 simulation model files.
