@@ -159,9 +159,9 @@
 		</dependency>
 		<!-- Add some of the web resources we depend on -->
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-			<version>3.3.1-2</version>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery</artifactId>
+		    <version>3.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>

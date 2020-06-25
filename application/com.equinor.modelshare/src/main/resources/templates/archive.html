@@ -111,8 +111,13 @@
 							_csrf: /*[[${_csrf.token}]]*/ 'null',
 							name: "assetDescription", 
 							value: e.getContent(), 
-							pk: $(e.$element).data("path") } );
-					    location.reload();
+							pk: $(e.$element).data("path") } )
+						.done(function(data) {
+						    location.reload();					    	
+						})
+					    .fail(function() {
+					        alert( "ERROR: Could not update asset description." );
+					    });
 					}
 		        });
 		    });

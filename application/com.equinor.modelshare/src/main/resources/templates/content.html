@@ -222,12 +222,17 @@
 		        $('#descriptionEditor').markdown({
 		        	savable: true,
 					onSave: function(e) {
-					    $.post( "edit", { 
-						_csrf: /*[[${_csrf.token}]]*/ 'null',
-						name: "assetDescription", 
-						value: e.getContent(), 
-						pk: $(e.$element).data("path") } );
-					    location.reload();
+					    $.post( "edit", {
+							_csrf: /*[[${_csrf.token}]]*/ 'null',
+							name: "assetDescription", 
+							value: e.getContent(), 
+							pk: $(e.$element).data("path") } )
+						.done(function(data) {
+						    location.reload();					    	
+						})
+					    .fail(function() {
+					        alert( "ERROR: Could not update asset description." );
+					    });
 					},
 		        	function(e) {
 		        		e.showEditor();
