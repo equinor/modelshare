@@ -56,6 +56,44 @@
 				});
 			});
 		</script>
+		<!-- Code for confirm delete asset dialog -->
+		<script>			
+			$(document).ready( function() {			    
+			    //confirm download dialog fragment
+			    function activateConfirmDeleteBtn(e){
+			    	$('#confirm-delete-dialog #confirm-ok .btn').prop('disabled', !e.currentTarget.checked);
+			    	if(e.currentTarget.checked)
+			    		$('#confirm-delete-dialog #confirm-ok').unbind('click', disableDeleteLink);
+			    	else
+			    		$('#confirm-delete-dialog #confirm-ok').bind('click', disableDeleteLink);
+			    }
+			    function hideDialog(e){
+			    	$('#confirm-delete-dialog').modal('hide');
+			    }
+			    function disableDeleteLink(e){
+			    	//ie fix
+			    	e.preventDefault();
+			    }
+			  	//on show - bind event handlers
+			    $('#confirm-delete-dialog').bind('show.bs.modal', function(e) {	    	
+			    	$(this).find('#confirm-check').bind('change', activateConfirmDeleteBtn);
+				    $(this).find('#confirm-ok').attr('href', $(e.relatedTarget).data('href'));
+				    $(this).find('#confirm-ok').bind('click', disableDeleteLink);
+				    $(this).find('#confirm-ok .btn').bind('click', hideDialog);
+				});
+			    
+			    //on hide - unbind event handlers - reset checkbox and button state.
+	 		    $('#confirm-delete-dialog').bind('hide.bs.modal', function(e) {
+	 		    	var confirmCheck = $(this).find('#confirm-check');
+	 		    	confirmCheck.prop('checked', false);
+	 		    	confirmCheck.unbind('change', activateConfirmDeleteBtn);
+	 		    	
+	 		    	var confirmBtn = $(this).find('#confirm-ok .btn'); 		    	
+	 		    	confirmBtn.prop('disabled', true);
+			    	confirmBtn.unbind('click', hideDialog);		    	
+				});
+			});
+		</script>
 	
 		<div th:if="${currentModel}" class="panel panel-primary">
 			<div class="panel-body">
@@ -144,12 +182,6 @@
 										<span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>&nbsp;Share
 									</button>
 								</a>
-								<a role="button" th:if="${writeAccess}"
-									th:href="@{/delete(item=${currentModel.relativePath})}">
-									<button class="btn btn-default">
-										<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>&nbsp;Delete
-									</button>
-								</a>
 							</span>
 						</div>
 					</div> <!-- column -->
@@ -208,6 +240,8 @@
 		</div><!-- panel body -->
 		<div th:if="${!viewOnly}"
 			th:replace="../fragments/confirm :: confirm('Terms of use &amp; Disclaimer', ${downloadTerms})">...</div>
+		<div th:if="${!viewOnly}"
+			th:replace="../fragments/confirm-delete :: confirm('Are you sure?', 'Please confirm that you wish to delete the \''+${currentModel.name}+'\' model')">...</div>
 	</div>
 	<div th:replace="../fragments/footer :: footer">...</div>
 	<!-- Model and folder data editing -->

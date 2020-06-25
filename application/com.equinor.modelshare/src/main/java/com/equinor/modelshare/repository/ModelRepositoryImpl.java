@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -182,6 +184,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 			createFromResources("pages/index.md");
 			createFromResources("pages/terms.md");
 			createFromResources("Models/.access");
+			createFromResources("Models/DPN - Operations North.modeldata");
+			createFromResources("Models/DPN - Operations South.modeldata");
+			createFromResources("Models/DPN - Operations West.modeldata");
+			createFromResources("Models/DPN - Operations West/EMACS-Reference-Card.pdf");
+			createFromResources("Models/DPN - Operations West/EMACS-Reference-Card.pdf.jpg");
+			createFromResources("Models/DPN - Operations West/EMACS-Reference-Card.pdf.modeldata");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -658,11 +666,19 @@ public class ModelRepositoryImpl implements ModelRepository {
 		}
 		// then delete the actual asset
 		Path assetPath = Paths.get(asset.getPath());
-		Files.delete(assetPath);
+		try (Stream<Path> walk = Files.walk(assetPath)) {
+		    walk.sorted(Comparator.reverseOrder())
+		        .map(Path::toFile)
+		        .peek(r -> log.info("Deleting "+r))
+		        .forEach(File::delete);
+		}
 		
 		// and finally delete the metadata
 		Path dataPath = Paths.get(asset.getPath() + ".modeldata");
-		Files.delete(dataPath);		
+		// it may not exist if it's just a folder
+		if (dataPath.toFile().exists()) {
+			Files.delete(dataPath);
+		}
 		
 		// clear the cache immediately
 		rootCache.clear();
