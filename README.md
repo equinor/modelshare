@@ -6,7 +6,7 @@ simulation model files.
 The below figure illustrates how a new version of Modelshare may take part in 
 continuous integration of simulation models.
 
-![Component Diagram](https://github.com/equinor/modelshare/blob/master/images/components.png?raw=true "Component Diagram")
+![Component Diagram](images/components.png?raw=true "Component Diagram")
 
 ## Building and running
 
@@ -50,7 +50,15 @@ going on with the e-mails. In production the following properties must be set in
 
 A preconfigured launch configuration has been made. Open the **Debug** or 
 **Run** menu and select **Launch ModelShare...**. This will start the 
-application at port 8080. 
+application at port 8080, but only after you have filled out the required
+settings:
+
+The default profile enabled in [application.properties](com.equinor.modelshare/src/main/resources/application.properties) 
+is "Azure", which means that a few environment variables must be specified in
+the launch configuration in order to enable Azure AD authentication.
+
+![Launch Configuration Settings](images/eclipse_launch.png)
+
 
 ## The repository
 
@@ -58,14 +66,14 @@ This service uses a very simple approach to storing it's data. Everything
 related to the model database are kept as raw files and stored under one 
 location.
 
-The [pages](https://github.com/equinor/modelshare/tree/master/com.equinor.modelshare/repository/pages)
+The [pages](com.equinor.modelshare/repository/pages)
 folder contains MarkDown formatted files that are automatically converted to 
 HTML. The file _index.md_ is used to render the front page of the application.
 There is also the _terms.md_ file which is expected to be present.
 
 ### The repository data model
 
-![The Modelshare data model](https://github.com/equinor/modelshare/blob/master/images/modelshare.png?raw=true "Modelshare data model")
+![The Modelshare data model](images/modelshare.png)
 
 For each folder in the repository there is a _*.modeldata_ file that is 
 basically a serialization of a _Folder_ entity. Likewise there is a 
@@ -87,8 +95,8 @@ For this mechanism to work, the application must be registered in the Azure AD
 instance. After creating the _application_, also make sure to set 
 `"groupMembershipClaims": "All",` in the application's manifest. 
 
-In addition the **Azure** profile must be enabled for the application. It can
-be done by modifying `application.properties`:
+In addition the **Azure** profile must be enabled for the application. This is
+the default as specified in `application.properties`:
 
 	# In order to enable OAuth2 authentication via Azure AD, one must enable the
 	# "Azure" profile. 
