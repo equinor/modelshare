@@ -1,4 +1,4 @@
-# Modelshare [![Build Status](https://travis-ci.com/equinor/modelshare.svg?token=z54pKaonrDrNopwngA3z&branch=master)](https://travis-ci.com/equinor/modelshare)
+# Modelshare [![Build Status]
 
 _Modelshare_ is a software service that supports storage and sharing of 
 simulation model files.
@@ -184,3 +184,10 @@ inherited from the level above.
 	tor.torsen@equinor.com              +v +r +r
 	users                               +v +r +w
 	guests                              +v -r -w
+
+## References
+
+* Running test instance on [Omnia Radix](https://application-modelshare-prod.radix.equinor.com/) (requires Equinor 
+  authentication)
+* [Omnia Radix Console](https://console.radix.equinor.com/applications/modelshare) for 
+  the test instance (requires Equinor authentication)
